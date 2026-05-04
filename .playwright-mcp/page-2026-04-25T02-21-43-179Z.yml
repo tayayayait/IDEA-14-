@@ -1,0 +1,128 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e27]:
+    - banner [ref=e28]:
+      - link "홈" [ref=e30] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e32]
+        - generic [ref=e35]: 산단수출 코파일럿
+      - generic [ref=e36]:
+        - link "프로젝트" [ref=e37] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e38] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e39] [cursor=pointer]:
+          - img
+          - generic [ref=e40]: 로그아웃
+    - main [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - heading "분석 프로젝트" [level=1] [ref=e46]
+            - paragraph [ref=e47]: 기업·제품 정보를 입력하면 6단계 분석과 10개 요구사항 결과를 리포트로 확인할 수 있습니다.
+          - button "새 분석 시작" [ref=e48] [cursor=pointer]:
+            - img
+            - text: 새 분석 시작
+        - generic [ref=e49]:
+          - button "새 분석 2026. 4. 24. 준비 · 단계 4/6 · 기능 7/10 · 2026.04.24 17:51 KICOX 대기 SafetyKorea 대기 계속하기 →" [ref=e50] [cursor=pointer]:
+            - generic [ref=e51]:
+              - img [ref=e53]
+              - generic [ref=e56]:
+                - paragraph [ref=e57]: 새 분석 2026. 4. 24.
+                - paragraph [ref=e58]: 준비 · 단계 4/6 · 기능 7/10 · 2026.04.24 17:51
+                - generic [ref=e59]:
+                  - generic [ref=e60]: KICOX
+                  - generic [ref=e61]: 대기
+                  - generic [ref=e62]: SafetyKorea
+                  - generic [ref=e63]: 대기
+            - generic [ref=e64]: 계속하기 →
+          - button "새 분석 2026. 4. 24. 준비 · 단계 4/6 · 기능 7/10 · 2026.04.24 17:46 KICOX 대기 SafetyKorea 대기 계속하기 →" [ref=e65] [cursor=pointer]:
+            - generic [ref=e66]:
+              - img [ref=e68]
+              - generic [ref=e71]:
+                - paragraph [ref=e72]: 새 분석 2026. 4. 24.
+                - paragraph [ref=e73]: 준비 · 단계 4/6 · 기능 7/10 · 2026.04.24 17:46
+                - generic [ref=e74]:
+                  - generic [ref=e75]: KICOX
+                  - generic [ref=e76]: 대기
+                  - generic [ref=e77]: SafetyKorea
+                  - generic [ref=e78]: 대기
+            - generic [ref=e79]: 계속하기 →
+          - button "새 분석 2026. 4. 24. 준비 · 단계 2/6 · 기능 2/10 · 2026.04.24 17:14 KICOX 대기 SafetyKorea 대기 계속하기 →" [ref=e80] [cursor=pointer]:
+            - generic [ref=e81]:
+              - img [ref=e83]
+              - generic [ref=e86]:
+                - paragraph [ref=e87]: 새 분석 2026. 4. 24.
+                - paragraph [ref=e88]: 준비 · 단계 2/6 · 기능 2/10 · 2026.04.24 17:14
+                - generic [ref=e89]:
+                  - generic [ref=e90]: KICOX
+                  - generic [ref=e91]: 대기
+                  - generic [ref=e92]: SafetyKorea
+                  - generic [ref=e93]: 대기
+            - generic [ref=e94]: 계속하기 →
+          - button "새 분석 2026. 4. 24. 초안 · 단계 1/6 · 기능 1/10 · 2026.04.24 16:54 KICOX 대기 SafetyKorea 대기 계속하기 →" [ref=e95] [cursor=pointer]:
+            - generic [ref=e96]:
+              - img [ref=e98]
+              - generic [ref=e101]:
+                - paragraph [ref=e102]: 새 분석 2026. 4. 24.
+                - paragraph [ref=e103]: 초안 · 단계 1/6 · 기능 1/10 · 2026.04.24 16:54
+                - generic [ref=e104]:
+                  - generic [ref=e105]: KICOX
+                  - generic [ref=e106]: 대기
+                  - generic [ref=e107]: SafetyKorea
+                  - generic [ref=e108]: 대기
+            - generic [ref=e109]: 계속하기 →
+          - button "새 분석 2026. 4. 24. 준비 · 단계 4/6 · 기능 7/10 · 2026.04.24 15:39 KICOX 대기 SafetyKorea 대기 계속하기 →" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]:
+              - img [ref=e113]
+              - generic [ref=e116]:
+                - paragraph [ref=e117]: 새 분석 2026. 4. 24.
+                - paragraph [ref=e118]: 준비 · 단계 4/6 · 기능 7/10 · 2026.04.24 15:39
+                - generic [ref=e119]:
+                  - generic [ref=e120]: KICOX
+                  - generic [ref=e121]: 대기
+                  - generic [ref=e122]: SafetyKorea
+                  - generic [ref=e123]: 대기
+            - generic [ref=e124]: 계속하기 →
+          - button "새 분석 2026. 4. 24. 준비 · 단계 2/6 · 기능 2/10 · 2026.04.24 15:15 KICOX 대기 SafetyKorea 오류 계속하기 →" [ref=e125] [cursor=pointer]:
+            - generic [ref=e126]:
+              - img [ref=e128]
+              - generic [ref=e131]:
+                - paragraph [ref=e132]: 새 분석 2026. 4. 24.
+                - paragraph [ref=e133]: 준비 · 단계 2/6 · 기능 2/10 · 2026.04.24 15:15
+                - generic [ref=e134]:
+                  - generic [ref=e135]: KICOX
+                  - generic [ref=e136]: 대기
+                  - generic [ref=e137]: SafetyKorea
+                  - generic [ref=e138]: 오류
+            - generic [ref=e139]: 계속하기 →
+          - button "새 분석 2026. 4. 23. 준비 · 단계 4/6 · 기능 7/10 · 2026.04.23 18:58 KICOX 대기 SafetyKorea 오류 계속하기 →" [ref=e140] [cursor=pointer]:
+            - generic [ref=e141]:
+              - img [ref=e143]
+              - generic [ref=e146]:
+                - paragraph [ref=e147]: 새 분석 2026. 4. 23.
+                - paragraph [ref=e148]: 준비 · 단계 4/6 · 기능 7/10 · 2026.04.23 18:58
+                - generic [ref=e149]:
+                  - generic [ref=e150]: KICOX
+                  - generic [ref=e151]: 대기
+                  - generic [ref=e152]: SafetyKorea
+                  - generic [ref=e153]: 오류
+            - generic [ref=e154]: 계속하기 →
+          - button "새 분석 2026. 4. 23. 준비 · 단계 2/6 · 기능 2/10 · 2026.04.23 15:56 KICOX 대기 SafetyKorea 대기 계속하기 →" [ref=e155] [cursor=pointer]:
+            - generic [ref=e156]:
+              - img [ref=e158]
+              - generic [ref=e161]:
+                - paragraph [ref=e162]: 새 분석 2026. 4. 23.
+                - paragraph [ref=e163]: 준비 · 단계 2/6 · 기능 2/10 · 2026.04.23 15:56
+                - generic [ref=e164]:
+                  - generic [ref=e165]: KICOX
+                  - generic [ref=e166]: 대기
+                  - generic [ref=e167]: SafetyKorea
+                  - generic [ref=e168]: 대기
+            - generic [ref=e169]: 계속하기 →

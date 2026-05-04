@@ -1,0 +1,305 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e16] [cursor=pointer]:
+          - img
+          - generic [ref=e17]: 로그아웃
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - heading "데이터 출처 및 API 상태" [level=1] [ref=e22]
+          - paragraph [ref=e23]: 실제 호출 로그를 기준으로 각 데이터 소스의 최신 상태를 표시합니다.
+          - generic [ref=e24]:
+            - paragraph [ref=e25]: "최근 조회 시각: 2026.04.29 16:23"
+            - generic [ref=e26]:
+              - generic [ref=e27]: KICOX 상태
+              - generic [ref=e28]: 대기
+              - generic [ref=e29]: SafetyKorea 상태
+              - generic [ref=e30]: 부분 산출
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - heading "공공데이터 API 10종" [level=3] [ref=e33]
+            - paragraph [ref=e34]: 실제 호출 로그 기반으로 API 상태를 자동 반영합니다.
+          - table "데이터 출처 및 API 상태 표" [ref=e36]:
+            - caption [ref=e37]: 데이터 출처, API 상태, 최근 조회 이력 표
+            - rowgroup [ref=e38]:
+              - row "API 기관 용도 최근 상태 최근 조회 HTTP 응답 건수 오류 코드 실패 횟수 라이선스" [ref=e39]:
+                - columnheader "API" [ref=e40]
+                - columnheader "기관" [ref=e41]
+                - columnheader "용도" [ref=e42]
+                - columnheader "최근 상태" [ref=e43]
+                - columnheader "최근 조회" [ref=e44]
+                - columnheader "HTTP" [ref=e45]
+                - columnheader "응답 건수" [ref=e46]
+                - columnheader "오류 코드" [ref=e47]
+                - columnheader "실패 횟수" [ref=e48]
+                - columnheader "라이선스" [ref=e49]
+            - rowgroup [ref=e50]:
+              - row "KICOX_Factory Production Info KICOX Factory registration and production information lookup 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 Public Data Portal" [ref=e51]:
+                - cell "KICOX_Factory Production Info" [ref=e52]
+                - cell "KICOX" [ref=e53]
+                - cell "Factory registration and production information lookup" [ref=e54]
+                - cell "대기 미실행" [ref=e55]:
+                  - generic [ref=e56]:
+                    - generic [ref=e57]: 대기
+                    - paragraph [ref=e58]: 미실행
+                - cell "정보 없음" [ref=e59]
+                - cell "정보 없음" [ref=e60]
+                - cell "정보 없음" [ref=e61]
+                - cell "정보 없음" [ref=e62]
+                - cell "0" [ref=e63]
+                - cell "Public Data Portal" [ref=e64]:
+                  - link "Public Data Portal" [ref=e65] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15087611/openapi.do
+                    - img [ref=e66]
+                    - text: Public Data Portal
+              - row "KOTRA_Country Info KOTRA Country-level market baseline information 정상 조회 성공 2026.04.29 15:48 200 8 정보 없음 0 KOTRA" [ref=e70]:
+                - cell "KOTRA_Country Info" [ref=e71]
+                - cell "KOTRA" [ref=e72]
+                - cell "Country-level market baseline information" [ref=e73]
+                - cell "정상 조회 성공" [ref=e74]:
+                  - generic [ref=e75]:
+                    - generic [ref=e76]: 정상
+                    - paragraph [ref=e77]: 조회 성공
+                - cell "2026.04.29 15:48" [ref=e78]
+                - cell "200" [ref=e79]
+                - cell "8" [ref=e80]
+                - cell "정보 없음" [ref=e81]
+                - cell "0" [ref=e82]
+                - cell "KOTRA" [ref=e83]:
+                  - link "KOTRA" [ref=e84] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                    - img [ref=e85]
+                    - text: KOTRA
+              - row "KOTRA_Overseas Market News KOTRA Collect overseas market news and trend signals 정상 조회 성공 2026.04.29 16:23 200 8 정보 없음 0 KOTRA" [ref=e89]:
+                - cell "KOTRA_Overseas Market News" [ref=e90]
+                - cell "KOTRA" [ref=e91]
+                - cell "Collect overseas market news and trend signals" [ref=e92]
+                - cell "정상 조회 성공" [ref=e93]:
+                  - generic [ref=e94]:
+                    - generic [ref=e95]: 정상
+                    - paragraph [ref=e96]: 조회 성공
+                - cell "2026.04.29 16:23" [ref=e97]
+                - cell "200" [ref=e98]
+                - cell "8" [ref=e99]
+                - cell "정보 없음" [ref=e100]
+                - cell "0" [ref=e101]
+                - cell "KOTRA" [ref=e102]:
+                  - link "KOTRA" [ref=e103] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/kotranews/index.do
+                    - img [ref=e104]
+                    - text: KOTRA
+              - row "KOTRA_Overseas Certification Info KOTRA Check overseas certification requirements 정상 조회 성공 2026.04.29 16:23 200 1 정보 없음 0 KOTRA" [ref=e108]:
+                - cell "KOTRA_Overseas Certification Info" [ref=e109]
+                - cell "KOTRA" [ref=e110]
+                - cell "Check overseas certification requirements" [ref=e111]
+                - cell "정상 조회 성공" [ref=e112]:
+                  - generic [ref=e113]:
+                    - generic [ref=e114]: 정상
+                    - paragraph [ref=e115]: 조회 성공
+                - cell "2026.04.29 16:23" [ref=e116]
+                - cell "200" [ref=e117]
+                - cell "1" [ref=e118]
+                - cell "정보 없음" [ref=e119]
+                - cell "0" [ref=e120]
+                - cell "KOTRA" [ref=e121]:
+                  - link "KOTRA" [ref=e122] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+                    - img [ref=e123]
+                    - text: KOTRA
+              - row "KOTRA_Import Regulation Info KOTRA Review import regulations and non-tariff barriers 오래됨 실행 중 2026.04.29 16:23 200 0 kotra_import_regulation_cache_stale 0 KOTRA" [ref=e127]:
+                - cell "KOTRA_Import Regulation Info" [ref=e128]
+                - cell "KOTRA" [ref=e129]
+                - cell "Review import regulations and non-tariff barriers" [ref=e130]
+                - cell "오래됨 실행 중" [ref=e131]:
+                  - generic [ref=e132]:
+                    - generic [ref=e133]: 오래됨
+                    - paragraph [ref=e134]: 실행 중
+                - cell "2026.04.29 16:23" [ref=e135]
+                - cell "200" [ref=e136]
+                - cell "0" [ref=e137]
+                - cell "kotra_import_regulation_cache_stale" [ref=e138]
+                - cell "0" [ref=e139]
+                - cell "KOTRA" [ref=e140]:
+                  - link "KOTRA" [ref=e141] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+                    - img [ref=e142]
+                    - text: KOTRA
+              - row "K-SURE_Country Risk Grade K-SURE Check country credit/risk grade 정상 조회 성공 2026.04.29 16:23 200 1 정보 없음 0 K-SURE" [ref=e146]:
+                - cell "K-SURE_Country Risk Grade" [ref=e147]
+                - cell "K-SURE" [ref=e148]
+                - cell "Check country credit/risk grade" [ref=e149]
+                - cell "정상 조회 성공" [ref=e150]:
+                  - generic [ref=e151]:
+                    - generic [ref=e152]: 정상
+                    - paragraph [ref=e153]: 조회 성공
+                - cell "2026.04.29 16:23" [ref=e154]
+                - cell "200" [ref=e155]
+                - cell "1" [ref=e156]
+                - cell "정보 없음" [ref=e157]
+                - cell "0" [ref=e158]
+                - cell "K-SURE" [ref=e159]:
+                  - link "K-SURE" [ref=e160] [cursor=pointer]:
+                    - /url: https://ksight.ksure.or.kr/rsrch/nation/nationView
+                    - img [ref=e161]
+                    - text: K-SURE
+              - row "K-SURE_Industry Risk Index K-SURE Check industry-level risk index 정상 조회 성공 2026.04.29 16:23 200 1 정보 없음 0 K-SURE" [ref=e165]:
+                - cell "K-SURE_Industry Risk Index" [ref=e166]
+                - cell "K-SURE" [ref=e167]
+                - cell "Check industry-level risk index" [ref=e168]
+                - cell "정상 조회 성공" [ref=e169]:
+                  - generic [ref=e170]:
+                    - generic [ref=e171]: 정상
+                    - paragraph [ref=e172]: 조회 성공
+                - cell "2026.04.29 16:23" [ref=e173]
+                - cell "200" [ref=e174]
+                - cell "1" [ref=e175]
+                - cell "정보 없음" [ref=e176]
+                - cell "0" [ref=e177]
+                - cell "K-SURE" [ref=e178]:
+                  - link "K-SURE" [ref=e179] [cursor=pointer]:
+                    - /url: https://ksight.ksure.or.kr/risk-index
+                    - img [ref=e180]
+                    - text: K-SURE
+              - row "K-SURE_Export Payment Info K-SURE Reference export payment terms and delay history 정상 조회 성공 2026.04.29 16:23 200 1 정보 없음 0 K-SURE" [ref=e184]:
+                - cell "K-SURE_Export Payment Info" [ref=e185]
+                - cell "K-SURE" [ref=e186]
+                - cell "Reference export payment terms and delay history" [ref=e187]
+                - cell "정상 조회 성공" [ref=e188]:
+                  - generic [ref=e189]:
+                    - generic [ref=e190]: 정상
+                    - paragraph [ref=e191]: 조회 성공
+                - cell "2026.04.29 16:23" [ref=e192]
+                - cell "200" [ref=e193]
+                - cell "1" [ref=e194]
+                - cell "정보 없음" [ref=e195]
+                - cell "0" [ref=e196]
+                - cell "K-SURE" [ref=e197]:
+                  - link "K-SURE" [ref=e198] [cursor=pointer]:
+                    - /url: https://ksight.ksure.or.kr/analysis/risk-advisor/payment
+                    - img [ref=e199]
+                    - text: K-SURE
+              - row "Trade Security Institute_HSK Strategic Item Info Trade Security Institute Check strategic item status by HSK code 정상 조회 성공 2026.04.29 16:20 200 1 정보 없음 0 Trade Security Institute" [ref=e203]:
+                - cell "Trade Security Institute_HSK Strategic Item Info" [ref=e204]
+                - cell "Trade Security Institute" [ref=e205]
+                - cell "Check strategic item status by HSK code" [ref=e206]
+                - cell "정상 조회 성공" [ref=e207]:
+                  - generic [ref=e208]:
+                    - generic [ref=e209]: 정상
+                    - paragraph [ref=e210]: 조회 성공
+                - cell "2026.04.29 16:20" [ref=e211]
+                - cell "200" [ref=e212]
+                - cell "1" [ref=e213]
+                - cell "정보 없음" [ref=e214]
+                - cell "0" [ref=e215]
+                - cell "Trade Security Institute" [ref=e216]:
+                  - link "Trade Security Institute" [ref=e217] [cursor=pointer]:
+                    - /url: https://www.yestrade.go.kr/
+                    - img [ref=e218]
+                    - text: Trade Security Institute
+              - row "KATS_SafetyKorea_Recall KATS Check product recall status 부분 산출 조회 결과 없음 2026.04.29 16:20 200 0 정보 없음 0 KATS" [ref=e222]:
+                - cell "KATS_SafetyKorea_Recall" [ref=e223]
+                - cell "KATS" [ref=e224]
+                - cell "Check product recall status" [ref=e225]
+                - cell "부분 산출 조회 결과 없음" [ref=e226]:
+                  - generic [ref=e227]:
+                    - generic [ref=e228]: 부분 산출
+                    - paragraph [ref=e229]: 조회 결과 없음
+                - cell "2026.04.29 16:20" [ref=e230]
+                - cell "200" [ref=e231]
+                - cell "0" [ref=e232]
+                - cell "정보 없음" [ref=e233]
+                - cell "0" [ref=e234]
+                - cell "KATS" [ref=e235]:
+                  - link "KATS" [ref=e236] [cursor=pointer]:
+                    - /url: https://www.safetykorea.kr/release/openapi
+                    - img [ref=e237]
+                    - text: KATS
+        - generic [ref=e241]:
+          - generic [ref=e242]:
+            - heading "CSV 캐시 데이터 4종" [level=3] [ref=e243]
+            - paragraph [ref=e244]: "supabase `api_cache_status` 기준 동기화 상태를 표시합니다."
+          - table "CSV 캐시 동기화 상태 표" [ref=e246]:
+            - caption [ref=e247]: CSV 캐시 4종 동기화 상태
+            - rowgroup [ref=e248]:
+              - row "데이터 상태 최근 성공 최근 시도 건수(total/fetched/upserted) 출처" [ref=e249]:
+                - columnheader "데이터" [ref=e250]
+                - columnheader "상태" [ref=e251]
+                - columnheader "최근 성공" [ref=e252]
+                - columnheader "최근 시도" [ref=e253]
+                - columnheader "건수(total/fetched/upserted)" [ref=e254]
+                - columnheader "출처" [ref=e255]
+            - rowgroup [ref=e256]:
+              - row "수출 지역 순위 정상 사용 가능 2026.04.29 17:17 2026.04.29 17:17 238 / 238 / 238 공공데이터포털" [ref=e257]:
+                - cell "수출 지역 순위" [ref=e258]
+                - cell "정상 사용 가능" [ref=e259]:
+                  - generic [ref=e260]:
+                    - generic [ref=e261]: 정상
+                    - paragraph [ref=e262]: 사용 가능
+                - cell "2026.04.29 17:17" [ref=e263]
+                - cell "2026.04.29 17:17" [ref=e264]
+                - cell "238 / 238 / 238" [ref=e265]
+                - cell "공공데이터포털" [ref=e266]:
+                  - link "공공데이터포털" [ref=e267] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EC%88%98%EC%B6%9C%20%EC%A7%80%EC%97%AD%20%EC%88%9C%EC%9C%84
+                    - img [ref=e268]
+                    - text: 공공데이터포털
+              - row "국별 대세계 수입규제 현황 정상 사용 가능 2026.04.29 17:17 2026.04.29 17:17 31,406 / 31,406 / 31,406 공공데이터포털" [ref=e272]:
+                - cell "국별 대세계 수입규제 현황" [ref=e273]
+                - cell "정상 사용 가능" [ref=e274]:
+                  - generic [ref=e275]:
+                    - generic [ref=e276]: 정상
+                    - paragraph [ref=e277]: 사용 가능
+                - cell "2026.04.29 17:17" [ref=e278]
+                - cell "2026.04.29 17:17" [ref=e279]
+                - cell "31,406 / 31,406 / 31,406" [ref=e280]
+                - cell "공공데이터포털" [ref=e281]:
+                  - link "공공데이터포털" [ref=e282] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EA%B5%AD%EB%B3%84%20%EB%8C%80%EC%84%B8%EA%B3%84%20%EC%88%98%EC%9E%85%EA%B7%9C%EC%A0%9C%20%ED%98%84%ED%99%A9
+                    - img [ref=e283]
+                    - text: 공공데이터포털
+              - row "무역관 정보 오류 동기화 오류 (Could not find the table 'public.kotra_csv_trade_office_cache' in the schema cache) 정보 없음 2026.04.29 17:17 127 / 127 / 0 공공데이터포털" [ref=e287]:
+                - cell "무역관 정보" [ref=e288]
+                - cell "오류 동기화 오류 (Could not find the table 'public.kotra_csv_trade_office_cache' in the schema cache)" [ref=e289]:
+                  - generic [ref=e290]:
+                    - generic [ref=e291]: 오류
+                    - paragraph [ref=e292]: 동기화 오류 (Could not find the table 'public.kotra_csv_trade_office_cache' in the schema cache)
+                - cell "정보 없음" [ref=e293]
+                - cell "2026.04.29 17:17" [ref=e294]
+                - cell "127 / 127 / 0" [ref=e295]
+                - cell "공공데이터포털" [ref=e296]:
+                  - link "공공데이터포털" [ref=e297] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EB%8C%80%ED%95%9C%EB%AC%B4%EC%97%AD%ED%88%AC%EC%9E%90%EC%A7%84%ED%9D%A5%EA%B3%B5%EC%82%AC_%EB%AC%B4%EC%97%AD%EA%B4%80%20%EC%A0%95%EB%B3%B4
+                    - img [ref=e298]
+                    - text: 공공데이터포털
+              - row "해외전시회 정보 오류 동기화 오류 (Could not find the table 'public.kotra_csv_overseas_exhibition_cache' in the schema cache) 정보 없음 2026.04.29 17:17 104 / 104 / 0 공공데이터포털" [ref=e302]:
+                - cell "해외전시회 정보" [ref=e303]
+                - cell "오류 동기화 오류 (Could not find the table 'public.kotra_csv_overseas_exhibition_cache' in the schema cache)" [ref=e304]:
+                  - generic [ref=e305]:
+                    - generic [ref=e306]: 오류
+                    - paragraph [ref=e307]: 동기화 오류 (Could not find the table 'public.kotra_csv_overseas_exhibition_cache' in the schema cache)
+                - cell "정보 없음" [ref=e308]
+                - cell "2026.04.29 17:17" [ref=e309]
+                - cell "104 / 104 / 0" [ref=e310]
+                - cell "공공데이터포털" [ref=e311]:
+                  - link "공공데이터포털" [ref=e312] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EB%8C%80%ED%95%9C%EB%AC%B4%EC%97%AD%ED%88%AC%EC%9E%90%EC%A7%84%ED%9D%A5%EA%B3%B5%EC%82%AC%20%ED%95%B4%EC%99%B8%EC%A0%84%EC%8B%9C%ED%9A%8C%20%EC%A0%95%EB%B3%B4
+                    - img [ref=e313]
+                    - text: 공공데이터포털
+        - paragraph [ref=e317]: SafetyKorea는 현재 API 승인 대기 상태로만 표시되며, 평가 결함으로 집계하지 않습니다.

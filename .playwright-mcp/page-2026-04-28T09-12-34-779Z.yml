@@ -1,0 +1,507 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e64]:
+    - banner [ref=e65]:
+      - link "홈" [ref=e67] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e69]
+        - generic [ref=e72]: 산단수출 코파일럿
+      - generic [ref=e73]:
+        - link "프로젝트" [ref=e74] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e75] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e76] [cursor=pointer]:
+          - img
+          - generic [ref=e77]: 로그아웃
+    - generic [ref=e78]:
+      - complementary [ref=e79]:
+        - paragraph [ref=e80]: 분석 단계
+        - navigation "분석 단계" [ref=e81]:
+          - link "1단계 기업·공장 검색" [ref=e82] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/company
+            - generic [ref=e83]: "1"
+            - generic [ref=e84]:
+              - generic [ref=e85]: 기업·공장 검색
+              - generic [ref=e86]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e87] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/product
+            - img [ref=e89]
+            - generic [ref=e91]:
+              - generic [ref=e92]: 제품·HS 코드
+              - generic [ref=e93]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e94] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/countries
+            - generic [ref=e95]: "3"
+            - generic [ref=e96]:
+              - generic [ref=e97]: 후보국 추천 Top 3
+              - generic [ref=e98]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e99] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/countries
+            - img [ref=e101]
+            - generic [ref=e103]:
+              - generic [ref=e104]: 국가 상세
+              - generic [ref=e105]: 요구사항 4~7
+              - generic [ref=e106]: 국가 선택 필요
+          - link "5단계 전략물자·제품안전" [ref=e107] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/safety
+            - generic [ref=e108]: "5"
+            - generic [ref=e109]:
+              - generic [ref=e110]: 전략물자·제품안전
+              - generic [ref=e111]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e112] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/report
+            - img [ref=e114]
+            - generic [ref=e116]:
+              - generic [ref=e117]: 리포트
+              - generic [ref=e118]: 요구사항 10
+      - main [ref=e119]:
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - paragraph [ref=e122]: 기획 요구사항 매핑
+            - paragraph [ref=e123]: 요구사항 3
+            - paragraph [ref=e124]: 후보국 추천 및 근거 점수화
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "3. 후보국 추천 Top 3" [level=1] [ref=e127]
+              - paragraph [ref=e128]: 후보군을 먼저 추출한 뒤, 후보군 내부에서만 점수와 순위를 계산합니다.
+            - button "추천 분석 실행" [ref=e129] [cursor=pointer]:
+              - img
+              - text: 추천 분석 실행
+          - generic [ref=e130]:
+            - button "1순위 일본(Japan) 상세 보기" [ref=e131] [cursor=pointer]:
+              - generic [ref=e132]:
+                - generic [ref=e133]:
+                  - img [ref=e134]
+                  - text: 순위 1
+                - status "위험도 우선검토" [ref=e140]: 우선검토
+              - paragraph [ref=e142]: 일본(Japan)
+              - paragraph [ref=e143]: JP
+              - paragraph [ref=e144]: 92/100
+              - paragraph [ref=e145]: "입력 목표시장: Indonesia(ID), India(IN), Vietnam(VN)"
+              - paragraph [ref=e146]: "후보 편입 신호: 수입 규제 데이터 존재, 제품 키워드 일치, 시장 뉴스 일치"
+              - paragraph [ref=e147]: "편입 사유: 수입 규제 데이터 존재; 제품 키워드 일치; 시장 뉴스 일치"
+              - paragraph [ref=e148]: "추천 근거: 노동력 부족 해결을 위한 DX 및 스마트 팩토리 투자 확대로 정밀 센서 수요가 꾸준함."
+              - paragraph [ref=e149]: "낮은 점수 사유: 키엔스, 옴론 등 세계적인 로컬 센서 기업과의 경쟁 및 높은 기술적 진입 장벽."
+              - paragraph [ref=e150]: "대안 시장: Germany(DE), Malaysia(MY), Poland(PL)"
+              - paragraph [ref=e151]: 상세 보기
+            - button "2순위 독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e152] [cursor=pointer]:
+              - generic [ref=e153]:
+                - generic [ref=e154]:
+                  - img [ref=e155]
+                  - text: 순위 2
+                - status "위험도 우선검토" [ref=e161]: 우선검토
+              - paragraph [ref=e163]: 독일연방공화국(The Federal Republic of Germany)
+              - paragraph [ref=e164]: DE
+              - paragraph [ref=e165]: 90/100
+              - paragraph [ref=e166]: "입력 목표시장: Indonesia(ID), India(IN), Vietnam(VN)"
+              - paragraph [ref=e167]: "후보 편입 신호: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e168]: "편입 사유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e169]: "추천 근거: 유럽 최대의 정밀 기계 및 자동차 제조 기반을 갖춘 고부가가치 센서 시장임."
+              - paragraph [ref=e170]: "낮은 점수 사유: 에너지 비용 상승 및 글로벌 수주 감소로 인한 제조업 경기 침체가 장기화되는 추세."
+              - paragraph [ref=e171]: "대안 시장: Japan(JP), Malaysia(MY), Poland(PL)"
+              - paragraph [ref=e172]: 상세 보기
+            - button "3순위 말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e173] [cursor=pointer]:
+              - generic [ref=e174]:
+                - generic [ref=e175]:
+                  - img [ref=e176]
+                  - text: 순위 3
+                - status "위험도 우선검토" [ref=e182]: 우선검토
+              - paragraph [ref=e184]: 말레이시아 연방(Federation of Malaysia)
+              - paragraph [ref=e185]: MY
+              - paragraph [ref=e186]: 83/100
+              - paragraph [ref=e187]: "입력 목표시장: Indonesia(ID), India(IN), Vietnam(VN)"
+              - paragraph [ref=e188]: "후보 편입 신호: 수입 규제 데이터 존재, 제품 키워드 일치, 시장 뉴스 일치"
+              - paragraph [ref=e189]: "편입 사유: 수입 규제 데이터 존재; 제품 키워드 일치; 시장 뉴스 일치"
+              - paragraph [ref=e190]: "추천 근거: 반도체 및 전자 기기 제조 허브로서 고도화된 산업용 센서의 안정적 수입 수요가 존재함."
+              - paragraph [ref=e191]: "낮은 점수 사유: 글로벌 경기 둔화 시 반도체 업황에 따른 수입 변동성이 큰 편임."
+              - paragraph [ref=e192]: "대안 시장: Japan(JP), Germany(DE), Poland(PL)"
+              - paragraph [ref=e193]: 상세 보기
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - heading "입력 목표시장 평가" [level=3] [ref=e196]
+              - paragraph [ref=e197]: 목표시장 메모는 비교 대상 편입 신호이며, 순위를 강제하지 않습니다.
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - paragraph [ref=e200]: Indonesia ID
+                - paragraph [ref=e201]: "편입 사유: 목표시장 메모 편입; 시장 뉴스 일치; 제품 키워드 일치"
+                - paragraph [ref=e202]: "최종 점수/순위: 77 / 순위 8"
+                - paragraph [ref=e203]: "추천 근거: 경기 부양책을 통한 기초 소재 및 제조업 육성 기조로 산업용 부품 시장이 활성화됨."
+                - paragraph [ref=e204]: "낮은 점수 사유: 최근 12개 품목 수입 금지 등 보호무역주의적 수입 규제 리스크가 잠재함."
+                - paragraph [ref=e205]: "대안 시장: Japan(JP), Germany(DE), Malaysia(MY)"
+              - generic [ref=e206]:
+                - paragraph [ref=e207]: India IN
+                - paragraph [ref=e208]: "편입 사유: 목표시장 메모 편입; 시장 뉴스 일치; 제품 키워드 일치"
+                - paragraph [ref=e209]: "최종 점수/순위: 78 / 순위 6"
+                - paragraph [ref=e210]: "추천 근거: Make in India 정책 기반의 제조 설비 확대로 인한 공정 자동화용 센서 모듈 수요가 막대함."
+                - paragraph [ref=e211]: "낮은 점수 사유: BIS 등 제품 규제 강화와 루피화 가치 하락에 따른 가격 경쟁력 확보 부담이 존재함."
+                - paragraph [ref=e212]: "대안 시장: Japan(JP), Germany(DE), Malaysia(MY)"
+              - generic [ref=e213]:
+                - paragraph [ref=e214]: Vietnam VN
+                - paragraph [ref=e215]: "편입 사유: 목표시장 메모 편입; 시장 뉴스 일치; 제품 키워드 일치"
+                - paragraph [ref=e216]: "최종 점수/순위: 80 / 순위 5"
+                - paragraph [ref=e217]: "추천 근거: 제조업 중심의 견조한 성장세와 한국 기업의 대규모 투자로 센서 수요가 급증하는 최우선 시장임."
+                - paragraph [ref=e218]: "낮은 점수 사유: 원자재 단가 상승 및 주요 교역국의 수요 변동에 따른 제조업 경기 민감도가 높음."
+                - paragraph [ref=e219]: "대안 시장: Japan(JP), Germany(DE), Malaysia(MY)"
+          - generic [ref=e220]:
+            - generic [ref=e221]:
+              - heading "뉴스 근거 (Top 3)" [level=3] [ref=e222]
+              - paragraph [ref=e223]: 점수 반영 근거 및 시장 배경 뉴스 원문입니다.
+            - generic [ref=e224]:
+              - generic [ref=e225]:
+                - paragraph [ref=e226]: "선택 국가: 일본(Japan)"
+                - combobox "국가 선택" [ref=e227] [cursor=pointer]:
+                  - generic: 순위 1 - 일본(Japan)
+                  - img [ref=e228]
+              - table "뉴스 근거 표" [ref=e230]:
+                - rowgroup [ref=e231]:
+                  - row "구분 제목 국가 발행일 링크" [ref=e232]:
+                    - columnheader "구분" [ref=e233]
+                    - columnheader "제목" [ref=e234]
+                    - columnheader "국가" [ref=e235]
+                    - columnheader "발행일" [ref=e236]
+                    - columnheader "링크" [ref=e237]
+                - rowgroup [ref=e238]:
+                  - row "제품 뉴스 근거 주거&middot;산업용 신재생에너지 수요 확대&hellip;2026 미얀마 태양광 전시회 참관기 미얀마 전력 및 태양광 전시회에서는 태양광 패널, ESS, 인버터 등 대체 전력 솔루션에 대한 현지 수요 확대가 확인됐다. 중국산 제품이 시장을 주도하는 가운데, 품질과 사후관리 경쟁력을 갖춘 한국 기업의 중장기적 시장 진입 가능성도 함께 제기된다. 일본(Japan) 2026-01-29 열기" [ref=e239]:
+                    - cell "제품 뉴스 근거" [ref=e240]
+                    - cell "주거&middot;산업용 신재생에너지 수요 확대&hellip;2026 미얀마 태양광 전시회 참관기 미얀마 전력 및 태양광 전시회에서는 태양광 패널, ESS, 인버터 등 대체 전력 솔루션에 대한 현지 수요 확대가 확인됐다. 중국산 제품이 시장을 주도하는 가운데, 품질과 사후관리 경쟁력을 갖춘 한국 기업의 중장기적 시장 진입 가능성도 함께 제기된다." [ref=e241]:
+                      - paragraph [ref=e242]: 주거&middot;산업용 신재생에너지 수요 확대&hellip;2026 미얀마 태양광 전시회 참관기
+                      - paragraph [ref=e243]: 미얀마 전력 및 태양광 전시회에서는 태양광 패널, ESS, 인버터 등 대체 전력 솔루션에 대한 현지 수요 확대가 확인됐다. 중국산 제품이 시장을 주도하는 가운데, 품질과 사후관리 경쟁력을 갖춘 한국 기업의 중장기적 시장 진입 가능성도 함께 제기된다.
+                    - cell "일본(Japan)" [ref=e244]
+                    - cell "2026-01-29" [ref=e245]
+                    - cell "열기" [ref=e246]:
+                      - link "열기" [ref=e247] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=238587
+                  - row "제품 뉴스 근거 미국 데이터센터 건설 붐에 산업용 야외창고(IOS) 품귀&hellip; 미국 산업&middot;물류 부동산 새 투자처 부상 미국 내 데이터센터 건설과 제조업 리쇼어링, 물류량 증가로 산업용 아웃도어 창고(IOS) 수요가 급증하고 있다. 그러나 지방정부 승인 절차가 까다로워 공급은 제한적이다. 이에 대형 투자사들이 대규모 투자를 단행하며 IOS 시장이 빠르게 성장 중이다. 한국 기업의 미국 진출 시 IOS 수요와 공급 현황을 전략적으로 검토해야 한다. 일본(Japan) 2025-11-25 열기" [ref=e248]:
+                    - cell "제품 뉴스 근거" [ref=e249]
+                    - cell "미국 데이터센터 건설 붐에 산업용 야외창고(IOS) 품귀&hellip; 미국 산업&middot;물류 부동산 새 투자처 부상 미국 내 데이터센터 건설과 제조업 리쇼어링, 물류량 증가로 산업용 아웃도어 창고(IOS) 수요가 급증하고 있다. 그러나 지방정부 승인 절차가 까다로워 공급은 제한적이다. 이에 대형 투자사들이 대규모 투자를 단행하며 IOS 시장이 빠르게 성장 중이다. 한국 기업의 미국 진출 시 IOS 수요와 공급 현황을 전략적으로 검토해야 한다." [ref=e250]:
+                      - paragraph [ref=e251]: 미국 데이터센터 건설 붐에 산업용 야외창고(IOS) 품귀&hellip; 미국 산업&middot;물류 부동산 새 투자처 부상
+                      - paragraph [ref=e252]: 미국 내 데이터센터 건설과 제조업 리쇼어링, 물류량 증가로 산업용 아웃도어 창고(IOS) 수요가 급증하고 있다. 그러나 지방정부 승인 절차가 까다로워 공급은 제한적이다. 이에 대형 투자사들이 대규모 투자를 단행하며 IOS 시장이 빠르게 성장 중이다. 한국 기업의 미국 진출 시 IOS 수요와 공급 현황을 전략적으로 검토해야 한다.
+                    - cell "일본(Japan)" [ref=e253]
+                    - cell "2025-11-25" [ref=e254]
+                    - cell "열기" [ref=e255]:
+                      - link "열기" [ref=e256] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=236612
+                  - row "제품 뉴스 근거 먼지는 물론 중국 시장 기회까지 잡는 한국 산업용 집진설비 중국 정부가 환경 보호, 특히 대기 오염 배출과 관련한 규제 및 관리 강화를 추진하면서 산업용 집진설비 시장이 빠르게 성장하고 있다. 2025년 이후 집진기 수요가 증가할 분야에 주목하며 관련 시장 동향을 면밀히 분석할 필요가 있다. 일본(Japan) 2025-04-03 열기" [ref=e257]:
+                    - cell "제품 뉴스 근거" [ref=e258]
+                    - cell "먼지는 물론 중국 시장 기회까지 잡는 한국 산업용 집진설비 중국 정부가 환경 보호, 특히 대기 오염 배출과 관련한 규제 및 관리 강화를 추진하면서 산업용 집진설비 시장이 빠르게 성장하고 있다. 2025년 이후 집진기 수요가 증가할 분야에 주목하며 관련 시장 동향을 면밀히 분석할 필요가 있다." [ref=e259]:
+                      - paragraph [ref=e260]: 먼지는 물론 중국 시장 기회까지 잡는 한국 산업용 집진설비
+                      - paragraph [ref=e261]: 중국 정부가 환경 보호, 특히 대기 오염 배출과 관련한 규제 및 관리 강화를 추진하면서 산업용 집진설비 시장이 빠르게 성장하고 있다. 2025년 이후 집진기 수요가 증가할 분야에 주목하며 관련 시장 동향을 면밀히 분석할 필요가 있다.
+                    - cell "일본(Japan)" [ref=e262]
+                    - cell "2025-04-03" [ref=e263]
+                    - cell "열기" [ref=e264]:
+                      - link "열기" [ref=e265] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=227470
+                  - row "제품 뉴스 근거 미국, 산업용 로봇 주문량 감소세 지속될까 올 상반기 북미 지역 산업용 로봇 주문량이 전년 동기대비 7.9% 감소했다. 지난해 전체 주문량은 2022년의 3분의 1 수준에 불과한 것으로 나타났다. 업계 관계자들은 미국의 고용 시장의 수급 불균형이 해소되고, 예상보다 부진한 전기차 판매 등을 그 요인을 꼽았다. 일본(Japan) 2024-10-29 열기" [ref=e266]:
+                    - cell "제품 뉴스 근거" [ref=e267]
+                    - cell "미국, 산업용 로봇 주문량 감소세 지속될까 올 상반기 북미 지역 산업용 로봇 주문량이 전년 동기대비 7.9% 감소했다. 지난해 전체 주문량은 2022년의 3분의 1 수준에 불과한 것으로 나타났다. 업계 관계자들은 미국의 고용 시장의 수급 불균형이 해소되고, 예상보다 부진한 전기차 판매 등을 그 요인을 꼽았다." [ref=e268]:
+                      - paragraph [ref=e269]: 미국, 산업용 로봇 주문량 감소세 지속될까
+                      - paragraph [ref=e270]: 올 상반기 북미 지역 산업용 로봇 주문량이 전년 동기대비 7.9% 감소했다. 지난해 전체 주문량은 2022년의 3분의 1 수준에 불과한 것으로 나타났다. 업계 관계자들은 미국의 고용 시장의 수급 불균형이 해소되고, 예상보다 부진한 전기차 판매 등을 그 요인을 꼽았다.
+                    - cell "일본(Japan)" [ref=e271]
+                    - cell "2024-10-29" [ref=e272]
+                    - cell "열기" [ref=e273]:
+                      - link "열기" [ref=e274] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=221377
+                  - row "제품 뉴스 근거 중국 산업용 로봇 시장, 로컬 기업 성장으로 시장 규모 확대 중 중국은 세계 최대 산업용 로봇 시장이다. 현재 FANUC, ABB, Yaskawa, KUKA 등 글로벌 기업이 시장을 장악하고 있으나, 전폭적인 정부 지원과 대규모 내수시장에 힘입어 중국 토종 기업의 경쟁력이 급속히 향상된다. 일본(Japan) 2024-03-19 열기" [ref=e275]:
+                    - cell "제품 뉴스 근거" [ref=e276]
+                    - cell "중국 산업용 로봇 시장, 로컬 기업 성장으로 시장 규모 확대 중 중국은 세계 최대 산업용 로봇 시장이다. 현재 FANUC, ABB, Yaskawa, KUKA 등 글로벌 기업이 시장을 장악하고 있으나, 전폭적인 정부 지원과 대규모 내수시장에 힘입어 중국 토종 기업의 경쟁력이 급속히 향상된다." [ref=e277]:
+                      - paragraph [ref=e278]: 중국 산업용 로봇 시장, 로컬 기업 성장으로 시장 규모 확대 중
+                      - paragraph [ref=e279]: 중국은 세계 최대 산업용 로봇 시장이다. 현재 FANUC, ABB, Yaskawa, KUKA 등 글로벌 기업이 시장을 장악하고 있으나, 전폭적인 정부 지원과 대규모 내수시장에 힘입어 중국 토종 기업의 경쟁력이 급속히 향상된다.
+                    - cell "일본(Japan)" [ref=e280]
+                    - cell "2024-03-19" [ref=e281]
+                    - cell "열기" [ref=e282]:
+                      - link "열기" [ref=e283] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=213307
+                  - row "국가 뉴스 근거 2026년 일본 경제 전망 &lsquo;사나에노믹스&rsquo;가 다가오는 &lsquo;공급 혁명&rsquo; 2026년 일본 경제를 전망한다. 핵심은 지난해 가을 출범한 다카이치 정권의 경제 정책 &#39;사나에노믹스&#39;의 실효성이다. 다카이치 총리는 연초에 열리는 정기국회 개회 직후 중의원을 해산하고 선거에 돌입, 승부를 걸었다. 선거 결과에 따라 다카이치 정권의 존속도 위태로울 수 있어 예단을 허용할 상황이 아니다. 일본 경제 전망과 사나에노믹스의 주목할 만한 포인트에 대해 리포트한다. 일본(Japan) 2026-04-23 열기" [ref=e284]:
+                    - cell "국가 뉴스 근거" [ref=e285]
+                    - cell "2026년 일본 경제 전망 &lsquo;사나에노믹스&rsquo;가 다가오는 &lsquo;공급 혁명&rsquo; 2026년 일본 경제를 전망한다. 핵심은 지난해 가을 출범한 다카이치 정권의 경제 정책 &#39;사나에노믹스&#39;의 실효성이다. 다카이치 총리는 연초에 열리는 정기국회 개회 직후 중의원을 해산하고 선거에 돌입, 승부를 걸었다. 선거 결과에 따라 다카이치 정권의 존속도 위태로울 수 있어 예단을 허용할 상황이 아니다. 일본 경제 전망과 사나에노믹스의 주목할 만한 포인트에 대해 리포트한다." [ref=e286]:
+                      - paragraph [ref=e287]: 2026년 일본 경제 전망 &lsquo;사나에노믹스&rsquo;가 다가오는 &lsquo;공급 혁명&rsquo;
+                      - paragraph [ref=e288]: 2026년 일본 경제를 전망한다. 핵심은 지난해 가을 출범한 다카이치 정권의 경제 정책 &#39;사나에노믹스&#39;의 실효성이다. 다카이치 총리는 연초에 열리는 정기국회 개회 직후 중의원을 해산하고 선거에 돌입, 승부를 걸었다. 선거 결과에 따라 다카이치 정권의 존속도 위태로울 수 있어 예단을 허용할 상황이 아니다. 일본 경제 전망과 사나에노믹스의 주목할 만한 포인트에 대해 리포트한다.
+                    - cell "일본(Japan)" [ref=e289]
+                    - cell "2026-04-23" [ref=e290]
+                    - cell "열기" [ref=e291]:
+                      - link "열기" [ref=e292] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=238183
+                  - row "국가 뉴스 근거 일본 식음료품 소비세 0% 인하와 경제적 파급 효과 일본에서 식음료품 소비세 인하가 주요 정책 쟁점으로 부상하였다. 가계 부담 경감 효과는 있으나 재정 투입 대비 소비&middot;GDP 확대 효과는 제한적이다. 외식과 내식 간 세율 격차 확대 가능성도 제기된다. 한국 식품 기업은 유통 구조 변화와 수입 수요 확대 가능성에 대비한 중기 전략 마련이 필요하다. 일본(Japan) 2026-04-23 열기" [ref=e293]:
+                    - cell "국가 뉴스 근거" [ref=e294]
+                    - cell "일본 식음료품 소비세 0% 인하와 경제적 파급 효과 일본에서 식음료품 소비세 인하가 주요 정책 쟁점으로 부상하였다. 가계 부담 경감 효과는 있으나 재정 투입 대비 소비&middot;GDP 확대 효과는 제한적이다. 외식과 내식 간 세율 격차 확대 가능성도 제기된다. 한국 식품 기업은 유통 구조 변화와 수입 수요 확대 가능성에 대비한 중기 전략 마련이 필요하다." [ref=e295]:
+                      - paragraph [ref=e296]: 일본 식음료품 소비세 0% 인하와 경제적 파급 효과
+                      - paragraph [ref=e297]: 일본에서 식음료품 소비세 인하가 주요 정책 쟁점으로 부상하였다. 가계 부담 경감 효과는 있으나 재정 투입 대비 소비&middot;GDP 확대 효과는 제한적이다. 외식과 내식 간 세율 격차 확대 가능성도 제기된다. 한국 식품 기업은 유통 구조 변화와 수입 수요 확대 가능성에 대비한 중기 전략 마련이 필요하다.
+                    - cell "일본(Japan)" [ref=e298]
+                    - cell "2026-04-23" [ref=e299]
+                    - cell "열기" [ref=e300]:
+                      - link "열기" [ref=e301] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239310
+                  - row "국가 뉴스 근거 스마도리 문화 중심으로 변화하는 일본 주류시장 트렌드 일본 주류 시장은 축소가 지속되는 상황에서도 MZ세대를 중심으로 &#39;스마도리 문화&#39;로 대표되는 논알코올 음료, 절제 음주문화 확산, 2026년 일본 주세법 개정으로 인한 소비자의 맥주소비 증가, 인바운드 관광객 증가로 인한 지방 양조장 투어, 업사이클링 주류 확대 등의 트렌드가 일본 내에서 주목받고 있다. 일본(Japan) 2026-04-21 열기" [ref=e302]:
+                    - cell "국가 뉴스 근거" [ref=e303]
+                    - cell "스마도리 문화 중심으로 변화하는 일본 주류시장 트렌드 일본 주류 시장은 축소가 지속되는 상황에서도 MZ세대를 중심으로 &#39;스마도리 문화&#39;로 대표되는 논알코올 음료, 절제 음주문화 확산, 2026년 일본 주세법 개정으로 인한 소비자의 맥주소비 증가, 인바운드 관광객 증가로 인한 지방 양조장 투어, 업사이클링 주류 확대 등의 트렌드가 일본 내에서 주목받고 있다." [ref=e304]:
+                      - paragraph [ref=e305]: 스마도리 문화 중심으로 변화하는 일본 주류시장 트렌드
+                      - paragraph [ref=e306]: 일본 주류 시장은 축소가 지속되는 상황에서도 MZ세대를 중심으로 &#39;스마도리 문화&#39;로 대표되는 논알코올 음료, 절제 음주문화 확산, 2026년 일본 주세법 개정으로 인한 소비자의 맥주소비 증가, 인바운드 관광객 증가로 인한 지방 양조장 투어, 업사이클링 주류 확대 등의 트렌드가 일본 내에서 주목받고 있다.
+                    - cell "일본(Japan)" [ref=e307]
+                    - cell "2026-04-21" [ref=e308]
+                    - cell "열기" [ref=e309]:
+                      - link "열기" [ref=e310] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240652
+                  - row "국가 뉴스 근거 일본정부 2026년 경제안보정책의 산업 적용 방향성 현대 국제 사회에서 &#39;경제&#39;와 &#39;안보&#39;의 경계가 완전히 허물어지는 경제안보화 패러다임이 전 세계적인 표준으로 고착화되고 있다. 국가 경제 및 주요 산업의 체질을 &#39;효율성&#39;에서 &#39;안보 및 생존 지향&#39;으로 바꾸는 과정에서 일본 정부의 경제안보정책이 모빌리티 및 이차전지 산업현장에서 실제 어떻게 적용되고 있는지 살펴보고자 한다. 일본(Japan) 2026-04-21 열기" [ref=e311]:
+                    - cell "국가 뉴스 근거" [ref=e312]
+                    - cell "일본정부 2026년 경제안보정책의 산업 적용 방향성 현대 국제 사회에서 &#39;경제&#39;와 &#39;안보&#39;의 경계가 완전히 허물어지는 경제안보화 패러다임이 전 세계적인 표준으로 고착화되고 있다. 국가 경제 및 주요 산업의 체질을 &#39;효율성&#39;에서 &#39;안보 및 생존 지향&#39;으로 바꾸는 과정에서 일본 정부의 경제안보정책이 모빌리티 및 이차전지 산업현장에서 실제 어떻게 적용되고 있는지 살펴보고자 한다." [ref=e313]:
+                      - paragraph [ref=e314]: 일본정부 2026년 경제안보정책의 산업 적용 방향성
+                      - paragraph [ref=e315]: 현대 국제 사회에서 &#39;경제&#39;와 &#39;안보&#39;의 경계가 완전히 허물어지는 경제안보화 패러다임이 전 세계적인 표준으로 고착화되고 있다. 국가 경제 및 주요 산업의 체질을 &#39;효율성&#39;에서 &#39;안보 및 생존 지향&#39;으로 바꾸는 과정에서 일본 정부의 경제안보정책이 모빌리티 및 이차전지 산업현장에서 실제 어떻게 적용되고 있는지 살펴보고자 한다.
+                    - cell "일본(Japan)" [ref=e316]
+                    - cell "2026-04-21" [ref=e317]
+                    - cell "열기" [ref=e318]:
+                      - link "열기" [ref=e319] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240648
+                  - row "국가 뉴스 근거 중국의 대일 희토류 수출규제, 일본 산업에 미치는 영향 중국의 대일 희토류 수출규제로 중일 갈등이 안보를 넘어 경제&middot;산업 분야로 확산되고 있다. 일본은 자동차&middot;전기전자 등 핵심 산업에서 공급망 불안에 직면한 상황이다. 이에 따라 일본 정부와 기업은 수입 다변화와 자원 확보 등 대응에 나서고 있다. 일본(Japan) 2026-04-21 열기" [ref=e320]:
+                    - cell "국가 뉴스 근거" [ref=e321]
+                    - cell "중국의 대일 희토류 수출규제, 일본 산업에 미치는 영향 중국의 대일 희토류 수출규제로 중일 갈등이 안보를 넘어 경제&middot;산업 분야로 확산되고 있다. 일본은 자동차&middot;전기전자 등 핵심 산업에서 공급망 불안에 직면한 상황이다. 이에 따라 일본 정부와 기업은 수입 다변화와 자원 확보 등 대응에 나서고 있다." [ref=e322]:
+                      - paragraph [ref=e323]: 중국의 대일 희토류 수출규제, 일본 산업에 미치는 영향
+                      - paragraph [ref=e324]: 중국의 대일 희토류 수출규제로 중일 갈등이 안보를 넘어 경제&middot;산업 분야로 확산되고 있다. 일본은 자동차&middot;전기전자 등 핵심 산업에서 공급망 불안에 직면한 상황이다. 이에 따라 일본 정부와 기업은 수입 다변화와 자원 확보 등 대응에 나서고 있다.
+                    - cell "일본(Japan)" [ref=e325]
+                    - cell "2026-04-21" [ref=e326]
+                    - cell "열기" [ref=e327]:
+                      - link "열기" [ref=e328] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=238687
+                  - row "국가 뉴스 근거 17대 전략산업으로 격상된 일본 조선업, 수소∙암모니아 활용 차세대 선박 공급망 강화 국제해사기구(IMO)의 2050년 넷제로 목표 설정으로 글로벌 조선 시장이 탈탄소 선박 중심으로 재편되고 있다. 이에 일본 정부는 GX 경제이행채권을 활용해 1,200억 엔 규모의 지원을 결정했으며, 이마바리조선, 이즈미강업, BEMAC 등 16개 주요 기업이 차세대 선박 기술 확보에 나섰다. 조선&middot;해운사가 협력하는 ALL JAPAN 체제를 통해 중&middot;한 양국이 선점한 시장 구조를 뒤흔들고 차세대 선박... 일본(Japan) 2026-04-21 열기" [ref=e329]:
+                    - cell "국가 뉴스 근거" [ref=e330]
+                    - cell "17대 전략산업으로 격상된 일본 조선업, 수소∙암모니아 활용 차세대 선박 공급망 강화 국제해사기구(IMO)의 2050년 넷제로 목표 설정으로 글로벌 조선 시장이 탈탄소 선박 중심으로 재편되고 있다. 이에 일본 정부는 GX 경제이행채권을 활용해 1,200억 엔 규모의 지원을 결정했으며, 이마바리조선, 이즈미강업, BEMAC 등 16개 주요 기업이 차세대 선박 기술 확보에 나섰다. 조선&middot;해운사가 협력하는 ALL JAPAN 체제를 통해 중&middot;한 양국이 선점한 시장 구조를 뒤흔들고 차세대 선박..." [ref=e331]:
+                      - paragraph [ref=e332]: 17대 전략산업으로 격상된 일본 조선업, 수소∙암모니아 활용 차세대 선박 공급망 강화
+                      - paragraph [ref=e333]: 국제해사기구(IMO)의 2050년 넷제로 목표 설정으로 글로벌 조선 시장이 탈탄소 선박 중심으로 재편되고 있다. 이에 일본 정부는 GX 경제이행채권을 활용해 1,200억 엔 규모의 지원을 결정했으며, 이마바리조선, 이즈미강업, BEMAC 등 16개 주요 기업이 차세대 선박 기술 확보에 나섰다. 조선&middot;해운사가 협력하는 ALL JAPAN 체제를 통해 중&middot;한 양국이 선점한 시장 구조를 뒤흔들고 차세대 선박...
+                    - cell "일본(Japan)" [ref=e334]
+                    - cell "2026-04-21" [ref=e335]
+                    - cell "열기" [ref=e336]:
+                      - link "열기" [ref=e337] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240513
+                  - row "국가 뉴스 근거 일본 &lsquo;제품안전 4법&rsquo; 개정안 시행에 따른 해외 온라인 판매자 의무 및 대응 방안 일본은 2025년 12월 25일부터 해외 온라인 직판에도 제품안전 4법을 적용해 PS마크 대상 제품의 신고&middot;국내관리인 선임&middot;표시 의무를 강화하고, 플랫폼 판매 및 3세 미만 완구(어린이 PSC) 규제 대응을 요구하고 있다. 일본(Japan) 2026-04-21 열기" [ref=e338]:
+                    - cell "국가 뉴스 근거" [ref=e339]
+                    - cell "일본 &lsquo;제품안전 4법&rsquo; 개정안 시행에 따른 해외 온라인 판매자 의무 및 대응 방안 일본은 2025년 12월 25일부터 해외 온라인 직판에도 제품안전 4법을 적용해 PS마크 대상 제품의 신고&middot;국내관리인 선임&middot;표시 의무를 강화하고, 플랫폼 판매 및 3세 미만 완구(어린이 PSC) 규제 대응을 요구하고 있다." [ref=e340]:
+                      - paragraph [ref=e341]: 일본 &lsquo;제품안전 4법&rsquo; 개정안 시행에 따른 해외 온라인 판매자 의무 및 대응 방안
+                      - paragraph [ref=e342]: 일본은 2025년 12월 25일부터 해외 온라인 직판에도 제품안전 4법을 적용해 PS마크 대상 제품의 신고&middot;국내관리인 선임&middot;표시 의무를 강화하고, 플랫폼 판매 및 3세 미만 완구(어린이 PSC) 규제 대응을 요구하고 있다.
+                    - cell "일본(Japan)" [ref=e343]
+                    - cell "2026-04-21" [ref=e344]
+                    - cell "열기" [ref=e345]:
+                      - link "열기" [ref=e346] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=238167
+                  - row "국가 뉴스 근거 美 EV 보조금 정책 중단과 日 자동차 메이커 북미 시장 진출 동향 2026년 1분기, 美 보조금 폐지&middot;환경규제 철폐&middot;관세 재고 압박에 日 자동차 북미 판매 감소 이어지고 있음. 소니-혼다가 아필라 프로젝트 전면 중단을 발표, 스바루&middot;닛산&middot;도요타도 EV 투자 축소&middot;연기함. 유가 급등 속 불투명한 캐즘 향방, 불확실성 확대에 유연한 생산 체제 구축이 과제로 부각됨. 일본(Japan) 2026-04-21 열기" [ref=e347]:
+                    - cell "국가 뉴스 근거" [ref=e348]
+                    - cell "美 EV 보조금 정책 중단과 日 자동차 메이커 북미 시장 진출 동향 2026년 1분기, 美 보조금 폐지&middot;환경규제 철폐&middot;관세 재고 압박에 日 자동차 북미 판매 감소 이어지고 있음. 소니-혼다가 아필라 프로젝트 전면 중단을 발표, 스바루&middot;닛산&middot;도요타도 EV 투자 축소&middot;연기함. 유가 급등 속 불투명한 캐즘 향방, 불확실성 확대에 유연한 생산 체제 구축이 과제로 부각됨." [ref=e349]:
+                      - paragraph [ref=e350]: 美 EV 보조금 정책 중단과 日 자동차 메이커 북미 시장 진출 동향
+                      - paragraph [ref=e351]: 2026년 1분기, 美 보조금 폐지&middot;환경규제 철폐&middot;관세 재고 압박에 日 자동차 북미 판매 감소 이어지고 있음. 소니-혼다가 아필라 프로젝트 전면 중단을 발표, 스바루&middot;닛산&middot;도요타도 EV 투자 축소&middot;연기함. 유가 급등 속 불투명한 캐즘 향방, 불확실성 확대에 유연한 생산 체제 구축이 과제로 부각됨.
+                    - cell "일본(Japan)" [ref=e352]
+                    - cell "2026-04-21" [ref=e353]
+                    - cell "열기" [ref=e354]:
+                      - link "열기" [ref=e355] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240599
+          - generic [ref=e356]:
+            - generic [ref=e357]:
+              - heading "전체 후보국" [level=3] [ref=e358]
+              - paragraph [ref=e359]: 점수는 후보군 내부 비교로만 계산됩니다.
+            - table "후보국 순위 표" [ref=e361]:
+              - rowgroup [ref=e362]:
+                - row "국가 시장성 인증 규제 결제 안전성 총점 등급 상세" [ref=e363]:
+                  - columnheader "국가" [ref=e364]
+                  - columnheader "시장성" [ref=e365]
+                  - columnheader "인증" [ref=e366]
+                  - columnheader "규제" [ref=e367]
+                  - columnheader "결제" [ref=e368]
+                  - columnheader "안전성" [ref=e369]
+                  - columnheader "총점" [ref=e370]
+                  - columnheader "등급" [ref=e371]
+                  - columnheader "상세" [ref=e372]
+              - rowgroup [ref=e373]:
+                - row "일본(Japan) JP 26 18 19 19 10 92 위험도 우선검토 일본(Japan) 상세 보기" [ref=e374]:
+                  - cell "일본(Japan) JP" [ref=e375]
+                  - cell "26" [ref=e376]
+                  - cell "18" [ref=e377]
+                  - cell "19" [ref=e378]
+                  - cell "19" [ref=e379]
+                  - cell "10" [ref=e380]
+                  - cell "92" [ref=e381]
+                  - cell "위험도 우선검토" [ref=e382]:
+                    - status "위험도 우선검토" [ref=e383]: 우선검토
+                  - cell "일본(Japan) 상세 보기" [ref=e385]:
+                    - button "일본(Japan) 상세 보기" [ref=e386] [cursor=pointer]: 상세 보기
+                - row "독일연방공화국(The Federal Republic of Germany) DE 24 19 18 19 10 90 위험도 우선검토 독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e387]:
+                  - cell "독일연방공화국(The Federal Republic of Germany) DE" [ref=e388]
+                  - cell "24" [ref=e389]
+                  - cell "19" [ref=e390]
+                  - cell "18" [ref=e391]
+                  - cell "19" [ref=e392]
+                  - cell "10" [ref=e393]
+                  - cell "90" [ref=e394]
+                  - cell "위험도 우선검토" [ref=e395]:
+                    - status "위험도 우선검토" [ref=e396]: 우선검토
+                  - cell "독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e398]:
+                    - button "독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e399] [cursor=pointer]: 상세 보기
+                - row "말레이시아 연방(Federation of Malaysia) MY 25 15 16 18 9 83 위험도 우선검토 말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e400]:
+                  - cell "말레이시아 연방(Federation of Malaysia) MY" [ref=e401]
+                  - cell "25" [ref=e402]
+                  - cell "15" [ref=e403]
+                  - cell "16" [ref=e404]
+                  - cell "18" [ref=e405]
+                  - cell "9" [ref=e406]
+                  - cell "83" [ref=e407]
+                  - cell "위험도 우선검토" [ref=e408]:
+                    - status "위험도 우선검토" [ref=e409]: 우선검토
+                  - cell "말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e411]:
+                    - button "말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e412] [cursor=pointer]: 상세 보기
+                - row "폴란드공화국 (The Republic of Poland) PL 22 16 17 17 9 81 위험도 우선검토 폴란드공화국 (The Republic of Poland) 상세 보기" [ref=e413]:
+                  - cell "폴란드공화국 (The Republic of Poland) PL" [ref=e414]
+                  - cell "22" [ref=e415]
+                  - cell "16" [ref=e416]
+                  - cell "17" [ref=e417]
+                  - cell "17" [ref=e418]
+                  - cell "9" [ref=e419]
+                  - cell "81" [ref=e420]
+                  - cell "위험도 우선검토" [ref=e421]:
+                    - status "위험도 우선검토" [ref=e422]: 우선검토
+                  - cell "폴란드공화국 (The Republic of Poland) 상세 보기" [ref=e424]:
+                    - button "폴란드공화국 (The Republic of Poland) 상세 보기" [ref=e425] [cursor=pointer]: 상세 보기
+                - row "베트남 사회주의 공화국(Socialist Republic of Vietnam) VN 27 14 15 16 8 80 위험도 우선검토 베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e426]:
+                  - cell "베트남 사회주의 공화국(Socialist Republic of Vietnam) VN" [ref=e427]
+                  - cell "27" [ref=e428]
+                  - cell "14" [ref=e429]
+                  - cell "15" [ref=e430]
+                  - cell "16" [ref=e431]
+                  - cell "8" [ref=e432]
+                  - cell "80" [ref=e433]
+                  - cell "위험도 우선검토" [ref=e434]:
+                    - status "위험도 우선검토" [ref=e435]: 우선검토
+                  - cell "베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e437]:
+                    - button "베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e438] [cursor=pointer]: 상세 보기
+                - row "인도(The Republic of India) IN 28 13 14 15 8 78 위험도 검토권장 인도(The Republic of India) 상세 보기" [ref=e439]:
+                  - cell "인도(The Republic of India) IN" [ref=e440]
+                  - cell "28" [ref=e441]
+                  - cell "13" [ref=e442]
+                  - cell "14" [ref=e443]
+                  - cell "15" [ref=e444]
+                  - cell "8" [ref=e445]
+                  - cell "78" [ref=e446]
+                  - cell "위험도 검토권장" [ref=e447]:
+                    - status "위험도 검토권장" [ref=e448]: 검토권장
+                  - cell "인도(The Republic of India) 상세 보기" [ref=e450]:
+                    - button "인도(The Republic of India) 상세 보기" [ref=e451] [cursor=pointer]: 상세 보기
+                - row "태국 TH 23 14 16 16 9 78 위험도 검토권장 태국 상세 보기" [ref=e452]:
+                  - cell "태국 TH" [ref=e453]
+                  - cell "23" [ref=e454]
+                  - cell "14" [ref=e455]
+                  - cell "16" [ref=e456]
+                  - cell "16" [ref=e457]
+                  - cell "9" [ref=e458]
+                  - cell "78" [ref=e459]
+                  - cell "위험도 검토권장" [ref=e460]:
+                    - status "위험도 검토권장" [ref=e461]: 검토권장
+                  - cell "태국 상세 보기" [ref=e463]:
+                    - button "태국 상세 보기" [ref=e464] [cursor=pointer]: 상세 보기
+                - row "인도네시아 ID 26 14 13 16 8 77 위험도 검토권장 인도네시아 상세 보기" [ref=e465]:
+                  - cell "인도네시아 ID" [ref=e466]
+                  - cell "26" [ref=e467]
+                  - cell "14" [ref=e468]
+                  - cell "13" [ref=e469]
+                  - cell "16" [ref=e470]
+                  - cell "8" [ref=e471]
+                  - cell "77" [ref=e472]
+                  - cell "위험도 검토권장" [ref=e473]:
+                    - status "위험도 검토권장" [ref=e474]: 검토권장
+                  - cell "인도네시아 상세 보기" [ref=e476]:
+                    - button "인도네시아 상세 보기" [ref=e477] [cursor=pointer]: 상세 보기
+                - row "중화인민공화국(The People&rsquo;s Republic of China) CN 26 14 12 15 8 75 위험도 검토권장 중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e478]:
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) CN" [ref=e479]
+                  - cell "26" [ref=e480]
+                  - cell "14" [ref=e481]
+                  - cell "12" [ref=e482]
+                  - cell "15" [ref=e483]
+                  - cell "8" [ref=e484]
+                  - cell "75" [ref=e485]
+                  - cell "위험도 검토권장" [ref=e486]:
+                    - status "위험도 검토권장" [ref=e487]: 검토권장
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e489]:
+                    - button "중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e490] [cursor=pointer]: 상세 보기
+                - row "멕시코합중국 (Estados Unidos Mexicanos) MX 24 14 15 14 7 74 위험도 검토권장 멕시코합중국 (Estados Unidos Mexicanos) 상세 보기" [ref=e491]:
+                  - cell "멕시코합중국 (Estados Unidos Mexicanos) MX" [ref=e492]
+                  - cell "24" [ref=e493]
+                  - cell "14" [ref=e494]
+                  - cell "15" [ref=e495]
+                  - cell "14" [ref=e496]
+                  - cell "7" [ref=e497]
+                  - cell "74" [ref=e498]
+                  - cell "위험도 검토권장" [ref=e499]:
+                    - status "위험도 검토권장" [ref=e500]: 검토권장
+                  - cell "멕시코합중국 (Estados Unidos Mexicanos) 상세 보기" [ref=e502]:
+                    - button "멕시코합중국 (Estados Unidos Mexicanos) 상세 보기" [ref=e503] [cursor=pointer]: 상세 보기
+                - row "미합중국(The United States of America) US 30 0 0 12 2 44 위험도 주의필요 미합중국(The United States of America) 상세 보기" [ref=e504]:
+                  - cell "미합중국(The United States of America) US" [ref=e505]
+                  - cell "30" [ref=e506]
+                  - cell "0" [ref=e507]
+                  - cell "0" [ref=e508]
+                  - cell "12" [ref=e509]
+                  - cell "2" [ref=e510]
+                  - cell "44" [ref=e511]
+                  - cell "위험도 주의필요" [ref=e512]:
+                    - status "위험도 주의필요" [ref=e513]: 주의필요
+                  - cell "미합중국(The United States of America) 상세 보기" [ref=e515]:
+                    - button "미합중국(The United States of America) 상세 보기" [ref=e516] [cursor=pointer]: 상세 보기
+                - row "브라질 연방 공화국(The Federal Republic of Brazil) BR 30 0 0 12 2 44 위험도 주의필요 브라질 연방 공화국(The Federal Republic of Brazil) 상세 보기" [ref=e517]:
+                  - cell "브라질 연방 공화국(The Federal Republic of Brazil) BR" [ref=e518]
+                  - cell "30" [ref=e519]
+                  - cell "0" [ref=e520]
+                  - cell "0" [ref=e521]
+                  - cell "12" [ref=e522]
+                  - cell "2" [ref=e523]
+                  - cell "44" [ref=e524]
+                  - cell "위험도 주의필요" [ref=e525]:
+                    - status "위험도 주의필요" [ref=e526]: 주의필요
+                  - cell "브라질 연방 공화국(The Federal Republic of Brazil) 상세 보기" [ref=e528]:
+                    - button "브라질 연방 공화국(The Federal Republic of Brazil) 상세 보기" [ref=e529] [cursor=pointer]: 상세 보기
+                - row "튀르키예공화국(Republic of T&uuml;rkiye) TR 30 0 0 12 2 44 위험도 주의필요 튀르키예공화국(Republic of T&uuml;rkiye) 상세 보기" [ref=e530]:
+                  - cell "튀르키예공화국(Republic of T&uuml;rkiye) TR" [ref=e531]
+                  - cell "30" [ref=e532]
+                  - cell "0" [ref=e533]
+                  - cell "0" [ref=e534]
+                  - cell "12" [ref=e535]
+                  - cell "2" [ref=e536]
+                  - cell "44" [ref=e537]
+                  - cell "위험도 주의필요" [ref=e538]:
+                    - status "위험도 주의필요" [ref=e539]: 주의필요
+                  - cell "튀르키예공화국(Republic of T&uuml;rkiye) 상세 보기" [ref=e541]:
+                    - button "튀르키예공화국(Republic of T&uuml;rkiye) 상세 보기" [ref=e542] [cursor=pointer]: 상세 보기
+                - row "아랍에미리트(United Arab Emirates) AE 28 0 0 12 2 42 위험도 주의필요 아랍에미리트(United Arab Emirates) 상세 보기" [ref=e543]:
+                  - cell "아랍에미리트(United Arab Emirates) AE" [ref=e544]
+                  - cell "28" [ref=e545]
+                  - cell "0" [ref=e546]
+                  - cell "0" [ref=e547]
+                  - cell "12" [ref=e548]
+                  - cell "2" [ref=e549]
+                  - cell "42" [ref=e550]
+                  - cell "위험도 주의필요" [ref=e551]:
+                    - status "위험도 주의필요" [ref=e552]: 주의필요
+                  - cell "아랍에미리트(United Arab Emirates) 상세 보기" [ref=e554]:
+                    - button "아랍에미리트(United Arab Emirates) 상세 보기" [ref=e555] [cursor=pointer]: 상세 보기
+      - complementary [ref=e556]:
+        - generic [ref=e557]:
+          - generic [ref=e558]: 근거 패널
+          - button "근거 패널 접기" [ref=e559] [cursor=pointer]:
+            - img
+        - generic [ref=e561]:
+          - heading "근거 상태" [level=3] [ref=e562]
+          - paragraph [ref=e563]: 후보군으로 편입된 국가만 점수화해 순위를 계산합니다.
+          - generic [ref=e564]:
+            - paragraph [ref=e565]: 분석 기준 코드
+            - paragraph [ref=e566]: HS 902490 · HSK 9024901000
+            - paragraph [ref=e567]: "적용 방식: 사용자 수동 선택 (70점)"
+            - paragraph [ref=e568]: "상태: 확인 필요 · 확인 필요 상태로 진행 중입니다. 계약 전 코드 재확인이 필요합니다."
+            - paragraph [ref=e569]: "확인 필요 상태로 진행: 후속 단계 분석은 진행되지만, 최종 확정 전 코드 재검증이 필요합니다."
+          - generic [ref=e570]:
+            - paragraph [ref=e571]: 현재 상태
+            - generic [ref=e572]: 대기
+    - generic [ref=e574]:
+      - button "이전" [ref=e575] [cursor=pointer]
+      - button "안전성 검토" [ref=e576] [cursor=pointer]:
+        - text: 안전성 검토
+        - img

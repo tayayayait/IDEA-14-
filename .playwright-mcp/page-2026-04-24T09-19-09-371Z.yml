@@ -1,0 +1,55 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "홈" [ref=e6] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e8]
+      - generic [ref=e11]:
+        - link "프로젝트" [ref=e12] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e13] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e14] [cursor=pointer]:
+          - img
+    - main [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "6. 1페이지 수출 분석 리포트" [level=1] [ref=e19]
+          - paragraph [ref=e20]: A4 1페이지로 인쇄·공유할 수 있는 요약 리포트입니다.
+        - generic [ref=e21]:
+          - img [ref=e22]
+          - text: 불러오는 중…
+    - generic [ref=e25]:
+      - link "1단계 기업·공장 검색" [ref=e26] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+        - text: "1"
+      - link "2단계 제품·HS 코드" [ref=e27] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+        - text: "2"
+      - link "3단계 후보국 추천 Top 3" [ref=e28] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+        - text: "3"
+      - link "4단계 국가 상세" [ref=e29] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+        - text: "4"
+      - link "5단계 전략물자·제품안전" [ref=e30] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+        - text: "5"
+      - link "6단계 리포트" [ref=e31] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+        - text: "6"
+    - generic [ref=e33]:
+      - button "이전" [ref=e34] [cursor=pointer]
+      - button "AI 요약 생성" [disabled]:
+        - img
+        - text: AI 요약 생성
+      - button "PDF 다운로드" [disabled]:
+        - img
+        - text: PDF 다운로드

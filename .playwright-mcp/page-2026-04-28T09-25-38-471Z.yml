@@ -1,0 +1,224 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e576]:
+    - banner [ref=e577]:
+      - link "홈" [ref=e579] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e581]
+        - generic [ref=e584]: 산단수출 코파일럿
+      - generic [ref=e585]:
+        - link "프로젝트" [ref=e586] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e587] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e588] [cursor=pointer]:
+          - img
+          - generic [ref=e589]: 로그아웃
+    - generic [ref=e590]:
+      - complementary [ref=e591]:
+        - paragraph [ref=e592]: 분석 단계
+        - navigation "분석 단계" [ref=e593]:
+          - link "1단계 기업·공장 검색" [ref=e594] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/company
+            - generic [ref=e595]: "1"
+            - generic [ref=e596]:
+              - generic [ref=e597]: 기업·공장 검색
+              - generic [ref=e598]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e599] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/product
+            - img [ref=e601]
+            - generic [ref=e603]:
+              - generic [ref=e604]: 제품·HS 코드
+              - generic [ref=e605]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e606] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/countries
+            - generic [ref=e607]: "3"
+            - generic [ref=e608]:
+              - generic [ref=e609]: 후보국 추천 Top 3
+              - generic [ref=e610]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e611] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/countries/JP
+            - img [ref=e613]
+            - generic [ref=e615]:
+              - generic [ref=e616]: 국가 상세
+              - generic [ref=e617]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e618] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/safety
+            - generic [ref=e619]: "5"
+            - generic [ref=e620]:
+              - generic [ref=e621]: 전략물자·제품안전
+              - generic [ref=e622]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e623] [cursor=pointer]:
+            - /url: /projects/38a74aba-b404-4a68-835a-949fe29509b5/report
+            - img [ref=e625]
+            - generic [ref=e627]:
+              - generic [ref=e628]: 리포트
+              - generic [ref=e629]: 요구사항 10
+      - main [ref=e630]:
+        - generic [ref=e631]:
+          - generic [ref=e632]:
+            - paragraph [ref=e633]: 기획 요구사항 매핑
+            - paragraph [ref=e634]: 요구사항 8~9
+            - paragraph [ref=e635]: 전략물자 및 제품안전 검토
+          - generic [ref=e636]:
+            - generic [ref=e637]:
+              - heading "5. ?꾨왂臾쇱옄쨌?쒗뭹?덉쟾" [level=1] [ref=e638]
+              - paragraph [ref=e639]: "HS 湲곕컲 ?꾨왂臾쇱옄 媛\x80?μ꽦怨??쒗뭹?덉쟾쨌由ъ퐳 ?좎궗?щ?瑜?검\x80?좏빀?덈떎."
+            - 'button "검???ㅽ뻾" [ref=e640] [cursor=pointer]':
+              - img
+              - text: "검\x80???ㅽ뻾"
+          - generic [ref=e642]:
+            - img [ref=e643]
+            - paragraph [ref=e645]: "?먮룞 ?먯젙 검곌낵??踰뺤쟻 확젙???꾨떃?덈떎. ?꾨왂臾쇱옄쨌?몄쬆쨌?쒗뭹?덉쟾?\x80 諛섎뱶??湲곌? ?ъ쟾 확씤???꾩슂?⑸땲??"
+          - generic [ref=e646]:
+            - generic [ref=e647]:
+              - generic [ref=e648]:
+                - heading "?ㅽ뻾 ?쇰뱶諛?쨌 ?꾨왂臾쇱옄" [level=3] [ref=e649]
+                - paragraph [ref=e650]: Trade Security Institute ?곌퀎 ?곹깭
+              - generic [ref=e651]:
+                - generic [ref=e652]:
+                  - paragraph [ref=e653]: 실행 완료
+                  - generic [ref=e654]: 정상
+                - paragraph [ref=e655]: HTTP 200 · match_type=exact_hsk, hs=902490, hsk=9024901000, control_no=4A101., 6A002.b., 6A226., 8B001., 9A010.c.
+            - generic [ref=e656]:
+              - generic [ref=e657]:
+                - heading "?ㅽ뻾 ?쇰뱶諛?쨌 SafetyKorea" [level=3] [ref=e658]
+                - paragraph [ref=e659]: 由ъ퐳쨌?덉쟾 怨듭? 議고쉶 ?곹깭
+              - generic [ref=e660]:
+                - generic [ref=e661]:
+                  - paragraph [ref=e662]: 조회 실패
+                  - generic [ref=e663]: 오류
+                - paragraph [ref=e664]: "safetykorea_api_failed · error sending request for url (https://www.safetykorea.kr/openapi/recall/search): [REDACTED] client error (Connect): received fatal alert: HandshakeFailure"
+          - generic [ref=e665]:
+            - generic [ref=e666]:
+              - generic [ref=e667]:
+                - 'heading "?꾨왂臾쇱옄 검???곹깭" [level=3] [ref=e668]'
+                - paragraph [ref=e669]: HSK, ?곌퀎 ?덈ぉ, ?듭젣踰덊샇 湲곗?
+              - generic [ref=e670]:
+                - generic [ref=e671]:
+                  - paragraph [ref=e672]: HSK 코드 확인
+                  - paragraph [ref=e673]: "9024901000"
+                - generic [ref=e674]:
+                  - paragraph [ref=e675]: 분석 기준 코드 상태
+                  - paragraph [ref=e676]: 확인 필요 쨌 확인 필요 상태로 진행 중입니다. 계약 전 코드 재확인이 필요합니다.
+                - generic [ref=e677]:
+                  - paragraph [ref=e678]: 전략물자 매칭 여부
+                  - paragraph [ref=e679]: HSK 9024901000가 전략물자 연계표와 일치합니다.
+                - generic [ref=e680]:
+                  - paragraph [ref=e681]: 통제번호 매핑
+                  - paragraph [ref=e682]: 4A101., 6A002.b., 6A226., 8B001., 9A010.c.
+                - generic [ref=e683]:
+                  - paragraph [ref=e684]: 기관 사전판정
+                  - paragraph [ref=e685]: 자동 판정이 아닌 기관 확인 절차가 필요합니다.
+            - generic [ref=e686]:
+              - generic [ref=e687]:
+                - 'heading "?쒗뭹?덉쟾 검???곹깭" [level=3] [ref=e688]'
+                - paragraph [ref=e689]: 由ъ퐳쨌?덉쟾?몄쬆쨌?쒗뿕?깆쟻 湲곕컲
+              - generic [ref=e690]:
+                - generic [ref=e691]:
+                  - paragraph [ref=e692]: SafetyKorea 리콜 매칭
+                  - paragraph [ref=e693]: "SafetyKorea 상태: API 오류: error sending request for url (https://www.safetykorea.kr/openapi/recall/search?serviceKey=b2e5ee3d-673b-4e0f-be37-5f4ed4d2ed21&query=%EC%82%B0%EC%97%85%EC%9A%A9+%EC%84%BC%EC%84%9C+%EB%AA%A8%EB%93%88&numOfRows=20&pageNo=1&_type=json): client error (Connect): received fatal alert: HandshakeFailure"
+                - generic [ref=e694]:
+                  - paragraph [ref=e695]: 안전인증 대상 여부
+                  - paragraph [ref=e696]: 검토 필요
+                - generic [ref=e697]:
+                  - paragraph [ref=e698]: 판매중지/리콜 공지 점검
+                  - paragraph [ref=e699]: 확실한 정보 없음
+                - generic [ref=e700]:
+                  - paragraph [ref=e701]: 제품안전 유사사례 추가 확인
+                  - paragraph [ref=e702]: 검토 필요
+          - generic [ref=e703]:
+            - heading "?꾨왂臾쇱옄 ?곸꽭" [level=3] [ref=e705]
+            - generic [ref=e706]:
+              - paragraph [ref=e707]: "HS: 902490"
+              - paragraph [ref=e708]: "HSK: 9024901000"
+              - paragraph [ref=e709]: "매칭 방식: exact_hsk"
+              - paragraph [ref=e710]: "통제번호: 4A101., 6A002.b., 6A226., 8B001., 9A010.c."
+              - paragraph [ref=e711]: "기준일: 2026-04-24"
+              - paragraph [ref=e712]: "출처: 전략물자 HSK 연계표"
+              - paragraph [ref=e713]: "적용 방식: 사용자 수동 선택"
+              - paragraph [ref=e714]: "후보 점수: 70점"
+              - paragraph [ref=e715]: "확인 필요: 예"
+          - generic [ref=e716]:
+            - generic [ref=e717]:
+              - generic [ref=e718]:
+                - heading "전략물자 가능성 warn" [level=3] [ref=e719]:
+                  - img [ref=e720]
+                  - text: 전략물자 가능성
+                  - generic [ref=e722]: warn
+                - paragraph [ref=e723]: HSK 9024901000가 전략물자 연계표와 일치합니다.
+              - generic [ref=e724]:
+                - generic [ref=e725]:
+                  - paragraph [ref=e726]: 沅뚭퀬 議곗튂
+                  - paragraph [ref=e727]: 최종 판정은 전략물자관리원 자가판정 시스템(YESTrade)에서 확인하세요. 기관 확인 필요. 통제번호(4A101., 6A002.b., 6A226., 8B001., 9A010.c.) 기준으로 사전판정을 진행하세요.
+                - link "전략물자관리원" [ref=e728] [cursor=pointer]:
+                  - /url: https://yestrade.go.kr/
+                  - img [ref=e729]
+                  - text: 전략물자관리원
+            - generic [ref=e733]:
+              - generic [ref=e734]:
+                - heading "제품안전 검토 warn" [level=3] [ref=e735]:
+                  - img [ref=e736]
+                  - text: 제품안전 검토
+                  - generic [ref=e738]: warn
+                - paragraph [ref=e739]: "SafetyKorea 상태: API 오류: error sending request for url (https://www.safetykorea.kr/openapi/recall/search?serviceKey=b2e5ee3d-673b-4e0f-be37-5f4ed4d2ed21&query=%EC%82%B0%EC%97%85%EC%9A%A9+%EC%84%BC%EC%84%9C+%EB%AA%A8%EB%93%88&numOfRows=20&pageNo=1&_type=json): client error (Connect): received fatal alert: HandshakeFailure"
+              - generic [ref=e740]:
+                - generic [ref=e741]:
+                  - paragraph [ref=e742]: 沅뚭퀬 議곗튂
+                  - paragraph [ref=e743]: "기관 확인 필요: SafetyKorea 조회 상태를 점검하세요."
+                - link "KATS SafetyKorea" [ref=e744] [cursor=pointer]:
+                  - /url: https://www.safetykorea.kr/
+                  - img [ref=e745]
+                  - text: KATS SafetyKorea
+          - generic [ref=e749]:
+            - generic [ref=e750]:
+              - heading "조치 체크리스트" [level=3] [ref=e751]
+              - paragraph [ref=e752]: 실행 후 리포트 단계로 이동하세요.
+            - generic [ref=e754]:
+              - generic [ref=e756]:
+                - checkbox "전략물자관리원(YESTrade) 자가판정 수행 체크" [ref=e757] [cursor=pointer]
+                - generic [ref=e758]:
+                  - paragraph [ref=e759]: 전략물자관리원(YESTrade) 자가판정 수행
+                  - paragraph [ref=e760]: "국가: - · 근거 API: SafetyKorea/K-SURE"
+                - generic [ref=e761]: 대기
+              - generic [ref=e763]:
+                - checkbox "SafetyKorea 리콜·안전 공지 재확인 체크" [ref=e764] [cursor=pointer]
+                - generic [ref=e765]:
+                  - paragraph [ref=e766]: SafetyKorea 리콜·안전 공지 재확인
+                  - paragraph [ref=e767]: "국가: - · 근거 API: SafetyKorea/K-SURE"
+                - generic [ref=e768]: 대기
+              - generic [ref=e770]:
+                - checkbox "필수 인증 서류 최신본 준비 체크" [ref=e771] [cursor=pointer]
+                - generic [ref=e772]:
+                  - paragraph [ref=e773]: 필수 인증 서류 최신본 준비
+                  - paragraph [ref=e774]: "국가: - · 근거 API: ?꾨왂臾쇱옄愿\x80由ъ썝"
+                - generic [ref=e775]: 대기
+              - generic [ref=e777]:
+                - checkbox "기관 상담 일정 확보(관세평가분류원/무역안보관리원) 체크" [ref=e778] [cursor=pointer]
+                - generic [ref=e779]:
+                  - paragraph [ref=e780]: 기관 상담 일정 확보(관세평가분류원/무역안보관리원)
+                  - paragraph [ref=e781]: "국가: - · 근거 API: ?꾨왂臾쇱옄愿\x80由ъ썝"
+                - generic [ref=e782]: 대기
+      - complementary [ref=e783]:
+        - generic [ref=e784]:
+          - generic [ref=e785]: 근거 패널
+          - button "근거 패널 접기" [ref=e786] [cursor=pointer]:
+            - img
+        - generic [ref=e788]:
+          - heading "洹쇨굅 쨌 異쒖쿂" [level=3] [ref=e789]
+          - paragraph [ref=e790]: "?꾨왂臾쇱옄 ?먭??먯젙?\x80 ?꾨왂臾쇱옄愿\x80由ъ썝 湲곗??? ?쒗뭹?덉쟾쨌由ъ퐳?\x80 援??湲곗닠?쒖??먃톁afetyKorea瑜??곕쫭?덈떎. 확젙 ?먯젙?\x80 ?대떦 湲곌? ?ъ쟾 확씤???꾩슂?⑸땲??"
+          - generic [ref=e791]:
+            - paragraph [ref=e792]: "?곹깭"
+            - generic [ref=e793]: 부분 산출
+            - paragraph [ref=e794]: "理쒓렐 ?ㅽ뻾: 2026.04.28 15:42"
+            - paragraph [ref=e795]: "?꾨왂臾쇱옄 API: 실행 완료"
+            - paragraph [ref=e796]: "SafetyKorea API: 조회 실패"
+    - generic [ref=e798]:
+      - button "이전" [ref=e799] [cursor=pointer]
+      - button "리포트 생성" [ref=e800] [cursor=pointer]

@@ -1,0 +1,132 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e432]:
+    - banner [ref=e433]:
+      - link "홈" [ref=e435] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e437]
+        - generic [ref=e440]: 산단수출 코파일럿
+      - generic [ref=e441]:
+        - link "프로젝트" [ref=e442] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e443] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e444] [cursor=pointer]:
+          - img
+          - generic [ref=e445]: 로그아웃
+    - generic [ref=e446]:
+      - complementary [ref=e447]:
+        - paragraph [ref=e448]: 분석 단계
+        - navigation "분석 단계" [ref=e449]:
+          - link "1단계 기업·공장 검색" [ref=e450] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - generic [ref=e451]: "1"
+            - generic [ref=e452]: 기업·공장 검색
+          - link "2단계 제품·HS 코드" [ref=e453] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - generic [ref=e454]: "2"
+            - generic [ref=e455]: 제품·HS 코드
+          - link "3단계 후보국 추천 Top 3" [ref=e456] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - generic [ref=e457]: "3"
+            - generic [ref=e458]: 후보국 추천 Top 3
+          - link "4단계 국가 상세" [ref=e459] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - generic [ref=e460]: "4"
+            - generic [ref=e461]: 국가 상세
+          - link "5단계 전략물자·제품안전" [ref=e462] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e463]: "5"
+            - generic [ref=e464]: 전략물자·제품안전
+          - link "6단계 리포트" [ref=e465] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e466]: "6"
+            - generic [ref=e467]: 리포트
+      - main [ref=e468]:
+        - generic [ref=e469]:
+          - generic [ref=e470]:
+            - heading "1. 기업·공장 검색" [level=1] [ref=e471]
+            - paragraph [ref=e472]: 산업단지 입주기업을 검색하거나 직접 입력합니다.
+          - generic [ref=e473]:
+            - generic [ref=e474]:
+              - heading "KICOX 검색" [level=3] [ref=e475]
+              - paragraph [ref=e476]: 검색 조건 1개 이상, 텍스트 조건은 2자 이상 입력해야 조회됩니다.
+            - generic [ref=e477]:
+              - generic [ref=e478]:
+                - 'textbox "회사명 (예: ○○산업)" [ref=e479]'
+                - 'textbox "산단명 (예: 반월시화)" [ref=e480]'
+                - 'textbox "공장관리번호 (예: 115452009184637)" [ref=e481]'
+                - 'textbox "생산품 키워드 (예: 모터, 센서)" [ref=e482]'
+                - generic [ref=e483]:
+                  - text: 지역
+                  - combobox "지역 선택" [ref=e484] [cursor=pointer]:
+                    - generic: 지역 선택
+                    - img [ref=e485]
+                - generic [ref=e487]:
+                  - button "검색" [ref=e488] [cursor=pointer]:
+                    - img
+                    - text: 검색
+                  - button "조건 초기화" [ref=e489] [cursor=pointer]:
+                    - img
+                    - text: 조건 초기화
+              - generic [ref=e490]:
+                - paragraph [ref=e491]: 선택 요약
+                - generic [ref=e492]:
+                  - paragraph [ref=e493]: "회사명: 현대모비스(주)"
+                  - paragraph [ref=e494]: "산단: 창원국가산업단지"
+                  - paragraph [ref=e495]: "공장관리번호: 194211000259301"
+                  - paragraph [ref=e496]: "지역: 경상남도"
+                  - paragraph [ref=e497]: "생산품: 자동차 제동장치"
+          - generic [ref=e498]:
+            - generic [ref=e499]:
+              - heading "기업 정보" [level=3] [ref=e500]:
+                - img [ref=e501]
+                - text: 기업 정보
+              - paragraph [ref=e505]: 검색 결과를 채우거나 직접 입력해 주세요.
+            - generic [ref=e506]:
+              - generic [ref=e507]:
+                - generic [ref=e508]: 회사명*
+                - textbox [ref=e509]: 현대모비스(주)
+              - generic [ref=e510]:
+                - text: 산단명
+                - textbox [ref=e511]: 창원국가산업단지
+              - generic [ref=e512]:
+                - text: 공장관리번호
+                - textbox [ref=e513]: "194211000259301"
+              - generic [ref=e514]:
+                - text: 주소
+                - textbox [ref=e515]: 경상남도 창원시 성산구 성산패총로 87 (성산동)
+              - generic [ref=e516]:
+                - text: 지역
+                - textbox [ref=e517]: 경상남도
+              - generic [ref=e518]:
+                - text: 업종 코드
+                - textbox [ref=e519]: "30392"
+              - generic [ref=e520]:
+                - text: 주요 생산품
+                - textbox [ref=e521]: 자동차 제동장치
+              - generic [ref=e522]:
+                - text: 종업원 수
+                - spinbutton [ref=e523]: "498"
+      - complementary [ref=e524]:
+        - generic [ref=e525]:
+          - generic [ref=e526]: 근거 패널
+          - button "근거 패널 접기" [ref=e527] [cursor=pointer]:
+            - img
+        - generic [ref=e529]:
+          - heading "근거 · 출처" [level=3] [ref=e530]
+          - paragraph [ref=e531]: 기업 정보는 한국산업단지공단 입주기업 OpenAPI(KICOX)에서 조회합니다. 검색 결과가 없으면 직접 입력해 진행할 수 있으며, 입력값에는 ‘사용자 입력’ 배지가 붙습니다.
+          - generic [ref=e532]:
+            - paragraph [ref=e533]: 조회 상태
+            - generic [ref=e534]:
+              - generic [ref=e535]: 대기
+              - generic "출처 KICOX" [ref=e536]: KICOX
+    - generic [ref=e538]:
+      - button "취소" [ref=e539] [cursor=pointer]
+      - button "저장 후 다음 단계" [ref=e540] [cursor=pointer]

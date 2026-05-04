@@ -1,0 +1,301 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e109]:
+    - banner [ref=e110]:
+      - link "홈" [ref=e112] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e114]
+        - generic [ref=e117]: 산단수출 코파일럿
+      - generic [ref=e118]:
+        - link "프로젝트" [ref=e119] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e120] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e121] [cursor=pointer]:
+          - img
+          - generic [ref=e122]: 로그아웃
+    - generic [ref=e123]:
+      - complementary [ref=e124]:
+        - paragraph [ref=e125]: 분석 단계
+        - navigation "분석 단계" [ref=e126]:
+          - link "1단계 기업·공장 검색" [ref=e127] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e129]
+            - generic [ref=e131]: 기업·공장 검색
+          - link "2단계 제품·HS 코드" [ref=e132] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e134]
+            - generic [ref=e136]: 제품·HS 코드
+          - link "3단계 후보국 추천 Top 3" [ref=e137] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - generic [ref=e138]: "3"
+            - generic [ref=e139]: 후보국 추천 Top 3
+          - link "4단계 국가 상세" [ref=e140] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - generic [ref=e141]: "4"
+            - generic [ref=e142]: 국가 상세
+          - link "5단계 전략물자·제품안전" [ref=e143] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e144]: "5"
+            - generic [ref=e145]: 전략물자·제품안전
+          - link "6단계 리포트" [ref=e146] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e147]: "6"
+            - generic [ref=e148]: 리포트
+      - main [ref=e149]:
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - generic [ref=e152]:
+              - heading "3. Top 3 Candidate Countries" [level=1] [ref=e153]
+              - paragraph [ref=e154]: Candidates are extracted first, then scored and ranked only within that candidate pool.
+            - button "Run Recommendation" [ref=e155] [cursor=pointer]:
+              - img
+              - text: Run Recommendation
+          - generic [ref=e156]:
+            - 'button "Rank 1 위험도 우선검토 중화인민공화국(The People&rsquo;s Republic of China) CN 90/100 Input targets: Japan(JP) Candidate signals: Certification data exists, HS 6-digit exact match, Product keyword matched, Import regulation data exists, HS 4-digit prefix match Inclusion reason: Certification data exists; HS 6-digit exact match; Product keyword matched; Import regulation data exists; HS 4-digit prefix match Recommendation reason: 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다. Low-score reason: 현지 기업과의 치열한 가격 경쟁과 자국 부품 우선 정책, 그리고 지정학적 불확실성이 리스크 요인입니다. Alternative markets: 미합중국(The United States of America)(US), 일본(Japan)(JP), 태국(TH) Open detail" [ref=e157] [cursor=pointer]':
+              - generic [ref=e158]:
+                - generic [ref=e159]:
+                  - img [ref=e160]
+                  - text: Rank 1
+                - status "위험도 우선검토" [ref=e166]: 우선검토
+              - paragraph [ref=e168]: 중화인민공화국(The People&rsquo;s Republic of China)
+              - paragraph [ref=e169]: CN
+              - paragraph [ref=e170]: 90/100
+              - paragraph [ref=e171]: "Input targets: Japan(JP)"
+              - paragraph [ref=e172]: "Candidate signals: Certification data exists, HS 6-digit exact match, Product keyword matched, Import regulation data exists, HS 4-digit prefix match"
+              - paragraph [ref=e173]: "Inclusion reason: Certification data exists; HS 6-digit exact match; Product keyword matched; Import regulation data exists; HS 4-digit prefix match"
+              - paragraph [ref=e174]: "Recommendation reason: 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다."
+              - paragraph [ref=e175]: "Low-score reason: 현지 기업과의 치열한 가격 경쟁과 자국 부품 우선 정책, 그리고 지정학적 불확실성이 리스크 요인입니다."
+              - paragraph [ref=e176]: "Alternative markets: 미합중국(The United States of America)(US), 일본(Japan)(JP), 태국(TH)"
+              - paragraph [ref=e177]: Open detail
+            - 'button "Rank 2 위험도 우선검토 미합중국(The United States of America) US 82/100 Input targets: Japan(JP) Candidate signals: Certification data exists, HS 6-digit exact match, Product keyword matched Inclusion reason: Certification data exists; HS 6-digit exact match; Product keyword matched Recommendation reason: 거대한 애프터마켓과 완성차 시장을 보유하고 있으며, 결제 안정성과 법적 투명성이 전 세계에서 가장 우수합니다. Low-score reason: 트럼프 행정부의 관세 정책 변화와 기술 규제 강화로 인한 통상 환경의 불확실성이 잠재적 리스크입니다. Alternative markets: 중화인민공화국(The People&rsquo;s Republic of China)(CN), 일본(Japan)(JP), 태국(TH) Open detail" [ref=e178] [cursor=pointer]':
+              - generic [ref=e179]:
+                - generic [ref=e180]:
+                  - img [ref=e181]
+                  - text: Rank 2
+                - status "위험도 우선검토" [ref=e187]: 우선검토
+              - paragraph [ref=e189]: 미합중국(The United States of America)
+              - paragraph [ref=e190]: US
+              - paragraph [ref=e191]: 82/100
+              - paragraph [ref=e192]: "Input targets: Japan(JP)"
+              - paragraph [ref=e193]: "Candidate signals: Certification data exists, HS 6-digit exact match, Product keyword matched"
+              - paragraph [ref=e194]: "Inclusion reason: Certification data exists; HS 6-digit exact match; Product keyword matched"
+              - paragraph [ref=e195]: "Recommendation reason: 거대한 애프터마켓과 완성차 시장을 보유하고 있으며, 결제 안정성과 법적 투명성이 전 세계에서 가장 우수합니다."
+              - paragraph [ref=e196]: "Low-score reason: 트럼프 행정부의 관세 정책 변화와 기술 규제 강화로 인한 통상 환경의 불확실성이 잠재적 리스크입니다."
+              - paragraph [ref=e197]: "Alternative markets: 중화인민공화국(The People&rsquo;s Republic of China)(CN), 일본(Japan)(JP), 태국(TH)"
+              - paragraph [ref=e198]: Open detail
+            - 'button "Rank 3 위험도 우선검토 일본(Japan) JP 81/100 Input targets: Japan(JP) Candidate signals: Included by target market memo, Import regulation data exists, HS 4-digit prefix match Inclusion reason: Included by target market memo; Import regulation data exists; HS 4-digit prefix match Recommendation reason: 일본은 세계적인 자동차 제조 강국으로 제동장치와 같은 고품질 부품 수요가 매우 높으며, 현대모비스의 공급 역량과 지리적 이점이 큽니다. Low-score reason: 일본 내 기존 협력사 체계(Keiretsu)가 견고하여 신규 진입 장벽이 높고 최근 일본 내 자동차 인증 부정 이슈로 검증 절차가 까다로워졌습니다. Alternative markets: 중화인민공화국(The People&rsquo;s Republic of China)(CN), 미합중국(The United States of America)(US), 태국(TH) Open detail" [ref=e199] [cursor=pointer]':
+              - generic [ref=e200]:
+                - generic [ref=e201]:
+                  - img [ref=e202]
+                  - text: Rank 3
+                - status "위험도 우선검토" [ref=e208]: 우선검토
+              - paragraph [ref=e210]: 일본(Japan)
+              - paragraph [ref=e211]: JP
+              - paragraph [ref=e212]: 81/100
+              - paragraph [ref=e213]: "Input targets: Japan(JP)"
+              - paragraph [ref=e214]: "Candidate signals: Included by target market memo, Import regulation data exists, HS 4-digit prefix match"
+              - paragraph [ref=e215]: "Inclusion reason: Included by target market memo; Import regulation data exists; HS 4-digit prefix match"
+              - paragraph [ref=e216]: "Recommendation reason: 일본은 세계적인 자동차 제조 강국으로 제동장치와 같은 고품질 부품 수요가 매우 높으며, 현대모비스의 공급 역량과 지리적 이점이 큽니다."
+              - paragraph [ref=e217]: "Low-score reason: 일본 내 기존 협력사 체계(Keiretsu)가 견고하여 신규 진입 장벽이 높고 최근 일본 내 자동차 인증 부정 이슈로 검증 절차가 까다로워졌습니다."
+              - paragraph [ref=e218]: "Alternative markets: 중화인민공화국(The People&rsquo;s Republic of China)(CN), 미합중국(The United States of America)(US), 태국(TH)"
+              - paragraph [ref=e219]: Open detail
+          - generic [ref=e220]:
+            - generic [ref=e221]:
+              - heading "Input Target Market Evaluation" [level=3] [ref=e222]
+              - paragraph [ref=e223]: Target-market memo adds comparison targets only. It does not force ranking.
+            - generic [ref=e225]:
+              - paragraph [ref=e226]: Japan JP
+              - paragraph [ref=e227]: "Inclusion reason: Included by target market memo; Import regulation data exists; HS 4-digit prefix match"
+              - paragraph [ref=e228]: "Final score/rank: 81 / Rank 3"
+              - paragraph [ref=e229]: "Recommendation reason: 일본은 세계적인 자동차 제조 강국으로 제동장치와 같은 고품질 부품 수요가 매우 높으며, 현대모비스의 공급 역량과 지리적 이점이 큽니다."
+              - paragraph [ref=e230]: "Low-score reason: 일본 내 기존 협력사 체계(Keiretsu)가 견고하여 신규 진입 장벽이 높고 최근 일본 내 자동차 인증 부정 이슈로 검증 절차가 까다로워졌습니다."
+              - paragraph [ref=e231]: "Alternative markets: 중화인민공화국(The People&rsquo;s Republic of China)(CN), 미합중국(The United States of America)(US), 태국(TH)"
+          - generic [ref=e232]:
+            - generic [ref=e233]:
+              - heading "News Evidence (Top 3)" [level=3] [ref=e234]
+              - paragraph [ref=e235]: Review raw market-news evidence used in scoring.
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - paragraph [ref=e238]: "Selected country: 중화인민공화국(The People&rsquo;s Republic of China)"
+                - combobox "Select country" [ref=e239] [cursor=pointer]:
+                  - generic: Rank 1 - 중화인민공화국(The People&rsquo;s Republic of China)
+                  - img [ref=e240]
+              - table "News evidence table" [ref=e242]:
+                - rowgroup [ref=e243]:
+                  - row "Title Country Published Link" [ref=e244]:
+                    - columnheader "Title" [ref=e245]
+                    - columnheader "Country" [ref=e246]
+                    - columnheader "Published" [ref=e247]
+                    - columnheader "Link" [ref=e248]
+                - rowgroup [ref=e249]:
+                  - row "2026 중국 상하이 춘계 의료기기 전시회(CMEF) 참관기 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-22 Open" [ref=e250]:
+                    - cell "2026 중국 상하이 춘계 의료기기 전시회(CMEF) 참관기" [ref=e251]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e252]
+                    - cell "2026-04-22" [ref=e253]
+                    - cell "Open" [ref=e254]:
+                      - link "Open" [ref=e255] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240776
+                  - 'row "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-21 Open" [ref=e256]':
+                    - 'cell "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화" [ref=e257]'
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e258]
+                    - cell "2026-04-21" [ref=e259]
+                    - cell "Open" [ref=e260]:
+                      - link "Open" [ref=e261] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240216
+                  - row "2025년 중국 후난성 주요 경제현황 및 2026년 경제전망 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-21 Open" [ref=e262]:
+                    - cell "2025년 중국 후난성 주요 경제현황 및 2026년 경제전망" [ref=e263]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e264]
+                    - cell "2026-04-21" [ref=e265]
+                    - cell "Open" [ref=e266]:
+                      - link "Open" [ref=e267] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240633
+                  - row "中 AI 산업 흐름에서 본 한&middot;중 협력 방향 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-20 Open" [ref=e268]:
+                    - cell "中 AI 산업 흐름에서 본 한&middot;중 협력 방향" [ref=e269]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e270]
+                    - cell "2026-04-20" [ref=e271]
+                    - cell "Open" [ref=e272]:
+                      - link "Open" [ref=e273] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240669
+                  - row "중국 열펌프 시장, 보급률 5%에 불과 - 조(兆) 위안 시장이 열린다 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-20 Open" [ref=e274]:
+                    - cell "중국 열펌프 시장, 보급률 5%에 불과 - 조(兆) 위안 시장이 열린다" [ref=e275]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e276]
+                    - cell "2026-04-20" [ref=e277]
+                    - cell "Open" [ref=e278]:
+                      - link "Open" [ref=e279] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240623
+                  - row "두피도 피부처럼, 중국은 지금 두피 관리 열풍 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-20 Open" [ref=e280]:
+                    - cell "두피도 피부처럼, 중국은 지금 두피 관리 열풍" [ref=e281]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e282]
+                    - cell "2026-04-20" [ref=e283]
+                    - cell "Open" [ref=e284]:
+                      - link "Open" [ref=e285] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240734
+                  - row "중국 헤이룽장성 바이오 및 한약재 기반 코스메슈티컬 발전 트렌드 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-20 Open" [ref=e286]:
+                    - cell "중국 헤이룽장성 바이오 및 한약재 기반 코스메슈티컬 발전 트렌드" [ref=e287]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e288]
+                    - cell "2026-04-20" [ref=e289]
+                    - cell "Open" [ref=e290]:
+                      - link "Open" [ref=e291] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240717
+                  - row "80% 고속 성장! 중국이 주도하는 AR 안경 시장의 현재 중화인민공화국(The People&rsquo;s Republic of China) 2026-04-17 Open" [ref=e292]:
+                    - cell "80% 고속 성장! 중국이 주도하는 AR 안경 시장의 현재" [ref=e293]
+                    - cell "중화인민공화국(The People&rsquo;s Republic of China)" [ref=e294]
+                    - cell "2026-04-17" [ref=e295]
+                    - cell "Open" [ref=e296]:
+                      - link "Open" [ref=e297] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240192
+          - generic [ref=e298]:
+            - generic [ref=e299]:
+              - heading "All Candidates" [level=3] [ref=e300]
+              - paragraph [ref=e301]: Scores are compared only among extracted candidates.
+            - table "Candidate ranking table" [ref=e303]:
+              - rowgroup [ref=e304]:
+                - row "Country Market Cert Regulation Payment Safety Total Label" [ref=e305]:
+                  - columnheader "Country" [ref=e306]
+                  - columnheader "Market" [ref=e307]
+                  - columnheader "Cert" [ref=e308]
+                  - columnheader "Regulation" [ref=e309]
+                  - columnheader "Payment" [ref=e310]
+                  - columnheader "Safety" [ref=e311]
+                  - columnheader "Total" [ref=e312]
+                  - columnheader "Label" [ref=e313]
+              - rowgroup [ref=e314]:
+                - row "중화인민공화국(The People&rsquo;s Republic of China) CN 30 20 17 15 8 90 위험도 우선검토" [ref=e315] [cursor=pointer]:
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) CN" [ref=e316]
+                  - cell "30" [ref=e317]
+                  - cell "20" [ref=e318]
+                  - cell "17" [ref=e319]
+                  - cell "15" [ref=e320]
+                  - cell "8" [ref=e321]
+                  - cell "90" [ref=e322]
+                  - cell "위험도 우선검토" [ref=e323]:
+                    - status "위험도 우선검토" [ref=e324]: 우선검토
+                - row "미합중국(The United States of America) US 22 15 15 20 10 82 위험도 우선검토" [ref=e326] [cursor=pointer]:
+                  - cell "미합중국(The United States of America) US" [ref=e327]
+                  - cell "22" [ref=e328]
+                  - cell "15" [ref=e329]
+                  - cell "15" [ref=e330]
+                  - cell "20" [ref=e331]
+                  - cell "10" [ref=e332]
+                  - cell "82" [ref=e333]
+                  - cell "위험도 우선검토" [ref=e334]:
+                    - status "위험도 우선검토" [ref=e335]: 우선검토
+                - row "일본(Japan) JP 23 12 18 19 9 81 위험도 우선검토" [ref=e337] [cursor=pointer]:
+                  - cell "일본(Japan) JP" [ref=e338]
+                  - cell "23" [ref=e339]
+                  - cell "12" [ref=e340]
+                  - cell "18" [ref=e341]
+                  - cell "19" [ref=e342]
+                  - cell "9" [ref=e343]
+                  - cell "81" [ref=e344]
+                  - cell "위험도 우선검토" [ref=e345]:
+                    - status "위험도 우선검토" [ref=e346]: 우선검토
+                - row "태국 TH 29 10 18 16 8 81 위험도 우선검토" [ref=e348] [cursor=pointer]:
+                  - cell "태국 TH" [ref=e349]
+                  - cell "29" [ref=e350]
+                  - cell "10" [ref=e351]
+                  - cell "18" [ref=e352]
+                  - cell "16" [ref=e353]
+                  - cell "8" [ref=e354]
+                  - cell "81" [ref=e355]
+                  - cell "위험도 우선검토" [ref=e356]:
+                    - status "위험도 우선검토" [ref=e357]: 우선검토
+                - row "말레이시아 연방(Federation of Malaysia) MY 27 10 18 17 8 80 위험도 우선검토" [ref=e359] [cursor=pointer]:
+                  - cell "말레이시아 연방(Federation of Malaysia) MY" [ref=e360]
+                  - cell "27" [ref=e361]
+                  - cell "10" [ref=e362]
+                  - cell "18" [ref=e363]
+                  - cell "17" [ref=e364]
+                  - cell "8" [ref=e365]
+                  - cell "80" [ref=e366]
+                  - cell "위험도 우선검토" [ref=e367]:
+                    - status "위험도 우선검토" [ref=e368]: 우선검토
+                - row "튀르키예공화국(Republic of T&uuml;rkiye) TR 28 14 18 11 7 78 위험도 검토권장" [ref=e370] [cursor=pointer]:
+                  - cell "튀르키예공화국(Republic of T&uuml;rkiye) TR" [ref=e371]
+                  - cell "28" [ref=e372]
+                  - cell "14" [ref=e373]
+                  - cell "18" [ref=e374]
+                  - cell "11" [ref=e375]
+                  - cell "7" [ref=e376]
+                  - cell "78" [ref=e377]
+                  - cell "위험도 검토권장" [ref=e378]:
+                    - status "위험도 검토권장" [ref=e379]: 검토권장
+                - row "브라질 연방 공화국(The Federal Republic of Brazil) BR 26 13 9 14 7 69 위험도 검토권장" [ref=e381] [cursor=pointer]:
+                  - cell "브라질 연방 공화국(The Federal Republic of Brazil) BR" [ref=e382]
+                  - cell "26" [ref=e383]
+                  - cell "13" [ref=e384]
+                  - cell "9" [ref=e385]
+                  - cell "14" [ref=e386]
+                  - cell "7" [ref=e387]
+                  - cell "69" [ref=e388]
+                  - cell "위험도 검토권장" [ref=e389]:
+                    - status "위험도 검토권장" [ref=e390]: 검토권장
+      - complementary [ref=e392]:
+        - generic [ref=e393]:
+          - generic [ref=e394]: 근거 패널
+          - button "근거 패널 접기" [ref=e395] [cursor=pointer]:
+            - img
+        - generic [ref=e397]:
+          - heading "Evidence Status" [level=3] [ref=e398]
+          - paragraph [ref=e399]: Recommendation now ranks only countries that entered the candidate pool via HS/product/news/regulation/memo signals.
+          - generic [ref=e400]:
+            - paragraph [ref=e401]: 분석 기준 코드
+            - paragraph [ref=e402]: HS 870830 · HSK 8708303000
+            - paragraph [ref=e403]: "적용 방식: 사용자 수동 선택 (44점)"
+            - paragraph [ref=e404]: "상태: 정보 부족 · 정보 부족으로 오분류 가능성 있음"
+            - paragraph [ref=e405]: "확인 필요: 후속 단계 분석은 진행되지만 최종 확정 전 코드 검증이 필요합니다."
+          - generic [ref=e406]:
+            - paragraph [ref=e407]: Current State
+            - generic [ref=e408]: 대기
+    - generic [ref=e410]:
+      - button "Back" [ref=e411] [cursor=pointer]
+      - button "Safety Review" [ref=e412] [cursor=pointer]:
+        - text: Safety Review
+        - img

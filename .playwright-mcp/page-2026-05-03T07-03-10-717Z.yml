@@ -1,0 +1,630 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation "main navigation" [ref=e4]:
+        - generic [ref=e5]:
+          - link "EN" [ref=e6] [cursor=pointer]:
+            - /url: /en/Search/Index
+          - generic [ref=e7]: "|"
+          - link "FR" [ref=e8] [cursor=pointer]:
+            - /url: /fr/Search/Index
+          - generic [ref=e9]: "|"
+          - link "ES" [ref=e10] [cursor=pointer]:
+            - /url: /es/Search/Index
+          - generic [ref=e11]: "|"
+          - link "Other languages" [ref=e12] [cursor=pointer]:
+            - /url: /en/Home/OtherLanguages
+        - generic [ref=e15]:
+          - link "Login" [ref=e16] [cursor=pointer]:
+            - /url: /en/Account/Login
+            - generic [ref=e17]:
+              - generic [ref=e18]: 
+              - text: Login
+          - link "Login Register" [ref=e19] [cursor=pointer]:
+            - /url: /en/Account/Registration
+            - generic [ref=e20]:
+              - generic [ref=e21]: 
+              - generic [ref=e22]: Login
+              - text: Register
+          - link "Forgot your password?" [ref=e23] [cursor=pointer]:
+            - /url: https://accman.wto.org/public/ForgotPassword?ClientId=14ace6e62cd64ed19ab86e379b8c167f&language=1
+            - generic [ref=e24]:
+              - generic [ref=e25]: 
+              - text: Forgot your password?
+          - link "Contact us" [ref=e26] [cursor=pointer]:
+            - /url: /en/ContactUs
+            - generic [ref=e27]:
+              - generic [ref=e28]: 
+              - text: Contact us
+      - navigation "main navigation" [ref=e30]:
+        - link "WTO eAgenda" [ref=e32] [cursor=pointer]:
+          - /url: /
+          - img "WTO eAgenda" [ref=e33]
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - link "Home" [ref=e36] [cursor=pointer]:
+              - /url: /
+            - menuitem "Search" [ref=e38] [cursor=pointer]
+            - generic [ref=e39]:
+              - menuitem "Facts & figures" [ref=e40] [cursor=pointer]
+              - text: 
+            - menuitem "Resources" [ref=e42] [cursor=pointer]
+          - generic [ref=e44]:
+            - link "ITC" [ref=e45] [cursor=pointer]:
+              - /url: http://www.intracen.org/
+              - img "ITC" [ref=e46]
+            - link "UN" [ref=e47] [cursor=pointer]:
+              - /url: https://www.un.org/en/desa
+              - img "UN" [ref=e48]
+            - link "WTO" [ref=e49] [cursor=pointer]:
+              - /url: https://www.wto.org/
+              - img "WTO" [ref=e50]
+    - generic [ref=e52]:
+      - navigation "breadcrumbs" [ref=e53]:
+        - list [ref=e54]:
+          - listitem [ref=e55]:
+            - link "Home" [ref=e56] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e57]:
+            - text: /
+            - link "Search Notifications":
+              - /url: "#"
+      - main [ref=e58]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - heading "Search notifications" [level=1] [ref=e65]
+            - button "Export search results" [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]:
+                - generic [ref=e70]: 
+                - text: Export search results
+                - generic [ref=e74]: 
+          - generic [ref=e76]:
+            - generic [ref=e78]:
+              - generic [ref=e80]:
+                - generic [ref=e82]:
+                  - generic [ref=e83]: Area (SPS, TBT)
+                  - generic [ref=e85] [cursor=pointer]:
+                    - generic "TBT" [ref=e159]
+                    - generic [ref=e88]: 
+                - link "x" [ref=e89] [cursor=pointer]:
+                  - /url: javascript:void(0)
+              - generic [ref=e90]:
+                - generic [ref=e92]:
+                  - generic [ref=e93]:
+                    - text: Free text search
+                    - link "How to use the free text search" [ref=e94] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                      - generic [ref=e96]: 
+                  - generic [ref=e97]:
+                    - link "x" [ref=e98] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - textbox [ref=e100]
+                - generic [ref=e102]:
+                  - generic [ref=e103]: Notification symbol
+                  - generic [ref=e104]:
+                    - link "x" [ref=e105] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - textbox [ref=e107]
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - generic [ref=e110]:
+                    - generic [ref=e111]: Notifying Member
+                    - generic [ref=e113] [cursor=pointer]:
+                      - generic [ref=e114]: Select notifying Member(s)
+                      - generic [ref=e116]: 
+                  - link "x" [ref=e117] [cursor=pointer]:
+                    - /url: javascript:void(0)
+                - generic [ref=e119]:
+                  - generic [ref=e120]: Distribution date from
+                  - generic [ref=e121]:
+                    - link "x" [ref=e122] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - generic [ref=e124]:
+                      - button [ref=e125]:
+                        - generic [ref=e126]:
+                          - textbox [ref=e127] [cursor=pointer]
+                          - generic:
+                            - generic: 
+                      - text:    
+                - generic [ref=e129]:
+                  - generic [ref=e130]: Distribution date to
+                  - generic [ref=e131]:
+                    - link "x" [ref=e132] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - generic [ref=e134]:
+                      - button [ref=e135]:
+                        - generic [ref=e136]:
+                          - textbox [ref=e137] [cursor=pointer]
+                          - generic:
+                            - generic: 
+                      - text:    
+              - generic [ref=e162]:
+                - strong [ref=e163]: Area (SPS, TBT)
+                - text: ": TBT"
+              - generic [ref=e138]:
+                - button "Search more fields" [ref=e140] [cursor=pointer]:
+                  - generic [ref=e141]: Search more fields
+                  - generic [ref=e143]: 
+                - button "Clear filter(s)" [ref=e146] [cursor=pointer]:
+                  - generic [ref=e147]: Clear filter(s)
+                  - generic [ref=e149]: 
+            - generic [ref=e164]:
+              - generic [ref=e165]: Showing 1 - 20 of 63746
+              - generic [ref=e166]:
+                - text: 
+                - navigation [ref=e170]:
+                  - button [ref=e171]:
+                    - generic [ref=e173]: 
+                  - button [ref=e174] [cursor=pointer]:
+                    - generic [ref=e176]: 
+                  - list [ref=e177]:
+                    - listitem [ref=e178]:
+                      - button "1"
+                    - listitem [ref=e179]:
+                      - button "2" [ref=e180] [cursor=pointer]
+                    - listitem [ref=e181]:
+                      - generic: …
+                    - listitem [ref=e182]:
+                      - button "3188" [ref=e183] [cursor=pointer]
+                - table [ref=e185]:
+                  - rowgroup [ref=e186]:
+                    - row "Notifying Member Symbol and title Distribution/Comments Products covered" [ref=e187]:
+                      - columnheader "Notifying Member" [ref=e188] [cursor=pointer]:
+                        - generic [ref=e190]: Notifying Member
+                      - columnheader "Symbol and title" [ref=e191] [cursor=pointer]:
+                        - generic [ref=e193]: Symbol and title
+                      - columnheader "Distribution/Comments" [ref=e194] [cursor=pointer]:
+                        - generic [ref=e196]:
+                          - text: Distribution/Comments
+                          - generic [ref=e200]: 
+                      - columnheader "Products covered" [ref=e201]:
+                        - generic [ref=e203]:
+                          - text: Products covered
+                          - generic [ref=e207]: 
+                      - columnheader [ref=e208]
+                  - rowgroup [ref=e209]:
+                    - 'row "Rwanda G/TBT/N/RWA/1404 DRS 453: 2026, Mouthwash — Specification Notified document (1) 01/05/2026 30/06/2026 Cosmetics. Toiletries (ICS code(s): 71.100.70)" [ref=e210]':
+                      - cell "Rwanda" [ref=e211]: Rwanda
+                      - 'cell "G/TBT/N/RWA/1404 DRS 453: 2026, Mouthwash — Specification Notified document (1)" [ref=e212]':
+                        - generic [ref=e213]:
+                          - link "G/TBT/N/RWA/1404" [ref=e214] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FRWA%2F1404
+                          - generic "Download Document" [ref=e215] [cursor=pointer]:
+                            - generic [ref=e217]: 
+                          - text: "DRS 453: 2026, Mouthwash — Specification"
+                        - paragraph [ref=e221]:
+                          - link "Notified document (1)" [ref=e222] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/RWA/26_02316_00_e.pdf
+                      - cell "01/05/2026 30/06/2026" [ref=e223]:
+                        - text: 01/05/2026
+                        - generic [ref=e224]:
+                          - generic [ref=e225]: 
+                          - text: 30/06/2026
+                      - 'cell "Cosmetics. Toiletries (ICS code(s): 71.100.70)" [ref=e226]':
+                        - 'generic "Cosmetics. Toiletries (ICS code(s): 71.100.70)" [ref=e227]'
+                      - cell [ref=e228]:
+                        - button [ref=e232] [cursor=pointer]:
+                          - generic [ref=e235]: 
+                    - 'row "Rwanda G/TBT/N/RWA/1405 DRS 638: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP)— Specification Notified document (1) 01/05/2026 30/06/2026 Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e236]':
+                      - cell "Rwanda" [ref=e237]: Rwanda
+                      - 'cell "G/TBT/N/RWA/1405 DRS 638: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP)— Specification Notified document (1)" [ref=e238]':
+                        - generic [ref=e239]:
+                          - link "G/TBT/N/RWA/1405" [ref=e240] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FRWA%2F1405
+                          - generic "Download Document" [ref=e241] [cursor=pointer]:
+                            - generic [ref=e243]: 
+                          - text: "DRS 638: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP)— Specification"
+                        - paragraph [ref=e247]:
+                          - link "Notified document (1)" [ref=e248] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/RWA/26_02317_00_e.pdf
+                      - cell "01/05/2026 30/06/2026" [ref=e249]:
+                        - text: 01/05/2026
+                        - generic [ref=e250]:
+                          - generic [ref=e251]: 
+                          - text: 30/06/2026
+                      - 'cell "Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e252]':
+                        - 'generic "Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e253]'
+                      - cell [ref=e254]:
+                        - button [ref=e258] [cursor=pointer]:
+                          - generic [ref=e261]: 
+                    - 'row "Rwanda G/TBT/N/RWA/1406 DRS 452:2026, Beeswax, bleached for cosmetic use — Specification Notified document (1) 01/05/2026 30/06/2026 Cosmetics. Toiletries (ICS code(s): 71.100.70)" [ref=e262]':
+                      - cell "Rwanda" [ref=e263]: Rwanda
+                      - cell "G/TBT/N/RWA/1406 DRS 452:2026, Beeswax, bleached for cosmetic use — Specification Notified document (1)" [ref=e264]:
+                        - generic [ref=e265]:
+                          - link "G/TBT/N/RWA/1406" [ref=e266] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FRWA%2F1406
+                          - generic "Download Document" [ref=e267] [cursor=pointer]:
+                            - generic [ref=e269]: 
+                          - text: DRS 452:2026, Beeswax, bleached for cosmetic use — Specification
+                        - paragraph [ref=e273]:
+                          - link "Notified document (1)" [ref=e274] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/RWA/26_02318_00_e.pdf
+                      - cell "01/05/2026 30/06/2026" [ref=e275]:
+                        - text: 01/05/2026
+                        - generic [ref=e276]:
+                          - generic [ref=e277]: 
+                          - text: 30/06/2026
+                      - 'cell "Cosmetics. Toiletries (ICS code(s): 71.100.70)" [ref=e278]':
+                        - 'generic "Cosmetics. Toiletries (ICS code(s): 71.100.70)" [ref=e279]'
+                      - cell [ref=e280]:
+                        - button [ref=e284] [cursor=pointer]:
+                          - generic [ref=e287]: 
+                    - 'row "Rwanda G/TBT/N/RWA/1407 RS 639: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP) flour— Specification Notified document (1) 01/05/2026 30/06/2026 Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e288]':
+                      - cell "Rwanda" [ref=e289]: Rwanda
+                      - 'cell "G/TBT/N/RWA/1407 RS 639: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP) flour— Specification Notified document (1)" [ref=e290]':
+                        - generic [ref=e291]:
+                          - link "G/TBT/N/RWA/1407" [ref=e292] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FRWA%2F1407
+                          - generic "Download Document" [ref=e293] [cursor=pointer]:
+                            - generic [ref=e295]: 
+                          - text: "RS 639: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP) flour— Specification"
+                        - paragraph [ref=e299]:
+                          - link "Notified document (1)" [ref=e300] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/RWA/26_02319_00_e.pdf
+                      - cell "01/05/2026 30/06/2026" [ref=e301]:
+                        - text: 01/05/2026
+                        - generic [ref=e302]:
+                          - generic [ref=e303]: 
+                          - text: 30/06/2026
+                      - 'cell "Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e304]':
+                        - 'generic "Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e305]'
+                      - cell [ref=e306]:
+                        - button [ref=e310] [cursor=pointer]:
+                          - generic [ref=e313]: 
+                    - 'row "Rwanda G/TBT/N/RWA/1408 DRS 640: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP) puree— Specification Notified document (1) 01/05/2026 30/06/2026 Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e314]':
+                      - cell "Rwanda" [ref=e315]: Rwanda
+                      - 'cell "G/TBT/N/RWA/1408 DRS 640: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP) puree— Specification Notified document (1)" [ref=e316]':
+                        - generic [ref=e317]:
+                          - link "G/TBT/N/RWA/1408" [ref=e318] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FRWA%2F1408
+                          - generic "Download Document" [ref=e319] [cursor=pointer]:
+                            - generic [ref=e321]: 
+                          - text: "DRS 640: 2026, Biofortified Orange Fleshed Sweetpotato (OFSP) puree— Specification"
+                        - paragraph [ref=e325]:
+                          - link "Notified document (1)" [ref=e326] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/RWA/26_02320_00_e.pdf
+                      - cell "01/05/2026 30/06/2026" [ref=e327]:
+                        - text: 01/05/2026
+                        - generic [ref=e328]:
+                          - generic [ref=e329]: 
+                          - text: 30/06/2026
+                      - 'cell "Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e330]':
+                        - 'generic "Prepackaged and prepared foods (ICS code(s): 67.230)" [ref=e331]'
+                      - cell [ref=e332]:
+                        - button [ref=e336] [cursor=pointer]:
+                          - generic [ref=e339]: 
+                    - 'row "China G/TBT/N/CHN/1752/Add.1 Amendment No.1 of GB45184-2024 Optometry Product—Safety Technical Specifications of Components Notified document (1) 30/04/2026 Optometry Components (HS code(s): 7015; 9003; 9004); (ICS code(s): 11.040.70)" [ref=e340]':
+                      - cell "China" [ref=e341]: China
+                      - cell "G/TBT/N/CHN/1752/Add.1 Amendment No.1 of GB45184-2024 Optometry Product—Safety Technical Specifications of Components Notified document (1)" [ref=e342]:
+                        - generic [ref=e343]:
+                          - link "G/TBT/N/CHN/1752/Add.1" [ref=e344] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FCHN%2F1752%2FAdd.1
+                          - generic "Download Document" [ref=e345] [cursor=pointer]:
+                            - generic [ref=e347]: 
+                          - text: Amendment No.1 of GB45184-2024 Optometry Product—Safety Technical Specifications of Components
+                        - paragraph [ref=e351]:
+                          - link "Notified document (1)" [ref=e352] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/CHN/modification/26_02309_00_x.pdf
+                      - cell "30/04/2026" [ref=e353]
+                      - 'cell "Optometry Components (HS code(s): 7015; 9003; 9004); (ICS code(s): 11.040.70)" [ref=e354]':
+                        - 'generic "Optometry Components (HS code(s): 7015; 9003; 9004); (ICS code(s): 11.040.70)" [ref=e355]'
+                      - cell [ref=e356]:
+                        - button [ref=e360] [cursor=pointer]:
+                          - generic [ref=e363]: 
+                    - 'row "China G/TBT/N/CHN/2253 National Standard of the P.R.C., Basic detonators Notified document (1) 30/04/2026 29/06/2026 Industrial electric detonator and non-electric detonator (HS code(s): 3603); (ICS code(s): 71.100.30)" [ref=e364]':
+                      - cell "China" [ref=e365]: China
+                      - cell "G/TBT/N/CHN/2253 National Standard of the P.R.C., Basic detonators Notified document (1)" [ref=e366]:
+                        - generic [ref=e367]:
+                          - link "G/TBT/N/CHN/2253" [ref=e368] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FCHN%2F2253
+                          - generic "Download Document" [ref=e369] [cursor=pointer]:
+                            - generic [ref=e371]: 
+                          - text: National Standard of the P.R.C., Basic detonators
+                        - paragraph [ref=e375]:
+                          - link "Notified document (1)" [ref=e376] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/CHN/26_02308_00_x.pdf
+                      - cell "30/04/2026 29/06/2026" [ref=e377]:
+                        - text: 30/04/2026
+                        - generic [ref=e378]:
+                          - generic [ref=e379]: 
+                          - text: 29/06/2026
+                      - 'cell "Industrial electric detonator and non-electric detonator (HS code(s): 3603); (ICS code(s): 71.100.30)" [ref=e380]':
+                        - 'generic "Industrial electric detonator and non-electric detonator (HS code(s): 3603); (ICS code(s): 71.100.30)" [ref=e381]'
+                      - cell [ref=e382]:
+                        - button [ref=e386] [cursor=pointer]:
+                          - generic [ref=e389]: 
+                    - 'row "Ecuador G/TBT/N/ECU/394/Rev.2/Add.1 Tercera Revisión del Reglamento Técnico RTE INEN 072 (3R), “Eficiencia energética para acondicionadores de aire sin ductos externos” Notified document (1), Notified document (2) 30/04/2026 Máquinas y aparatos para acondicionamiento de aire, de pared o para ventanas, formando un solo cuerpo o del tipo sistema de elementos separados \"split-system\" (HS code(s): 841510); Máquinas y aparatos para acondicionamiento de aire, con equipo de enfriamiento pero sin válvula de inversión del ciclo térmico (exc. máquinas y aparatos de pared o para ventanas, formando un solo cuerpo o del tipo sistema de elementos separados \"split-system\"; acondicionadores de los tipos utilizados en vehículos automóviles para bienestar de las personas) (HS code(s): 841582); (ICS code(s): 23.120)" [ref=e390]':
+                      - cell "Ecuador" [ref=e391]: Ecuador
+                      - cell "G/TBT/N/ECU/394/Rev.2/Add.1 Tercera Revisión del Reglamento Técnico RTE INEN 072 (3R), “Eficiencia energética para acondicionadores de aire sin ductos externos” Notified document (1), Notified document (2)" [ref=e392]:
+                        - generic [ref=e393]:
+                          - link "G/TBT/N/ECU/394/Rev.2/Add.1" [ref=e394] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FECU%2F394%2FRev.2%2FAdd.1
+                          - generic "Download Document" [ref=e395] [cursor=pointer]:
+                            - generic [ref=e397]: 
+                          - text: Tercera Revisión del Reglamento Técnico RTE INEN 072 (3R), “Eficiencia energética para acondicionadores de aire sin ductos externos”
+                        - paragraph [ref=e401]:
+                          - link "Notified document (1)" [ref=e402] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/ECU/26_02311_00_s.pdf
+                          - text: ","
+                          - link "Notified document (2)" [ref=e403] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/ECU/26_02311_01_s.pdf
+                      - cell "30/04/2026" [ref=e404]
+                      - 'cell "Máquinas y aparatos para acondicionamiento de aire, de pared o para ventanas, formando un solo cuerpo o del tipo sistema de elementos separados \"split-system\" (HS code(s): 841510); Máquinas y aparatos para acondicionamiento de aire, con equipo de enfriamiento pero sin válvula de inversión del ciclo térmico (exc. máquinas y aparatos de pared o para ventanas, formando un solo cuerpo o del tipo sistema de elementos separados \"split-system\"; acondicionadores de los tipos utilizados en vehículos automóviles para bienestar de las personas) (HS code(s): 841582); (ICS code(s): 23.120)" [ref=e405]':
+                        - 'generic "Máquinas y aparatos para acondicionamiento de aire, de pared o para ventanas, formando un solo cuerpo o del tipo sistema de elementos separados \"split-system\" (HS code(s): 841510); Máquinas y aparatos para acondicionamiento de aire, con equipo de enfriamiento pero sin válvula de inversión del ciclo térmico (exc. máquinas y aparatos de pared o para ventanas, formando un solo cuerpo o del tipo sistema de elementos separados \"split-system\"; acondicionadores de los tipos utilizados en vehículos automóviles para bienestar de las personas) (HS code(s): 841582); (ICS code(s): 23.120)" [ref=e406]'
+                      - cell [ref=e407]:
+                        - button [ref=e411] [cursor=pointer]:
+                          - generic [ref=e414]: 
+                    - 'row "Egypt G/TBT/N/EGY/2/Add.40 Draft of the Egyptian standard ES 1185-3 for “Milk and Water Ices Part 3: Milk Ices with Vegetables Fat (ice cream with vegetables fat)” 30/04/2026 Food products" [ref=e415]':
+                      - cell "Egypt" [ref=e416]: Egypt
+                      - 'cell "G/TBT/N/EGY/2/Add.40 Draft of the Egyptian standard ES 1185-3 for “Milk and Water Ices Part 3: Milk Ices with Vegetables Fat (ice cream with vegetables fat)”" [ref=e417]':
+                        - generic [ref=e418]:
+                          - link "G/TBT/N/EGY/2/Add.40" [ref=e419] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FEGY%2F2%2FAdd.40
+                          - generic "Download Document" [ref=e420] [cursor=pointer]:
+                            - generic [ref=e422]: 
+                          - text: "Draft of the Egyptian standard ES 1185-3 for “Milk and Water Ices Part 3: Milk Ices with Vegetables Fat (ice cream with vegetables fat)”"
+                      - cell "30/04/2026" [ref=e423]
+                      - cell "Food products" [ref=e424]:
+                        - generic "Food products" [ref=e425]
+                      - cell [ref=e426]:
+                        - button [ref=e430] [cursor=pointer]:
+                          - generic [ref=e433]: 
+                    - 'row "Egypt G/TBT/N/EGY/577 Draft of Egyptian standard for “A Blend of Evaporated Skimmed Milk and Vegetable Fat\" 30/04/2026 29/06/2026 Milk and processed milk products (ICS code(s): 67.100.10)" [ref=e434]':
+                      - cell "Egypt" [ref=e435]: Egypt
+                      - cell "G/TBT/N/EGY/577 Draft of Egyptian standard for “A Blend of Evaporated Skimmed Milk and Vegetable Fat\"" [ref=e436]:
+                        - generic [ref=e437]:
+                          - link "G/TBT/N/EGY/577" [ref=e438] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FEGY%2F577
+                          - generic "Download Document" [ref=e439] [cursor=pointer]:
+                            - generic [ref=e441]: 
+                          - text: Draft of Egyptian standard for “A Blend of Evaporated Skimmed Milk and Vegetable Fat"
+                      - cell "30/04/2026 29/06/2026" [ref=e442]:
+                        - text: 30/04/2026
+                        - generic [ref=e443]:
+                          - generic [ref=e444]: 
+                          - text: 29/06/2026
+                      - 'cell "Milk and processed milk products (ICS code(s): 67.100.10)" [ref=e445]':
+                        - 'generic "Milk and processed milk products (ICS code(s): 67.100.10)" [ref=e446]'
+                      - cell [ref=e447]:
+                        - button [ref=e451] [cursor=pointer]:
+                          - generic [ref=e454]: 
+                    - 'row "Egypt G/TBT/N/EGY/578 Draft of Egyptian standard for “A Blend of Sweetened Condensed Skimmed Milk and Vegetable Fat” 30/04/2026 29/06/2026 Milk and processed milk products (ICS code(s): 67.100.10)" [ref=e455]':
+                      - cell "Egypt" [ref=e456]: Egypt
+                      - cell "G/TBT/N/EGY/578 Draft of Egyptian standard for “A Blend of Sweetened Condensed Skimmed Milk and Vegetable Fat”" [ref=e457]:
+                        - generic [ref=e458]:
+                          - link "G/TBT/N/EGY/578" [ref=e459] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FEGY%2F578
+                          - generic "Download Document" [ref=e460] [cursor=pointer]:
+                            - generic [ref=e462]: 
+                          - text: Draft of Egyptian standard for “A Blend of Sweetened Condensed Skimmed Milk and Vegetable Fat”
+                      - cell "30/04/2026 29/06/2026" [ref=e463]:
+                        - text: 30/04/2026
+                        - generic [ref=e464]:
+                          - generic [ref=e465]: 
+                          - text: 29/06/2026
+                      - 'cell "Milk and processed milk products (ICS code(s): 67.100.10)" [ref=e466]':
+                        - 'generic "Milk and processed milk products (ICS code(s): 67.100.10)" [ref=e467]'
+                      - cell [ref=e468]:
+                        - button [ref=e472] [cursor=pointer]:
+                          - generic [ref=e475]: 
+                    - row "India G/TBT/N/IND/433 Notification for New Standards on Essential Requirement (ER) for “NTP Server” Notified document (1) 30/04/2026 29/06/2026 Telecommunication" [ref=e476]:
+                      - cell "India" [ref=e477]: India
+                      - cell "G/TBT/N/IND/433 Notification for New Standards on Essential Requirement (ER) for “NTP Server” Notified document (1)" [ref=e478]:
+                        - generic [ref=e479]:
+                          - link "G/TBT/N/IND/433" [ref=e480] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FIND%2F433
+                          - generic "Download Document" [ref=e481] [cursor=pointer]:
+                            - generic [ref=e483]: 
+                          - text: Notification for New Standards on Essential Requirement (ER) for “NTP Server”
+                        - paragraph [ref=e487]:
+                          - link "Notified document (1)" [ref=e488] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/IND/26_02299_00_e.pdf
+                      - cell "30/04/2026 29/06/2026" [ref=e489]:
+                        - text: 30/04/2026
+                        - generic [ref=e490]:
+                          - generic [ref=e491]: 
+                          - text: 29/06/2026
+                      - cell "Telecommunication" [ref=e492]:
+                        - generic "Telecommunication" [ref=e493]
+                      - cell [ref=e494]:
+                        - button [ref=e498] [cursor=pointer]:
+                          - generic [ref=e501]: 
+                    - row "Mexico G/TBT/N/MEX/564 Proyecto de Norma Oficial Mexicana PROY-NOM-045-SSA-2026, Para la vigilancia epidemiológica, prevención y control de las infecciones asociadas a la atención de la salud. Notified document (1) 30/04/2026 29/06/2026 Es de observancia obligatoria, en todo el territorio nacional, y establece los lineamientos para la vigilancia epidemiológica, prevención y control de las Infecciones Asociadas a la Atención de la Salud en todos los Establecimientos para la Atención Medica que forman parte del Sistema Nacional de Salud." [ref=e502]:
+                      - cell "Mexico" [ref=e503]: Mexico
+                      - cell "G/TBT/N/MEX/564 Proyecto de Norma Oficial Mexicana PROY-NOM-045-SSA-2026, Para la vigilancia epidemiológica, prevención y control de las infecciones asociadas a la atención de la salud. Notified document (1)" [ref=e504]:
+                        - generic [ref=e505]:
+                          - link "G/TBT/N/MEX/564" [ref=e506] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FMEX%2F564
+                          - generic "Download Document" [ref=e507] [cursor=pointer]:
+                            - generic [ref=e509]: 
+                          - text: Proyecto de Norma Oficial Mexicana PROY-NOM-045-SSA-2026, Para la vigilancia epidemiológica, prevención y control de las infecciones asociadas a la atención de la salud.
+                        - paragraph [ref=e513]:
+                          - link "Notified document (1)" [ref=e514] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/MEX/26_02217_00_s.pdf
+                      - cell "30/04/2026 29/06/2026" [ref=e515]:
+                        - text: 30/04/2026
+                        - generic [ref=e516]:
+                          - generic [ref=e517]: 
+                          - text: 29/06/2026
+                      - cell "Es de observancia obligatoria, en todo el territorio nacional, y establece los lineamientos para la vigilancia epidemiológica, prevención y control de las Infecciones Asociadas a la Atención de la Salud en todos los Establecimientos para la Atención Medica que forman parte del Sistema Nacional de Salud." [ref=e518]:
+                        - generic "Es de observancia obligatoria, en todo el territorio nacional, y establece los lineamientos para la vigilancia epidemiológica, prevención y control de las Infecciones Asociadas a la Atención de la Salud en todos los Establecimientos para la Atención Medica que forman parte del Sistema Nacional de Salud." [ref=e519]
+                      - cell [ref=e520]:
+                        - button [ref=e524] [cursor=pointer]:
+                          - generic [ref=e527]: 
+                    - row [ref=e528]:
+                      - cell "Mexico" [ref=e529]: Mexico
+                      - cell "G/TBT/N/MEX/565 Proyecto de Norma Oficial Mexicana PROY-NOM-175-SEMARNAT-2026 Límites máximos permisibles de emisión de contaminantes a la atmosfera, provenientes del escape de motocicletas nuevas equipadas con un motor de combustión interna a gasolina. Notified document (1)" [ref=e530]:
+                        - generic [ref=e531]:
+                          - link "G/TBT/N/MEX/565" [ref=e532] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FMEX%2F565
+                          - generic "Download Document" [ref=e533] [cursor=pointer]:
+                            - generic [ref=e535]: 
+                          - text: Proyecto de Norma Oficial Mexicana PROY-NOM-175-SEMARNAT-2026 Límites máximos permisibles de emisión de contaminantes a la atmosfera, provenientes del escape de motocicletas nuevas equipadas con un motor de combustión interna a gasolina.
+                        - paragraph [ref=e539]:
+                          - link "Notified document (1)" [ref=e540] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/MEX/26_02218_00_s.pdf
+                      - cell "30/04/2026 29/06/2026" [ref=e541]:
+                        - text: 30/04/2026
+                        - generic [ref=e542]:
+                          - generic [ref=e543]: 
+                          - text: 29/06/2026
+                      - cell "Es de observancia obligatoria, en todo el territorio nacional, y establece los límites máximos permisibles de emisión de hidrocarburos totales (HCT), monóxido de carbono (CO) y óxidos de nitrógeno (NOx), provenientes del escape de motocicletas nuevas equipadas con un motor de combustión a gasolina, así como las características de los sistemas de diagnóstico a bordo integrados en motocicletas nuevas a gasolina que les aplique, conforme a la certificación de origen y las características del sistema de control de emisiones de las motocicletas nuevas equipadas con un motor de combustión a gasolina." [ref=e544]:
+                        - generic "Es de observancia obligatoria, en todo el territorio nacional, y establece los límites máximos permisibles de emisión de hidrocarburos totales (HCT), monóxido de carbono (CO) y óxidos de nitrógeno (NOx), provenientes del escape de motocicletas nuevas equipadas con un motor de combustión a gasolina, así como las características de los sistemas de diagnóstico a bordo integrados en motocicletas nuevas a gasolina que les aplique, conforme a la certificación de origen y las características del sistema de control de emisiones de las motocicletas nuevas equipadas con un motor de combustión a gasolina." [ref=e545]
+                      - cell [ref=e546]:
+                        - button [ref=e550] [cursor=pointer]:
+                          - generic [ref=e553]: 
+                    - 'row "Chinese Taipei G/TBT/N/TPKM/594 Proposal for Amendments to the Legal Inspection Requirements for Four Power Supply and Charging Equipment, Including Battery Chargers Notified document (1), Notified document (2) 30/04/2026 29/06/2026 Static converters (HS code(s): 850440)" [ref=e554]':
+                      - cell "Chinese Taipei" [ref=e555]: Chinese Taipei
+                      - cell "G/TBT/N/TPKM/594 Proposal for Amendments to the Legal Inspection Requirements for Four Power Supply and Charging Equipment, Including Battery Chargers Notified document (1), Notified document (2)" [ref=e556]:
+                        - generic [ref=e557]:
+                          - link "G/TBT/N/TPKM/594" [ref=e558] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FTPKM%2F594
+                          - generic "Download Document" [ref=e559] [cursor=pointer]:
+                            - generic [ref=e561]: 
+                          - text: Proposal for Amendments to the Legal Inspection Requirements for Four Power Supply and Charging Equipment, Including Battery Chargers
+                        - paragraph [ref=e565]:
+                          - link "Notified document (1)" [ref=e566] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/TPKM/26_02296_00_x.pdf
+                          - text: ","
+                          - link "Notified document (2)" [ref=e567] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/TPKM/26_02296_00_e.pdf
+                      - cell "30/04/2026 29/06/2026" [ref=e568]:
+                        - text: 30/04/2026
+                        - generic [ref=e569]:
+                          - generic [ref=e570]: 
+                          - text: 29/06/2026
+                      - 'cell "Static converters (HS code(s): 850440)" [ref=e571]':
+                        - 'generic "Static converters (HS code(s): 850440)" [ref=e572]'
+                      - cell [ref=e573]:
+                        - button [ref=e577] [cursor=pointer]:
+                          - generic [ref=e580]: 
+                    - 'row "Chinese Taipei G/TBT/N/TPKM/595 Proposal for Amendments to the Legal Inspection Requirements for Three Power Supply Equipment, Including Uninterruptible Power Supplies Notified document (1), Notified document (2) 30/04/2026 29/06/2026 Static converters (HS code(s): 850440)" [ref=e581]':
+                      - cell "Chinese Taipei" [ref=e582]: Chinese Taipei
+                      - cell "G/TBT/N/TPKM/595 Proposal for Amendments to the Legal Inspection Requirements for Three Power Supply Equipment, Including Uninterruptible Power Supplies Notified document (1), Notified document (2)" [ref=e583]:
+                        - generic [ref=e584]:
+                          - link "G/TBT/N/TPKM/595" [ref=e585] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FTPKM%2F595
+                          - generic "Download Document" [ref=e586] [cursor=pointer]:
+                            - generic [ref=e588]: 
+                          - text: Proposal for Amendments to the Legal Inspection Requirements for Three Power Supply Equipment, Including Uninterruptible Power Supplies
+                        - paragraph [ref=e592]:
+                          - link "Notified document (1)" [ref=e593] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/TPKM/26_02297_00_e.pdf
+                          - text: ","
+                          - link "Notified document (2)" [ref=e594] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/TPKM/26_02297_00_x.pdf
+                      - cell "30/04/2026 29/06/2026" [ref=e595]:
+                        - text: 30/04/2026
+                        - generic [ref=e596]:
+                          - generic [ref=e597]: 
+                          - text: 29/06/2026
+                      - 'cell "Static converters (HS code(s): 850440)" [ref=e598]':
+                        - 'generic "Static converters (HS code(s): 850440)" [ref=e599]'
+                      - cell [ref=e600]:
+                        - button [ref=e604] [cursor=pointer]:
+                          - generic [ref=e607]: 
+                    - row [ref=e608]:
+                      - cell "United Kingdom" [ref=e609]: United Kingdom
+                      - cell "G/TBT/N/GBR/119 The Persistent Organic Pollutants (Amendment) Regulations 2026 Notified document (1)" [ref=e610]:
+                        - generic [ref=e611]:
+                          - link "G/TBT/N/GBR/119" [ref=e612] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FGBR%2F119
+                          - generic "Download Document" [ref=e613] [cursor=pointer]:
+                            - generic [ref=e615]: 
+                          - text: The Persistent Organic Pollutants (Amendment) Regulations 2026
+                        - paragraph [ref=e619]:
+                          - link "Notified document (1)" [ref=e620] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/GBR/26_02278_00_e.pdf
+                      - cell "29/04/2026 28/06/2026" [ref=e621]:
+                        - text: 29/04/2026
+                        - generic [ref=e622]:
+                          - generic [ref=e623]: 
+                          - text: 28/06/2026
+                      - cell [ref=e624]:
+                        - generic [ref=e625]
+                      - cell [ref=e626]:
+                        - button [ref=e630] [cursor=pointer]:
+                          - generic [ref=e633]: 
+                    - row "Kazakhstan G/TBT/N/KAZ/36 Draft amendments to the Rules of Good Manufacturing Practice in the Eurasian Economic Union 29/04/2026 28/06/2026 Pharmaceuticals" [ref=e634]:
+                      - cell "Kazakhstan" [ref=e635]: Kazakhstan
+                      - cell "G/TBT/N/KAZ/36 Draft amendments to the Rules of Good Manufacturing Practice in the Eurasian Economic Union" [ref=e636]:
+                        - generic [ref=e637]:
+                          - link "G/TBT/N/KAZ/36" [ref=e638] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FKAZ%2F36
+                          - generic "Download Document" [ref=e639] [cursor=pointer]:
+                            - generic [ref=e641]: 
+                          - text: Draft amendments to the Rules of Good Manufacturing Practice in the Eurasian Economic Union
+                      - cell "29/04/2026 28/06/2026" [ref=e642]:
+                        - text: 29/04/2026
+                        - generic [ref=e643]:
+                          - generic [ref=e644]: 
+                          - text: 28/06/2026
+                      - cell "Pharmaceuticals" [ref=e645]:
+                        - generic "Pharmaceuticals" [ref=e646]
+                      - cell [ref=e647]:
+                        - button [ref=e651] [cursor=pointer]:
+                          - generic [ref=e654]: 
+                    - row "Kazakhstan G/TBT/N/KAZ/37 Draft Amendments No. 1 to the Technical Regulation of Eurasian Economic Union «On Requirements to Energy Efficiency of Energy Consuming Devices» (TR EAEU 048/2019) 29/04/2026 28/06/2026 Energy Consuming Devices" [ref=e655]:
+                      - cell "Kazakhstan" [ref=e656]: Kazakhstan
+                      - cell "G/TBT/N/KAZ/37 Draft Amendments No. 1 to the Technical Regulation of Eurasian Economic Union «On Requirements to Energy Efficiency of Energy Consuming Devices» (TR EAEU 048/2019)" [ref=e657]:
+                        - generic [ref=e658]:
+                          - link "G/TBT/N/KAZ/37" [ref=e659] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FKAZ%2F37
+                          - generic "Download Document" [ref=e660] [cursor=pointer]:
+                            - generic [ref=e662]: 
+                          - text: Draft Amendments No. 1 to the Technical Regulation of Eurasian Economic Union «On Requirements to Energy Efficiency of Energy Consuming Devices» (TR EAEU 048/2019)
+                      - cell "29/04/2026 28/06/2026" [ref=e663]:
+                        - text: 29/04/2026
+                        - generic [ref=e664]:
+                          - generic [ref=e665]: 
+                          - text: 28/06/2026
+                      - cell "Energy Consuming Devices" [ref=e666]:
+                        - generic "Energy Consuming Devices" [ref=e667]
+                      - cell [ref=e668]:
+                        - button [ref=e672] [cursor=pointer]:
+                          - generic [ref=e675]: 
+                    - 'row "Poland G/TBT/N/POL/7 Draft Act amending the Act on the protection of health against the effects of using tobacco and tobacco products (governmental document no.: UD 213); 6 pages in Polish + justification and other related documents. Notified document (1) 29/04/2026 28/06/2026 Disposable electronic cigarettes with and without nicotine liquid, nicotine pouches, other nicotine products, electronic cigarettes refill container packaging." [ref=e676]':
+                      - cell "Poland" [ref=e677]: Poland
+                      - 'cell "G/TBT/N/POL/7 Draft Act amending the Act on the protection of health against the effects of using tobacco and tobacco products (governmental document no.: UD 213); 6 pages in Polish + justification and other related documents. Notified document (1)" [ref=e678]':
+                        - generic [ref=e679]:
+                          - link "G/TBT/N/POL/7" [ref=e680] [cursor=pointer]:
+                            - /url: https://eping.wto.org/en/Search/Index?domainIds=1&hs=8542&page=1&pageSize=10&viewData=%20G%2FTBT%2FN%2FPOL%2F7
+                          - generic "Download Document" [ref=e681] [cursor=pointer]:
+                            - generic [ref=e683]: 
+                          - text: "Draft Act amending the Act on the protection of health against the effects of using tobacco and tobacco products (governmental document no.: UD 213); 6 pages in Polish + justification and other related documents."
+                        - paragraph [ref=e687]:
+                          - link "Notified document (1)" [ref=e688] [cursor=pointer]:
+                            - /url: https://members.wto.org/crnattachments/2026/TBT/POL/26_02269_00_x.pdf
+                      - cell "29/04/2026 28/06/2026" [ref=e689]:
+                        - text: 29/04/2026
+                        - generic [ref=e690]:
+                          - generic [ref=e691]: 
+                          - text: 28/06/2026
+                      - cell "Disposable electronic cigarettes with and without nicotine liquid, nicotine pouches, other nicotine products, electronic cigarettes refill container packaging." [ref=e692]:
+                        - generic "Disposable electronic cigarettes with and without nicotine liquid, nicotine pouches, other nicotine products, electronic cigarettes refill container packaging." [ref=e693]
+                      - cell [ref=e694]:
+                        - button [ref=e698] [cursor=pointer]:
+                          - generic [ref=e701]: 
+                - navigation [ref=e705]:
+                  - button [ref=e706]:
+                    - generic [ref=e708]: 
+                  - button [ref=e709] [cursor=pointer]:
+                    - generic [ref=e711]: 
+                  - list [ref=e712]:
+                    - listitem [ref=e713]:
+                      - button "1"
+                    - listitem [ref=e714]:
+                      - button "2" [ref=e715] [cursor=pointer]
+                    - listitem [ref=e716]:
+                      - generic: …
+                    - listitem [ref=e717]:
+                      - button "3188" [ref=e718] [cursor=pointer]
+              - generic [ref=e719]: Showing 1 - 20 of 63746
+    - contentinfo [ref=e154]:
+      - generic [ref=e156]:
+        - link "Terms and conditions of use, disclaimer and copyright" [ref=e157] [cursor=pointer]:
+          - /url: /en/CopyrightsAndDisclaimer
+        - text: ","
+        - link "about us" [ref=e158] [cursor=pointer]:
+          - /url: /en/About
+  - generic:  Select notification type(s)   Select HS code(s)   Select ICS code(s)  Select objective(s)   Select group(s)   Select keyword(s)  Select Country  Select Standard(s)  Reason for addendum   Select type of measure(s)  Reason for addendum 

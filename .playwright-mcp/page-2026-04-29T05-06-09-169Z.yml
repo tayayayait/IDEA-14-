@@ -1,0 +1,999 @@
+- generic [ref=e4]:
+  - generic:
+    - link "본문 바로가기":
+      - /url: "#main"
+  - banner [ref=e5]:
+    - generic [ref=e7]:
+      - link "K-Sight 무역보험 빅데이터 플랫폼" [ref=e9] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e10]:
+        - navigation [ref=e11]:
+          - list [ref=e12]:
+            - listitem [ref=e13]:
+              - link "국가" [ref=e14] [cursor=pointer]:
+                - /url: /rsrch/nation/nationView
+              - list:
+                - listitem [ref=e15]:
+                  - link "Country Risk Map" [ref=e16] [cursor=pointer]:
+                    - /url: /rsrch/nation/nationView
+                  - list
+                - listitem [ref=e17]:
+                  - link "세계 경제지표" [ref=e18] [cursor=pointer]:
+                    - /url: /rsrch/trade-stat/world-eco
+                  - list
+                - listitem [ref=e19]:
+                  - link "주요 경제 지표 동향" [ref=e20] [cursor=pointer]:
+                    - /url: /rsrch/country/trade-stat
+                  - list
+                - listitem [ref=e21]:
+                  - link "국가별 무역지표" [ref=e22] [cursor=pointer]:
+                    - /url: /rsrch/trade-stat/country-trade
+                  - list
+                - listitem [ref=e23]:
+                  - link "Economic Calendar" [ref=e24] [cursor=pointer]:
+                    - /url: /rsrch/country/eco-calendar/list
+                  - list
+                - listitem [ref=e25]:
+                  - link "유망시장 추천" [ref=e26] [cursor=pointer]:
+                    - /url: /recommended-markets
+                  - list
+            - listitem [ref=e27]:
+              - link "기업" [ref=e28] [cursor=pointer]:
+                - /url: /find-buyer
+              - list:
+                - listitem [ref=e29]:
+                  - link "Find Buyer System" [ref=e30] [cursor=pointer]:
+                    - /url: /find-buyer
+                  - list
+                - listitem [ref=e31]:
+                  - link "제재 대상자 조회" [ref=e32] [cursor=pointer]:
+                    - /url: /rsrch/sanction/list
+                  - list
+                - listitem [ref=e33]:
+                  - link "국외기업 공시자료" [ref=e34] [cursor=pointer]:
+                    - /url: /disclosure
+                  - list
+                - listitem [ref=e35]:
+                  - link "국외기업 경영분석" [ref=e36] [cursor=pointer]:
+                    - /url: /foreign-company-analysis
+                  - list
+            - listitem [ref=e37]:
+              - link "데이터" [ref=e38] [cursor=pointer]:
+                - /url: /analysis/risk-advisor/payment
+              - list:
+                - listitem [ref=e39]:
+                  - link "수출결제정보" [ref=e40] [cursor=pointer]:
+                    - /url: /analysis/risk-advisor/payment
+                  - list
+                - listitem [ref=e41]:
+                  - link "K-SURE Risk Index" [ref=e42] [cursor=pointer]:
+                    - /url: /risk-index
+                  - list
+                - listitem [ref=e43]:
+                  - link "해외시장 신용위험지수" [ref=e44] [cursor=pointer]:
+                    - /url: /credit-risk-index
+                  - list
+                - listitem [ref=e45]:
+                  - link "위치기반 등급현황" [ref=e46] [cursor=pointer]:
+                    - /url: /importer-map
+                  - list
+                - listitem [ref=e47]:
+                  - link "맞춤형 무역보험 추천" [ref=e48] [cursor=pointer]:
+                    - /url: /analysis/trade-insurance/reco
+                  - list
+                - listitem [ref=e49]:
+                  - link "숨은 보험금 찾기" [ref=e50] [cursor=pointer]:
+                    - /url: /analysis/trade-insurance/find
+                  - list
+                - listitem [ref=e51]:
+                  - link "안심거래 자가진단" [ref=e52] [cursor=pointer]:
+                    - /url: /self-diagnosis
+                  - list
+            - listitem [ref=e53]:
+              - link "보고서 및 뉴스" [ref=e54] [cursor=pointer]:
+                - /url: /news/report/ctry/list
+              - list:
+                - listitem [ref=e55]:
+                  - link "국가보고서" [ref=e56] [cursor=pointer]:
+                    - /url: /news/report/ctry/list
+                  - list
+                - listitem [ref=e57]:
+                  - link "국외기업보고서" [ref=e58] [cursor=pointer]:
+                    - /url: /news/report/abrd/list
+                  - list
+                - listitem [ref=e59]:
+                  - link "국별인수방침" [ref=e60] [cursor=pointer]:
+                    - /url: /news/report/acpt/list
+                  - list
+                - listitem [ref=e61]:
+                  - link "산업보고서" [ref=e62] [cursor=pointer]:
+                    - /url: /news/report/inds/list
+                  - list
+                - listitem [ref=e63]:
+                  - link "무역보험 발간자료" [ref=e64] [cursor=pointer]:
+                    - /url: /news/report/data/list
+                  - list
+                - listitem [ref=e65]:
+                  - link "주요 경제 뉴스" [ref=e66] [cursor=pointer]:
+                    - /url: /news/economic/list
+                  - list
+            - listitem [ref=e67]:
+              - link "고객지원" [ref=e68] [cursor=pointer]:
+                - /url: /board/notice/list
+              - list:
+                - listitem [ref=e69]:
+                  - link "공지사항" [ref=e70] [cursor=pointer]:
+                    - /url: /board/notice/list
+                  - list
+                - listitem [ref=e71]:
+                  - link "FAQ" [ref=e72] [cursor=pointer]:
+                    - /url: /board/faq/list
+                  - list
+                - listitem [ref=e73]:
+                  - link "고객제안" [ref=e74] [cursor=pointer]:
+                    - /url: https://www.ksure.or.kr/rh-kr/pgm/i-393/ibs/minwon/save.do
+                - listitem [ref=e75]:
+                  - link "아이디어 제안" [ref=e76] [cursor=pointer]:
+                    - /url: https://www.ksure.or.kr/rh-kr/bbs/i-451/list.do
+                - listitem [ref=e77]:
+                  - link "플랫폼 이용안내" [ref=e78] [cursor=pointer]:
+                    - /url: /platform/guide
+                  - list
+                - listitem [ref=e79]:
+                  - link "해외신용정보Link" [ref=e80] [cursor=pointer]:
+                    - /url: /news/report/link/list
+                  - list
+                - listitem [ref=e81]:
+                  - link "공공데이터 개방" [ref=e82] [cursor=pointer]:
+                    - /url: /board/openapi/list
+                  - list
+        - list [ref=e84]:
+          - listitem [ref=e85]:
+            - link "로그인" [ref=e86] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e87]: 로그인
+        - generic [ref=e88]:
+          - button "글자크기" [ref=e90] [cursor=pointer]:
+            - generic [ref=e92]: 글자크기
+          - button "통합검색 통합검색" [ref=e93] [cursor=pointer]:
+            - text: 통합검색
+            - generic: 통합검색
+  - main [ref=e95]:
+    - generic [ref=e96]:
+      - generic: 대메뉴 타이틀
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - list [ref=e101]:
+            - listitem [ref=e102]:
+              - link "홈" [ref=e103] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e104]:
+              - button "데이터" [ref=e106] [cursor=pointer]:
+                - generic [ref=e107]: 데이터
+            - listitem [ref=e108]:
+              - button "수출결제정보" [ref=e110] [cursor=pointer]:
+                - generic [ref=e111]: 수출결제정보
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - img "수출결제정보" [ref=e115]
+              - heading "수출결제정보" [level=1] [ref=e116]
+            - generic [ref=e117]:
+              - paragraph [ref=e118]: 단기수출보험 자료를 활용해 최근 5년간 국가·업종별 수출결제 추이를 제공합니다.
+              - link "매뉴얼 다운로드" [ref=e120] [cursor=pointer]:
+                - /url: /public/guide/수출결제정보_매뉴얼.pdf
+                - generic [ref=e122]: 매뉴얼 다운로드
+        - generic [ref=e124]:
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: 국가
+              - generic [ref=e131]:
+                - combobox "Search for option" [ref=e134] [cursor=pointer]:
+                  - generic [ref=e135]:
+                    - generic [ref=e1230]: 말레이시아
+                    - searchbox "국가명(한글)" [ref=e1232]
+                  - button "Clear Selected" [ref=e139]
+                - button "지도 선택" [ref=e141] [cursor=pointer]:
+                  - generic [ref=e142]: 지도 선택
+            - generic [ref=e143]:
+              - generic [ref=e144]: 업종
+              - generic [ref=e145]:
+                - combobox "Search for option" [ref=e148] [cursor=pointer]:
+                  - generic [ref=e149]:
+                    - generic [ref=e150]: 대분류 전체
+                    - searchbox "업종선택" [ref=e151]
+                  - button "Clear Selected" [ref=e153]
+                - combobox "Search for option" [ref=e157] [cursor=pointer]:
+                  - generic [ref=e158]:
+                    - generic [ref=e159]: 중분류 전체
+                    - searchbox "중분류 전체" [disabled] [ref=e160]
+                  - button "Clear Selected" [disabled] [ref=e162]
+            - generic [ref=e164]:
+              - button "초기화" [ref=e165] [cursor=pointer]:
+                - generic [ref=e166]: 초기화
+              - button "조회" [active] [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]: 조회
+          - button "출력" [ref=e170] [cursor=pointer]:
+            - generic [ref=e172]: 출력
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - heading "결제조건(%)" [level=2] [ref=e178]
+                  - button "도움말" [ref=e181] [cursor=pointer]:
+                    - generic: 도움말
+                - button "더보기" [ref=e183] [cursor=pointer]:
+                  - generic: 더보기
+              - generic [ref=e185]:
+                - region "Chart. Highcharts interactive chart." [ref=e1234]:
+                  - generic [ref=e1235]:
+                    - paragraph [ref=e1236]: Chart
+                    - generic [ref=e1237]: Bar chart with 7 data series.
+                    - generic [ref=e1238]: The chart has 1 X axis displaying categories.
+                    - generic [ref=e1239]: The chart has 1 Y axis displaying values. Data ranges from 6.5038741488612 to 100.
+                  - generic [ref=e1243]:
+                    - img "Interactive chart" [ref=e1244]:
+                      - generic [ref=e1250]:
+                        - region "O/A(T/T포함), bar series 1 of 7 with 5 bars." [ref=e1251]:
+                          - img "2021, 72.46941478999454. O/A(T/T포함)." [ref=e1252]
+                          - img "2022, 68.00203355363497. O/A(T/T포함)." [ref=e1253]
+                          - img "2023, 68.06648308418568. O/A(T/T포함)." [ref=e1254]
+                          - img "2024, 70.85803128947624. O/A(T/T포함)." [ref=e1255]
+                          - img "2025, 74.00798309462316. O/A(T/T포함)." [ref=e1256]
+                        - region "D/A, bar series 2 of 7 with 5 bars." [ref=e1257]:
+                          - img "2021, 5.010519753759838. D/A." [ref=e1258]
+                          - img "2022, 3.416370106761566. D/A." [ref=e1259]
+                          - img "2023, 2.6553894571203775. D/A." [ref=e1260]
+                          - img "2024, 2.3418521037800017. D/A." [ref=e1261]
+                          - img "2025, 2.45362761211552. D/A." [ref=e1262]
+                        - region "D/P, bar series 3 of 7 with 5 bars." [ref=e1263]:
+                          - img "2021, 9.14049715577028. D/P." [ref=e1264]
+                          - img "2022, 9.679715302491102. D/P." [ref=e1265]
+                          - img "2023, 12.352478363493312. D/P." [ref=e1266]
+                          - img "2024, 12.010494606938101. D/P." [ref=e1267]
+                          - img "2025, 9.650152617985443. D/P." [ref=e1268]
+                        - region "NET, bar series 4 of 7 with 5 bars." [ref=e1269]:
+                          - img "2021, 1.2935400919504403. NET." [ref=e1270]
+                          - img "2022, 2.806304016268429. NET." [ref=e1271]
+                          - img "2023, 1.7997639653815893. NET." [ref=e1272]
+                          - img "2024, 1.7393839277038188. NET." [ref=e1273]
+                          - img "2025, 1.9957736557877435. NET." [ref=e1274]
+                        - region "CAD, bar series 5 of 7 with 5 bars." [ref=e1275]:
+                          - img "2021, 2.5870801839008806. CAD." [ref=e1276]
+                          - img "2022, 4.026436197254703. CAD." [ref=e1277]
+                          - img "2023, 3.924075531077891. CAD." [ref=e1278]
+                          - img "2024, 3.9063259158487997. CAD." [ref=e1279]
+                          - img "2025, 4.390702042733036. CAD." [ref=e1280]
+                        - region "COD, bar series 6 of 7 with 5 bars." [ref=e1281]:
+                          - img "2021, 1.20003116964077. COD." [ref=e1282]
+                          - img "2022, 1.2302999491611593. COD." [ref=e1283]
+                          - img "2023, 0.8261211644374508. COD." [ref=e1284]
+                          - img "2024, 1.166067437566806. COD." [ref=e1285]
+                          - img "2025, 0.9978868278938717. COD." [ref=e1286]
+                        - region "L/C, bar series 7 of 7 with 5 bars." [ref=e1287]:
+                          - img "2021, 8.298916854983245. L/C." [ref=e1288]
+                          - img "2022, 10.838840874428064. L/C." [ref=e1289]
+                          - img "2023, 10.375688434303697. L/C." [ref=e1290]
+                          - img "2024, 7.977844718686231. L/C." [ref=e1291]
+                          - img "2025, 6.503874148861236. L/C." [ref=e1292]
+                      - generic [ref=e1293]:
+                        - generic [ref=e1295]:
+                          - generic [ref=e1296]: 72 %
+                          - text: 72 %
+                        - generic [ref=e1298]:
+                          - generic [ref=e1299]: 68 %
+                          - text: 68 %
+                        - generic [ref=e1301]:
+                          - generic [ref=e1302]: 68 %
+                          - text: 68 %
+                        - generic [ref=e1304]:
+                          - generic [ref=e1305]: 71 %
+                          - text: 71 %
+                        - generic [ref=e1307]:
+                          - generic [ref=e1308]: 74 %
+                          - text: 74 %
+                      - generic [ref=e1309]:
+                        - generic [ref=e1311]:
+                          - generic [ref=e1312]: 5 %
+                          - text: 5 %
+                        - generic [ref=e1314]:
+                          - generic [ref=e1315]: 3 %
+                          - text: 3 %
+                        - generic [ref=e1317]:
+                          - generic [ref=e1318]: 3 %
+                          - text: 3 %
+                        - generic [ref=e1320]:
+                          - generic [ref=e1321]: 2 %
+                          - text: 2 %
+                        - generic [ref=e1323]:
+                          - generic [ref=e1324]: 2 %
+                          - text: 2 %
+                      - generic [ref=e1325]:
+                        - generic [ref=e1327]:
+                          - generic [ref=e1328]: 9 %
+                          - text: 9 %
+                        - generic [ref=e1330]:
+                          - generic [ref=e1331]: 10 %
+                          - text: 10 %
+                        - generic [ref=e1333]:
+                          - generic [ref=e1334]: 12 %
+                          - text: 12 %
+                        - generic [ref=e1336]:
+                          - generic [ref=e1337]: 12 %
+                          - text: 12 %
+                        - generic [ref=e1339]:
+                          - generic [ref=e1340]: 10 %
+                          - text: 10 %
+                      - generic [ref=e1341]:
+                        - generic:
+                          - generic:
+                            - generic: 1 %
+                            - text: 1 %
+                        - generic:
+                          - generic:
+                            - generic: 3 %
+                            - text: 3 %
+                        - generic:
+                          - generic:
+                            - generic: 2 %
+                            - text: 2 %
+                        - generic:
+                          - generic:
+                            - generic: 2 %
+                            - text: 2 %
+                        - generic:
+                          - generic:
+                            - generic: 2 %
+                            - text: 2 %
+                      - generic [ref=e1342]:
+                        - generic [ref=e1344]:
+                          - generic [ref=e1345]: 3 %
+                          - text: 3 %
+                        - generic [ref=e1347]:
+                          - generic [ref=e1348]: 4 %
+                          - text: 4 %
+                        - generic [ref=e1350]:
+                          - generic [ref=e1351]: 4 %
+                          - text: 4 %
+                        - generic [ref=e1353]:
+                          - generic [ref=e1354]: 4 %
+                          - text: 4 %
+                        - generic [ref=e1356]:
+                          - generic [ref=e1357]: 4 %
+                          - text: 4 %
+                      - generic [ref=e1358]:
+                        - generic:
+                          - generic:
+                            - generic: 1 %
+                            - text: 1 %
+                        - generic:
+                          - generic:
+                            - generic: 1 %
+                            - text: 1 %
+                        - generic:
+                          - generic:
+                            - generic: 1 %
+                            - text: 1 %
+                        - generic:
+                          - generic:
+                            - generic: 1 %
+                            - text: 1 %
+                        - generic:
+                          - generic:
+                            - generic: 1 %
+                            - text: 1 %
+                      - generic [ref=e1359]:
+                        - generic [ref=e1361]:
+                          - generic [ref=e1362]: 8 %
+                          - text: 8 %
+                        - generic [ref=e1364]:
+                          - generic [ref=e1365]: 11 %
+                          - text: 11 %
+                        - generic [ref=e1367]:
+                          - generic [ref=e1368]: 10 %
+                          - text: 10 %
+                        - generic [ref=e1370]:
+                          - generic [ref=e1371]: 8 %
+                          - text: 8 %
+                        - generic [ref=e1373]:
+                          - generic [ref=e1374]: 7 %
+                          - text: 7 %
+                      - generic [ref=e1378]:
+                        - generic [ref=e1380]: O/A(T/T포함)
+                        - generic [ref=e1383]: D/A
+                        - generic [ref=e1386]: D/P
+                        - generic [ref=e1389]: NET
+                        - generic [ref=e1392]: CAD
+                        - generic [ref=e1395]: COD
+                        - generic [ref=e1398]: L/C
+                      - generic [ref=e1400]:
+                        - generic [ref=e1401]: "2021"
+                        - generic [ref=e1402]: "2022"
+                        - generic [ref=e1403]: "2023"
+                        - generic [ref=e1404]: "2024"
+                        - generic [ref=e1405]: "2025"
+                      - generic [ref=e1406]:
+                        - generic [ref=e1407]: "0"
+                        - generic [ref=e1408]: "25"
+                        - generic [ref=e1409]: "50"
+                        - generic [ref=e1410]: "75"
+                        - generic [ref=e1411]: "100"
+                    - generic:
+                      - region "Toggle series visibility, Chart":
+                        - list:
+                          - listitem:
+                            - button "Show O/A(T/T포함)" [pressed] [ref=e1412] [cursor=pointer]
+                          - listitem:
+                            - button "Show D/A" [pressed] [ref=e1413] [cursor=pointer]
+                          - listitem:
+                            - button "Show D/P" [pressed] [ref=e1414] [cursor=pointer]
+                          - listitem:
+                            - button "Show NET" [pressed] [ref=e1415] [cursor=pointer]
+                          - listitem:
+                            - button "Show CAD" [pressed] [ref=e1416] [cursor=pointer]
+                          - listitem:
+                            - button "Show COD" [pressed] [ref=e1417] [cursor=pointer]
+                          - listitem:
+                            - button "Show L/C" [pressed] [ref=e1418] [cursor=pointer]
+                  - generic [ref=e1420]: End of interactive chart.
+                - generic [ref=e377]:
+                  - generic [ref=e378]:
+                    - generic [ref=e379]: 결제조건(%)
+                    - generic [ref=e382]:
+                      - generic [ref=e383]:
+                        - radio "2025" [checked]
+                        - generic [ref=e385] [cursor=pointer]: "2025"
+                      - generic [ref=e386]:
+                        - radio "2024"
+                        - generic [ref=e388] [cursor=pointer]: "2024"
+                      - generic [ref=e389]:
+                        - radio "2023"
+                        - generic [ref=e391] [cursor=pointer]: "2023"
+                      - generic [ref=e392]:
+                        - radio "2022"
+                        - generic [ref=e394] [cursor=pointer]: "2022"
+                      - generic [ref=e395]:
+                        - radio "2021"
+                        - generic [ref=e397] [cursor=pointer]: "2021"
+                  - table "연도별 결제조건, 건수, 비중(%) 정보" [ref=e399]:
+                    - caption: 연도별 결제조건, 건수, 비중(%) 정보
+                    - rowgroup [ref=e403]:
+                      - row "결제조건 건수 비중(%)" [ref=e404]:
+                        - columnheader "결제조건" [ref=e405]
+                        - columnheader "건수" [ref=e406]
+                        - columnheader "비중(%)" [ref=e407]
+                    - rowgroup [ref=e408]:
+                      - row "O/A(T/T포함) 6,304 74.0" [ref=e1421]:
+                        - cell "O/A(T/T포함)" [ref=e410]
+                        - cell "6,304" [ref=e1422]
+                        - cell "74.0" [ref=e1423]
+                      - row "D/A 209 2.5" [ref=e1424]:
+                        - cell "D/A" [ref=e414]
+                        - cell "209" [ref=e1425]
+                        - cell "2.5" [ref=e1426]
+                      - row "D/P 822 9.7" [ref=e1427]:
+                        - cell "D/P" [ref=e418]
+                        - cell "822" [ref=e1428]
+                        - cell "9.7" [ref=e1429]
+                      - row "NET 170 2.0" [ref=e1430]:
+                        - cell "NET" [ref=e422]
+                        - cell "170" [ref=e1431]
+                        - cell "2.0" [ref=e1432]
+                      - row "CAD 374 4.4" [ref=e1433]:
+                        - cell "CAD" [ref=e426]
+                        - cell "374" [ref=e1434]
+                        - cell "4.4" [ref=e1435]
+                      - row "COD 85 1.0" [ref=e1436]:
+                        - cell "COD" [ref=e430]
+                        - cell "85" [ref=e1437]
+                        - cell "1.0" [ref=e1438]
+                      - row "L/C 554 6.5" [ref=e1439]:
+                        - cell "L/C" [ref=e434]
+                        - cell "554" [ref=e1440]
+                        - cell "6.5" [ref=e1441]
+                      - row "소계 8,518 100.0" [ref=e1442]:
+                        - cell "소계" [ref=e438]
+                        - cell "8,518" [ref=e1443]
+                        - cell "100.0" [ref=e440]
+            - generic [ref=e441]:
+              - generic [ref=e442]:
+                - generic [ref=e443]:
+                  - heading "평균 결제기간(선적일~예정만기일)" [level=2] [ref=e444]
+                  - button "도움말" [ref=e447] [cursor=pointer]:
+                    - generic: 도움말
+                - button "더보기" [ref=e449] [cursor=pointer]:
+                  - generic: 더보기
+              - generic [ref=e451]:
+                - region "Chart. Highcharts interactive chart." [ref=e1445]:
+                  - generic [ref=e1446]:
+                    - paragraph [ref=e1447]: Chart
+                    - generic [ref=e1448]: Line chart with 2 lines.
+                    - generic [ref=e1449]: The chart has 1 X axis displaying categories.
+                    - generic [ref=e1450]: The chart has 1 Y axis displaying values. Data ranges from 63.6 to 73.5.
+                  - generic [ref=e1454]:
+                    - img "Interactive chart" [ref=e1455]:
+                      - generic [ref=e1461]:
+                        - region "국가, line 1 of 2 with 5 data points." [ref=e1465]:
+                          - img "2021, 63.9. 국가." [ref=e1466]
+                          - img "2022, 65.5. 국가." [ref=e1467]
+                          - img "2023, 64. 국가." [ref=e1468]
+                          - img "2024, 63.7. 국가." [ref=e1469]
+                          - img "2025, 63.6. 국가." [ref=e1470]
+                        - region "전체, line 2 of 2 with 5 data points." [ref=e1474]:
+                          - img "2021, 72.9. 전체." [ref=e1475]
+                          - img "2022, 72. 전체." [ref=e1476]
+                          - img "2023, 72.3. 전체." [ref=e1477]
+                          - img "2024, 72.6. 전체." [ref=e1478]
+                          - img "2025, 73.5. 전체." [ref=e1479]
+                      - generic [ref=e1483]:
+                        - generic [ref=e1486]: 국가
+                        - generic [ref=e1489]: 전체
+                      - generic [ref=e1490]:
+                        - generic [ref=e1491]: "2021"
+                        - generic [ref=e1492]: "2022"
+                        - generic [ref=e1493]: "2023"
+                        - generic [ref=e1494]: "2024"
+                        - generic [ref=e1495]: "2025"
+                      - generic [ref=e1496]:
+                        - generic [ref=e1497]: "62"
+                        - generic [ref=e1498]: "64"
+                        - generic [ref=e1499]: "66"
+                        - generic [ref=e1500]: "68"
+                        - generic [ref=e1501]: "70"
+                        - generic [ref=e1502]: "72"
+                        - generic [ref=e1503]: "74"
+                    - generic:
+                      - region "Toggle series visibility, Chart":
+                        - list:
+                          - listitem:
+                            - button "Show 국가" [pressed] [ref=e1504] [cursor=pointer]
+                          - listitem:
+                            - button "Show 전체" [pressed] [ref=e1505] [cursor=pointer]
+                  - generic [ref=e1507]: End of interactive chart.
+                - generic [ref=e505]:
+                  - generic [ref=e506]:
+                    - generic [ref=e507]: 결제기간(일)
+                    - generic [ref=e1510]:
+                      - generic [ref=e1511]:
+                        - radio "국가" [checked]
+                        - generic [ref=e1513] [cursor=pointer]: 국가
+                      - generic [ref=e1514]:
+                        - radio "전체"
+                        - generic [ref=e1516] [cursor=pointer]: 전체
+                  - table "연도별 평균 결제기간" [ref=e509]:
+                    - caption: 연도별 평균 결제기간
+                    - rowgroup [ref=e513]:
+                      - row "연도 결제기간(일)" [ref=e514]:
+                        - columnheader "연도" [ref=e515]
+                        - columnheader "결제기간(일)" [ref=e516]
+                    - rowgroup [ref=e517]:
+                      - row "2025년 63.6" [ref=e1517]:
+                        - cell "2025년" [ref=e519]
+                        - cell "63.6" [ref=e1518]
+                      - row "2024년 63.7" [ref=e1519]:
+                        - cell "2024년" [ref=e522]
+                        - cell "63.7" [ref=e1520]
+                      - row "2023년 64.0" [ref=e1521]:
+                        - cell "2023년" [ref=e525]
+                        - cell "64.0" [ref=e1522]
+                      - row "2022년 65.5" [ref=e1523]:
+                        - cell "2022년" [ref=e528]
+                        - cell "65.5" [ref=e1524]
+                      - row "2021년 63.9" [ref=e1525]:
+                        - cell "2021년" [ref=e531]
+                        - cell "63.9" [ref=e1526]
+            - generic [ref=e533]:
+              - generic [ref=e534]:
+                - heading "결제기간 구간(선적일~예정만기일, %)" [level=2] [ref=e536]
+                - button "더보기" [ref=e537] [cursor=pointer]:
+                  - generic: 더보기
+              - generic [ref=e539]:
+                - region "Chart. Highcharts interactive chart." [ref=e1528]:
+                  - generic [ref=e1529]:
+                    - paragraph [ref=e1530]: Chart
+                    - generic [ref=e1531]: Bar chart with 5 data series.
+                    - generic [ref=e1532]: The chart has 1 X axis displaying categories.
+                    - generic [ref=e1533]: The chart has 1 Y axis displaying values. Data ranges from 5.7760037567504 to 100.
+                  - generic [ref=e1537]:
+                    - img "Interactive chart" [ref=e1538]:
+                      - generic [ref=e1544]:
+                        - region "30일 이내, bar series 1 of 5 with 5 bars." [ref=e1545]:
+                          - img "2021, 31.496921997973974. 30일 이내." [ref=e1546]
+                          - img "2022, 32.60803253685816. 30일 이내." [ref=e1547]
+                          - img "2023, 36.37883556254917. 30일 이내." [ref=e1548]
+                          - img "2024, 34.42814109415995. 30일 이내." [ref=e1549]
+                          - img "2025, 32.90678563042968. 30일 이내." [ref=e1550]
+                        - region "31~60일, bar series 2 of 5 with 5 bars." [ref=e1551]:
+                          - img "2021, 24.662978259175564. 31~60일." [ref=e1552]
+                          - img "2022, 18.14946619217082. 31~60일." [ref=e1553]
+                          - img "2023, 17.260031471282456. 31~60일." [ref=e1554]
+                          - img "2024, 16.033427266543583. 31~60일." [ref=e1555]
+                          - img "2025, 18.243719182906787. 31~60일." [ref=e1556]
+                        - region "61~90일, bar series 3 of 5 with 5 bars." [ref=e1557]:
+                          - img "2021, 27.08641782903452. 61~90일." [ref=e1558]
+                          - img "2022, 29.47635993899339. 61~90일." [ref=e1559]
+                          - img "2023, 25.560582218725415. 61~90일." [ref=e1560]
+                          - img "2024, 28.92818968030318. 61~90일." [ref=e1561]
+                          - img "2025, 29.584409485794787. 61~90일." [ref=e1562]
+                        - region "91일~120일, bar series 4 of 5 with 5 bars." [ref=e1563]:
+                          - img "2021, 10.73794124522715. 91일~120일." [ref=e1564]
+                          - img "2022, 13.014743263853584. 91일~120일." [ref=e1565]
+                          - img "2023, 12.77537372147915. 91일~120일." [ref=e1566]
+                          - img "2024, 14.507822369060344. 91일~120일." [ref=e1567]
+                          - img "2025, 13.489081944118336. 91일~120일." [ref=e1568]
+                        - region "120일 초과, bar series 5 of 5 with 5 bars." [ref=e1569]:
+                          - img "2021, 6.015740668588795. 120일 초과." [ref=e1570]
+                          - img "2022, 6.751398068124047. 120일 초과." [ref=e1571]
+                          - img "2023, 8.025177025963808. 120일 초과." [ref=e1572]
+                          - img "2024, 6.102419589932951. 120일 초과." [ref=e1573]
+                          - img "2025, 5.776003756750411. 120일 초과." [ref=e1574]
+                      - generic [ref=e1575]:
+                        - generic [ref=e1577]:
+                          - generic [ref=e1578]: 31 %
+                          - text: 31 %
+                        - generic [ref=e1580]:
+                          - generic [ref=e1581]: 33 %
+                          - text: 33 %
+                        - generic [ref=e1583]:
+                          - generic [ref=e1584]: 36 %
+                          - text: 36 %
+                        - generic [ref=e1586]:
+                          - generic [ref=e1587]: 34 %
+                          - text: 34 %
+                        - generic [ref=e1589]:
+                          - generic [ref=e1590]: 33 %
+                          - text: 33 %
+                      - generic [ref=e1591]:
+                        - generic [ref=e1593]:
+                          - generic [ref=e1594]: 25 %
+                          - text: 25 %
+                        - generic [ref=e1596]:
+                          - generic [ref=e1597]: 18 %
+                          - text: 18 %
+                        - generic [ref=e1599]:
+                          - generic [ref=e1600]: 17 %
+                          - text: 17 %
+                        - generic [ref=e1602]:
+                          - generic [ref=e1603]: 16 %
+                          - text: 16 %
+                        - generic [ref=e1605]:
+                          - generic [ref=e1606]: 18 %
+                          - text: 18 %
+                      - generic [ref=e1607]:
+                        - generic [ref=e1609]:
+                          - generic [ref=e1610]: 27 %
+                          - text: 27 %
+                        - generic [ref=e1612]:
+                          - generic [ref=e1613]: 29 %
+                          - text: 29 %
+                        - generic [ref=e1615]:
+                          - generic [ref=e1616]: 26 %
+                          - text: 26 %
+                        - generic [ref=e1618]:
+                          - generic [ref=e1619]: 29 %
+                          - text: 29 %
+                        - generic [ref=e1621]:
+                          - generic [ref=e1622]: 30 %
+                          - text: 30 %
+                      - generic [ref=e1623]:
+                        - generic [ref=e1625]:
+                          - generic [ref=e1626]: 11 %
+                          - text: 11 %
+                        - generic [ref=e1628]:
+                          - generic [ref=e1629]: 13 %
+                          - text: 13 %
+                        - generic [ref=e1631]:
+                          - generic [ref=e1632]: 13 %
+                          - text: 13 %
+                        - generic [ref=e1634]:
+                          - generic [ref=e1635]: 15 %
+                          - text: 15 %
+                        - generic [ref=e1637]:
+                          - generic [ref=e1638]: 13 %
+                          - text: 13 %
+                      - generic [ref=e1639]:
+                        - generic [ref=e1641]:
+                          - generic [ref=e1642]: 6 %
+                          - text: 6 %
+                        - generic [ref=e1644]:
+                          - generic [ref=e1645]: 7 %
+                          - text: 7 %
+                        - generic [ref=e1647]:
+                          - generic [ref=e1648]: 8 %
+                          - text: 8 %
+                        - generic [ref=e1650]:
+                          - generic [ref=e1651]: 6 %
+                          - text: 6 %
+                        - generic [ref=e1653]:
+                          - generic [ref=e1654]: 6 %
+                          - text: 6 %
+                      - generic [ref=e1658]:
+                        - generic [ref=e1660]: 30일 이내
+                        - generic [ref=e1663]: 31~60일
+                        - generic [ref=e1666]: 61~90일
+                        - generic [ref=e1669]: 91일~120일
+                        - generic [ref=e1672]: 120일 초과
+                      - generic [ref=e1674]:
+                        - generic [ref=e1675]: "2021"
+                        - generic [ref=e1676]: "2022"
+                        - generic [ref=e1677]: "2023"
+                        - generic [ref=e1678]: "2024"
+                        - generic [ref=e1679]: "2025"
+                      - generic [ref=e1680]:
+                        - generic [ref=e1681]: "0"
+                        - generic [ref=e1682]: "25"
+                        - generic [ref=e1683]: "50"
+                        - generic [ref=e1684]: "75"
+                        - generic [ref=e1685]: "100"
+                    - generic:
+                      - region "Toggle series visibility, Chart":
+                        - list:
+                          - listitem:
+                            - button "Show 30일 이내" [pressed] [ref=e1686] [cursor=pointer]
+                          - listitem:
+                            - button "Show 31~60일" [pressed] [ref=e1687] [cursor=pointer]
+                          - listitem:
+                            - button "Show 61~90일" [pressed] [ref=e1688] [cursor=pointer]
+                          - listitem:
+                            - button "Show 91일~120일" [pressed] [ref=e1689] [cursor=pointer]
+                          - listitem:
+                            - button "Show 120일 초과" [pressed] [ref=e1690] [cursor=pointer]
+                  - generic [ref=e1692]: End of interactive chart.
+                - generic [ref=e709]:
+                  - generic [ref=e710]:
+                    - generic [ref=e711]: 결제기간 구간
+                    - generic [ref=e714]:
+                      - generic [ref=e715]:
+                        - radio "2025" [checked]
+                        - generic [ref=e717] [cursor=pointer]: "2025"
+                      - generic [ref=e718]:
+                        - radio "2024"
+                        - generic [ref=e720] [cursor=pointer]: "2024"
+                      - generic [ref=e721]:
+                        - radio "2023"
+                        - generic [ref=e723] [cursor=pointer]: "2023"
+                      - generic [ref=e724]:
+                        - radio "2022"
+                        - generic [ref=e726] [cursor=pointer]: "2022"
+                      - generic [ref=e727]:
+                        - radio "2021"
+                        - generic [ref=e729] [cursor=pointer]: "2021"
+                  - table "연도별 결제조건, 건수, 비중(%) 정보" [ref=e731]:
+                    - caption: 연도별 결제조건, 건수, 비중(%) 정보
+                    - rowgroup [ref=e735]:
+                      - row "결제기간 구간 건수 비중(%)" [ref=e736]:
+                        - columnheader "결제기간 구간" [ref=e737]
+                        - columnheader "건수" [ref=e738]
+                        - columnheader "비중(%)" [ref=e739]
+                    - rowgroup [ref=e740]:
+                      - row "30일 이내 2,803 32.9" [ref=e1693]:
+                        - cell "30일 이내" [ref=e742]
+                        - cell "2,803" [ref=e1694]
+                        - cell "32.9" [ref=e1695]
+                      - row "31~60일 1,554 18.2" [ref=e1696]:
+                        - cell "31~60일" [ref=e746]
+                        - cell "1,554" [ref=e1697]
+                        - cell "18.2" [ref=e1698]
+                      - row "61~90일 2,520 29.6" [ref=e1699]:
+                        - cell "61~90일" [ref=e750]
+                        - cell "2,520" [ref=e1700]
+                        - cell "29.6" [ref=e1701]
+                      - row "91일~120일 1,149 13.5" [ref=e1702]:
+                        - cell "91일~120일" [ref=e754]
+                        - cell "1,149" [ref=e1703]
+                        - cell "13.5" [ref=e1704]
+                      - row "120일 초과 492 5.8" [ref=e1705]:
+                        - cell "120일 초과" [ref=e758]
+                        - cell "492" [ref=e1706]
+                        - cell "5.8" [ref=e1707]
+                      - row "소계 8,518 100.0" [ref=e1708]:
+                        - cell "소계" [ref=e762]
+                        - cell "8,518" [ref=e1709]
+                        - cell "100.0" [ref=e764]
+            - generic [ref=e765]:
+              - generic [ref=e766]:
+                - generic [ref=e767]:
+                  - heading "연체율(지연결제건/전체결제건)" [level=2] [ref=e768]
+                  - button "도움말" [ref=e771] [cursor=pointer]:
+                    - generic: 도움말
+                - button "더보기" [ref=e773] [cursor=pointer]:
+                  - generic: 더보기
+              - generic [ref=e775]:
+                - region "Chart. Highcharts interactive chart." [ref=e1711]:
+                  - generic [ref=e1712]:
+                    - paragraph [ref=e1713]: Chart
+                    - generic [ref=e1714]: Line chart with 2 lines.
+                    - generic [ref=e1715]: The chart has 1 X axis displaying categories.
+                    - generic [ref=e1716]: The chart has 1 Y axis displaying values. Data ranges from 9.5 to 19.8.
+                  - generic [ref=e1720]:
+                    - img "Interactive chart" [ref=e1721]:
+                      - generic [ref=e1727]:
+                        - region "국가, line 1 of 2 with 5 data points." [ref=e1731]:
+                          - img "2021, 9.5. 국가." [ref=e1732]
+                          - img "2022, 11.4. 국가." [ref=e1733]
+                          - img "2023, 15.7. 국가." [ref=e1734]
+                          - img "2024, 19.1. 국가." [ref=e1735]
+                          - img "2025, 19.8. 국가." [ref=e1736]
+                        - region "전체, line 2 of 2 with 5 data points." [ref=e1740]:
+                          - img "2021, 12.5. 전체." [ref=e1741]
+                          - img "2022, 15. 전체." [ref=e1742]
+                          - img "2023, 17.1. 전체." [ref=e1743]
+                          - img "2024, 17.8. 전체." [ref=e1744]
+                          - img "2025, 18.3. 전체." [ref=e1745]
+                      - generic [ref=e1749]:
+                        - generic [ref=e1752]: 국가
+                        - generic [ref=e1755]: 전체
+                      - generic [ref=e1756]:
+                        - generic [ref=e1757]: "2021"
+                        - generic [ref=e1758]: "2022"
+                        - generic [ref=e1759]: "2023"
+                        - generic [ref=e1760]: "2024"
+                        - generic [ref=e1761]: "2025"
+                      - generic [ref=e1762]:
+                        - generic [ref=e1763]: "8"
+                        - generic [ref=e1764]: "10"
+                        - generic [ref=e1765]: "12"
+                        - generic [ref=e1766]: "14"
+                        - generic [ref=e1767]: "16"
+                        - generic [ref=e1768]: "18"
+                        - generic [ref=e1769]: "20"
+                        - generic [ref=e1770]: "22"
+                    - generic:
+                      - region "Toggle series visibility, Chart":
+                        - list:
+                          - listitem:
+                            - button "Show 국가" [pressed] [ref=e1771] [cursor=pointer]
+                          - listitem:
+                            - button "Show 전체" [pressed] [ref=e1772] [cursor=pointer]
+                  - generic [ref=e1774]: End of interactive chart.
+                - generic [ref=e828]:
+                  - generic [ref=e829]:
+                    - generic [ref=e830]: 연체율(%)
+                    - generic [ref=e1777]:
+                      - generic [ref=e1778]:
+                        - radio "국가" [checked]
+                        - generic [ref=e1780] [cursor=pointer]: 국가
+                      - generic [ref=e1781]:
+                        - radio "전체"
+                        - generic [ref=e1783] [cursor=pointer]: 전체
+                  - table "연도별 연체율" [ref=e832]:
+                    - caption: 연도별 연체율
+                    - rowgroup [ref=e836]:
+                      - row "연도 연체율(%)" [ref=e837]:
+                        - columnheader "연도" [ref=e838]
+                        - columnheader "연체율(%)" [ref=e839]
+                    - rowgroup [ref=e840]:
+                      - row "2025년 19.8" [ref=e1784]:
+                        - cell "2025년" [ref=e842]
+                        - cell "19.8" [ref=e1785]
+                      - row "2024년 19.1" [ref=e1786]:
+                        - cell "2024년" [ref=e845]
+                        - cell "19.1" [ref=e1787]
+                      - row "2023년 15.7" [ref=e1788]:
+                        - cell "2023년" [ref=e848]
+                        - cell "15.7" [ref=e1789]
+                      - row "2022년 11.4" [ref=e1790]:
+                        - cell "2022년" [ref=e851]
+                        - cell "11.4" [ref=e1791]
+                      - row "2021년 9.5" [ref=e1792]:
+                        - cell "2021년" [ref=e854]
+                        - cell "9.5" [ref=e1793]
+            - generic [ref=e856]:
+              - generic [ref=e857]:
+                - heading "평균 연체기간(예정만기일~실제결제일)" [level=2] [ref=e859]
+                - button "더보기" [ref=e860] [cursor=pointer]:
+                  - generic: 더보기
+              - generic [ref=e862]:
+                - region "Chart. Highcharts interactive chart." [ref=e1795]:
+                  - generic [ref=e1796]:
+                    - paragraph [ref=e1797]: Chart
+                    - generic [ref=e1798]: Line chart with 2 lines.
+                    - generic [ref=e1799]: The chart has 1 X axis displaying categories.
+                    - generic [ref=e1800]: The chart has 1 Y axis displaying values. Data ranges from 11.2 to 17.5.
+                  - generic [ref=e1804]:
+                    - img "Interactive chart" [ref=e1805]:
+                      - generic [ref=e1811]:
+                        - region "국가, line 1 of 2 with 5 data points." [ref=e1815]:
+                          - img "2021, 11.2. 국가." [ref=e1816]
+                          - img "2022, 13.2. 국가." [ref=e1817]
+                          - img "2023, 12.4. 국가." [ref=e1818]
+                          - img "2024, 13.4. 국가." [ref=e1819]
+                          - img "2025, 15.2. 국가." [ref=e1820]
+                        - region "전체, line 2 of 2 with 5 data points." [ref=e1824]:
+                          - img "2021, 15.9. 전체." [ref=e1825]
+                          - img "2022, 16.6. 전체." [ref=e1826]
+                          - img "2023, 16.8. 전체." [ref=e1827]
+                          - img "2024, 17.5. 전체." [ref=e1828]
+                          - img "2025, 16.8. 전체." [ref=e1829]
+                      - generic [ref=e1833]:
+                        - generic [ref=e1836]: 국가
+                        - generic [ref=e1839]: 전체
+                      - generic [ref=e1840]:
+                        - generic [ref=e1841]: "2021"
+                        - generic [ref=e1842]: "2022"
+                        - generic [ref=e1843]: "2023"
+                        - generic [ref=e1844]: "2024"
+                        - generic [ref=e1845]: "2025"
+                      - generic [ref=e1846]:
+                        - generic [ref=e1847]: "10"
+                        - generic [ref=e1848]: "12"
+                        - generic [ref=e1849]: "14"
+                        - generic [ref=e1850]: "16"
+                        - generic [ref=e1851]: "18"
+                    - generic:
+                      - region "Toggle series visibility, Chart":
+                        - list:
+                          - listitem:
+                            - button "Show 국가" [pressed] [ref=e1852] [cursor=pointer]
+                          - listitem:
+                            - button "Show 전체" [pressed] [ref=e1853] [cursor=pointer]
+                  - generic [ref=e1855]: End of interactive chart.
+                - generic [ref=e914]:
+                  - generic [ref=e915]:
+                    - generic [ref=e916]: 연체기간(일)
+                    - generic [ref=e1858]:
+                      - generic [ref=e1859]:
+                        - radio "국가" [checked]
+                        - generic [ref=e1861] [cursor=pointer]: 국가
+                      - generic [ref=e1862]:
+                        - radio "전체"
+                        - generic [ref=e1864] [cursor=pointer]: 전체
+                  - table "연도별 연체기간" [ref=e918]:
+                    - caption: 연도별 연체기간
+                    - rowgroup [ref=e922]:
+                      - row "연도 연체기간(일)" [ref=e923]:
+                        - columnheader "연도" [ref=e924]
+                        - columnheader "연체기간(일)" [ref=e925]
+                    - rowgroup [ref=e926]:
+                      - row "2025년 15.2" [ref=e1865]:
+                        - cell "2025년" [ref=e928]
+                        - cell "15.2" [ref=e1866]
+                      - row "2024년 13.4" [ref=e1867]:
+                        - cell "2024년" [ref=e931]
+                        - cell "13.4" [ref=e1868]
+                      - row "2023년 12.4" [ref=e1869]:
+                        - cell "2023년" [ref=e934]
+                        - cell "12.4" [ref=e1870]
+                      - row "2022년 13.2" [ref=e1871]:
+                        - cell "2022년" [ref=e937]
+                        - cell "13.2" [ref=e1872]
+                      - row "2021년 11.2" [ref=e1873]:
+                        - cell "2021년" [ref=e940]
+                        - cell "11.2" [ref=e1874]
+          - generic [ref=e943]:
+            - link "안내 사항" [ref=e945] [cursor=pointer]:
+              - /url: javascript:void(0)
+            - generic [ref=e947]:
+              - generic [ref=e948]:
+                - generic [ref=e949]: 자료 구성
+                - list [ref=e950]:
+                  - listitem [ref=e951]: "- 한국무역보험공사에서 제공하는 ‘단기수출보험’ 서비스를 기준으로 제공합니다."
+                  - listitem [ref=e952]: "- 업종 정보는 한국 표준산업분류(제10차 KSIC)세세분류 정보를 기준으로 분류하며, 신용평가 업무 시 수집됩니다."
+                  - listitem [ref=e953]: "- 제공되는 데이터는 단순건수 기준 통계자료이므로, 실제 거래 결제조건과 상이할 수 있습니다."
+                  - listitem [ref=e954]: "- 제공되는 정보는 참고 용도로 제공되므로, 수출거래 등에서 발생하는 손실에 대해서는 그 어떠한 민형사상의 책임을 부담하지 않습니다."
+                - generic [ref=e955]: 자료 제공의 제한
+                - list [ref=e956]:
+                  - listitem [ref=e957]: "- 자료에서 제공되는 통계치는 모두 평균 값 입니다."
+                  - listitem [ref=e958]: "- 예로 미국의 A업종 결제기간은 해당업종으로 분류되는 기업의 단기수출보험 가입 평균 결제기간입니다."
+                  - listitem [ref=e959]: "- 데이터 값이 없을 경우 원본 데이터 상에서는 'n/a'로 표시합니다"
+              - generic [ref=e960]:
+                - 'heading "수출결제정보(PDR) 원본 데이터 다운로드 (최종 업데이트: Invalid date)" [level=2] [ref=e961]':
+                  - text: 수출결제정보(PDR) 원본 데이터 다운로드
+                  - generic [ref=e962]: "(최종 업데이트: Invalid date)"
+                - link "데이터 다운로드" [ref=e963] [cursor=pointer]:
+                  - /url: javascript:void(0)
+                  - generic [ref=e965]: 데이터 다운로드
+  - contentinfo [ref=e966]:
+    - generic [ref=e967]:
+      - generic [ref=e968]: K-Sight 무역보험 빅데이터 플랫폼
+      - generic [ref=e969]:
+        - link "개인정보처리방침" [ref=e971] [cursor=pointer]:
+          - /url: https://www.ksure.or.kr/rh-kr/bbs/i-496/list.do
+        - paragraph [ref=e973]: (03187) 서울특별시 종로구 종로 14 (서린동), 한국무역보험공사 | Tel 1588-3884
+        - paragraph [ref=e974]: Copyright ⓒ 2026 Korea Trade Insurance Corporation.ALL RIGHTS RESERVED
+      - generic [ref=e975]:
+        - button "Family Site" [ref=e977] [cursor=pointer]:
+          - generic [ref=e978]: Family Site
+        - link "이동" [ref=e979] [cursor=pointer]:
+          - /url: ""
+          - generic [ref=e980]: 이동
+      - button "맨위로 이동" [ref=e981] [cursor=pointer]

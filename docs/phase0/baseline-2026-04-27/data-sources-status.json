@@ -1,0 +1,76 @@
+{
+  "capturedAt": "2026-04-27T11:01:59.050Z",
+  "source": "http://localhost:8080/data-sources",
+  "statuses": {
+    "KICOX_Factory Production Info": {
+      "stateText": "미실행",
+      "httpStatus": "정보 없음",
+      "responseCount": "정보 없음",
+      "errorCode": "정보 없음",
+      "recentAt": "정보 없음"
+    },
+    "KOTRA_Country Info": {
+      "stateText": "미실행",
+      "httpStatus": "정보 없음",
+      "responseCount": "정보 없음",
+      "errorCode": "정보 없음",
+      "recentAt": "정보 없음"
+    },
+    "KOTRA_Overseas Market News": {
+      "stateText": "조회 성공",
+      "httpStatus": "200",
+      "responseCount": "8",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:59"
+    },
+    "KOTRA_Overseas Certification Info": {
+      "stateText": "조회 결과 없음",
+      "httpStatus": "200",
+      "responseCount": "0",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:59"
+    },
+    "KOTRA_Import Regulation Info": {
+      "stateText": "조회 성공",
+      "httpStatus": "200",
+      "responseCount": "27",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:59"
+    },
+    "K-SURE_Country Risk Grade": {
+      "stateText": "조회 성공",
+      "httpStatus": "200",
+      "responseCount": "1",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:59"
+    },
+    "K-SURE_Industry Risk Index": {
+      "stateText": "조회 성공",
+      "httpStatus": "200",
+      "responseCount": "35",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:59"
+    },
+    "K-SURE_Export Payment Info": {
+      "stateText": "조회 성공",
+      "httpStatus": "200",
+      "responseCount": "1",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:59"
+    },
+    "Trade Security Institute_HSK Strategic Item Info": {
+      "stateText": "조회 결과 없음",
+      "httpStatus": "200",
+      "responseCount": "0",
+      "errorCode": "정보 없음",
+      "recentAt": "2026.04.27 19:16"
+    },
+    "KATS_SafetyKorea_Recall": {
+      "stateText": "미실행 (API 승인 대기)",
+      "httpStatus": "정보 없음",
+      "responseCount": "0",
+      "errorCode": "API 승인 대기",
+      "recentAt": "2026.04.27 19:16"
+    }
+  }
+}

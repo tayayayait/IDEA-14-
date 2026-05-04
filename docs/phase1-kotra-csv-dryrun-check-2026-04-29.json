@@ -1,0 +1,82 @@
+{
+  "generatedAt": "2026-04-29T07:57:30.217Z",
+  "mode": "dry-run",
+  "datasets": [
+    {
+      "key": "kotra_csv_export_region_rank",
+      "table": "kotra_csv_export_region_rank_cache",
+      "file": "api가이드 파일(공공데이터)/수출 지역 순위_20260429145408.csv",
+      "startedAt": "2026-04-29T07:57:30.217Z",
+      "completedAt": "2026-04-29T07:57:30.249Z",
+      "status": "success",
+      "message": "dry-run parsed and validated",
+      "counts": {
+        "sourceRows": 241,
+        "normalizedRows": 238,
+        "upsertedRows": 238,
+        "duplicateRows": 0,
+        "errorRows": 3,
+        "invalidHsCodes": 0,
+        "truncatedHsCodes": 0,
+        "nullFieldCount": 0
+      }
+    },
+    {
+      "key": "kotra_csv_import_regulation",
+      "table": "kotra_csv_import_regulation_cache",
+      "file": "api가이드 파일(공공데이터)/대한무역투자진흥공사_국별 대세계 수입규제 현황_20250603.csv",
+      "startedAt": "2026-04-29T07:57:30.250Z",
+      "completedAt": "2026-04-29T07:57:31.566Z",
+      "status": "success",
+      "message": "dry-run parsed and validated",
+      "counts": {
+        "sourceRows": 4942,
+        "normalizedRows": 31406,
+        "upsertedRows": 31406,
+        "duplicateRows": 739,
+        "errorRows": 297,
+        "invalidHsCodes": 297,
+        "truncatedHsCodes": 1076,
+        "nullFieldCount": 69
+      }
+    },
+    {
+      "key": "kotra_csv_trade_office",
+      "table": "kotra_csv_trade_office_cache",
+      "file": "api가이드 파일(공공데이터)/대한무역투자진흥공사_무역관 정보_20240603.csv",
+      "startedAt": "2026-04-29T07:57:31.566Z",
+      "completedAt": "2026-04-29T07:57:31.656Z",
+      "status": "success",
+      "message": "dry-run parsed and validated",
+      "counts": {
+        "sourceRows": 127,
+        "normalizedRows": 127,
+        "upsertedRows": 127,
+        "duplicateRows": 0,
+        "errorRows": 0,
+        "invalidHsCodes": 0,
+        "truncatedHsCodes": 0,
+        "nullFieldCount": 0
+      }
+    },
+    {
+      "key": "kotra_csv_overseas_exhibition",
+      "table": "kotra_csv_overseas_exhibition_cache",
+      "file": "api가이드 파일(공공데이터)/대한무역투자진흥공사 해외전시회 정보_20250630.CSV",
+      "startedAt": "2026-04-29T07:57:31.656Z",
+      "completedAt": "2026-04-29T07:57:31.671Z",
+      "status": "success",
+      "message": "dry-run parsed and validated",
+      "counts": {
+        "sourceRows": 105,
+        "normalizedRows": 104,
+        "upsertedRows": 104,
+        "duplicateRows": 1,
+        "errorRows": 0,
+        "invalidHsCodes": 0,
+        "truncatedHsCodes": 0,
+        "nullFieldCount": 0
+      }
+    }
+  ]
+}

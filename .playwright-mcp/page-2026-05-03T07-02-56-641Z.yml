@@ -1,0 +1,160 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation "main navigation" [ref=e4]:
+        - generic [ref=e5]:
+          - link "EN" [ref=e6] [cursor=pointer]:
+            - /url: /en/Search/Index
+          - generic [ref=e7]: "|"
+          - link "FR" [ref=e8] [cursor=pointer]:
+            - /url: /fr/Search/Index
+          - generic [ref=e9]: "|"
+          - link "ES" [ref=e10] [cursor=pointer]:
+            - /url: /es/Search/Index
+          - generic [ref=e11]: "|"
+          - link "Other languages" [ref=e12] [cursor=pointer]:
+            - /url: /en/Home/OtherLanguages
+        - generic [ref=e15]:
+          - link "Login" [ref=e16] [cursor=pointer]:
+            - /url: /en/Account/Login
+            - generic [ref=e17]:
+              - generic [ref=e18]: 
+              - text: Login
+          - link "Login Register" [ref=e19] [cursor=pointer]:
+            - /url: /en/Account/Registration
+            - generic [ref=e20]:
+              - generic [ref=e21]: 
+              - generic [ref=e22]: Login
+              - text: Register
+          - link "Forgot your password?" [ref=e23] [cursor=pointer]:
+            - /url: https://accman.wto.org/public/ForgotPassword?ClientId=14ace6e62cd64ed19ab86e379b8c167f&language=1
+            - generic [ref=e24]:
+              - generic [ref=e25]: 
+              - text: Forgot your password?
+          - link "Contact us" [ref=e26] [cursor=pointer]:
+            - /url: /en/ContactUs
+            - generic [ref=e27]:
+              - generic [ref=e28]: 
+              - text: Contact us
+      - navigation "main navigation" [ref=e30]:
+        - link "WTO eAgenda" [ref=e32] [cursor=pointer]:
+          - /url: /
+          - img "WTO eAgenda" [ref=e33]
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - link "Home" [ref=e36] [cursor=pointer]:
+              - /url: /
+            - menuitem "Search" [ref=e38] [cursor=pointer]
+            - generic [ref=e39]:
+              - menuitem "Facts & figures" [ref=e40] [cursor=pointer]
+              - text: 
+            - generic [ref=e41]:
+              - menuitem "Resources" [ref=e42] [cursor=pointer]
+              - text:  
+          - generic [ref=e44]:
+            - link "ITC" [ref=e45] [cursor=pointer]:
+              - /url: http://www.intracen.org/
+              - img "ITC" [ref=e46]
+            - link "UN" [ref=e47] [cursor=pointer]:
+              - /url: https://www.un.org/en/desa
+              - img "UN" [ref=e48]
+            - link "WTO" [ref=e49] [cursor=pointer]:
+              - /url: https://www.wto.org/
+              - img "WTO" [ref=e50]
+    - generic [ref=e52]:
+      - navigation "breadcrumbs" [ref=e53]:
+        - list [ref=e54]:
+          - listitem [ref=e55]:
+            - link "Home" [ref=e56] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e57]:
+            - text: /
+            - link "Search Notifications":
+              - /url: "#"
+      - main [ref=e58]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - heading "Search notifications" [level=1] [ref=e65]
+            - button "Export search results" [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]:
+                - generic [ref=e70]: 
+                - text: Export search results
+                - generic [ref=e74]: 
+          - generic [ref=e76]:
+            - generic [ref=e78]:
+              - generic [ref=e80]:
+                - generic [ref=e82]:
+                  - generic [ref=e83]: Area (SPS, TBT)
+                  - generic [ref=e85] [cursor=pointer]:
+                    - generic [ref=e86]: Select SPS and/or TBT
+                    - generic [ref=e88]: 
+                - link "x" [ref=e89] [cursor=pointer]:
+                  - /url: javascript:void(0)
+              - generic [ref=e90]:
+                - generic [ref=e92]:
+                  - generic [ref=e93]:
+                    - text: Free text search
+                    - link "How to use the free text search" [ref=e94] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                      - generic [ref=e96]: 
+                  - generic [ref=e97]:
+                    - link "x" [ref=e98] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - textbox [ref=e100]
+                - generic [ref=e102]:
+                  - generic [ref=e103]: Notification symbol
+                  - generic [ref=e104]:
+                    - link "x" [ref=e105] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - textbox [ref=e107]
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - generic [ref=e110]:
+                    - generic [ref=e111]: Notifying Member
+                    - generic [ref=e113] [cursor=pointer]:
+                      - generic [ref=e114]: Select notifying Member(s)
+                      - generic [ref=e116]: 
+                  - link "x" [ref=e117] [cursor=pointer]:
+                    - /url: javascript:void(0)
+                - generic [ref=e119]:
+                  - generic [ref=e120]: Distribution date from
+                  - generic [ref=e121]:
+                    - link "x" [ref=e122] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - generic [ref=e124]:
+                      - button [ref=e125]:
+                        - generic [ref=e126]:
+                          - textbox [ref=e127] [cursor=pointer]
+                          - generic:
+                            - generic: 
+                      - text:    
+                - generic [ref=e129]:
+                  - generic [ref=e130]: Distribution date to
+                  - generic [ref=e131]:
+                    - link "x" [ref=e132] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                    - generic [ref=e134]:
+                      - button [ref=e135]:
+                        - generic [ref=e136]:
+                          - textbox [ref=e137] [cursor=pointer]
+                          - generic:
+                            - generic: 
+                      - text:    
+              - generic [ref=e138]:
+                - button "Search more fields" [ref=e140] [cursor=pointer]:
+                  - generic [ref=e141]: Search more fields
+                  - generic [ref=e143]: 
+                - button "Clear filter(s)" [ref=e146] [cursor=pointer]:
+                  - generic [ref=e147]: Clear filter(s)
+                  - generic [ref=e149]: 
+            - paragraph [ref=e152]:
+              - generic [ref=e153]: 
+              - text: Loading...
+    - contentinfo [ref=e154]:
+      - generic [ref=e156]:
+        - link "Terms and conditions of use, disclaimer and copyright" [ref=e157] [cursor=pointer]:
+          - /url: /en/CopyrightsAndDisclaimer
+        - text: ","
+        - link "about us" [ref=e158] [cursor=pointer]:
+          - /url: /en/About
+  - generic:  Select notification type(s)   Select HS code(s)   Select ICS code(s)  Select objective(s)   Select group(s)   Select keyword(s)  Select Country  Select Standard(s)  Reason for addendum   Select type of measure(s)  Reason for addendum 

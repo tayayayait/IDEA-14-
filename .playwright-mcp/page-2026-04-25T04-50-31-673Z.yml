@@ -1,0 +1,64 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "홈" [ref=e6] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e8]
+        - generic [ref=e11]: 산단수출 코파일럿
+      - generic [ref=e12]:
+        - link "프로젝트" [ref=e13] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e14] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e15] [cursor=pointer]:
+          - img
+          - generic [ref=e16]: 로그아웃
+    - generic [ref=e17]:
+      - complementary [ref=e18]:
+        - navigation "분석 단계" [ref=e19]:
+          - link "1단계 기업·공장 검색" [ref=e20] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e22]
+          - link "2단계 제품·HS 코드" [ref=e24] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e26]
+          - link "3단계 후보국 추천 Top 3" [ref=e28] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - img [ref=e30]
+          - link "4단계 국가 상세" [ref=e35] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+            - img [ref=e37]
+          - link "5단계 전략물자·제품안전" [ref=e42] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - img [ref=e44]
+          - link "6단계 리포트" [ref=e46] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - img [ref=e48]
+      - main [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - paragraph [ref=e54]: 기획 요구사항 매핑
+            - paragraph [ref=e55]: 요구사항 3
+            - paragraph [ref=e56]: 후보국 추천 및 근거 점수화
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - heading "3. 후보국 추천 Top 3" [level=1] [ref=e59]
+              - paragraph [ref=e60]: 후보군을 먼저 추출한 뒤, 후보군 내부에서만 점수와 순위를 계산합니다.
+            - button "추천 실행" [ref=e61] [cursor=pointer]:
+              - img
+              - text: 추천 실행
+          - generic [ref=e63]:
+            - paragraph [ref=e64]: 아직 추천 결과가 없습니다.
+            - paragraph [ref=e65]: 추천 실행을 눌러 HS·제품·뉴스·규제·목표시장 메모 신호로 후보국을 생성하세요.
+    - generic [ref=e67]:
+      - button "이전" [ref=e68] [cursor=pointer]
+      - button "안전성 검토" [disabled]:
+        - text: 안전성 검토
+        - img

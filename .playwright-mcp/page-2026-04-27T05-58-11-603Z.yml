@@ -1,0 +1,57 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "홈" [ref=e6] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e8]
+        - generic [ref=e11]: 산단수출 코파일럿
+      - generic [ref=e12]:
+        - link "프로젝트" [ref=e13] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e14] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e15] [cursor=pointer]:
+          - img
+          - generic [ref=e16]: 로그아웃
+    - generic [ref=e17]:
+      - complementary [ref=e18]:
+        - navigation "분석 단계" [ref=e19]:
+          - link "1단계 기업·공장 검색" [ref=e20] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - img [ref=e22]
+          - link "2단계 제품·HS 코드" [ref=e24] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - img [ref=e26]
+          - link "3단계 후보국 추천 Top 3" [ref=e28] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e30]
+          - link "4단계 국가 상세" [ref=e32] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries/JP
+            - img [ref=e34]
+          - link "5단계 전략물자·제품안전" [ref=e39] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - img [ref=e41]
+          - link "6단계 리포트" [ref=e43] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - img [ref=e45]
+      - main [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - paragraph [ref=e51]: 기획 요구사항 매핑
+            - paragraph [ref=e52]: 요구사항 4~7
+            - paragraph [ref=e53]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=e54]:
+            - img [ref=e55]
+            - text: 상세 데이터 조회 중...
+    - generic [ref=e58]:
+      - button "후보국으로" [ref=e59] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로" [ref=e60] [cursor=pointer]

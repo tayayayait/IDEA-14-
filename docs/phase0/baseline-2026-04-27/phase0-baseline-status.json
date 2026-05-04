@@ -1,0 +1,28 @@
+{
+  "projectId": "6a5af2f0-fc48-493b-99fd-0f467f6e8717",
+  "capturedAt": "2026-04-27T11:01:59.050Z",
+  "checks": {
+    "kicox_failure": true,
+    "certification_zero": true,
+    "regulation_zero": true,
+    "recommendation_country_evidence_mismatch": true,
+    "ksure_industry_mismatch": true,
+    "ai_task_generation_failure": true,
+    "ai_summary_generation_failure": true,
+    "data_sources_kicox_unrun": true,
+    "data_sources_kotra_country_unrun": true,
+    "data_sources_cert_zero": true,
+    "data_sources_import_reg_count_27": true,
+    "data_sources_ksure_country_count_1": true,
+    "data_sources_ksure_industry_count_35": true,
+    "data_sources_ksure_payment_count_1": true,
+    "data_sources_safety_pending": true,
+    "step4_reg_zero_despite_data_sources_import_27": true,
+    "data_sources_fullpage_snapshot_saved": true,
+    "phase0_baseline_artifacts_complete": true
+  },
+  "artifactsDir": "docs/phase0/baseline-2026-04-27",
+  "dataSourcesStatusFile": "docs/phase0/baseline-2026-04-27/data-sources-status.json",
+  "reproScenarioFile": "docs/phase0/baseline-2026-04-27/repro-scenario.md",
+  "manifestFile": "docs/phase0/baseline-2026-04-27/manifest.sha256.txt"
+}

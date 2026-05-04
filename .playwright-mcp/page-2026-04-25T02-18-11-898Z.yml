@@ -1,0 +1,175 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e171]:
+    - banner [ref=e172]:
+      - link "홈" [ref=e174] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e176]
+        - generic [ref=e179]: 산단수출 코파일럿
+      - generic [ref=e180]:
+        - link "프로젝트" [ref=e181] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e182] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e183] [cursor=pointer]:
+          - img
+          - generic [ref=e184]: 로그아웃
+    - generic [ref=e185]:
+      - complementary [ref=e186]:
+        - paragraph [ref=e187]: 분석 단계
+        - navigation "분석 단계" [ref=e188]:
+          - link "1단계 기업·공장 검색" [ref=e189] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e191]
+            - generic [ref=e193]:
+              - generic [ref=e194]: 기업·공장 검색
+              - generic [ref=e195]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e196] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e198]
+            - generic [ref=e200]:
+              - generic [ref=e201]: 제품·HS 코드
+              - generic [ref=e202]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e203] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - img [ref=e205]
+            - generic [ref=e207]:
+              - generic [ref=e208]: 후보국 추천 Top 3
+              - generic [ref=e209]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e210] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+            - img [ref=e212]
+            - generic [ref=e214]:
+              - generic [ref=e215]: 국가 상세
+              - generic [ref=e216]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e217] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e218]: "5"
+            - generic [ref=e219]:
+              - generic [ref=e220]: 전략물자·제품안전
+              - generic [ref=e221]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e222] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e223]: "6"
+            - generic [ref=e224]:
+              - generic [ref=e225]: 리포트
+              - generic [ref=e226]: 요구사항 10
+      - main [ref=e227]:
+        - generic [ref=e228]:
+          - generic [ref=e229]:
+            - paragraph [ref=e230]: 기획 요구사항 매핑
+            - paragraph [ref=e231]: 요구사항 8~9
+            - paragraph [ref=e232]: 전략물자 및 제품안전 검토
+          - generic [ref=e233]:
+            - generic [ref=e234]:
+              - heading "5. 전략물자·제품안전" [level=1] [ref=e235]
+              - paragraph [ref=e236]: HS 기반 전략물자 가능성과 제품안전·리콜 유사사례를 검토합니다.
+            - button "검토 실행" [ref=e237] [cursor=pointer]:
+              - img
+              - text: 검토 실행
+          - generic [ref=e239]:
+            - img [ref=e240]
+            - paragraph [ref=e242]: 자동 판정 결과는 법적 확정이 아닙니다. 전략물자·인증·제품안전은 반드시 기관 사전 확인이 필요합니다.
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - heading "전략물자 검토 상태" [level=3] [ref=e246]
+                - paragraph [ref=e247]: HSK, 연계 품목, 통제번호 기준
+              - generic [ref=e248]:
+                - generic [ref=e249]:
+                  - paragraph [ref=e250]: HSK 코드 검토
+                  - paragraph [ref=e251]: "8708303000"
+                - generic [ref=e252]:
+                  - paragraph [ref=e253]: 분석 기준 코드 상태
+                  - paragraph [ref=e254]: 정보 부족 · 입력 정보가 부족해 오분류 가능성이 있습니다.
+                - generic [ref=e255]:
+                  - paragraph [ref=e256]: 연계 품목 확인
+                  - paragraph [ref=e257]: 확실한 정보 없음
+                - generic [ref=e258]:
+                  - paragraph [ref=e259]: 통제번호 매핑
+                  - paragraph [ref=e260]: 확실한 정보 없음
+                - generic [ref=e261]:
+                  - paragraph [ref=e262]: 기관 사전판정
+                  - paragraph [ref=e263]: 자동 판정이 아닌 기관 확인 절차 필요
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - heading "제품안전 검토 상태" [level=3] [ref=e266]
+                - paragraph [ref=e267]: 리콜·안전인증·시험성적 기반
+              - generic [ref=e268]:
+                - generic [ref=e269]:
+                  - paragraph [ref=e270]: SafetyKorea 리콜 매칭
+                  - paragraph [ref=e271]: 확실한 정보 없음
+                - generic [ref=e272]:
+                  - paragraph [ref=e273]: 안전인증 대상 여부
+                  - paragraph [ref=e274]: 확실한 정보 없음
+                - generic [ref=e275]:
+                  - paragraph [ref=e276]: 판매중지/리콜 공지 점검
+                  - paragraph [ref=e277]: 확실한 정보 없음
+                - generic [ref=e278]:
+                  - paragraph [ref=e279]: 시험성적서 최신성 점검
+                  - paragraph [ref=e280]: 검토 필요
+          - generic [ref=e281]:
+            - heading "전략물자 상세" [level=3] [ref=e283]
+            - generic [ref=e284]:
+              - paragraph [ref=e285]: "HS: 870830"
+              - paragraph [ref=e286]: "HSK: 8708303000"
+              - paragraph [ref=e287]: "매칭 방식: none"
+              - paragraph [ref=e288]: "통제번호: 확실한 정보 없음"
+              - paragraph [ref=e289]: "기준일: 확실한 정보 없음"
+              - paragraph [ref=e290]: "출처: 전략물자 HSK 연계표"
+              - paragraph [ref=e291]: "적용 방식: 사용자 수동 선택"
+              - paragraph [ref=e292]: "후보 점수: 44점"
+              - paragraph [ref=e293]: "확인 필요: 예"
+          - generic [ref=e295]:
+            - img [ref=e296]
+            - paragraph [ref=e298]: 아직 검토 결과가 없습니다
+            - paragraph [ref=e299]: ‘검토 실행’을 누르면 HS·제품 정보를 토대로 전략물자 플래그·리콜 유사사례를 수집합니다.
+          - generic [ref=e300]:
+            - generic [ref=e301]:
+              - heading "조치 체크리스트" [level=3] [ref=e302]
+              - paragraph [ref=e303]: 실행 후 리포트 단계로 이동하세요.
+            - generic [ref=e305]:
+              - generic [ref=e307]:
+                - checkbox "전략물자관리원(YESTrade) 자가판정 수행 체크" [ref=e308] [cursor=pointer]
+                - generic [ref=e309]:
+                  - paragraph [ref=e310]: 전략물자관리원(YESTrade) 자가판정 수행
+                  - paragraph [ref=e311]: "국가: - · 근거 API: SafetyKorea/K-SURE"
+                - generic [ref=e312]: 대기
+              - generic [ref=e314]:
+                - checkbox "SafetyKorea 리콜·안전 공지 재확인 체크" [ref=e315] [cursor=pointer]
+                - generic [ref=e316]:
+                  - paragraph [ref=e317]: SafetyKorea 리콜·안전 공지 재확인
+                  - paragraph [ref=e318]: "국가: - · 근거 API: SafetyKorea/K-SURE"
+                - generic [ref=e319]: 대기
+              - generic [ref=e321]:
+                - checkbox "필수 인증 서류 최신본 준비 체크" [ref=e322] [cursor=pointer]
+                - generic [ref=e323]:
+                  - paragraph [ref=e324]: 필수 인증 서류 최신본 준비
+                  - paragraph [ref=e325]: "국가: - · 근거 API: 전략물자관리원"
+                - generic [ref=e326]: 대기
+              - generic [ref=e328]:
+                - checkbox "기관 상담 일정 확보(관세평가분류원/무역안보관리원) 체크" [ref=e329] [cursor=pointer]
+                - generic [ref=e330]:
+                  - paragraph [ref=e331]: 기관 상담 일정 확보(관세평가분류원/무역안보관리원)
+                  - paragraph [ref=e332]: "국가: - · 근거 API: 전략물자관리원"
+                - generic [ref=e333]: 대기
+      - complementary [ref=e334]:
+        - generic [ref=e335]:
+          - generic [ref=e336]: 근거 패널
+          - button "근거 패널 접기" [ref=e337] [cursor=pointer]:
+            - img
+        - generic [ref=e339]:
+          - heading "근거 · 출처" [level=3] [ref=e340]
+          - paragraph [ref=e341]: 전략물자 자가판정은 전략물자관리원 기준을, 제품안전·리콜은 국가기술표준원·SafetyKorea를 따릅니다. 확정 판정은 해당 기관 사전 확인이 필요합니다.
+          - generic [ref=e342]:
+            - paragraph [ref=e343]: 상태
+            - generic [ref=e344]: 대기
+    - generic [ref=e346]:
+      - button "이전" [ref=e347] [cursor=pointer]
+      - button "리포트 생성 →" [ref=e348] [cursor=pointer]

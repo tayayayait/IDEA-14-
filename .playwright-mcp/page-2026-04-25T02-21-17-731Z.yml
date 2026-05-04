@@ -1,0 +1,26 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e364]:
+    - banner [ref=e365]:
+      - img [ref=e367]
+      - generic [ref=e370]: 산단수출 코파일럿
+    - main [ref=e371]:
+      - generic [ref=e372]:
+        - generic [ref=e373]:
+          - heading "시작하기" [level=3] [ref=e374]
+          - paragraph [ref=e375]: 5분 안에 어디로·어떻게 수출을 시작할지 1페이지 리포트로 받아보세요.
+        - generic [ref=e377]:
+          - tablist [ref=e378]:
+            - tab "로그인" [selected] [ref=e379] [cursor=pointer]
+            - tab "회원가입" [ref=e380] [cursor=pointer]
+          - generic [ref=e381]:
+            - generic [ref=e382]:
+              - text: 이메일
+              - textbox "이메일" [ref=e383]: dbcdkwo629@naver.com
+            - generic [ref=e384]:
+              - text: 비밀번호
+              - textbox "비밀번호" [ref=e385]: "12341234"
+            - tabpanel "로그인"
+            - button "로그인" [ref=e386] [cursor=pointer]

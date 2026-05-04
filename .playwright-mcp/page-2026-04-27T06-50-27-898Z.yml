@@ -1,0 +1,195 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "홈" [ref=e6] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e8]
+        - generic [ref=e11]: 산단수출 코파일럿
+      - generic [ref=e12]:
+        - link "프로젝트" [ref=e13] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e14] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e15] [cursor=pointer]:
+          - img
+          - generic [ref=e16]: 로그아웃
+    - generic [ref=e17]:
+      - complementary [ref=e18]:
+        - paragraph [ref=e19]: 분석 단계
+        - navigation "분석 단계" [ref=e20]:
+          - link "1단계 기업·공장 검색" [ref=e21] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/company
+            - img [ref=e23]
+            - generic [ref=e25]:
+              - generic [ref=e26]: 기업·공장 검색
+              - generic [ref=e27]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e28] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/product
+            - generic [ref=e29]: "2"
+            - generic [ref=e30]:
+              - generic [ref=e31]: 제품·HS 코드
+              - generic [ref=e32]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e33] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/countries
+            - generic [ref=e34]: "3"
+            - generic [ref=e35]:
+              - generic [ref=e36]: 후보국 추천 Top 3
+              - generic [ref=e37]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e38] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/countries
+            - generic [ref=e39]: "4"
+            - generic [ref=e40]:
+              - generic [ref=e41]: 국가 상세
+              - generic [ref=e42]: 요구사항 4~7
+              - generic [ref=e43]: 국가 선택 필요
+          - link "5단계 전략물자·제품안전" [ref=e44] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/safety
+            - generic [ref=e45]: "5"
+            - generic [ref=e46]:
+              - generic [ref=e47]: 전략물자·제품안전
+              - generic [ref=e48]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e49] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/report
+            - generic [ref=e50]: "6"
+            - generic [ref=e51]:
+              - generic [ref=e52]: 리포트
+              - generic [ref=e53]: 요구사항 10
+      - main [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - paragraph [ref=e57]: 기획 요구사항 매핑
+            - paragraph [ref=e58]: 요구사항 2
+            - paragraph [ref=e59]: 제품/HS·HSK 코드 확정
+          - generic [ref=e61]:
+            - img [ref=e62]
+            - generic [ref=e66]:
+              - paragraph [ref=e67]: SK하이닉스 주식회사
+              - paragraph [ref=e68]: 청주테크노폴리스일반산업단지 · 업종 26111
+          - generic [ref=e69]:
+            - heading "2. 제품·HS 코드" [level=1] [ref=e70]
+            - paragraph [ref=e71]: 제품 정보를 입력하면 관세청 공식 코드표에서 HS/HSK 후보를 검색합니다. 확정 토글로 분석에 사용할 코드를 선택하세요.
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - heading "제품 정보" [level=3] [ref=e74]
+              - paragraph [ref=e75]: 핵심 부품·소재·용도를 함께 적으면 정확도가 높아집니다.
+            - generic [ref=e76]:
+              - generic [ref=e77]:
+                - generic [ref=e78]: 제품명 *
+                - textbox "예) 전기차용 BLDC 모터" [ref=e79]: DRAM. NAND Flash
+                - paragraph [ref=e80]: 제품명을 1개 품목으로 입력하면 HS·HSK 후보 정확도가 높아집니다.
+              - generic [ref=e81]:
+                - text: 모델명
+                - textbox "예) BLDC-MTR-3000" [ref=e82]
+              - generic [ref=e83]:
+                - text: 목표 시장 메모
+                - textbox "예) 동남아 OEM 공급, 1차 베트남·인도네시아 우선" [ref=e84]
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - generic [ref=e87]: 제품 설명 *
+                  - button "AI 설명 초안 작성" [ref=e88] [cursor=pointer]:
+                    - img
+                    - text: AI 설명 초안 작성
+                - textbox "용도, 정격 출력, 소재, 인증, 응용 분야 등 (20~1000자)" [ref=e89]: "개요: DRAM은 데이터의 일시 보관을 담당하는 휘발성 메모리이며, NAND Flash는 전원이 차단되어도 데이터를 보존하는 비휘발성 저장 매체입니다. 이들은 전자기기의 연산 보조 및 데이터 저장에 필수적인 반도체 소자입니다. 프로젝트 맥락: SK하이닉스 주식회사가 충청북도 청주테크노폴리스일반산업단지에서 생산하는 제품입니다. 한국 표준 산업 분류 26111에 따라 DRAM 및 NAND Flash를 제조하고 있으나, 상세한 구성 비율이나 물리적 규격에 대해서는 확실한 정보 없음으로 분류됩니다."
+                - paragraph [ref=e90]: 277/1000자
+                - generic [ref=e91]:
+                  - generic [ref=e92]: 정상
+                  - paragraph [ref=e93]: 해당 물품은 반도체 메모리 소자인 DRAM과 NAND Flash로, HS코드 제8542.32호의 메모리 반도체 부문에 해당할 가능성이 높습니다. 기업 정보와 산업단지 위치를 통해 제조 환경을 확인했습니다.
+              - generic [ref=e94]:
+                - text: 주요 부품/소재
+                - generic [ref=e95]:
+                  - textbox "태그 입력" [ref=e96]:
+                    - /placeholder: 부품/소재 입력 후 Enter (최대 20개)
+                  - generic [ref=e98]:
+                    - text: DRAM. NAND Flash
+                    - button "DRAM. NAND Flash 태그 제거" [ref=e99] [cursor=pointer]:
+                      - img
+                  - paragraph [ref=e100]: 1/20개, 태그당 최대 30자
+              - button "공식 데이터 기반 후보 검색" [ref=e101] [cursor=pointer]:
+                - img
+                - text: 공식 데이터 기반 후보 검색
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - heading "HS·HSK 후보" [level=3] [ref=e132]
+              - paragraph [ref=e133]: 후보 점수 1순위 코드를 자동 반영합니다. 필요하면 직접 변경해 확정하세요.
+            - generic [ref=e134]:
+              - generic [ref=e135]:
+                - paragraph [ref=e136]: 복수 품목 입력 시 후보 선택 기준
+                - list [ref=e137]:
+                  - listitem [ref=e138]: 확정 코드는 실제 수출 계약·인보이스에 기재될 주력 1개 품목 기준으로 선택합니다.
+                  - listitem [ref=e139]: 후보 점수는 키워드 매칭 보조 지표입니다. 설명이 핵심 기능·작동 원리·재질과 불일치하면 제외합니다.
+                  - listitem [ref=e140]: HS 6단위가 맞으면 HSK 10단위는 용도·규격이 더 구체적으로 맞는 후보를 선택합니다.
+                  - listitem [ref=e141]: 서로 다른 품목이면 품목별로 나눠 조회해 각각 코드로 관리합니다.
+              - generic [ref=e142]:
+                - paragraph [ref=e143]: "선택 상태: 자동 선택 · 신뢰 높음 (88점)"
+                - paragraph [ref=e144]: 공식 데이터 키워드 매칭 기준 상위 후보입니다.
+                - paragraph [ref=e145]: "적용 방식: 후보 점수 1순위 자동 반영"
+                - paragraph [ref=e146]: "확인 필요 상태로 진행: 다음 단계에서 근거를 확인하며 진행합니다."
+              - table "HS HSK 후보 표" [ref=e148]:
+                - caption [ref=e149]: AI 추천 HS 및 HSK 코드 후보 목록
+                - rowgroup [ref=e150]:
+                  - row "HS 코드 HSK 설명 후보 점수 선택" [ref=e151]:
+                    - columnheader "HS 코드" [ref=e152]
+                    - columnheader "HSK" [ref=e153]
+                    - columnheader "설명" [ref=e154]
+                    - columnheader "후보 점수" [ref=e155]
+                    - columnheader "선택" [ref=e156]
+                - rowgroup [ref=e157]:
+                  - row "854232 8542321030 플래시 메모리 (Flash memory) 88점 선택됨" [ref=e158]:
+                    - cell "854232" [ref=e159]
+                    - cell "8542321030" [ref=e160]
+                    - cell "플래시 메모리 (Flash memory)" [ref=e161]
+                    - cell "88점" [ref=e162]
+                    - cell "선택됨" [ref=e163]:
+                      - button "선택됨" [ref=e164] [cursor=pointer]:
+                        - img
+                        - text: 선택됨
+                  - row "854232 8542321010 디램 (DRAM (Dynamic random access memory)) 86점 선택" [ref=e165]:
+                    - cell "854232" [ref=e166]
+                    - cell "8542321010" [ref=e167]
+                    - cell "디램 (DRAM (Dynamic random access memory))" [ref=e168]
+                    - cell "86점" [ref=e169]
+                    - cell "선택" [ref=e170]:
+                      - button "선택" [ref=e171] [cursor=pointer]
+                  - row "847330 8473304060 디램 모듈 (DRAM modules) 64점 선택" [ref=e172]:
+                    - cell "847330" [ref=e173]
+                    - cell "8473304060" [ref=e174]
+                    - cell "디램 모듈 (DRAM modules)" [ref=e175]
+                    - cell "64점" [ref=e176]
+                    - cell "선택" [ref=e177]:
+                      - button "선택" [ref=e178] [cursor=pointer]
+          - generic [ref=e102]:
+            - heading "확정 코드" [level=3] [ref=e104]
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - text: HS
+                - textbox "예) 850140" [ref=e107]: "854232"
+                - paragraph [ref=e108]: 숫자 6~10자리
+              - generic [ref=e109]:
+                - text: HSK
+                - textbox "예) 8501401010" [ref=e110]: "8542321030"
+                - paragraph [ref=e111]: 숫자 6~10자리
+              - generic [ref=e112] [cursor=pointer]:
+                - checkbox "분석에 이 코드를 사용한다 (확정)" [ref=e113]
+                - generic [ref=e114]: 분석에 이 코드를 사용한다 (확정)
+      - complementary [ref=e115]:
+        - generic [ref=e116]:
+          - generic [ref=e117]: 근거 패널
+          - button "근거 패널 접기" [ref=e118] [cursor=pointer]:
+            - img
+        - generic [ref=e120]:
+          - heading "근거 · 출처" [level=3] [ref=e121]
+          - paragraph [ref=e122]: HS·HSK 후보는 관세청 공식 코드 데이터(HS부호/표준품명)에서 검색한 결과를 기준으로 정렬해 제시합니다. AI는 후보 재정렬과 요약 근거 보조에만 사용됩니다.
+          - generic [ref=e123]:
+            - paragraph [ref=e124]: HS 후보 검색 상태
+            - generic [ref=e125]: 정상
+            - paragraph [ref=e179]: 제시된 제품은 메모리 반도체 소자인 DRAM과 NAND Flash입니다. HSK 8542.32-1030은 플래시 메모리(NAND Flash 포함)를, 8542.32-1010은 DRAM을 명확히 규정하고 있어 가장 우선순위가 높습니다. 8473.30-4060은 이 소자들이 장착된 모듈 형태일 경우를 대비한 차선책입니다. 나머지 후보군(어류, 조명기구, 무기부품 등)은 단순히 'flash'나 'nand'라는 텍스트 매칭에 의한 오분류이므로 제외하였습니다.
+    - generic [ref=e127]:
+      - button "이전" [ref=e128] [cursor=pointer]
+      - button "확인 필요 상태로 진행" [ref=e129] [cursor=pointer]

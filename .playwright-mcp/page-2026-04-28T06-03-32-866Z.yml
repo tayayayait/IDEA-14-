@@ -1,0 +1,235 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e770]:
+    - banner [ref=e771]:
+      - link "홈" [ref=e773] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e775]
+        - generic [ref=e778]: 산단수출 코파일럿
+      - generic [ref=e779]:
+        - link "프로젝트" [ref=e780] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e781] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e782] [cursor=pointer]:
+          - img
+          - generic [ref=e783]: 로그아웃
+    - main [ref=e785]:
+      - generic [ref=e786]:
+        - generic [ref=e787]:
+          - heading "데이터 출처 및 API 상태" [level=1] [ref=e788]
+          - paragraph [ref=e789]: 실제 호출 로그를 기준으로 각 데이터 소스의 최신 상태를 표시합니다.
+          - generic [ref=e790]:
+            - paragraph [ref=e791]: "최근 조회 시각: 2026.04.28 15:03"
+            - generic [ref=e792]:
+              - generic [ref=e793]: KICOX 상태
+              - generic [ref=e794]: 대기
+              - generic [ref=e795]: SafetyKorea 상태
+              - generic [ref=e796]: 대기
+              - generic [ref=e797]: API 승인 대기
+        - generic [ref=e798]:
+          - generic [ref=e799]:
+            - heading "공공데이터 API 10종" [level=3] [ref=e800]
+            - paragraph [ref=e801]: 실제 호출 로그 기반으로 API 상태를 자동 반영합니다.
+          - table "데이터 출처 및 API 상태 표" [ref=e803]:
+            - caption [ref=e804]: 데이터 출처, API 상태, 최근 조회 이력 표
+            - rowgroup [ref=e805]:
+              - row "API 기관 용도 최근 상태 최근 조회 HTTP 응답 건수 오류 코드 실패 횟수 라이선스" [ref=e806]:
+                - columnheader "API" [ref=e807]
+                - columnheader "기관" [ref=e808]
+                - columnheader "용도" [ref=e809]
+                - columnheader "최근 상태" [ref=e810]
+                - columnheader "최근 조회" [ref=e811]
+                - columnheader "HTTP" [ref=e812]
+                - columnheader "응답 건수" [ref=e813]
+                - columnheader "오류 코드" [ref=e814]
+                - columnheader "실패 횟수" [ref=e815]
+                - columnheader "라이선스" [ref=e816]
+            - rowgroup [ref=e817]:
+              - row "KICOX_Factory Production Info KICOX Factory registration and production information lookup 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 Public Data Portal" [ref=e818]:
+                - cell "KICOX_Factory Production Info" [ref=e819]
+                - cell "KICOX" [ref=e820]
+                - cell "Factory registration and production information lookup" [ref=e821]
+                - cell "대기 미실행" [ref=e822]:
+                  - generic [ref=e823]:
+                    - generic [ref=e824]: 대기
+                    - paragraph [ref=e825]: 미실행
+                - cell "정보 없음" [ref=e826]
+                - cell "정보 없음" [ref=e827]
+                - cell "정보 없음" [ref=e828]
+                - cell "정보 없음" [ref=e829]
+                - cell "0" [ref=e830]
+                - cell "Public Data Portal" [ref=e831]:
+                  - link "Public Data Portal" [ref=e832] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15087611/openapi.do
+                    - img [ref=e833]
+                    - text: Public Data Portal
+              - row "KOTRA_Country Info KOTRA Country-level market baseline information 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 KOTRA" [ref=e837]:
+                - cell "KOTRA_Country Info" [ref=e838]
+                - cell "KOTRA" [ref=e839]
+                - cell "Country-level market baseline information" [ref=e840]
+                - cell "대기 미실행" [ref=e841]:
+                  - generic [ref=e842]:
+                    - generic [ref=e843]: 대기
+                    - paragraph [ref=e844]: 미실행
+                - cell "정보 없음" [ref=e845]
+                - cell "정보 없음" [ref=e846]
+                - cell "정보 없음" [ref=e847]
+                - cell "정보 없음" [ref=e848]
+                - cell "0" [ref=e849]
+                - cell "KOTRA" [ref=e850]:
+                  - link "KOTRA" [ref=e851] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                    - img [ref=e852]
+                    - text: KOTRA
+              - row "KOTRA_Overseas Market News KOTRA Collect overseas market news and trend signals 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 KOTRA" [ref=e856]:
+                - cell "KOTRA_Overseas Market News" [ref=e857]
+                - cell "KOTRA" [ref=e858]
+                - cell "Collect overseas market news and trend signals" [ref=e859]
+                - cell "대기 미실행" [ref=e860]:
+                  - generic [ref=e861]:
+                    - generic [ref=e862]: 대기
+                    - paragraph [ref=e863]: 미실행
+                - cell "정보 없음" [ref=e864]
+                - cell "정보 없음" [ref=e865]
+                - cell "정보 없음" [ref=e866]
+                - cell "정보 없음" [ref=e867]
+                - cell "0" [ref=e868]
+                - cell "KOTRA" [ref=e869]:
+                  - link "KOTRA" [ref=e870] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/kotranews/index.do
+                    - img [ref=e871]
+                    - text: KOTRA
+              - row "KOTRA_Overseas Certification Info KOTRA Check overseas certification requirements 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 KOTRA" [ref=e875]:
+                - cell "KOTRA_Overseas Certification Info" [ref=e876]
+                - cell "KOTRA" [ref=e877]
+                - cell "Check overseas certification requirements" [ref=e878]
+                - cell "대기 미실행" [ref=e879]:
+                  - generic [ref=e880]:
+                    - generic [ref=e881]: 대기
+                    - paragraph [ref=e882]: 미실행
+                - cell "정보 없음" [ref=e883]
+                - cell "정보 없음" [ref=e884]
+                - cell "정보 없음" [ref=e885]
+                - cell "정보 없음" [ref=e886]
+                - cell "0" [ref=e887]
+                - cell "KOTRA" [ref=e888]:
+                  - link "KOTRA" [ref=e889] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+                    - img [ref=e890]
+                    - text: KOTRA
+              - row "KOTRA_Import Regulation Info KOTRA Review import regulations and non-tariff barriers 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 KOTRA" [ref=e894]:
+                - cell "KOTRA_Import Regulation Info" [ref=e895]
+                - cell "KOTRA" [ref=e896]
+                - cell "Review import regulations and non-tariff barriers" [ref=e897]
+                - cell "대기 미실행" [ref=e898]:
+                  - generic [ref=e899]:
+                    - generic [ref=e900]: 대기
+                    - paragraph [ref=e901]: 미실행
+                - cell "정보 없음" [ref=e902]
+                - cell "정보 없음" [ref=e903]
+                - cell "정보 없음" [ref=e904]
+                - cell "정보 없음" [ref=e905]
+                - cell "0" [ref=e906]
+                - cell "KOTRA" [ref=e907]:
+                  - link "KOTRA" [ref=e908] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+                    - img [ref=e909]
+                    - text: KOTRA
+              - row "K-SURE_Country Risk Grade K-SURE Check country credit/risk grade 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 K-SURE" [ref=e913]:
+                - cell "K-SURE_Country Risk Grade" [ref=e914]
+                - cell "K-SURE" [ref=e915]
+                - cell "Check country credit/risk grade" [ref=e916]
+                - cell "대기 미실행" [ref=e917]:
+                  - generic [ref=e918]:
+                    - generic [ref=e919]: 대기
+                    - paragraph [ref=e920]: 미실행
+                - cell "정보 없음" [ref=e921]
+                - cell "정보 없음" [ref=e922]
+                - cell "정보 없음" [ref=e923]
+                - cell "정보 없음" [ref=e924]
+                - cell "0" [ref=e925]
+                - cell "K-SURE" [ref=e926]:
+                  - link "K-SURE" [ref=e927] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15140201/openapi.do
+                    - img [ref=e928]
+                    - text: K-SURE
+              - row "K-SURE_Industry Risk Index K-SURE Check industry-level risk index 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 K-SURE" [ref=e932]:
+                - cell "K-SURE_Industry Risk Index" [ref=e933]
+                - cell "K-SURE" [ref=e934]
+                - cell "Check industry-level risk index" [ref=e935]
+                - cell "대기 미실행" [ref=e936]:
+                  - generic [ref=e937]:
+                    - generic [ref=e938]: 대기
+                    - paragraph [ref=e939]: 미실행
+                - cell "정보 없음" [ref=e940]
+                - cell "정보 없음" [ref=e941]
+                - cell "정보 없음" [ref=e942]
+                - cell "정보 없음" [ref=e943]
+                - cell "0" [ref=e944]
+                - cell "K-SURE" [ref=e945]:
+                  - link "K-SURE" [ref=e946] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15132755/openapi.do
+                    - img [ref=e947]
+                    - text: K-SURE
+              - row "K-SURE_Export Payment Info K-SURE Reference export payment terms and delay history 대기 미실행 정보 없음 정보 없음 정보 없음 정보 없음 0 K-SURE" [ref=e951]:
+                - cell "K-SURE_Export Payment Info" [ref=e952]
+                - cell "K-SURE" [ref=e953]
+                - cell "Reference export payment terms and delay history" [ref=e954]
+                - cell "대기 미실행" [ref=e955]:
+                  - generic [ref=e956]:
+                    - generic [ref=e957]: 대기
+                    - paragraph [ref=e958]: 미실행
+                - cell "정보 없음" [ref=e959]
+                - cell "정보 없음" [ref=e960]
+                - cell "정보 없음" [ref=e961]
+                - cell "정보 없음" [ref=e962]
+                - cell "0" [ref=e963]
+                - cell "K-SURE" [ref=e964]:
+                  - link "K-SURE" [ref=e965] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15144259/openapi.do
+                    - img [ref=e966]
+                    - text: K-SURE
+              - row "Trade Security Institute_HSK Strategic Item Info Trade Security Institute Check strategic item status by HSK code 조회 결과 없음 조회 결과 없음 2026.04.28 15:03 200 0 정보 없음 0 Trade Security Institute" [ref=e970]:
+                - cell "Trade Security Institute_HSK Strategic Item Info" [ref=e971]
+                - cell "Trade Security Institute" [ref=e972]
+                - cell "Check strategic item status by HSK code" [ref=e973]
+                - cell "조회 결과 없음 조회 결과 없음" [ref=e974]:
+                  - generic [ref=e975]:
+                    - generic [ref=e976]: 조회 결과 없음
+                    - paragraph [ref=e977]: 조회 결과 없음
+                - cell "2026.04.28 15:03" [ref=e978]
+                - cell "200" [ref=e979]
+                - cell "0" [ref=e980]
+                - cell "정보 없음" [ref=e981]
+                - cell "0" [ref=e982]
+                - cell "Trade Security Institute" [ref=e983]:
+                  - link "Trade Security Institute" [ref=e984] [cursor=pointer]:
+                    - /url: https://www.yestrade.go.kr/
+                    - img [ref=e985]
+                    - text: Trade Security Institute
+              - row "KATS_SafetyKorea_Recall KATS Check product recall status 대기 미실행 (API 승인 대기) 2026.04.28 15:03 정보 없음 0 API 승인 대기 0 KATS" [ref=e989]:
+                - cell "KATS_SafetyKorea_Recall" [ref=e990]
+                - cell "KATS" [ref=e991]
+                - cell "Check product recall status" [ref=e992]
+                - cell "대기 미실행 (API 승인 대기)" [ref=e993]:
+                  - generic [ref=e994]:
+                    - generic [ref=e995]: 대기
+                    - paragraph [ref=e996]: 미실행 (API 승인 대기)
+                - cell "2026.04.28 15:03" [ref=e997]
+                - cell "정보 없음" [ref=e998]
+                - cell "0" [ref=e999]
+                - cell "API 승인 대기" [ref=e1000]
+                - cell "0" [ref=e1001]
+                - cell "KATS" [ref=e1002]:
+                  - link "KATS" [ref=e1003] [cursor=pointer]:
+                    - /url: https://www.safetykorea.kr/release/openapi
+                    - img [ref=e1004]
+                    - text: KATS
+        - paragraph [ref=e1008]: SafetyKorea는 현재 API 승인 대기 상태로만 표시되며, 평가 결함으로 집계하지 않습니다.

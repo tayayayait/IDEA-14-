@@ -1,0 +1,102 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e583]:
+    - banner [ref=e584]:
+      - link "홈" [ref=e586] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e588]
+        - generic [ref=e591]: 산단수출 코파일럿
+      - generic [ref=e592]:
+        - link "프로젝트" [ref=e593] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e594] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e595] [cursor=pointer]:
+          - img
+          - generic [ref=e596]: 로그아웃
+    - generic [ref=e597]:
+      - complementary [ref=e598]:
+        - navigation "분석 단계" [ref=e599]:
+          - link "1단계 기업·공장 검색" [ref=e600] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - img [ref=e602]
+          - link "2단계 제품·HS 코드" [ref=e604] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - img [ref=e606]
+          - link "3단계 후보국 추천 Top 3" [ref=e608] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e610]
+          - link "4단계 국가 상세" [ref=e612] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries/US
+            - img [ref=e614]
+          - link "5단계 전략물자·제품안전" [ref=e619] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - img [ref=e621]
+          - link "6단계 리포트" [ref=e623] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - img [ref=e625]
+      - main [ref=e628]:
+        - generic [ref=e629]:
+          - generic [ref=e630]:
+            - paragraph [ref=e631]: 기획 요구사항 매핑
+            - paragraph [ref=e632]: 요구사항 4~7
+            - paragraph [ref=e633]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=e634]:
+            - generic [ref=e635]:
+              - paragraph [ref=e636]: US
+              - heading "미합중국(The United States of America)" [level=1] [ref=e637]
+              - generic [ref=e638]:
+                - status "위험도 우선검토" [ref=e639]: 우선검토
+                - generic [ref=e641]: 총점 89/100
+            - button "상세 데이터 조회 중..." [disabled]:
+              - img
+              - text: 상세 데이터 조회 중...
+          - generic [ref=e643]:
+            - generic [ref=e644]:
+              - heading "목표시장 평가 요약" [level=3] [ref=e645]
+              - paragraph [ref=e646]: 목표시장 메모, 후보군 포함 신호, 최종 순위와 점수를 함께 표시합니다.
+            - generic [ref=e647]:
+              - paragraph [ref=e648]: "입력 목표시장: 확실한 정보 없음"
+              - paragraph [ref=e649]: "포함 여부: 기본 후보군 포함"
+              - paragraph [ref=e650]: "최종 순위: Rank 1"
+              - paragraph [ref=e651]: "후보 편입 근거: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e652]: "포함 이유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e653]: "추천 근거: 세계 최대 규모의 애프터마켓 시장과 중국산 부품에 대한 고율 관세 부과로 인한 한국산 부품의 반사이익 기대."
+              - paragraph [ref=e654]: "낮은 추천 이유: 엄격한 DOT 인증 기준 요구와 미 연방정부의 통상 정책 변화에 따른 불확실성."
+              - paragraph [ref=e655]: "대안 시장: 일본(Japan)(JP), 독일연방공화국(The Federal Republic of Germany)(DE), 폴란드공화국 (The Republic of Poland)(PL)"
+          - generic [ref=e656]:
+            - generic [ref=e657]:
+              - generic [ref=e658]:
+                - heading "필요 인증" [level=3] [ref=e659]
+                - paragraph [ref=e660]: "추천 단계 감지 수: 0건"
+              - paragraph [ref=e662]: 상세 분석 미실행 상태입니다. 우상단 분석 실행을 눌러주세요.
+            - generic [ref=e663]:
+              - generic [ref=e664]:
+                - heading "규제·NTM" [level=3] [ref=e665]
+                - paragraph [ref=e666]: "추천 단계 감지 수: 0건"
+              - paragraph [ref=e668]: 상세 분석 미실행 상태입니다. 우상단 분석 실행을 눌러주세요.
+            - generic [ref=e669]:
+              - generic [ref=e670]:
+                - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e671]
+                - paragraph [ref=e672]: 국가등급 1건 / 업종위험 상위 3건 / 수출결제 1건
+              - paragraph [ref=e674]: 상세 분석 미실행 상태입니다. 우상단 분석 실행을 눌러주세요.
+            - generic [ref=e675]:
+              - generic [ref=e677]:
+                - generic [ref=e678]:
+                  - heading "7일 실행 과제" [level=3] [ref=e679]
+                  - paragraph [ref=e680]: 상세 데이터를 기반으로 1주 내 실행 가능한 과제를 제안합니다.
+                - button "과제 생성" [disabled]:
+                  - img
+                  - text: 과제 생성
+              - paragraph [ref=e683]: 과제 생성 버튼을 눌러 7일 실행 과제를 받아보세요.
+    - generic [ref=e685]:
+      - button "후보국으로" [ref=e686] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로" [ref=e687] [cursor=pointer]

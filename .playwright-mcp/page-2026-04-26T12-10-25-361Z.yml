@@ -1,0 +1,88 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "홈" [ref=e6] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e8]
+        - generic [ref=e11]: 산단수출 코파일럿
+      - generic [ref=e12]:
+        - link "프로젝트" [ref=e13] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e14] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e15] [cursor=pointer]:
+          - img
+          - generic [ref=e16]: 로그아웃
+    - generic [ref=e17]:
+      - complementary [ref=e18]:
+        - paragraph [ref=e19]: 분석 단계
+        - navigation "분석 단계" [ref=e20]:
+          - link "1단계 기업·공장 검색" [ref=e21] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - img [ref=e23]
+            - generic [ref=e25]:
+              - generic [ref=e26]: 기업·공장 검색
+              - generic [ref=e27]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e28] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - img [ref=e30]
+            - generic [ref=e32]:
+              - generic [ref=e33]: 제품·HS 코드
+              - generic [ref=e34]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e35] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e37]
+            - generic [ref=e39]:
+              - generic [ref=e40]: 후보국 추천 Top 3
+              - generic [ref=e41]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e42] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e44]
+            - generic [ref=e46]:
+              - generic [ref=e47]: 국가 상세
+              - generic [ref=e48]: 요구사항 4~7
+              - generic [ref=e49]: 국가 선택 필요
+          - link "5단계 전략물자·제품안전" [ref=e50] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - img [ref=e52]
+            - generic [ref=e54]:
+              - generic [ref=e55]: 전략물자·제품안전
+              - generic [ref=e56]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e57] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - generic [ref=e58]: "6"
+            - generic [ref=e59]:
+              - generic [ref=e60]: 리포트
+              - generic [ref=e61]: 요구사항 10
+      - main [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - paragraph [ref=e65]: 기획 요구사항 매핑
+            - paragraph [ref=e66]: 요구사항 10
+            - paragraph [ref=e67]: 최종 리포트/PDF 생성
+          - generic [ref=e68]:
+            - heading "6. 1페이지 제출 분석 리포트" [level=1] [ref=e69]
+            - paragraph [ref=e70]: A4 1페이지로 인쇄/공유 가능한 최종 요약 리포트입니다.
+            - generic [ref=e71]:
+              - generic [ref=e72]: KICOX 상태
+              - generic [ref=e73]: 대기
+              - generic [ref=e74]: SafetyKorea 상태
+              - generic [ref=e75]: 대기
+          - generic [ref=e76]:
+            - img [ref=e77]
+            - text: 데이터를 불러오는 중입니다.
+    - generic [ref=e80]:
+      - button "이전" [ref=e81] [cursor=pointer]
+      - button "AI 요약 생성" [disabled]:
+        - img
+        - text: AI 요약 생성
+      - button "PDF 내려받기" [disabled]:
+        - img
+        - text: PDF 내려받기

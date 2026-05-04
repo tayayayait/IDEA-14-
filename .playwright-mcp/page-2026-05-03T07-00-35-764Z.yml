@@ -1,0 +1,55 @@
+- generic [ref=e2]:
+  - article [ref=e5]:
+    - link "Picture" [ref=e6] [cursor=pointer]:
+      - /url: /
+      - img "Picture" [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - navigation [ref=e10]:
+          - list [ref=e12]:
+            - listitem [ref=e13]:
+              - link "Home" [ref=e14] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e15]:
+              - link "APIs" [ref=e16] [cursor=pointer]:
+                - /url: /apis
+            - listitem [ref=e17]:
+              - link "Products" [ref=e18] [cursor=pointer]:
+                - /url: /products
+        - navigation [ref=e19]:
+          - list [ref=e21]:
+            - listitem [ref=e22]:
+              - link "Sign in" [ref=e23] [cursor=pointer]:
+                - /url: /signin
+            - listitem [ref=e24]:
+              - link "Sign up" [ref=e25] [cursor=pointer]:
+                - /url: /signup
+        - text: 
+      - text: 
+  - main [ref=e28]:
+    - generic [ref=e31]:
+      - navigation [ref=e32]:
+        - generic "APIs" [ref=e36]:
+          - button "Select API" [ref=e37]
+          - button "Expand APIs list" [ref=e38] [cursor=pointer]:
+            - generic [ref=e39]: 
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - searchbox "Search operations" [ref=e44]
+            - button "" [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]: 
+          - generic [ref=e50]:
+            - text: Group by tag
+            - generic [ref=e51]:
+              - checkbox "Group by tag"
+      - article [ref=e59]:
+        - paragraph [ref=e64]: The specified API does not exist.
+        - paragraph [ref=e67]: No operation selected.
+  - article [ref=e70]:
+    - paragraph [ref=e72]:
+      - text: © 2023, World Trade Organization |
+      - link "Disclaimer" [ref=e73] [cursor=pointer]:
+        - /url: https://www.wto.org/english/info_e/disclaimer_e.htm
+      - text: "|"
+      - link "Copyright and permissions" [ref=e74] [cursor=pointer]:
+        - /url: https://www.wto.org/english/info_e/copyrights_permissions_e.htm

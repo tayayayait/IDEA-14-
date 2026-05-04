@@ -1,0 +1,160 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e505]:
+        - button "Close toast" [ref=e506] [cursor=pointer]:
+          - img [ref=e507]
+        - img [ref=e511]
+        - generic [ref=e514]: 상세 분석은 완료되었지만 일부 항목(해외인증, 수입규제)은 조회 결과가 없습니다.
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e16] [cursor=pointer]:
+          - img
+          - generic [ref=e17]: 로그아웃
+    - generic [ref=e18]:
+      - complementary [ref=e19]:
+        - navigation "분석 단계" [ref=e20]:
+          - link "1단계 기업·공장 검색" [ref=e21] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - img [ref=e23]
+          - link "2단계 제품·HS 코드" [ref=e25] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - img [ref=e27]
+          - link "3단계 후보국 추천 Top 3" [ref=e29] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e31]
+          - link "4단계 국가 상세" [ref=e33] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries/DE
+            - img [ref=e35]
+          - link "5단계 전략물자·제품안전" [ref=e40] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - img [ref=e42]
+          - link "6단계 리포트" [ref=e44] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - img [ref=e46]
+      - main [ref=e49]:
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - paragraph [ref=e52]: 기획 요구사항 매핑
+            - paragraph [ref=e53]: 요구사항 4~7
+            - paragraph [ref=e54]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: DE
+              - heading "독일연방공화국(The Federal Republic of Germany)" [level=1] [ref=e58]
+              - generic [ref=e59]:
+                - status "위험도 우선검토" [ref=e60]: 우선검토
+                - generic [ref=e62]: 총점 84/100
+            - button "상세 분석 실행" [ref=e63] [cursor=pointer]:
+              - img
+              - text: 상세 분석 실행
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - heading "목표시장 평가 요약" [level=3] [ref=e66]
+              - paragraph [ref=e67]: 목표시장 메모, 후보군 포함 신호, 최종 순위와 점수를 함께 표시합니다.
+            - generic [ref=e68]:
+              - paragraph [ref=e69]: "입력 목표시장: 확실한 정보 없음"
+              - paragraph [ref=e70]: "포함 여부: 기본 후보군 포함"
+              - paragraph [ref=e71]: "최종 순위: Rank 3"
+              - paragraph [ref=e72]: "후보 편입 근거: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e73]: "포함 이유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e74]: "추천 근거: 유럽 최대의 자동차 생산 기지로서 고품질 플라스틱 및 유리 부품에 대한 OEM 공급 기회 상존."
+              - paragraph [ref=e75]: "낮은 추천 이유: 최근 경기 침체로 인한 자동차 생산량 둔화와 에너지 비용 상승에 따른 가동률 저하 리스크."
+              - paragraph [ref=e76]: "대안 시장: 미합중국(The United States of America)(US), 일본(Japan)(JP), 폴란드공화국 (The Republic of Poland)(PL)"
+          - generic [ref=e77]:
+            - generic [ref=e78]:
+              - generic [ref=e79]:
+                - heading "필요 인증" [level=3] [ref=e80]
+                - paragraph [ref=e81]: "출처 패널·본문 행 수: 0건"
+              - paragraph [ref=e515]: 조회 결과 없음
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - heading "규제·NTM" [level=3] [ref=e206]
+                - paragraph [ref=e207]: "출처 패널·본문 행 수: 0건"
+              - paragraph [ref=e516]: 조회 결과 없음
+            - generic [ref=e430]:
+              - generic [ref=e431]:
+                - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e432]
+                - paragraph [ref=e433]: 국가등급 1건 / 업종위험 상위 3건 / 수출결제 1건
+              - generic [ref=e434]:
+                - generic [ref=e435]:
+                  - generic [ref=e436]:
+                    - paragraph [ref=e437]: 국가 위험 등급
+                    - generic [ref=e438]:
+                      - paragraph [ref=e439]: 정보
+                      - paragraph [ref=e440]: "국가명: 독일"
+                      - paragraph [ref=e441]: "평가 등급: 1"
+                      - paragraph [ref=e442]: "평가일: 2025-12-30"
+                      - link "K-SURE 출처" [ref=e443] [cursor=pointer]:
+                        - /url: https://www.data.go.kr/data/15140201/openapi.do
+                        - img [ref=e444]
+                        - text: K-SURE 출처
+                  - generic [ref=e448]:
+                    - paragraph [ref=e449]: 업종 위험 지수 (상위 3)
+                    - list [ref=e450]:
+                      - listitem [ref=e517]:
+                        - paragraph [ref=e518]: 정보
+                        - paragraph [ref=e519]: "업종명: 고무 및 플라스틱제품 제조업"
+                        - paragraph [ref=e520]: "위험 지수: 2"
+                        - link "K-SURE 출처" [ref=e521] [cursor=pointer]:
+                          - /url: https://www.data.go.kr/data/15132755/openapi.do
+                          - img [ref=e522]
+                          - text: K-SURE 출처
+                      - listitem [ref=e526]:
+                        - paragraph [ref=e527]: 정보
+                        - paragraph [ref=e528]: "업종명: 비금속 광물제품 제조업"
+                        - paragraph [ref=e529]: "위험 지수: 2"
+                        - link "K-SURE 출처" [ref=e530] [cursor=pointer]:
+                          - /url: https://www.data.go.kr/data/15132755/openapi.do
+                          - img [ref=e531]
+                          - text: K-SURE 출처
+                      - listitem [ref=e535]:
+                        - paragraph [ref=e536]: 정보
+                        - paragraph [ref=e537]: "업종명: 농업"
+                        - paragraph [ref=e538]: "위험 지수: 2"
+                        - link "K-SURE 출처" [ref=e539] [cursor=pointer]:
+                          - /url: https://www.data.go.kr/data/15132755/openapi.do
+                          - img [ref=e540]
+                          - text: K-SURE 출처
+                  - generic [ref=e478]:
+                    - paragraph [ref=e479]: 수출결제 현황
+                    - generic [ref=e480]:
+                      - paragraph [ref=e481]: 주의
+                      - paragraph [ref=e482]: 전세계 집계 참고자료
+                      - paragraph [ref=e483]: "평균 결제기간: 73.5일"
+                      - paragraph [ref=e484]: "연체율: 18.3%"
+                      - paragraph [ref=e485]: "주요 결제조건: O/A(T/T 포함) (74.4%)"
+                      - link "K-SURE 출처" [ref=e486] [cursor=pointer]:
+                        - /url: https://www.data.go.kr/data/15144259/openapi.do
+                        - img [ref=e487]
+                        - text: K-SURE 출처
+                - paragraph [ref=e491]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+            - generic [ref=e492]:
+              - generic [ref=e494]:
+                - generic [ref=e495]:
+                  - heading "7일 실행 과제" [level=3] [ref=e496]
+                  - paragraph [ref=e497]: 상세 데이터를 기반으로 1주 내 실행 가능한 과제를 제안합니다.
+                - button "과제 생성" [ref=e498] [cursor=pointer]:
+                  - img
+                  - text: 과제 생성
+              - paragraph [ref=e500]: 과제 생성 버튼을 눌러 7일 실행 과제를 받아보세요.
+    - generic [ref=e502]:
+      - button "후보국으로" [ref=e503] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로" [ref=e504] [cursor=pointer]

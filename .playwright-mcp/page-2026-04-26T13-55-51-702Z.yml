@@ -1,0 +1,213 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e1562]:
+    - banner [ref=e1563]:
+      - link "홈" [ref=e1565] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e1567]
+        - generic [ref=e1570]: 산단수출 코파일럿
+      - generic [ref=e1571]:
+        - link "프로젝트" [ref=e1572] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e1573] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e1574] [cursor=pointer]:
+          - img
+          - generic [ref=e1575]: 로그아웃
+    - generic [ref=e1576]:
+      - complementary [ref=e1577]:
+        - paragraph [ref=e1578]: 분석 단계
+        - navigation "분석 단계" [ref=e1579]:
+          - link "1단계 기업·공장 검색" [ref=e1580] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - img [ref=e1582]
+            - generic [ref=e1584]:
+              - generic [ref=e1585]: 기업·공장 검색
+              - generic [ref=e1586]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e1587] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - generic [ref=e1588]: "2"
+            - generic [ref=e1589]:
+              - generic [ref=e1590]: 제품·HS 코드
+              - generic [ref=e1591]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e1592] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - generic [ref=e1593]: "3"
+            - generic [ref=e1594]:
+              - generic [ref=e1595]: 후보국 추천 Top 3
+              - generic [ref=e1596]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e1597] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries/DE
+            - generic [ref=e1598]: "4"
+            - generic [ref=e1599]:
+              - generic [ref=e1600]: 국가 상세
+              - generic [ref=e1601]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e1602] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - generic [ref=e1603]: "5"
+            - generic [ref=e1604]:
+              - generic [ref=e1605]: 전략물자·제품안전
+              - generic [ref=e1606]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e1607] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - generic [ref=e1608]: "6"
+            - generic [ref=e1609]:
+              - generic [ref=e1610]: 리포트
+              - generic [ref=e1611]: 요구사항 10
+      - main [ref=e1612]:
+        - generic [ref=e1613]:
+          - generic [ref=e1614]:
+            - paragraph [ref=e1615]: 기획 요구사항 매핑
+            - paragraph [ref=e1616]: 요구사항 2
+            - paragraph [ref=e1617]: 제품/HS·HSK 코드 확정
+          - generic [ref=e1619]:
+            - img [ref=e1620]
+            - generic [ref=e1624]:
+              - paragraph [ref=e1625]: 삼성진공
+              - paragraph [ref=e1626]: · 업종 30399
+          - generic [ref=e1627]:
+            - heading "2. 제품·HS 코드" [level=1] [ref=e1628]
+            - paragraph [ref=e1629]: 제품 정보를 입력하면 관세청 공식 코드표에서 HS/HSK 후보를 검색합니다. 확정 토글로 분석에 사용할 코드를 선택하세요.
+          - generic [ref=e1630]:
+            - generic [ref=e1631]:
+              - heading "제품 정보" [level=3] [ref=e1632]
+              - paragraph [ref=e1633]: 핵심 부품·소재·용도를 함께 적으면 정확도가 높아집니다.
+            - generic [ref=e1634]:
+              - generic [ref=e1635]:
+                - generic [ref=e1636]: 제품명 *
+                - textbox "예) 전기차용 BLDC 모터" [ref=e1637]: 차량유리, 백밀러케이스
+                - generic [ref=e1638]:
+                  - paragraph [ref=e1639]: 품목 분리 필요
+                  - paragraph [ref=e1640]: 현재 제품명에 2개 품목이 포함되어 있습니다. 품목별로 나눠 입력하고, 확정 코드는 실제 수출 계약 기준의 주력 1개 품목으로 선택하세요.
+              - generic [ref=e1641]:
+                - text: 모델명
+                - textbox "예) BLDC-MTR-3000" [ref=e1642]
+              - generic [ref=e1643]:
+                - text: 목표 시장 메모
+                - textbox "예) 동남아 OEM 공급, 1차 베트남·인도네시아 우선" [ref=e1644]
+              - generic [ref=e1645]:
+                - generic [ref=e1646]:
+                  - generic [ref=e1647]: 제품 설명 *
+                  - button "AI 설명 초안 작성" [ref=e1648] [cursor=pointer]:
+                    - img
+                    - text: AI 설명 초안 작성
+                - textbox "용도, 정격 출력, 소재, 인증, 응용 분야 등 (20~1000자)" [ref=e1649]: 차량용 백미러 케이스와 자동차 유리 주변 조립 부품입니다. 플라스틱 사출 케이스와 차량용 유리 부품을 자동차 부품 애프터마켓 및 OEM 공급 목적으로 수출하려는 제품입니다.
+                - paragraph [ref=e1650]: 96/1000자
+              - generic [ref=e1651]:
+                - text: 주요 부품/소재
+                - generic [ref=e1652]:
+                  - textbox "태그 입력" [ref=e1653]:
+                    - /placeholder: 부품/소재 입력 후 Enter (최대 20개)
+                  - generic [ref=e1654]:
+                    - generic [ref=e1655]:
+                      - text: 차량유리
+                      - button "차량유리 태그 제거" [ref=e1656] [cursor=pointer]:
+                        - img
+                    - generic [ref=e1657]:
+                      - text: 백밀러케이스
+                      - button "백밀러케이스 태그 제거" [ref=e1658] [cursor=pointer]:
+                        - img
+                  - paragraph [ref=e1659]: 2/20개, 태그당 최대 30자
+              - button "공식 데이터 기반 후보 검색" [ref=e1660] [cursor=pointer]:
+                - img
+                - text: 공식 데이터 기반 후보 검색
+          - generic [ref=e1661]:
+            - generic [ref=e1662]:
+              - heading "HS·HSK 후보" [level=3] [ref=e1663]
+              - paragraph [ref=e1664]: 후보 점수 1순위 코드를 자동 반영합니다. 필요하면 직접 변경해 확정하세요.
+            - generic [ref=e1665]:
+              - generic [ref=e1666]:
+                - paragraph [ref=e1667]: 복수 품목 입력 시 후보 선택 기준
+                - list [ref=e1668]:
+                  - listitem [ref=e1669]: 확정 코드는 실제 수출 계약·인보이스에 기재될 주력 1개 품목 기준으로 선택합니다.
+                  - listitem [ref=e1670]: 후보 점수는 키워드 매칭 보조 지표입니다. 설명이 핵심 기능·작동 원리·재질과 불일치하면 제외합니다.
+                  - listitem [ref=e1671]: HS 6단위가 맞으면 HSK 10단위는 용도·규격이 더 구체적으로 맞는 후보를 선택합니다.
+                  - listitem [ref=e1672]: 서로 다른 품목이면 품목별로 나눠 조회해 각각 코드로 관리합니다.
+              - generic [ref=e1673]:
+                - paragraph [ref=e1674]: "선택 상태: 품목 분리 필요 (62점)"
+                - paragraph [ref=e1675]: 복수 품목이 감지되어 코드 오분류 가능성이 높습니다. 품목별로 분리 입력 후 확정하세요.
+                - paragraph [ref=e1676]: "적용 방식: 후보 점수 1순위 자동 반영"
+                - paragraph [ref=e1677]: 현재 코드는 확인 필요 상태입니다. 계약/인보이스 기준으로 최종 확인하세요.
+                - paragraph [ref=e1678]: "확인 필요 상태로 진행: 다음 단계에서 근거를 확인하며 진행합니다."
+              - table "HS HSK 후보 표" [ref=e1680]:
+                - caption [ref=e1681]: AI 추천 HS 및 HSK 코드 후보 목록
+                - rowgroup [ref=e1682]:
+                  - row "HS 코드 HSK 설명 후보 점수 선택" [ref=e1683]:
+                    - columnheader "HS 코드" [ref=e1684]
+                    - columnheader "HSK" [ref=e1685]
+                    - columnheader "설명" [ref=e1686]
+                    - columnheader "후보 점수" [ref=e1687]
+                    - columnheader "선택" [ref=e1688]
+                - rowgroup [ref=e1689]:
+                  - 'row "200811 2008111000 피넛 버터 (Peanut butter) · 표준품명: 피넛버터(잼 혼합) 71점 선택" [ref=e1690]':
+                    - cell "200811" [ref=e1691]
+                    - cell "2008111000" [ref=e1692]
+                    - 'cell "피넛 버터 (Peanut butter) · 표준품명: 피넛버터(잼 혼합)" [ref=e1693]'
+                    - cell "71점" [ref=e1694]
+                    - cell "선택" [ref=e1695]:
+                      - button "선택" [ref=e1696] [cursor=pointer]
+                  - row "700910 7009100000 백미러(차량용으로 한정한다) (Rear-view mirrors for vehicles) 62점 선택됨" [ref=e1697]:
+                    - cell "700910" [ref=e1698]
+                    - cell "7009100000" [ref=e1699]
+                    - cell "백미러(차량용으로 한정한다) (Rear-view mirrors for vehicles)" [ref=e1700]
+                    - cell "62점" [ref=e1701]
+                    - cell "선택됨" [ref=e1702]:
+                      - button "선택됨" [ref=e1703] [cursor=pointer]:
+                        - img
+                        - text: 선택됨
+                  - row "847510 8475100000 전기램프나 전자램프ㆍ튜브ㆍ밸브ㆍ섬광전구(flashbulb)(외피를 유리로 만든 것으로 한정한다)의 조립기계 (Machines for assembling electric or electronic lamps, tubes or valves or flashbulbs, in glass envelopes) 62점 선택" [ref=e1704]:
+                    - cell "847510" [ref=e1705]
+                    - cell "8475100000" [ref=e1706]
+                    - cell "전기램프나 전자램프ㆍ튜브ㆍ밸브ㆍ섬광전구(flashbulb)(외피를 유리로 만든 것으로 한정한다)의 조립기계 (Machines for assembling electric or electronic lamps, tubes or valves or flashbulbs, in glass envelopes)" [ref=e1707]
+                    - cell "62점" [ref=e1708]
+                    - cell "선택" [ref=e1709]:
+                      - button "선택" [ref=e1710] [cursor=pointer]
+                  - row "848640 8486402070 사출식ㆍ압축식의 고무ㆍ플라스틱 성형용 주형 (Moulds for rubber or plastics of injection or compression types) 62점 선택" [ref=e1711]:
+                    - cell "848640" [ref=e1712]
+                    - cell "8486402070" [ref=e1713]
+                    - cell "사출식ㆍ압축식의 고무ㆍ플라스틱 성형용 주형 (Moulds for rubber or plastics of injection or compression types)" [ref=e1714]
+                    - cell "62점" [ref=e1715]
+                    - cell "선택" [ref=e1716]:
+                      - button "선택" [ref=e1717] [cursor=pointer]
+                  - 'row "870829 8708290000 기타 (Other) · 표준품명: 기타 53점 선택" [ref=e1718]':
+                    - cell "870829" [ref=e1719]
+                    - cell "8708290000" [ref=e1720]
+                    - 'cell "기타 (Other) · 표준품명: 기타" [ref=e1721]'
+                    - cell "53점" [ref=e1722]
+                    - cell "선택" [ref=e1723]:
+                      - button "선택" [ref=e1724] [cursor=pointer]
+          - generic [ref=e1725]:
+            - heading "확정 코드" [level=3] [ref=e1727]
+            - generic [ref=e1728]:
+              - generic [ref=e1729]:
+                - text: HS
+                - textbox "예) 850140" [ref=e1730]: "700910"
+                - paragraph [ref=e1731]: 숫자 6~10자리
+              - generic [ref=e1732]:
+                - text: HSK
+                - textbox "예) 8501401010" [ref=e1733]: "7009100000"
+                - paragraph [ref=e1734]: 숫자 6~10자리
+              - generic [ref=e1735] [cursor=pointer]:
+                - checkbox "분석에 이 코드를 사용한다 (확정)" [ref=e1736]
+                - generic [ref=e1737]: 분석에 이 코드를 사용한다 (확정)
+      - complementary [ref=e1738]:
+        - generic [ref=e1739]:
+          - generic [ref=e1740]: 근거 패널
+          - button "근거 패널 접기" [ref=e1741] [cursor=pointer]:
+            - img
+        - generic [ref=e1743]:
+          - heading "근거 · 출처" [level=3] [ref=e1744]
+          - paragraph [ref=e1745]: HS·HSK 후보는 관세청 공식 코드 데이터(HS부호/표준품명)에서 검색한 결과를 기준으로 정렬해 제시합니다. AI는 후보 재정렬과 요약 근거 보조에만 사용됩니다.
+          - generic [ref=e1746]:
+            - paragraph [ref=e1747]: HS 후보 검색 상태
+            - generic [ref=e1748]: 대기
+            - paragraph [ref=e1749]: 7009100000은 차량용 백미러를 분류하는 코드로, 백미러 케이스 등 관련 부품에 가장 적합한 항목입니다. 8708290000은 자동차의 기타 차체 부품 및 부속품을 분류하는 코드로, 차량 유리 주변 조립 부품 및 자동차 애프터마켓용 사출 부품에 부합합니다. 후보 중 3923100000은 운송이나 포장용 케이스를 의미하므로 자동차 구성 부품인 해당 물품에는 적절하지 않습니다.
+    - generic [ref=e1751]:
+      - button "이전" [ref=e1752] [cursor=pointer]
+      - button "확인 필요 상태로 진행" [ref=e1753] [cursor=pointer]

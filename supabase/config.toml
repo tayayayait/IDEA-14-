@@ -1,0 +1,28 @@
+project_id = "gnwhjqaxndbkqxecxjkn"
+
+[functions.api-kicox-search]
+verify_jwt = false
+
+[functions.ai-hs-suggest]
+verify_jwt = false
+
+[functions.recommend-countries]
+verify_jwt = false
+
+[functions.recommend-country-news]
+verify_jwt = false
+
+[functions.country-detail]
+verify_jwt = false
+
+[functions.safety-scan]
+verify_jwt = false
+
+[functions.ai-action-tasks]
+verify_jwt = false
+
+[functions.ai-report-summary]
+verify_jwt = false
+
+[functions.ai-product-description]
+verify_jwt = false

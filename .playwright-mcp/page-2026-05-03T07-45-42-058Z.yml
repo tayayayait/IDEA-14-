@@ -1,0 +1,262 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - link "본문 바로가기" [ref=e2] [cursor=pointer]:
+      - /url: "#colgroup"
+    - link "주 메뉴 바로가기" [ref=e3] [cursor=pointer]:
+      - /url: "#gnb-menu"
+  - generic [ref=e4]:
+    - generic [ref=e9]: 이 누리집은 대한민국 공식 전자정부 누리집입니다.
+    - banner [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e13]:
+          - list [ref=e15]:
+            - listitem [ref=e16]:
+              - link "로그인" [ref=e17] [cursor=pointer]:
+                - /url: /user/consumer/160/ftc/login.do
+            - listitem [ref=e18]:
+              - link "회원가입" [ref=e19] [cursor=pointer]:
+                - /url: /user/ftc/consumer/mber/163/regist.do
+            - listitem [ref=e20]:
+              - link "원격지원" [ref=e21] [cursor=pointer]:
+                - /url: https://support.consumer.go.kr:9000
+                - text: 원격지원
+            - listitem [ref=e23]:
+              - generic [ref=e24]:
+                - checkbox "고대비" [ref=e25]
+                - generic [ref=e26] [cursor=pointer]: 고대비
+          - heading "소비자24 24시간 열린 소비자포털" [level=1] [ref=e29]:
+            - link "소비자24 24시간 열린 소비자포털" [ref=e30] [cursor=pointer]:
+              - /url: https://www.consumer.go.kr/consumer/index.do
+              - generic [ref=e31]: 소비자24 24시간 열린 소비자포털
+          - generic [ref=e33]:
+            - button "통합검색" [ref=e34] [cursor=pointer]
+            - button "전체메뉴" [ref=e35] [cursor=pointer]
+        - navigation [ref=e36]:
+          - list "메인 메뉴" [ref=e38]:
+            - listitem [ref=e39]:
+              - button "소비자정보" [ref=e40] [cursor=pointer]
+            - listitem [ref=e41]:
+              - button "상품·안전정보" [ref=e42] [cursor=pointer]
+            - listitem [ref=e43]:
+              - button "해외직구정보" [ref=e44] [cursor=pointer]
+            - listitem [ref=e45]:
+              - button "상담 및 피해/분쟁" [ref=e46] [cursor=pointer]
+            - listitem [ref=e47]:
+              - button "알림소식" [ref=e48] [cursor=pointer]
+            - listitem [ref=e49]:
+              - button "서비스안내" [ref=e50] [cursor=pointer]
+      - text: • • • •
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - navigation [ref=e53]:
+          - heading "알림소식" [level=2] [ref=e54]:
+            - generic [ref=e55]: 알림소식
+          - menubar [ref=e56]:
+            - menuitem "공지사항" [ref=e57] [cursor=pointer]
+            - menuitem "자료실" [expanded] [ref=e58] [cursor=pointer]
+            - menu [ref=e60]:
+              - menuitem "일반자료실" [ref=e61] [cursor=pointer]
+              - menuitem "Open API" [ref=e62] [cursor=pointer]
+              - menuitem "RSS" [ref=e63] [cursor=pointer]
+              - menuitem "뷰어다운로드" [ref=e64] [cursor=pointer]
+            - menuitem "FAQ" [ref=e65] [cursor=pointer]
+        - generic [ref=e66]:
+          - navigation "현재 경로" [ref=e67]:
+            - list [ref=e68]:
+              - listitem [ref=e69]:
+                - link "홈" [ref=e70] [cursor=pointer]:
+                  - /url: /consumer/index.do
+              - listitem [ref=e71]:
+                - link "알림소식" [ref=e72] [cursor=pointer]:
+                  - /url: /user/bbs/consumer/1/800/bbsDataList.do
+              - listitem [ref=e73]:
+                - link "자료실" [ref=e74] [cursor=pointer]:
+                  - /url: /user/bbs/consumer/100/119/bbsDataList.do
+              - listitem [ref=e75]:
+                - link "Open API" [ref=e76] [cursor=pointer]:
+                  - /url: /user/ftc/consumer/openApiSvcUser/120/selectOpenApiSvcList.do
+          - heading "Open API" [level=3] [ref=e78]
+          - generic [ref=e79]:
+            - group "OPEN API 활용신청" [ref=e81]:
+              - generic [ref=e82]: OPEN API 활용신청
+              - generic [ref=e84]:
+                - generic [ref=e86]: 기본정보
+                - table "서비스명을 알수 있는 표 입니다." [ref=e88]:
+                  - caption [ref=e89]: 서비스명을 알수 있는 표 입니다.
+                  - rowgroup [ref=e93]:
+                    - row "서비스명" [ref=e94]:
+                      - rowheader "서비스명" [ref=e95]
+                      - cell [ref=e96]
+                - generic [ref=e98]: 신청 기관정보
+                - table "신청자, 신청일자, 신청기관, 담당부서, 부서전화번호, 이메일주소를 입력하는 표 입니다." [ref=e100]:
+                  - caption [ref=e101]: 신청자, 신청일자, 신청기관, 담당부서, 부서전화번호, 이메일주소를 입력하는 표 입니다.
+                  - rowgroup [ref=e105]:
+                    - row "신청자" [ref=e106]:
+                      - rowheader "신청자" [ref=e107]
+                      - cell [ref=e108]:
+                        - textbox "신청자" [ref=e109]
+                    - row "신청일자 달력 보기 입력예시 2018-01-01" [ref=e110]:
+                      - rowheader "신청일자" [ref=e111]
+                      - cell "달력 보기 입력예시 2018-01-01" [ref=e112]:
+                        - generic [ref=e113]:
+                          - textbox "신청일자" [ref=e114]
+                          - button "달력 보기" [ref=e115] [cursor=pointer]:
+                            - generic [ref=e117]: 달력 보기
+                        - paragraph [ref=e118]: 입력예시 2018-01-01
+                    - row "신청기관" [ref=e119]:
+                      - rowheader "신청기관" [ref=e120]
+                      - cell [ref=e121]:
+                        - textbox "신청기관" [ref=e122]
+                    - row "담당부서" [ref=e123]:
+                      - rowheader "담당부서" [ref=e124]
+                      - cell [ref=e125]:
+                        - textbox "담당부서" [ref=e126]
+                    - row "부서전화번호" [ref=e127]:
+                      - rowheader "부서전화번호" [ref=e128]
+                      - cell [ref=e129]:
+                        - textbox "부서전화번호" [ref=e130]
+                    - row "이메일주소" [ref=e131]:
+                      - rowheader "이메일주소" [ref=e132]
+                      - cell [ref=e133]:
+                        - textbox "이메일주소" [ref=e134]
+                - generic [ref=e136]: 서버 정보
+                - table "시스템명, 시스템 개요, IP, 운영체계를 알수 있는 표 입니다." [ref=e138]:
+                  - caption [ref=e139]: 시스템명, 시스템 개요, IP, 운영체계를 알수 있는 표 입니다.
+                  - rowgroup [ref=e145]:
+                    - row "시스템명 시스템 개요 IP 운영체계" [ref=e146]:
+                      - columnheader "시스템명" [ref=e147]
+                      - columnheader "시스템 개요" [ref=e148]
+                      - columnheader "IP" [ref=e149]
+                      - columnheader "운영체계" [ref=e150]
+                  - rowgroup [ref=e151]:
+                    - row [ref=e152]:
+                      - cell [ref=e153]:
+                        - textbox "시스템명" [ref=e154]
+                      - cell [ref=e155]:
+                        - textbox "시스템개요" [ref=e156]
+                      - cell [ref=e157]:
+                        - textbox "IP" [ref=e158]
+                      - cell [ref=e159]:
+                        - textbox "운영체제" [ref=e160]
+                - generic [ref=e162]: 신청 기관정보
+                - table "활용목적, 사이트주소, 활용희망일를 입력하는 표 입니다." [ref=e164]:
+                  - caption [ref=e165]: 활용목적, 사이트주소, 활용희망일를 입력하는 표 입니다.
+                  - rowgroup [ref=e169]:
+                    - row "활용목적" [ref=e170]:
+                      - rowheader "활용목적" [ref=e171]
+                      - cell [ref=e172]:
+                        - textbox "활용목적" [ref=e173]
+                    - row "사이트주소" [ref=e174]:
+                      - rowheader "사이트주소" [ref=e175]
+                      - cell [ref=e176]:
+                        - textbox "사이트주소" [ref=e177]
+                    - row "활용희망일 달력 보기 입력예시 2018-01-01" [ref=e178]:
+                      - rowheader "활용희망일" [ref=e179]
+                      - cell "달력 보기 입력예시 2018-01-01" [ref=e180]:
+                        - generic [ref=e181]:
+                          - textbox "활용희망일" [ref=e182]
+                          - button "달력 보기" [ref=e183] [cursor=pointer]:
+                            - generic [ref=e185]: 달력 보기
+                        - paragraph [ref=e186]: 입력예시 2018-01-01
+                - generic [ref=e187]:
+                  - button "목록" [ref=e188] [cursor=pointer]
+                  - button "신청" [ref=e189] [cursor=pointer]
+            - generic [ref=e192]:
+              - paragraph [ref=e193]: 이 페이지에서 제공하는 정보를 평가해 주세요.
+              - group "만족도 조사" [ref=e194]:
+                - generic [ref=e195]: 만족도 조사
+                - generic [ref=e196]:
+                  - generic [ref=e197]:
+                    - generic [ref=e198]: 제공하는 정보에 대하여 만족하십니까?
+                    - generic [ref=e199]:
+                      - generic [ref=e200]:
+                        - radio "매우만족" [checked] [ref=e201]
+                        - generic [ref=e202] [cursor=pointer]: 매우만족
+                      - generic [ref=e203]:
+                        - radio "만족" [ref=e204]
+                        - generic [ref=e205] [cursor=pointer]: 만족
+                      - generic [ref=e206]:
+                        - radio "보통" [ref=e207]
+                        - generic [ref=e208] [cursor=pointer]: 보통
+                      - generic [ref=e209]:
+                        - radio "불만족" [ref=e210]
+                        - generic [ref=e211] [cursor=pointer]: 불만족
+                      - generic [ref=e212]:
+                        - radio "매우불만족" [ref=e213]
+                        - generic [ref=e214] [cursor=pointer]: 매우불만족
+                  - generic [ref=e215]:
+                    - generic [ref=e216]: 회원님의 의견을 알려주세요.
+                    - generic [ref=e217]:
+                      - textbox "의견 작성" [ref=e218]:
+                        - /placeholder: 내용을 입력해주세요.
+                      - button "제출" [ref=e219] [cursor=pointer]
+      - contentinfo [ref=e220]:
+        - generic [ref=e222]:
+          - button "소속기관 바로가기" [ref=e224] [cursor=pointer]
+          - button "관련기관 바로가기" [ref=e226] [cursor=pointer]
+        - generic [ref=e227]:
+          - generic [ref=e229]: 소비자24 24시간 열린 소비자포털
+          - generic [ref=e230]:
+            - generic [ref=e231]:
+              - paragraph [ref=e232]: (30108) 세종특별자치시 다솜3로 95 공정거래위원회
+              - list [ref=e233]:
+                - listitem [ref=e234]:
+                  - strong [ref=e235]: 이용문의
+                  - generic [ref=e236]:
+                    - link "044-200-4920" [ref=e237]:
+                      - /url: tel:044-200-4920
+                    - text: (통화료는 발신자 부담)
+                - listitem [ref=e238]:
+                  - strong [ref=e239]: 이메일
+                  - link "yjyong@korea.kr" [ref=e241] [cursor=pointer]:
+                    - /url: mailto:yjyong@korea.kr
+            - generic [ref=e242]:
+              - generic [ref=e243]:
+                - link "이용안내" [ref=e244] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/consumer/subIndex/47.do
+                  - text: 이용안내
+                - link "뷰어다운로드" [ref=e246] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/consumer/subIndex/121.do
+                  - text: 뷰어다운로드
+              - generic [ref=e248]:
+                - link "소비자24 RSS" [ref=e249] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/user/ftc/consumer/rssInfoMainCntnts/631/selectCntntsForRSS.do
+                  - generic [ref=e250]: 소비자24 RSS
+                - link "소비자24 페이스북" [ref=e252] [cursor=pointer]:
+                  - /url: https://www.facebook.com/consumer.go.kr
+                  - generic [ref=e253]: 소비자24 페이스북
+                - link "소비자24 블로그" [ref=e255] [cursor=pointer]:
+                  - /url: https://blog.naver.com/consumerweb
+                  - generic [ref=e256]: 소비자24 블로그
+                - link "소비자24 X" [ref=e258] [cursor=pointer]:
+                  - /url: https://x.com/guide4consumer
+                  - generic [ref=e259]: 소비자24 X
+                - link "소비자24 카카오스토리" [ref=e261] [cursor=pointer]:
+                  - /url: http://story.kakao.com/ch/smartconsumer
+                  - generic [ref=e262]: 소비자24 카카오스토리
+                - link "소비자24 유튜브" [ref=e264] [cursor=pointer]:
+                  - /url: https://www.youtube.com/user/consumerweb
+                  - generic [ref=e265]: 소비자24 유튜브
+                - link "소비자24 인스타그램" [ref=e267] [cursor=pointer]:
+                  - /url: https://www.instagram.com/consumer.go.kr
+                  - generic [ref=e268]: 소비자24 인스타그램
+          - generic [ref=e270]:
+            - generic [ref=e271]:
+              - generic [ref=e272]:
+                - link "개인정보처리방침" [ref=e273] [cursor=pointer]:
+                  - /url: http://www.ftc.go.kr/www/contents.do?key=449
+                - link "이용약관" [ref=e274] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/consumer/subIndex/170.do
+                - link "이메일무단수집거부" [ref=e275] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/consumer/subIndex/173.do
+                - link "저작권정책" [ref=e276] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/consumer/subIndex/172.do
+                - link "Open API" [ref=e277] [cursor=pointer]:
+                  - /url: https://www.consumer.go.kr/user/ftc/consumer/openApiSvcUser/120/selectOpenApiSvcList.do
+                - link "(사)한국장애인단체충연합회 한국웹접근성인증평가원 웹 접근성 우수사이트 인증" [ref=e278] [cursor=pointer]:
+                  - /url: http://www.wa.or.kr/board/list.asp?search=link_url&SearchString=consumer.go.kr&BoardID=0006
+                  - generic [ref=e279]: (사)한국장애인단체충연합회 한국웹접근성인증평가원 웹 접근성 우수사이트 인증
+              - paragraph [ref=e280]: Copyright © FAIR TRADE COMMISSION. All rights reserved.
+            - generic [ref=e281]:
+              - generic [ref=e283]: 공정거래위원회
+              - generic [ref=e284]: 이 누리집은 공정거래위원회에서 운영하는 누리집입니다.

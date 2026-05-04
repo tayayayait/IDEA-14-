@@ -1,0 +1,149 @@
+@import url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   산단수출 코파일럿 디자인 시스템 (상세서 §5)
+   모든 색상은 HSL. 텍스트·아이콘은 semantic 토큰만 사용.
+   ============================================================ */
+
+@layer base {
+  :root {
+    /* Brand */
+    --brand: 183 78% 24%;            /* #0E6B6F */
+    --brand-foreground: 0 0% 100%;
+    --brand-soft: 183 60% 94%;
+
+    /* Neutrals */
+    --background: 220 20% 97%;       /* #F7F8FA */
+    --foreground: 220 18% 12%;       /* near #161A22 */
+    --surface: 0 0% 100%;
+    --surface-foreground: 220 18% 12%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 42%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 18% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 18% 12%;
+
+    --primary: 183 78% 24%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 220 18% 16%;
+
+    --accent: 211 84% 56%;           /* #2F80ED */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 90%;
+    --ring: 217 91% 46%;             /* #1D4ED8 */
+
+    --radius: 8px;
+
+    /* Risk scale */
+    --risk-priority: 158 64% 38%;     /* 우선검토 — green */
+    --risk-priority-soft: 158 64% 92%;
+    --risk-reviewable: 200 78% 42%;   /* 검토가능 — blue */
+    --risk-reviewable-soft: 200 78% 94%;
+    --risk-caution: 38 92% 50%;       /* 주의필요 — amber */
+    --risk-caution-soft: 38 92% 94%;
+    --risk-high: 8 78% 52%;           /* 고위험 — red */
+    --risk-high-soft: 8 78% 95%;
+    --risk-critical: 220 9% 38%;
+    --risk-critical-soft: 220 9% 90%;
+    --risk-unknown: 220 9% 60%;       /* 확실한 정보 없음 — gray */
+    --risk-unknown-soft: 220 9% 94%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 18% 18%;
+    --sidebar-primary: 183 78% 24%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 183 60% 96%;
+    --sidebar-accent-foreground: 183 78% 20%;
+    --sidebar-border: 220 13% 90%;
+    --sidebar-ring: 183 78% 30%;
+
+    /* Spacing tokens (상세서 §6) */
+    --topbar-h: 64px;
+    --actionbar-h: 72px;
+    --evidence-w: 360px;
+
+    /* Shadows */
+    --shadow-card: 0 1px 2px 0 hsl(220 18% 12% / 0.04), 0 1px 3px 0 hsl(220 18% 12% / 0.06);
+    --shadow-elevated: 0 8px 24px -8px hsl(220 18% 12% / 0.12);
+  }
+
+  .dark {
+    --background: 220 22% 8%;
+    --foreground: 40 20% 96%;
+    --surface: 220 22% 11%;
+    --muted: 220 16% 16%;
+    --muted-foreground: 220 10% 70%;
+    --card: 220 22% 11%;
+    --card-foreground: 40 20% 96%;
+    --popover: 220 22% 11%;
+    --popover-foreground: 40 20% 96%;
+    --primary: 183 60% 60%;
+    --primary-foreground: 220 22% 8%;
+    --secondary: 220 16% 18%;
+    --secondary-foreground: 40 20% 96%;
+    --accent: 211 84% 62%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 16% 22%;
+    --input: 220 16% 22%;
+    --ring: 217 91% 62%;
+    --sidebar-background: 220 22% 10%;
+    --sidebar-foreground: 40 20% 92%;
+    --sidebar-primary: 183 60% 60%;
+    --sidebar-primary-foreground: 220 22% 8%;
+    --sidebar-accent: 220 16% 16%;
+    --sidebar-accent-foreground: 40 20% 96%;
+    --sidebar-border: 220 16% 20%;
+    --sidebar-ring: 183 60% 60%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  html { font-family: "SUIT Variable", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "tnum";
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "IBM Plex Sans KR", "SUIT Variable", "SUIT", "Noto Sans KR", system-ui, sans-serif;
+    letter-spacing: -0.01em;
+  }
+  code, pre, .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .surface { background: hsl(var(--surface)); color: hsl(var(--surface-foreground)); }
+  .text-balance { text-wrap: balance; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

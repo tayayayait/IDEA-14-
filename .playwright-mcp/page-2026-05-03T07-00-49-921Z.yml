@@ -1,0 +1,542 @@
+- generic [ref=e2]:
+  - article [ref=e5]:
+    - link "Picture" [ref=e6] [cursor=pointer]:
+      - /url: /
+      - img "Picture" [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - navigation [ref=e10]:
+          - list [ref=e12]:
+            - listitem [ref=e13]:
+              - link "Home" [ref=e14] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e15]:
+              - link "APIs" [ref=e16] [cursor=pointer]:
+                - /url: /apis
+            - listitem [ref=e17]:
+              - link "Products" [ref=e18] [cursor=pointer]:
+                - /url: /products
+        - navigation [ref=e19]:
+          - list [ref=e21]:
+            - listitem [ref=e22]:
+              - link "Sign in" [ref=e23] [cursor=pointer]:
+                - /url: /signin
+            - listitem [ref=e24]:
+              - link "Sign up" [ref=e25] [cursor=pointer]:
+                - /url: /signup
+        - text: 
+      - text: 
+  - main [ref=e28]:
+    - generic [ref=e31]:
+      - navigation [ref=e32]:
+        - generic "APIs" [ref=e36]:
+          - button "ePing" [ref=e75]
+          - button "Expand APIs list" [ref=e38] [cursor=pointer]:
+            - generic [ref=e39]: 
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - searchbox "Search operations" [ref=e44]
+              - button "" [ref=e47] [cursor=pointer]:
+                - generic [ref=e48]: 
+            - generic [ref=e50]:
+              - text: Group by tag
+              - generic [ref=e51]:
+                - checkbox "Group by tag"
+          - listbox "List of operations" [ref=e77]:
+            - option "GET Members" [ref=e78] [cursor=pointer]:
+              - generic [ref=e79]: GET
+              - generic "Members" [ref=e80]
+            - option "GET Search Notifications" [ref=e81] [cursor=pointer]:
+              - generic [ref=e82]: GET
+              - generic "Search Notifications" [ref=e83]
+      - article [ref=e59]:
+        - generic [ref=e84]:
+          - heading "ePing" [level=1] [ref=e85]:
+            - generic [ref=e86]: ePing
+          - generic [ref=e88]:
+            - combobox "API definitions" [ref=e89]:
+              - option "API definition" [disabled] [selected]
+              - option "Open API 3 (YAML)"
+              - option "Open API 3 (JSON)"
+              - option "Open API 2 (JSON)"
+              - option "WADL"
+            - link "Changelog" [ref=e90] [cursor=pointer]:
+              - /url: /api-changelog#api=eping
+          - paragraph [ref=e91]:
+            - paragraph [ref=e92]: Returns SPS and TBT notifications that are in the ePing website. Allows external applications/systems to search for notifications programatically.
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - heading "Search Notifications" [level=2] [ref=e96]
+            - button "Try it " [ref=e98] [cursor=pointer]:
+              - text: Try it
+              - generic [ref=e99]: 
+          - paragraph [ref=e101]: Searches TBT and SPS notifications in ePing
+          - group [ref=e103]: Notifications
+          - generic [ref=e104]:
+            - heading "Request" [level=3] [ref=e105]
+            - generic [ref=e106]:
+              - text: GET https://api.wto.org/eping/notifications/search[?language][&domainIds][&documentSymbol][&distributionDateFrom][&distributionDateTo][&countryIds][&hs][&ics][&freeText][&page][&pageSize]
+              - heading "Request parameters" [level=4] [ref=e107]
+              - table [ref=e108]:
+                - rowgroup [ref=e109]:
+                  - row "Name In Required Type Description" [ref=e110]:
+                    - columnheader "Name" [ref=e111]
+                    - columnheader "In" [ref=e112]
+                    - columnheader "Required" [ref=e113]
+                    - columnheader "Type" [ref=e114]
+                    - columnheader "Description" [ref=e115]
+                - rowgroup [ref=e116]:
+                  - row "language query true string Language of the notifications you are requesting (1 - English, 2 - French, 3 - Spanish)" [ref=e117]:
+                    - cell "language" [ref=e118]
+                    - cell "query" [ref=e119]
+                    - cell "true" [ref=e120]
+                    - cell "string" [ref=e121]
+                    - cell "Language of the notifications you are requesting (1 - English, 2 - French, 3 - Spanish)" [ref=e122]:
+                      - paragraph [ref=e124]: Language of the notifications you are requesting (1 - English, 2 - French, 3 - Spanish)
+                  - row "domainIds query false int Domain of the notification you want to retrieve, either 1 - TBT, 2 - SPS. Not specifying the domainIds will return notifications for both TBT and SPS" [ref=e125]:
+                    - cell "domainIds" [ref=e126]
+                    - cell "query" [ref=e127]
+                    - cell "false" [ref=e128]
+                    - cell "int" [ref=e129]
+                    - cell "Domain of the notification you want to retrieve, either 1 - TBT, 2 - SPS. Not specifying the domainIds will return notifications for both TBT and SPS" [ref=e130]:
+                      - paragraph [ref=e132]: Domain of the notification you want to retrieve, either 1 - TBT, 2 - SPS. Not specifying the domainIds will return notifications for both TBT and SPS
+                  - row "documentSymbol query false string Search for a particular document symbol. Specifying \"USA/1234\" (without the quotes) will return all notifications where the document symbol contains \"USA/1234\" (e.g. G/TBT/N/USA/1234, G/SPS/N/USA/1234, G/SPS/N/USA/1234/Add.1, etc.)" [ref=e133]:
+                    - cell "documentSymbol" [ref=e134]
+                    - cell "query" [ref=e135]
+                    - cell "false" [ref=e136]
+                    - cell "string" [ref=e137]
+                    - cell "Search for a particular document symbol. Specifying \"USA/1234\" (without the quotes) will return all notifications where the document symbol contains \"USA/1234\" (e.g. G/TBT/N/USA/1234, G/SPS/N/USA/1234, G/SPS/N/USA/1234/Add.1, etc.)" [ref=e138]:
+                      - paragraph [ref=e140]: Search for a particular document symbol. Specifying "USA/1234" (without the quotes) will return all notifications where the document symbol contains "USA/1234" (e.g. G/TBT/N/USA/1234, G/SPS/N/USA/1234, G/SPS/N/USA/1234/Add.1, etc.)
+                  - row "distributionDateFrom query false date Search for notifications which are issued on or after the date specified in this parameter. yyyy-MM-dd format. Specifying 2022-08-01 will return notifications that were issued on or after 8 August 8, 2022." [ref=e141]:
+                    - cell "distributionDateFrom" [ref=e142]
+                    - cell "query" [ref=e143]
+                    - cell "false" [ref=e144]
+                    - cell "date" [ref=e145]
+                    - cell "Search for notifications which are issued on or after the date specified in this parameter. yyyy-MM-dd format. Specifying 2022-08-01 will return notifications that were issued on or after 8 August 8, 2022." [ref=e146]:
+                      - paragraph [ref=e148]: Search for notifications which are issued on or after the date specified in this parameter. yyyy-MM-dd format. Specifying 2022-08-01 will return notifications that were issued on or after 8 August 8, 2022.
+                  - row "distributionDateTo query false date Search for notifications which are issued on or before the date specified in this parameter. yyyy-MM-dd format. Specifying \"2022-08-01\" will return notifications that were issued on or before 8 August 8, 2022." [ref=e149]:
+                    - cell "distributionDateTo" [ref=e150]
+                    - cell "query" [ref=e151]
+                    - cell "false" [ref=e152]
+                    - cell "date" [ref=e153]
+                    - cell "Search for notifications which are issued on or before the date specified in this parameter. yyyy-MM-dd format. Specifying \"2022-08-01\" will return notifications that were issued on or before 8 August 8, 2022." [ref=e154]:
+                      - paragraph [ref=e156]: Search for notifications which are issued on or before the date specified in this parameter. yyyy-MM-dd format. Specifying "2022-08-01" will return notifications that were issued on or before 8 August 8, 2022.
+                  - row "countryIds query false array of string Search for notifications issued by a particular Member. See members API for list of Country Ids (use value field)" [ref=e157]:
+                    - cell "countryIds" [ref=e158]
+                    - cell "query" [ref=e159]
+                    - cell "false" [ref=e160]
+                    - cell "array of string" [ref=e161]
+                    - cell "Search for notifications issued by a particular Member. See members API for list of Country Ids (use value field)" [ref=e162]:
+                      - paragraph [ref=e164]: Search for notifications issued by a particular Member. See members API for list of Country Ids (use value field)
+                  - row "hs query false string Search for notifications related to specified HS Codes. To search for multiple HS Codes, submit comma-separated values of HS Codes (e.g. 0102,0103,etc.). When combined with \"ics\" parameter, system performs an \"OR\" condition (e.g. &hs=01,02&ics=01.030,01.040 will return notifications related to HS 01 OR HS 02 OR ICS 01.030 OR ICS 01.040)" [ref=e165]:
+                    - cell "hs" [ref=e166]
+                    - cell "query" [ref=e167]
+                    - cell "false" [ref=e168]
+                    - cell "string" [ref=e169]
+                    - cell "Search for notifications related to specified HS Codes. To search for multiple HS Codes, submit comma-separated values of HS Codes (e.g. 0102,0103,etc.). When combined with \"ics\" parameter, system performs an \"OR\" condition (e.g. &hs=01,02&ics=01.030,01.040 will return notifications related to HS 01 OR HS 02 OR ICS 01.030 OR ICS 01.040)" [ref=e170]:
+                      - paragraph [ref=e172]: Search for notifications related to specified HS Codes. To search for multiple HS Codes, submit comma-separated values of HS Codes (e.g. 0102,0103,etc.). When combined with "ics" parameter, system performs an "OR" condition (e.g. &hs=01,02&ics=01.030,01.040 will return notifications related to HS 01 OR HS 02 OR ICS 01.030 OR ICS 01.040)
+                  - row "ics query false string Search for notifications related to specified ICS Codes. To search for multiple ICS Codes, submit comma-separated values of ICS Codes (e.g. 0102,0103,etc.). When combined with \"hs\" parameter, system performs an \"OR\" condition (e.g. &hs=01,02&ics=01.030,01.040 will return notifications related to HS 01 OR HS 02 OR ICS 01.030 OR ICS 01.040)" [ref=e173]:
+                    - cell "ics" [ref=e174]
+                    - cell "query" [ref=e175]
+                    - cell "false" [ref=e176]
+                    - cell "string" [ref=e177]
+                    - cell "Search for notifications related to specified ICS Codes. To search for multiple ICS Codes, submit comma-separated values of ICS Codes (e.g. 0102,0103,etc.). When combined with \"hs\" parameter, system performs an \"OR\" condition (e.g. &hs=01,02&ics=01.030,01.040 will return notifications related to HS 01 OR HS 02 OR ICS 01.030 OR ICS 01.040)" [ref=e178]:
+                      - paragraph [ref=e180]: Search for notifications related to specified ICS Codes. To search for multiple ICS Codes, submit comma-separated values of ICS Codes (e.g. 0102,0103,etc.). When combined with "hs" parameter, system performs an "OR" condition (e.g. &hs=01,02&ics=01.030,01.040 will return notifications related to HS 01 OR HS 02 OR ICS 01.030 OR ICS 01.040)
+                  - row "freeText query false string Search for any term related to a notification." [ref=e181]:
+                    - cell "freeText" [ref=e182]
+                    - cell "query" [ref=e183]
+                    - cell "false" [ref=e184]
+                    - cell "string" [ref=e185]
+                    - cell "Search for any term related to a notification." [ref=e186]:
+                      - paragraph [ref=e188]: Search for any term related to a notification.
+                  - row "page query false int Page number of the notifications you want to retrieve. Default value is 1." [ref=e189]:
+                    - cell "page" [ref=e190]
+                    - cell "query" [ref=e191]
+                    - cell "false" [ref=e192]
+                    - cell "int" [ref=e193]
+                    - cell "Page number of the notifications you want to retrieve. Default value is 1." [ref=e194]:
+                      - paragraph [ref=e196]: Page number of the notifications you want to retrieve. Default value is 1.
+                  - row "pageSize query false int Number of notifications to be retrieved per call. Default value is 20. Maximum value is 100." [ref=e197]:
+                    - cell "pageSize" [ref=e198]
+                    - cell "query" [ref=e199]
+                    - cell "false" [ref=e200]
+                    - cell "int" [ref=e201]
+                    - cell "Number of notifications to be retrieved per call. Default value is 20. Maximum value is 100." [ref=e202]:
+                      - paragraph [ref=e204]: Number of notifications to be retrieved per call. Default value is 20. Maximum value is 100.
+              - heading "Request body" [level=4] [ref=e205]
+              - 'heading "Response: 400 Bad Request" [level=3] [ref=e206]'
+              - paragraph [ref=e207]:
+                - paragraph [ref=e208]: Invalid parameters were passed.
+              - 'heading "Response: 200 OK" [level=3] [ref=e209]'
+              - generic [ref=e210]:
+                - generic [ref=e211] [cursor=pointer]: application/json
+                - generic [ref=e212]:
+                  - generic [ref=e213]:
+                    - heading "searchResult" [level=4] [ref=e214]
+                    - tablist [ref=e215]:
+                      - tab "Table view" [selected] [ref=e216] [cursor=pointer]:
+                        - generic [ref=e217]: 
+                      - tab "Raw schema view" [ref=e218] [cursor=pointer]:
+                        - generic [ref=e219]: 
+                    - table [ref=e220]:
+                      - rowgroup [ref=e221]:
+                        - row "Name Required Type Description" [ref=e222]:
+                          - columnheader "Name" [ref=e223]
+                          - columnheader "Required" [ref=e224]
+                          - columnheader "Type" [ref=e225]
+                          - columnheader "Description" [ref=e226]
+                      - rowgroup [ref=e227]:
+                        - row "items[].id true string" [ref=e228]:
+                          - cell "items[].id" [ref=e229]
+                          - cell "true" [ref=e230]
+                          - cell "string" [ref=e231]
+                          - cell [ref=e232]
+                        - row "items[].area true string" [ref=e233]:
+                          - cell "items[].area" [ref=e234]
+                          - cell "true" [ref=e235]
+                          - cell "string" [ref=e236]
+                          - cell [ref=e237]
+                        - row "items[].notificationType true string" [ref=e238]:
+                          - cell "items[].notificationType" [ref=e239]
+                          - cell "true" [ref=e240]
+                          - cell "string" [ref=e241]
+                          - cell [ref=e242]
+                        - row "items[].distributionDate true string" [ref=e243]:
+                          - cell "items[].distributionDate" [ref=e244]
+                          - cell "true" [ref=e245]
+                          - cell "string" [ref=e246]
+                          - cell [ref=e247]
+                        - row "items[].documentSymbol true string" [ref=e248]:
+                          - cell "items[].documentSymbol" [ref=e249]
+                          - cell "true" [ref=e250]
+                          - cell "string" [ref=e251]
+                          - cell [ref=e252]
+                        - row "items[].documentSymbolOrdered true string" [ref=e253]:
+                          - cell "items[].documentSymbolOrdered" [ref=e254]
+                          - cell "true" [ref=e255]
+                          - cell "string" [ref=e256]
+                          - cell [ref=e257]
+                        - row "items[].notifyingMember true string" [ref=e258]:
+                          - cell "items[].notifyingMember" [ref=e259]
+                          - cell "true" [ref=e260]
+                          - cell "string" [ref=e261]
+                          - cell [ref=e262]
+                        - row "items[].notifyingMemberCode true string" [ref=e263]:
+                          - cell "items[].notifyingMemberCode" [ref=e264]
+                          - cell "true" [ref=e265]
+                          - cell "string" [ref=e266]
+                          - cell [ref=e267]
+                        - row "items[].title true string" [ref=e268]:
+                          - cell "items[].title" [ref=e269]
+                          - cell "true" [ref=e270]
+                          - cell "string" [ref=e271]
+                          - cell [ref=e272]
+                        - row "items[].description true string" [ref=e273]:
+                          - cell "items[].description" [ref=e274]
+                          - cell "true" [ref=e275]
+                          - cell "string" [ref=e276]
+                          - cell [ref=e277]
+                        - row "items[].productsFreeText true string" [ref=e278]:
+                          - cell "items[].productsFreeText" [ref=e279]
+                          - cell "true" [ref=e280]
+                          - cell "string" [ref=e281]
+                          - cell [ref=e282]
+                        - row "items[].icsCodes[].id true integer" [ref=e283]:
+                          - cell "items[].icsCodes[].id" [ref=e284]
+                          - cell "true" [ref=e285]
+                          - cell "integer" [ref=e286]
+                          - cell [ref=e287]
+                        - row "items[].icsCodes[].code true string" [ref=e288]:
+                          - cell "items[].icsCodes[].code" [ref=e289]
+                          - cell "true" [ref=e290]
+                          - cell "string" [ref=e291]
+                          - cell [ref=e292]
+                        - row "items[].icsCodes[].name true string" [ref=e293]:
+                          - cell "items[].icsCodes[].name" [ref=e294]
+                          - cell "true" [ref=e295]
+                          - cell "string" [ref=e296]
+                          - cell [ref=e297]
+                        - row "items[].objectives[].id true integer" [ref=e298]:
+                          - cell "items[].objectives[].id" [ref=e299]
+                          - cell "true" [ref=e300]
+                          - cell "integer" [ref=e301]
+                          - cell [ref=e302]
+                        - row "items[].objectives[].name true string" [ref=e303]:
+                          - cell "items[].objectives[].name" [ref=e304]
+                          - cell "true" [ref=e305]
+                          - cell "string" [ref=e306]
+                          - cell [ref=e307]
+                        - row "items[].hsCodeText true string" [ref=e308]:
+                          - cell "items[].hsCodeText" [ref=e309]
+                          - cell "true" [ref=e310]
+                          - cell "string" [ref=e311]
+                          - cell [ref=e312]
+                        - row "items[].icsCodeText true string" [ref=e313]:
+                          - cell "items[].icsCodeText" [ref=e314]
+                          - cell "true" [ref=e315]
+                          - cell "string" [ref=e316]
+                          - cell [ref=e317]
+                        - row "items[].technicalRegulation true boolean" [ref=e318]:
+                          - cell "items[].technicalRegulation" [ref=e319]
+                          - cell "true" [ref=e320]
+                          - cell "boolean" [ref=e321]
+                          - cell [ref=e322]
+                        - row "items[].technicalRegulationUrgent true boolean" [ref=e323]:
+                          - cell "items[].technicalRegulationUrgent" [ref=e324]
+                          - cell "true" [ref=e325]
+                          - cell "boolean" [ref=e326]
+                          - cell [ref=e327]
+                        - row "items[].conformityAssessmentProcedure true boolean" [ref=e328]:
+                          - cell "items[].conformityAssessmentProcedure" [ref=e329]
+                          - cell "true" [ref=e330]
+                          - cell "boolean" [ref=e331]
+                          - cell [ref=e332]
+                        - row "items[].conformityAssessmentProcedureUrgent true boolean" [ref=e333]:
+                          - cell "items[].conformityAssessmentProcedureUrgent" [ref=e334]
+                          - cell "true" [ref=e335]
+                          - cell "boolean" [ref=e336]
+                          - cell [ref=e337]
+                        - row "items[].technicalRegulationLocalGovernment true boolean" [ref=e338]:
+                          - cell "items[].technicalRegulationLocalGovernment" [ref=e339]
+                          - cell "true" [ref=e340]
+                          - cell "boolean" [ref=e341]
+                          - cell [ref=e342]
+                        - row "items[].conformityAssessmentProcedureLocalGovernment true boolean" [ref=e343]:
+                          - cell "items[].conformityAssessmentProcedureLocalGovernment" [ref=e344]
+                          - cell "true" [ref=e345]
+                          - cell "boolean" [ref=e346]
+                          - cell [ref=e347]
+                        - row "items[].articleOther true boolean" [ref=e348]:
+                          - cell "items[].articleOther" [ref=e349]
+                          - cell "true" [ref=e350]
+                          - cell "boolean" [ref=e351]
+                          - cell [ref=e352]
+                        - row "items[].dolLink true string" [ref=e353]:
+                          - cell "items[].dolLink" [ref=e354]
+                          - cell "true" [ref=e355]
+                          - cell "string" [ref=e356]
+                          - cell [ref=e357]
+                        - row "items[].notifiedDocumentLink true string" [ref=e358]:
+                          - cell "items[].notifiedDocumentLink" [ref=e359]
+                          - cell "true" [ref=e360]
+                          - cell "string" [ref=e361]
+                          - cell [ref=e362]
+                        - row "items[].notificationFormatId true string" [ref=e363]:
+                          - cell "items[].notificationFormatId" [ref=e364]
+                          - cell "true" [ref=e365]
+                          - cell "string" [ref=e366]
+                          - cell [ref=e367]
+                        - row "currentPage false integer" [ref=e368]:
+                          - cell "currentPage" [ref=e369]
+                          - cell "false" [ref=e370]
+                          - cell "integer" [ref=e371]
+                          - cell [ref=e372]
+                        - row "pageSize false integer" [ref=e373]:
+                          - cell "pageSize" [ref=e374]
+                          - cell "false" [ref=e375]
+                          - cell "integer" [ref=e376]
+                          - cell [ref=e377]
+                        - row "totalCount false integer" [ref=e378]:
+                          - cell "totalCount" [ref=e379]
+                          - cell "false" [ref=e380]
+                          - cell "integer" [ref=e381]
+                          - cell [ref=e382]
+                  - generic [ref=e383]:
+                    - heading "default" [level=4] [ref=e384]
+                    - generic [ref=e386]:
+                      - generic [ref=e387]: default - json
+                      - button "Copy to clipboard" [ref=e388] [cursor=pointer]:
+                        - generic [ref=e389]: 
+                        - text: Copy
+                    - generic [ref=e390]: "{ \"items\": [{ \"id\": \"19877\", \"area\": \"TBT\", \"notificationType\": \"Regular notification\", \"distributionDate\": \"2016-11-29T00:00:00Z\", \"commentDeadlineDate\": null, \"documentSymbol\": \" G/TBT/N/USA/1234\", \"documentSymbolOrdered\": \" G/TBT/N/USA/00001234\", \"notifyingMember\": \"United States of America\", \"notifyingMemberCode\": \"C840\", \"title\": \"Pesticide Use on Crops Grown for Seed (4 pages, in English)\", \"description\": \"&lt;span style=\\\"line-height:107%;font-family:'Calibri',sans-serif;font-size:11pt;\\\"&gt;Establishes provisions governing the use of pesticides on crops grown for seed.&lt;/span&gt;\", \"productsFreeText\": \"Pesticide use\", \"hsCodes\": [], \"icsCodes\": [{ \"id\": 894, \"code\": \"65.020\", \"name\": \"65.020 - Farming and forestry\" }, { \"id\": 920, \"code\": \"65.100\", \"name\": \"65.100 - Pesticides and other agrochemicals\" }], \"keywords\": [], \"spsKeywords\": [], \"objectives\": [{ \"id\": 8, \"name\": \"Prevention of deceptive practices and consumer protection (TBT)\" }, { \"id\": 11, \"name\": \"Protection of the environment (TBT)\" }], \"hsCodeText\": \"\", \"icsCodeText\": \"65.020, 65.100\", \"countriesAffected\": [], \"specificRegionsOrCountries\": null, \"allTradingPartners\": null, \"codexAlimentariusCommision\": null, \"worldOrganizationForAnimalHealth\": null, \"internationalPlantProtectionConvention\": null, \"notRelevant\": null, \"conformStandardYes\": null, \"conformStandardNo\": null, \"conformStandardNA\": null, \"tradeFacilitatingMeasure\": null, \"technicalRegulation\": false, \"technicalRegulationUrgent\": false, \"conformityAssessmentProcedure\": false, \"conformityAssessmentProcedureUrgent\": false, \"technicalRegulationLocalGovernment\": true, \"conformityAssessmentProcedureLocalGovernment\": false, \"articleOther\": false, \"dolLink\": \"G\\\\TBTN16\\\\USA1234.pdf\", \"notifiedDocumentLink\": \"https://members.wto.org/crnattachments/2016/TBT/USA/16_4900_00_e.pdf\", \"notificationFormatId\": \"10\", \"version\": null, \"affectedRegionsOrCountries\": null }, { \"id\": \"49418\", \"area\": \"SPS\", \"notificationType\": \"Addendum to Regular Notification\", \"distributionDate\": \"2006-09-22T00:00:00Z\", \"commentDeadlineDate\": null, \"documentSymbol\": \" G/SPS/N/USA/1234/Add.1\", \"documentSymbolOrdered\": \" G/SPS/N/USA/00001234/Add.00000001\", \"notifyingMember\": \"United States of America\", \"notifyingMemberCode\": \"C840\", \"title\": null, \"description\": null, \"productsFreeText\": null, \"hsCodes\": [], \"icsCodes\": [], \"keywords\": [{ \"id\": 29, \"name\": \"Food safety\" }, { \"id\": 38, \"name\": \"Human health\" }, { \"id\": 56, \"name\": \"Pesticides\" }, { \"id\": 60, \"name\": \"Plant health\" }, { \"id\": 45, \"name\": \"Maximum residue limits (MRLs)\" }], \"spsKeywords\": [{ \"id\": 29, \"name\": \"Food safety\" }, { \"id\": 38, \"name\": \"Human health\" }, { \"id\": 56, \"name\": \"Pesticides\" }, { \"id\": 60, \"name\": \"Plant health\" }, { \"id\": 45, \"name\": \"Maximum residue limits (MRLs)\" }], \"objectives\": [], \"hsCodeText\": \"\", \"icsCodeText\": \"\", \"countriesAffected\": [], \"specificRegionsOrCountries\": null, \"allTradingPartners\": null, \"codexAlimentariusCommision\": null, \"worldOrganizationForAnimalHealth\": null, \"internationalPlantProtectionConvention\": null, \"notRelevant\": null, \"conformStandardYes\": null, \"conformStandardNo\": null, \"conformStandardNA\": null, \"tradeFacilitatingMeasure\": null, \"technicalRegulation\": null, \"technicalRegulationUrgent\": null, \"conformityAssessmentProcedure\": null, \"conformityAssessmentProcedureUrgent\": null, \"technicalRegulationLocalGovernment\": null, \"conformityAssessmentProcedureLocalGovernment\": null, \"articleOther\": null, \"dolLink\": \"G\\\\SPS\\\\NUSA1234A1.pdf\", \"notifiedDocumentLink\": \"\", \"notificationFormatId\": \"17\", \"version\": null, \"affectedRegionsOrCountries\": null }, { \"id\": \"40826\", \"area\": \"SPS\", \"notificationType\": \"Regular notification\", \"distributionDate\": \"2006-02-24T00:00:00Z\", \"commentDeadlineDate\": null, \"documentSymbol\": \" G/SPS/N/USA/1234\", \"documentSymbolOrdered\": \" G/SPS/N/USA/00001234\", \"notifyingMember\": \"United States of America\", \"notifyingMemberCode\": \"C840\", \"title\": \"Notice. Notice of Filing of a Pesticide Petition for the Establishment of a Regulation for the Residues of the Fungicide Epoxiconazole in or on Coffee Beans (Available in English, 2 pages).\", \"description\": \"This notice announces the initial filing of a pesticide petition proposing the establishment of a regulation for residues of the fungicide epoxiconazole, (2RS, 3SR)-3-(2-chlorophenyl)-2-(4-fluorophenyl)-2-[(1H-1, 2, 4-triazol-1-yl) methyl] oxirane in or on coffee beans.\", \"productsFreeText\": \"Coffee Beans.\", \"hsCodes\": [], \"icsCodes\": [], \"keywords\": [{ \"id\": 38, \"name\": \"Human health\" }, { \"id\": 56, \"name\": \"Pesticides\" }, { \"id\": 29, \"name\": \"Food safety\" }, { \"id\": 60, \"name\": \"Plant health\" }, { \"id\": 45, \"name\": \"Maximum residue limits (MRLs)\" }], \"spsKeywords\": [{ \"id\": 38, \"name\": \"Human health\" }, { \"id\": 56, \"name\": \"Pesticides\" }, { \"id\": 29, \"name\": \"Food safety\" }, { \"id\": 60, \"name\": \"Plant health\" }, { \"id\": 45, \"name\": \"Maximum residue limits (MRLs)\" }], \"objectives\": [], \"hsCodeText\": \"\", \"icsCodeText\": \"\", \"countriesAffected\": [], \"specificRegionsOrCountries\": null, \"allTradingPartners\": null, \"codexAlimentariusCommision\": false, \"worldOrganizationForAnimalHealth\": false, \"internationalPlantProtectionConvention\": false, \"notRelevant\": false, \"conformStandardYes\": false, \"conformStandardNo\": false, \"conformStandardNA\": true, \"tradeFacilitatingMeasure\": false, \"technicalRegulation\": null, \"technicalRegulationUrgent\": null, \"conformityAssessmentProcedure\": null, \"conformityAssessmentProcedureUrgent\": null, \"technicalRegulationLocalGovernment\": null, \"conformityAssessmentProcedureLocalGovernment\": null, \"articleOther\": null, \"dolLink\": \"G\\\\SPS\\\\NUSA1234.pdf\", \"notifiedDocumentLink\": \"\", \"notificationFormatId\": \"1\", \"version\": null, \"affectedRegionsOrCountries\": null }, { \"id\": \"53665\", \"area\": \"TBT\", \"notificationType\": \"Addendum to Regular Notification\", \"distributionDate\": \"2018-01-09T00:00:00Z\", \"commentDeadlineDate\": null, \"documentSymbol\": \" G/TBT/N/USA/1234/Add.2\", \"documentSymbolOrdered\": \" G/TBT/N/USA/00001234/Add.00000002\", \"notifyingMember\": \"United States of America\", \"notifyingMemberCode\": \"C840\", \"title\": \"<p style=\\\"margin:2px !important;\\\">TITLE: Pesticide Use on Crops Grown for Seed <br />AGENCY: State Department of Agriculture, Seed Division, State of Nevada <br />ACTION: Adopted rule <br />SUMMARY: Adopts various changes relating to pesticide use on crops grown for seed.</p>\\r\\n<p style=\\\"margin:2px !important;\\\">Effective 19 December 2017</p>\\r\\n<p style=\\\"margin:2px !important;\\\">Vol. 240, Nevada Register of Administrative Regulations 20 December 2017: <br /><a href=\\\"https://www.leg.state.nv.us/Register/2016Register/R156-16NI.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">https://www.leg.state.nv.us/Register/2016Register/R156-16NI.pdf</a></p>\\r\\n<p style=\\\"margin:2px !important;\\\"><a href=\\\"https://www.leg.state.nv.us/Register/2016Register/R156-16AP.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">https://www.leg.state.nv.us/Register/2016Register/R156-16AP.pdf </a></p>\", \"description\": null, \"productsFreeText\": \"Pesticide use\", \"hsCodes\": [], \"icsCodes\": [{ \"id\": 894, \"code\": \"65.020\", \"name\": \"65.020 - Farming and forestry\" }, { \"id\": 894, \"code\": \"65.020\", \"name\": \"65.020 - Farming and forestry\" }, { \"id\": 920, \"code\": \"65.100\", \"name\": \"65.100 - Pesticides and other agrochemicals\" }, { \"id\": 920, \"code\": \"65.100\", \"name\": \"65.100 - Pesticides and other agrochemicals\" }], \"keywords\": [], \"spsKeywords\": [], \"objectives\": [{ \"id\": 8, \"name\": \"Prevention of deceptive practices and consumer protection (TBT)\" }, { \"id\": 11, \"name\": \"Protection of the environment (TBT)\" }], \"hsCodeText\": \"\", \"icsCodeText\": \"65.020, 65.100\", \"countriesAffected\": [], \"specificRegionsOrCountries\": null, \"allTradingPartners\": null, \"codexAlimentariusCommision\": null, \"worldOrganizationForAnimalHealth\": null, \"internationalPlantProtectionConvention\": null, \"notRelevant\": null, \"conformStandardYes\": null, \"conformStandardNo\": null, \"conformStandardNA\": null, \"tradeFacilitatingMeasure\": null, \"technicalRegulation\": false, \"technicalRegulationUrgent\": false, \"conformityAssessmentProcedure\": false, \"conformityAssessmentProcedureUrgent\": false, \"technicalRegulationLocalGovernment\": true, \"conformityAssessmentProcedureLocalGovernment\": false, \"articleOther\": false, \"dolLink\": \"G\\\\TBTN16\\\\USA1234A2.DOCX\", \"notifiedDocumentLink\": \"https://members.wto.org/crnattachments/2018/TBT/USA/18_0184_00_e.pdf,https://members.wto.org/crnattachments/2018/TBT/USA/18_0184_01_e.pdf\", \"notificationFormatId\": \"14\", \"version\": null, \"affectedRegionsOrCountries\": null }, { \"id\": \"52268\", \"area\": \"TBT\", \"notificationType\": \"Addendum to Regular Notification\", \"distributionDate\": \"2017-09-19T00:00:00Z\", \"commentDeadlineDate\": null, \"documentSymbol\": \" G/TBT/N/USA/1234/Add.1\", \"documentSymbolOrdered\": \" G/TBT/N/USA/00001234/Add.00000001\", \"notifyingMember\": \"United States of America\", \"notifyingMemberCode\": \"C840\", \"title\": \"<p style=\\\"margin:2px !important;\\\">TITLE: Pesticide Use on Crops Grown for Seed</p>\\r\\n<p style=\\\"margin:2px !important;\\\">AGENCY: State Department of Agriculture, Seed Division, State of Nevada</p>\\r\\n<p style=\\\"margin:2px !important;\\\">ACTION: Proposed rule<br />SUMMARY: Makes various changes relating to pesticide use on crops grown for seed.</p>\\r\\n<p style=\\\"margin:2px !important;\\\">Vol. 237, Nevada Register of Administrative Regulations 11 September 2017:<a href=\\\"https://www.leg.state.nv.us/Register/2016Register/R156-16P.pdf\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\"><br />https://www.leg.state.nv.us/Register/2016Register/R156-16P.pdf</a></p>\\r\\n<p style=\\\"margin:2px !important;\\\"><span style=\\\"font-face: Verdana;\\\"><span lang=\\\"EN-GB\\\">For information and comments please contact:<br />James R Barbee, Director <br />Department of Agriculture <br />405 S 21st St, Sparks, NV 89431 <br />Telephone: 775-353-3601 <br />Fax 775-353-3661</span></span></p>\", \"description\": null, \"productsFreeText\": \"Pesticide use\", \"hsCodes\": [], \"icsCodes\": [{ \"id\": 894, \"code\": \"65.020\", \"name\": \"65.020 - Farming and forestry\" }, { \"id\": 894, \"code\": \"65.020\", \"name\": \"65.020 - Farming and forestry\" }, { \"id\": 920, \"code\": \"65.100\", \"name\": \"65.100 - Pesticides and other agrochemicals\" }, { \"id\": 920, \"code\": \"65.100\", \"name\": \"65.100 - Pesticides and other agrochemicals\" }], \"keywords\": [], \"spsKeywords\": [], \"objectives\": [{ \"id\": 11, \"name\": \"Protection of the environment (TBT)\" }, { \"id\": 8, \"name\": \"Prevention of deceptive practices and consumer protection (TBT)\" }], \"hsCodeText\": \"\", \"icsCodeText\": \"65.020, 65.100\", \"countriesAffected\": [], \"specificRegionsOrCountries\": null, \"allTradingPartners\": null, \"codexAlimentariusCommision\": null, \"worldOrganizationForAnimalHealth\": null, \"internationalPlantProtectionConvention\": null, \"notRelevant\": null, \"conformStandardYes\": null, \"conformStandardNo\": null, \"conformStandardNA\": null, \"tradeFacilitatingMeasure\": null, \"technicalRegulation\": false, \"technicalRegulationUrgent\": false, \"conformityAssessmentProcedure\": false, \"conformityAssessmentProcedureUrgent\": false, \"technicalRegulationLocalGovernment\": true, \"conformityAssessmentProcedureLocalGovernment\": false, \"articleOther\": false, \"dolLink\": \"G\\\\TBTN16\\\\USA1234A1.DOCX\", \"notifiedDocumentLink\": \"https://members.wto.org/crnattachments/2017/TBT/USA/17_4109_00_e.pdf\", \"notificationFormatId\": \"14\", \"version\": null, \"affectedRegionsOrCountries\": null }], \"currentPage\": 1, \"pageSize\": 20, \"totalCount\": 5 }"
+          - heading "Definitions" [level=3] [ref=e391]
+          - table [ref=e392]:
+            - rowgroup [ref=e393]:
+              - row "Name Description" [ref=e394]:
+                - columnheader "Name" [ref=e395]
+                - columnheader "Description" [ref=e396]
+            - rowgroup [ref=e397]:
+              - row "searchResult" [ref=e398]:
+                - cell "searchResult" [ref=e399]:
+                  - link "searchResult" [ref=e400] [cursor=pointer]:
+                    - /url: "#api=eping&operation=search-notifications&definition=searchResult"
+                - cell [ref=e401]
+          - generic [ref=e402]:
+            - heading "searchResult" [level=4] [ref=e403]
+            - tablist [ref=e404]:
+              - tab "Table view" [selected] [ref=e405] [cursor=pointer]:
+                - generic [ref=e406]: 
+              - tab "Raw schema view" [ref=e407] [cursor=pointer]:
+                - generic [ref=e408]: 
+            - table [ref=e409]:
+              - rowgroup [ref=e410]:
+                - row "Name Required Type Description" [ref=e411]:
+                  - columnheader "Name" [ref=e412]
+                  - columnheader "Required" [ref=e413]
+                  - columnheader "Type" [ref=e414]
+                  - columnheader "Description" [ref=e415]
+              - rowgroup [ref=e416]:
+                - row "items[].id true string" [ref=e417]:
+                  - cell "items[].id" [ref=e418]
+                  - cell "true" [ref=e419]
+                  - cell "string" [ref=e420]
+                  - cell [ref=e421]
+                - row "items[].area true string" [ref=e422]:
+                  - cell "items[].area" [ref=e423]
+                  - cell "true" [ref=e424]
+                  - cell "string" [ref=e425]
+                  - cell [ref=e426]
+                - row "items[].notificationType true string" [ref=e427]:
+                  - cell "items[].notificationType" [ref=e428]
+                  - cell "true" [ref=e429]
+                  - cell "string" [ref=e430]
+                  - cell [ref=e431]
+                - row "items[].distributionDate true string" [ref=e432]:
+                  - cell "items[].distributionDate" [ref=e433]
+                  - cell "true" [ref=e434]
+                  - cell "string" [ref=e435]
+                  - cell [ref=e436]
+                - row "items[].documentSymbol true string" [ref=e437]:
+                  - cell "items[].documentSymbol" [ref=e438]
+                  - cell "true" [ref=e439]
+                  - cell "string" [ref=e440]
+                  - cell [ref=e441]
+                - row "items[].documentSymbolOrdered true string" [ref=e442]:
+                  - cell "items[].documentSymbolOrdered" [ref=e443]
+                  - cell "true" [ref=e444]
+                  - cell "string" [ref=e445]
+                  - cell [ref=e446]
+                - row "items[].notifyingMember true string" [ref=e447]:
+                  - cell "items[].notifyingMember" [ref=e448]
+                  - cell "true" [ref=e449]
+                  - cell "string" [ref=e450]
+                  - cell [ref=e451]
+                - row "items[].notifyingMemberCode true string" [ref=e452]:
+                  - cell "items[].notifyingMemberCode" [ref=e453]
+                  - cell "true" [ref=e454]
+                  - cell "string" [ref=e455]
+                  - cell [ref=e456]
+                - row "items[].title true string" [ref=e457]:
+                  - cell "items[].title" [ref=e458]
+                  - cell "true" [ref=e459]
+                  - cell "string" [ref=e460]
+                  - cell [ref=e461]
+                - row "items[].description true string" [ref=e462]:
+                  - cell "items[].description" [ref=e463]
+                  - cell "true" [ref=e464]
+                  - cell "string" [ref=e465]
+                  - cell [ref=e466]
+                - row "items[].productsFreeText true string" [ref=e467]:
+                  - cell "items[].productsFreeText" [ref=e468]
+                  - cell "true" [ref=e469]
+                  - cell "string" [ref=e470]
+                  - cell [ref=e471]
+                - row "items[].icsCodes[].id true integer" [ref=e472]:
+                  - cell "items[].icsCodes[].id" [ref=e473]
+                  - cell "true" [ref=e474]
+                  - cell "integer" [ref=e475]
+                  - cell [ref=e476]
+                - row "items[].icsCodes[].code true string" [ref=e477]:
+                  - cell "items[].icsCodes[].code" [ref=e478]
+                  - cell "true" [ref=e479]
+                  - cell "string" [ref=e480]
+                  - cell [ref=e481]
+                - row "items[].icsCodes[].name true string" [ref=e482]:
+                  - cell "items[].icsCodes[].name" [ref=e483]
+                  - cell "true" [ref=e484]
+                  - cell "string" [ref=e485]
+                  - cell [ref=e486]
+                - row "items[].objectives[].id true integer" [ref=e487]:
+                  - cell "items[].objectives[].id" [ref=e488]
+                  - cell "true" [ref=e489]
+                  - cell "integer" [ref=e490]
+                  - cell [ref=e491]
+                - row "items[].objectives[].name true string" [ref=e492]:
+                  - cell "items[].objectives[].name" [ref=e493]
+                  - cell "true" [ref=e494]
+                  - cell "string" [ref=e495]
+                  - cell [ref=e496]
+                - row "items[].hsCodeText true string" [ref=e497]:
+                  - cell "items[].hsCodeText" [ref=e498]
+                  - cell "true" [ref=e499]
+                  - cell "string" [ref=e500]
+                  - cell [ref=e501]
+                - row "items[].icsCodeText true string" [ref=e502]:
+                  - cell "items[].icsCodeText" [ref=e503]
+                  - cell "true" [ref=e504]
+                  - cell "string" [ref=e505]
+                  - cell [ref=e506]
+                - row "items[].technicalRegulation true boolean" [ref=e507]:
+                  - cell "items[].technicalRegulation" [ref=e508]
+                  - cell "true" [ref=e509]
+                  - cell "boolean" [ref=e510]
+                  - cell [ref=e511]
+                - row "items[].technicalRegulationUrgent true boolean" [ref=e512]:
+                  - cell "items[].technicalRegulationUrgent" [ref=e513]
+                  - cell "true" [ref=e514]
+                  - cell "boolean" [ref=e515]
+                  - cell [ref=e516]
+                - row "items[].conformityAssessmentProcedure true boolean" [ref=e517]:
+                  - cell "items[].conformityAssessmentProcedure" [ref=e518]
+                  - cell "true" [ref=e519]
+                  - cell "boolean" [ref=e520]
+                  - cell [ref=e521]
+                - row "items[].conformityAssessmentProcedureUrgent true boolean" [ref=e522]:
+                  - cell "items[].conformityAssessmentProcedureUrgent" [ref=e523]
+                  - cell "true" [ref=e524]
+                  - cell "boolean" [ref=e525]
+                  - cell [ref=e526]
+                - row "items[].technicalRegulationLocalGovernment true boolean" [ref=e527]:
+                  - cell "items[].technicalRegulationLocalGovernment" [ref=e528]
+                  - cell "true" [ref=e529]
+                  - cell "boolean" [ref=e530]
+                  - cell [ref=e531]
+                - row "items[].conformityAssessmentProcedureLocalGovernment true boolean" [ref=e532]:
+                  - cell "items[].conformityAssessmentProcedureLocalGovernment" [ref=e533]
+                  - cell "true" [ref=e534]
+                  - cell "boolean" [ref=e535]
+                  - cell [ref=e536]
+                - row "items[].articleOther true boolean" [ref=e537]:
+                  - cell "items[].articleOther" [ref=e538]
+                  - cell "true" [ref=e539]
+                  - cell "boolean" [ref=e540]
+                  - cell [ref=e541]
+                - row "items[].dolLink true string" [ref=e542]:
+                  - cell "items[].dolLink" [ref=e543]
+                  - cell "true" [ref=e544]
+                  - cell "string" [ref=e545]
+                  - cell [ref=e546]
+                - row "items[].notifiedDocumentLink true string" [ref=e547]:
+                  - cell "items[].notifiedDocumentLink" [ref=e548]
+                  - cell "true" [ref=e549]
+                  - cell "string" [ref=e550]
+                  - cell [ref=e551]
+                - row "items[].notificationFormatId true string" [ref=e552]:
+                  - cell "items[].notificationFormatId" [ref=e553]
+                  - cell "true" [ref=e554]
+                  - cell "string" [ref=e555]
+                  - cell [ref=e556]
+                - row "currentPage false integer" [ref=e557]:
+                  - cell "currentPage" [ref=e558]
+                  - cell "false" [ref=e559]
+                  - cell "integer" [ref=e560]
+                  - cell [ref=e561]
+                - row "pageSize false integer" [ref=e562]:
+                  - cell "pageSize" [ref=e563]
+                  - cell "false" [ref=e564]
+                  - cell "integer" [ref=e565]
+                  - cell [ref=e566]
+                - row "totalCount false integer" [ref=e567]:
+                  - cell "totalCount" [ref=e568]
+                  - cell "false" [ref=e569]
+                  - cell "integer" [ref=e570]
+                  - cell [ref=e571]
+  - article [ref=e70]:
+    - paragraph [ref=e72]:
+      - text: © 2023, World Trade Organization |
+      - link "Disclaimer" [ref=e73] [cursor=pointer]:
+        - /url: https://www.wto.org/english/info_e/disclaimer_e.htm
+      - text: "|"
+      - link "Copyright and permissions" [ref=e74] [cursor=pointer]:
+        - /url: https://www.wto.org/english/info_e/copyrights_permissions_e.htm

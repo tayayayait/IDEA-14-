@@ -1,0 +1,62 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e16] [cursor=pointer]:
+          - img
+          - generic [ref=e17]: 로그아웃
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - heading "분석 프로젝트" [level=1] [ref=e23]
+            - paragraph [ref=e24]: 기업·제품 정보를 입력하면 6단계 분석과 10개 요구사항 결과를 리포트로 확인할 수 있습니다.
+          - button "새 분석 시작" [ref=e25] [cursor=pointer]:
+            - img
+            - text: 새 분석 시작
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - button "새 분석 2026. 4. 29. 검토 필요 · 단계 6/6 · 완료율 70% (기능 7/10) · 2026.04.29 16:20 KICOX 대기 SafetyKorea 부분 산출" [ref=e28] [cursor=pointer]:
+              - img [ref=e30]
+              - generic [ref=e33]:
+                - paragraph [ref=e34]: 새 분석 2026. 4. 29.
+                - paragraph [ref=e35]: 검토 필요 · 단계 6/6 · 완료율 70% (기능 7/10) · 2026.04.29 16:20
+                - generic [ref=e38]:
+                  - generic [ref=e39]: KICOX
+                  - generic [ref=e40]: 대기
+                  - generic [ref=e41]: SafetyKorea
+                  - generic [ref=e42]: 부분 산출
+            - generic [ref=e43]:
+              - button "계속하기 →" [ref=e44] [cursor=pointer]
+              - button "새 분석 2026. 4. 29. 삭제" [ref=e45] [cursor=pointer]:
+                - img
+          - generic [ref=e46]:
+            - button "새 분석 2026. 4. 29. 검토 필요 · 단계 4/6 · 완료율 20% (기능 2/10) · 2026.04.29 14:44 KICOX 대기 SafetyKorea 대기" [ref=e47] [cursor=pointer]:
+              - img [ref=e49]
+              - generic [ref=e52]:
+                - paragraph [ref=e53]: 새 분석 2026. 4. 29.
+                - paragraph [ref=e54]: 검토 필요 · 단계 4/6 · 완료율 20% (기능 2/10) · 2026.04.29 14:44
+                - generic [ref=e57]:
+                  - generic [ref=e58]: KICOX
+                  - generic [ref=e59]: 대기
+                  - generic [ref=e60]: SafetyKorea
+                  - generic [ref=e61]: 대기
+            - generic [ref=e62]:
+              - button "계속하기 →" [ref=e63] [cursor=pointer]
+              - button "새 분석 2026. 4. 29. 삭제" [ref=e64] [cursor=pointer]:
+                - img

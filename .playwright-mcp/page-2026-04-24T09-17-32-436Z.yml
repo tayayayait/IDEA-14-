@@ -1,0 +1,197 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e1016]:
+    - banner [ref=e1017]:
+      - link "홈" [ref=e1019] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e1021]
+        - generic [ref=e1024]: 산단수출 코파일럿
+      - generic [ref=e1025]:
+        - link "프로젝트" [ref=e1026] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e1027] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e1028] [cursor=pointer]:
+          - img
+          - generic [ref=e1029]: 로그아웃
+    - generic [ref=e1030]:
+      - complementary [ref=e1031]:
+        - paragraph [ref=e1032]: 분석 단계
+        - navigation "분석 단계" [ref=e1033]:
+          - link "1단계 기업·공장 검색" [ref=e1034] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e1036]
+            - generic [ref=e1038]: 기업·공장 검색
+          - link "2단계 제품·HS 코드" [ref=e1039] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e1041]
+            - generic [ref=e1043]: 제품·HS 코드
+          - link "3단계 후보국 추천 Top 3" [ref=e1044] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - img [ref=e1046]
+            - generic [ref=e1048]: 후보국 추천 Top 3
+          - link "4단계 국가 상세" [ref=e1049] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - generic [ref=e1050]: "4"
+            - generic [ref=e1051]: 국가 상세
+          - link "5단계 전략물자·제품안전" [ref=e1052] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e1053]: "5"
+            - generic [ref=e1054]: 전략물자·제품안전
+          - link "6단계 리포트" [ref=e1055] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e1056]: "6"
+            - generic [ref=e1057]: 리포트
+      - main [ref=e1058]:
+        - generic [ref=e1059]:
+          - generic [ref=e1060]:
+            - generic [ref=e1061]:
+              - paragraph [ref=e1062]: CN
+              - heading "중화인민공화국(The People&rsquo;s Republic of China)" [level=1] [ref=e1063]
+              - generic [ref=e1064]:
+                - status "위험도 우선검토" [ref=e1065]: 우선검토
+                - generic [ref=e1067]: 총점 90/100
+            - button "상세 분석 실행" [ref=e1068] [cursor=pointer]:
+              - img
+              - text: 상세 분석 실행
+          - generic [ref=e1069]:
+            - generic [ref=e1070]:
+              - heading "목표시장 평가 요약" [level=3] [ref=e1071]
+              - paragraph [ref=e1072]: 목표시장 메모는 후보군 포함 신호이며 최종 순위는 점수 기준으로 결정됩니다.
+            - generic [ref=e1073]:
+              - paragraph [ref=e1074]: "입력 목표시장: Japan(JP)"
+              - paragraph [ref=e1075]: "포함 여부: 기본 후보군 포함"
+              - paragraph [ref=e1076]: "최종 순위: Rank 1"
+              - paragraph [ref=e1077]: "후보 편입 근거: Certification data exists, HS 6-digit exact match, Product keyword matched, Import regulation data exists, HS 4-digit prefix match"
+              - paragraph [ref=e1078]: "포함 이유: Certification data exists; HS 6-digit exact match; Product keyword matched; Import regulation data exists; HS 4-digit prefix match"
+              - paragraph [ref=e1079]: "추천 근거: 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다."
+              - paragraph [ref=e1080]: "낮은 추천 이유: 현지 기업과의 치열한 가격 경쟁과 자국 부품 우선 정책, 그리고 지정학적 불확실성이 리스크 요인입니다."
+              - paragraph [ref=e1081]: "대안 시장: 미합중국(The United States of America)(US), 일본(Japan)(JP), 태국(TH)"
+          - generic [ref=e1082]:
+            - generic [ref=e1083]:
+              - heading "필요 인증" [level=3] [ref=e1085]
+              - paragraph [ref=e1087]: 인증 데이터 없음 — 기관 확인 필요
+            - generic [ref=e1088]:
+              - heading "규제·NTM" [level=3] [ref=e1090]
+              - paragraph [ref=e1092]: 조회된 규제 없음
+            - generic [ref=e1093]:
+              - generic [ref=e1094]:
+                - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e1095]
+                - paragraph [ref=e1096]: 대금 회수 가능성과 국가 위험 등급
+              - generic [ref=e1097]:
+                - paragraph [ref=e1098]: K-SURE 등 리스크 데이터 없음 — 기관 확인 필요
+                - paragraph [ref=e1099]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+            - generic [ref=e1100]:
+              - generic [ref=e1102]:
+                - generic [ref=e1103]:
+                  - heading "7일 내 다음 실행 과제" [level=3] [ref=e1104]
+                  - paragraph [ref=e1105]: AI가 위 데이터를 바탕으로 1주일 내 실행 가능한 과제를 제안합니다.
+                - button "과제 생성" [ref=e1106] [cursor=pointer]:
+                  - img
+                  - text: 과제 생성
+              - paragraph [ref=e1108]: ‘과제 생성’을 눌러 7일 내 실행 과제를 받아보세요
+      - complementary [ref=e1109]:
+        - generic [ref=e1110]:
+          - generic [ref=e1111]: 근거 패널
+          - button "근거 패널 접기" [ref=e1112] [cursor=pointer]:
+            - img
+        - generic [ref=e1114]:
+          - heading "출처" [level=3] [ref=e1115]
+          - generic [ref=e1116]:
+            - paragraph [ref=e1117]: 분석 기준 코드
+            - paragraph [ref=e1118]: HS 870830 · HSK 8708303000
+            - paragraph [ref=e1119]: "적용 방식: 사용자 수동 선택 (44점)"
+            - paragraph [ref=e1120]: "상태: 정보 부족 · 정보 부족으로 오분류 가능성 있음"
+            - paragraph [ref=e1121]: 후속 단계 참고용 코드이며 최종 확정 전 추가 검증이 필요합니다.
+          - list [ref=e1122]:
+            - listitem [ref=e1123]:
+              - generic [ref=e1124]:
+                - generic "출처 KOTRA" [ref=e1125]: KOTRA
+                - link "중화인민공화국(The People&rsquo;s Republic of China) market profile" [ref=e1126] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                  - img [ref=e1127]
+                  - generic [ref=e1131]: 중화인민공화국(The People&rsquo;s Republic of China) market profile
+            - listitem [ref=e1132]:
+              - generic [ref=e1133]:
+                - generic "출처 기타" [ref=e1134]: 기타
+                - link "Certification matched 2 item(s)" [ref=e1135] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                  - img [ref=e1136]
+                  - generic [ref=e1140]: Certification matched 2 item(s)
+            - listitem [ref=e1141]:
+              - generic [ref=e1142]:
+                - generic "출처 기타" [ref=e1143]: 기타
+                - link "Import regulation matched 15 item(s)" [ref=e1144] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                  - img [ref=e1145]
+                  - generic [ref=e1149]: Import regulation matched 15 item(s)
+            - listitem [ref=e1150]:
+              - generic [ref=e1151]:
+                - generic "출처 KOTRA" [ref=e1152]: KOTRA
+                - link "2026 중국 상하이 춘계 의료기기 전시회(CMEF) 참관기" [ref=e1153] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240776
+                  - img [ref=e1154]
+                  - generic [ref=e1158]: 2026 중국 상하이 춘계 의료기기 전시회(CMEF) 참관기
+            - listitem [ref=e1159]:
+              - generic [ref=e1160]:
+                - generic "출처 KOTRA" [ref=e1161]: KOTRA
+                - 'link "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화" [ref=e1162] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240216
+                  - img [ref=e1163]
+                  - generic [ref=e1167]: "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화"
+            - listitem [ref=e1168]:
+              - generic [ref=e1169]:
+                - generic "출처 KOTRA" [ref=e1170]: KOTRA
+                - link "2025년 중국 후난성 주요 경제현황 및 2026년 경제전망" [ref=e1171] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240633
+                  - img [ref=e1172]
+                  - generic [ref=e1176]: 2025년 중국 후난성 주요 경제현황 및 2026년 경제전망
+            - listitem [ref=e1177]:
+              - generic [ref=e1178]:
+                - generic "출처 KOTRA" [ref=e1179]: KOTRA
+                - link "中 AI 산업 흐름에서 본 한&middot;중 협력 방향" [ref=e1180] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240669
+                  - img [ref=e1181]
+                  - generic [ref=e1185]: 中 AI 산업 흐름에서 본 한&middot;중 협력 방향
+            - listitem [ref=e1186]:
+              - generic [ref=e1187]:
+                - generic "출처 KOTRA" [ref=e1188]: KOTRA
+                - link "중국 열펌프 시장, 보급률 5%에 불과 - 조(兆) 위안 시장이 열린다" [ref=e1189] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240623
+                  - img [ref=e1190]
+                  - generic [ref=e1194]: 중국 열펌프 시장, 보급률 5%에 불과 - 조(兆) 위안 시장이 열린다
+            - listitem [ref=e1195]:
+              - generic [ref=e1196]:
+                - generic "출처 KOTRA" [ref=e1197]: KOTRA
+                - link "두피도 피부처럼, 중국은 지금 두피 관리 열풍" [ref=e1198] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240734
+                  - img [ref=e1199]
+                  - generic [ref=e1203]: 두피도 피부처럼, 중국은 지금 두피 관리 열풍
+            - listitem [ref=e1204]:
+              - generic [ref=e1205]:
+                - generic "출처 KOTRA" [ref=e1206]: KOTRA
+                - link "중국 헤이룽장성 바이오 및 한약재 기반 코스메슈티컬 발전 트렌드" [ref=e1207] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240717
+                  - img [ref=e1208]
+                  - generic [ref=e1212]: 중국 헤이룽장성 바이오 및 한약재 기반 코스메슈티컬 발전 트렌드
+            - listitem [ref=e1213]:
+              - generic [ref=e1214]:
+                - generic "출처 KOTRA" [ref=e1215]: KOTRA
+                - link "80% 고속 성장! 중국이 주도하는 AR 안경 시장의 현재" [ref=e1216] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240192
+                  - img [ref=e1217]
+                  - generic [ref=e1221]: 80% 고속 성장! 중국이 주도하는 AR 안경 시장의 현재
+          - generic [ref=e1222]:
+            - paragraph [ref=e1223]: AI 상태
+            - generic [ref=e1224]: 대기
+    - generic [ref=e1226]:
+      - button "후보국으로" [ref=e1227] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로 →" [ref=e1228] [cursor=pointer]

@@ -1,0 +1,344 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+      - generic [ref=e12]:
+        - link "프로젝트" [ref=e13] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e14] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e15] [cursor=pointer]:
+          - img
+    - main [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - paragraph [ref=e20]: 기획 요구사항 매핑
+          - paragraph [ref=e21]: 요구사항 10
+          - paragraph [ref=e22]: 최종 리포트/PDF 생성
+        - generic [ref=e23]:
+          - heading "6. 1페이지 수출 분석 리포트" [level=1] [ref=e24]
+          - paragraph [ref=e25]: A4 1페이지로 인쇄·공유할 수 있는 요약 리포트입니다.
+          - generic [ref=e26]:
+            - generic [ref=e27]: KICOX 상태
+            - generic [ref=e28]: 대기
+            - generic [ref=e29]: SafetyKorea 상태
+            - generic [ref=e30]: 대기
+        - generic [ref=e46]:
+          - generic [ref=e48]:
+            - generic [ref=e49]:
+              - paragraph [ref=e50]: 산단수출 코파일럿 · 모바일 리포트
+              - heading "새 분석 2026. 4. 24." [level=2] [ref=e51]
+              - paragraph [ref=e52]: 발행 2026.04.24
+            - generic [ref=e53]:
+              - generic [ref=e54]:
+                - heading "기업" [level=3] [ref=e55]
+                - generic [ref=e56]:
+                  - paragraph [ref=e57]: 현대모비스(주)
+                  - paragraph [ref=e58]: 창원국가산업단지 경상남도 창원시 성산구 성산패총로 87 (성산동)
+              - generic [ref=e59]:
+                - heading "제품" [level=3] [ref=e60]
+                - generic [ref=e61]:
+                  - paragraph [ref=e62]: 자동차 제동장치
+                  - paragraph [ref=e63]: HS 870830 · HSK 8708303000
+              - generic [ref=e64]:
+                - heading "분석 기준 코드" [level=3] [ref=e65]
+                - generic [ref=e66]:
+                  - paragraph [ref=e67]: HS 870830 · HSK 8708303000
+                  - paragraph [ref=e68]: "적용 방식: 사용자 수동 선택 (44점)"
+                  - paragraph [ref=e69]: "상태: 정보 부족 · 입력 정보가 부족해 오분류 가능성이 있습니다."
+            - generic [ref=e70]:
+              - heading "추천 국가 Top 3" [level=3] [ref=e71]
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - generic [ref=e74]:
+                    - generic [ref=e75]:
+                      - paragraph [ref=e76]: Rank 1 · CN
+                      - paragraph [ref=e77]: 중화인민공화국(The People's Republic of China)
+                    - paragraph [ref=e78]: 90/100
+                  - paragraph [ref=e79]: 우선검토
+                  - paragraph [ref=e80]: "중화인민공화국(The People's Republic of China): ㅇ 2024년 2024년 중국 국내총생산(GDP)은 134조 9,084억 위안으로, 전년대비 5% 증가했다. 1~3분기 누적 성장률이 4.8%에 그치며 '5% 안팎'의 연간 목표 달성이 어... | 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다. | 해외인증정보 9건 수집 | 수입규제항목 15건 수집 | K-SURE country grade: 2 (2025-07-03) | K-SURE industry risk top: 석탄, 원유 및 천연가스 광업 (RI 4) | K-SURE export payment (global): late rate 18.3%"
+                - generic [ref=e81]:
+                  - generic [ref=e82]:
+                    - generic [ref=e83]:
+                      - paragraph [ref=e84]: Rank 2 · US
+                      - paragraph [ref=e85]: 미합중국(The United States of America)
+                    - paragraph [ref=e86]: 82/100
+                  - paragraph [ref=e87]: 우선검토
+                  - paragraph [ref=e88]: "미합중국(The United States of America): 2025년 3분기 미국 경제는 상반기 둔화세 이후 완만한 회복세를 이어가고 있다. 민간 부문 추정에 따르면, 3분기 실질 GDP 성장률은 연율 약 2.7% 수준으로, 2분기 3.8% 성장보다는 둔화했으나 견조한... | 거대한 애프터마켓과 완성차 시장을 보유하고 있으며, 결제 안정성과 법적 투명성이 전 세계에서 가장 우수합니다."
+                - generic [ref=e89]:
+                  - generic [ref=e90]:
+                    - generic [ref=e91]:
+                      - paragraph [ref=e92]: Rank 3 · JP
+                      - paragraph [ref=e93]: 일본(Japan)
+                    - paragraph [ref=e94]: 81/100
+                  - paragraph [ref=e95]: 우선검토
+                  - paragraph [ref=e96]: 확실한 정보 없음
+            - generic [ref=e97]:
+              - heading "핵심 요약" [level=3] [ref=e98]
+              - paragraph [ref=e100]: 현대모비스의 자동차 제동장치 수출을 위해 중국, 미국, 일본을 핵심 전략 시장으로 분석하였으며, 특히 중국은 최대 수요처로서 IATF 16949 및 CCC 인증 대응이 필수적입니다. 미국은 결제 안정성이 높으나 정책적 관세 불확실성을 고려해야 하며, 일본은 지리적 이점과 고품질 수요가 크지만 폐쇄적인 공급망 구조가 진입 장벽으로 작용합니다. 현재 HS코드 선택 신뢰도가 낮고 검토가 필요한 상태이므로, 최종 규제 준수 결정을 내리기 전에 반드시 정확한 HS/HSK 코드 분류 확정이 선행되어야 합니다.
+            - generic [ref=e101]:
+              - heading "7일 내 실행 과제" [level=3] [ref=e102]
+              - list [ref=e104]:
+                - listitem [ref=e105]: 정확한 수출 품목 분류를 위해 관세사 및 전문 기관을 통한 HS/HSK 코드(8708.30) 재검토 및 확정
+                - listitem [ref=e106]: 중국 수출에 필수적인 CCC 인증 및 품질 경영 시스템(IATF 16949)의 최신 규제 적합성 파악
+                - listitem [ref=e107]: 일본 시장 진출을 위한 현지 완성차 공급망(Keiretsu) 분석 및 2026년 시행될 제품안전 4법 대응 계획 수립
+                - listitem [ref=e323]: 미국의 관세 변동 가능성과 전기차 보조금 정책 변화에 따른 제동장치 수요 영향 분석
+                - listitem [ref=e324]: 중국 내 알루미늄 합금 관련 반덤핑 규제가 제동장치 구성품에 미치는 범위 상세 확인
+                - listitem [ref=e325]: K-SURE 국가별 등급 및 결제 지연율 정보를 활용한 수출 대금 회수 리스크 관리 전략 마련
+            - generic [ref=e108]:
+              - heading "국가별 주의사항" [level=3] [ref=e109]
+              - generic [ref=e110]:
+                - generic [ref=e111]:
+                  - paragraph [ref=e112]: 중화인민공화국(The People's Republic of China)
+                  - list [ref=e113]:
+                    - listitem [ref=e114]: "인증: IATF 16949 (자동차 품질경영시스템), CMVSS(캐나다 자동차안전기준)"
+                    - listitem [ref=e115]: "규제: 반덤핑(규제중)"
+                    - listitem [ref=e116]: "결제·리스크: Country: 중국 | Grade: 2 | Evaluated: 2025-07-03"
+                - generic [ref=e117]:
+                  - paragraph [ref=e118]: 미합중국(The United States of America)
+                  - list [ref=e119]:
+                    - listitem [ref=e120]: "인증: 추천 단계 감지 1건, 상세 분석 미실행"
+                    - listitem [ref=e121]: "규제: 조회 결과 없음"
+                    - listitem [ref=e122]: "결제·리스크: 확실한 정보 없음"
+                - generic [ref=e123]:
+                  - paragraph [ref=e124]: 일본(Japan)
+                  - list [ref=e125]:
+                    - listitem [ref=e126]: "인증: S-JET인증 제도"
+                    - listitem [ref=e127]: "규제: 반덤핑(규제중)"
+                    - listitem [ref=e128]: "결제·리스크: Country: 일본 | Grade: 1 | Evaluated: 2025-12-30"
+            - generic [ref=e129]:
+              - heading "출처" [level=3] [ref=e130]
+              - generic [ref=e132]:
+                - generic [ref=e133]:
+                  - paragraph [ref=e134]: KICOX 공장 생산정보
+                  - paragraph [ref=e135]: KICOX · 확실한 정보 없음 · 대기 · 응답 확실한 정보 없음
+                - generic [ref=e136]:
+                  - paragraph [ref=e137]: KOTRA 국가 정보
+                  - paragraph [ref=e138]: KOTRA · 확실한 정보 없음 · 대기 · 응답 확실한 정보 없음
+                - generic [ref=e139]:
+                  - paragraph [ref=e140]: KOTRA 해외시장 뉴스
+                  - paragraph [ref=e141]: KOTRA · 2026.04.25 · 조회 결과 없음 · 응답 0
+                - generic [ref=e142]:
+                  - paragraph [ref=e143]: KOTRA 해외인증 정보
+                  - paragraph [ref=e144]: KOTRA · 2026.04.25 · 정상 · 응답 9
+                - generic [ref=e145]:
+                  - paragraph [ref=e146]: KOTRA 수입규제 정보
+                  - paragraph [ref=e147]: KOTRA · 2026.04.25 · 정상 · 응답 15
+                - generic [ref=e148]:
+                  - paragraph [ref=e149]: K-SURE 국가위험 등급
+                  - paragraph [ref=e150]: K-SURE · 2026.04.25 · 정상 · 응답 1
+                - generic [ref=e151]:
+                  - paragraph [ref=e152]: K-SURE 업종위험 지수
+                  - paragraph [ref=e153]: K-SURE · 2026.04.25 · 정상 · 응답 52
+                - generic [ref=e154]:
+                  - paragraph [ref=e155]: K-SURE 수출결제 정보
+                  - paragraph [ref=e156]: K-SURE · 2026.04.25 · 정상 · 응답 1
+                - generic [ref=e157]:
+                  - paragraph [ref=e158]: 전략물자관리원 HSK 연계 정보
+                  - paragraph [ref=e159]: Trade Security Institute · 확실한 정보 없음 · 대기 · 응답 확실한 정보 없음
+                - generic [ref=e160]:
+                  - paragraph [ref=e161]: SafetyKorea 리콜 정보
+                  - paragraph [ref=e162]: KATS · 확실한 정보 없음 · 대기 · 응답 확실한 정보 없음
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - generic [ref=e166]:
+                - paragraph [ref=e167]: 산단수출 코파일럿 · 1페이지 리포트
+                - heading "새 분석 2026. 4. 24." [level=2] [ref=e168]
+              - paragraph [ref=e170]: 발행 2026.04.24
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - paragraph [ref=e173]: 기업
+                - generic [ref=e174]:
+                  - paragraph [ref=e175]: 현대모비스(주)
+                  - paragraph [ref=e176]: 창원국가산업단지 경상남도 창원시 성산구 성산패총로 87 (성산동)
+              - generic [ref=e177]:
+                - paragraph [ref=e178]: 제품
+                - generic [ref=e179]:
+                  - paragraph [ref=e180]: 자동차 제동장치
+                  - paragraph [ref=e181]: HS 870830 · HSK 8708303000
+            - generic [ref=e183]:
+              - paragraph [ref=e184]: 분석 기준 코드
+              - generic [ref=e185]:
+                - paragraph [ref=e186]: HS 870830 · HSK 8708303000
+                - paragraph [ref=e187]: "적용 방식: 사용자 수동 선택 (44점)"
+                - paragraph [ref=e188]: "상태: 정보 부족 · 입력 정보가 부족해 오분류 가능성이 있습니다."
+                - paragraph [ref=e189]: "확인 필요: 후속 분석은 본 코드를 기준으로 수행되며, 확정 전 추가 검증이 필요합니다."
+            - heading "추천 국가 Top 3" [level=3] [ref=e190]
+            - generic [ref=e191]:
+              - generic [ref=e192]:
+                - paragraph [ref=e193]: Rank 1 · CN
+                - paragraph [ref=e194]: 중화인민공화국(The People's Republic of China)
+                - paragraph [ref=e195]: 90/100
+                - paragraph [ref=e196]: 우선검토
+                - paragraph [ref=e197]: "중화인민공화국(The People's Republic of China): ㅇ 2024년 2024년 중국 국내총생산(GDP)은 134조 9,084억 위안으로, 전년대비 5% 증가했다. 1~3분기 누적 성장률이 4.8%에 그치며 '5% 안팎'의 연간 목표 달성이 어... | 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다. | 해외인증정보 9건 수집 | 수입규제항목 15건 수집 | K-SURE country grade: 2 (2025-07-03) | K-SURE industry risk top: 석탄, 원유 및 천연가스 광업 (RI 4) | K-SURE export payment (global): late rate 18.3%"
+              - generic [ref=e198]:
+                - paragraph [ref=e199]: Rank 2 · US
+                - paragraph [ref=e200]: 미합중국(The United States of America)
+                - paragraph [ref=e201]: 82/100
+                - paragraph [ref=e202]: 우선검토
+                - paragraph [ref=e203]: "미합중국(The United States of America): 2025년 3분기 미국 경제는 상반기 둔화세 이후 완만한 회복세를 이어가고 있다. 민간 부문 추정에 따르면, 3분기 실질 GDP 성장률은 연율 약 2.7% 수준으로, 2분기 3.8% 성장보다는 둔화했으나 견조한... | 거대한 애프터마켓과 완성차 시장을 보유하고 있으며, 결제 안정성과 법적 투명성이 전 세계에서 가장 우수합니다."
+              - generic [ref=e204]:
+                - paragraph [ref=e205]: Rank 3 · JP
+                - paragraph [ref=e206]: 일본(Japan)
+                - paragraph [ref=e207]: 81/100
+                - paragraph [ref=e208]: 우선검토
+                - paragraph [ref=e209]: 확실한 정보 없음
+            - heading "핵심 요약" [level=3] [ref=e210]
+            - generic [ref=e211]: 현대모비스의 자동차 제동장치 수출을 위해 중국, 미국, 일본을 핵심 전략 시장으로 분석하였으며, 특히 중국은 최대 수요처로서 IATF 16949 및 CCC 인증 대응이 필수적입니다. 미국은 결제 안정성이 높으나 정책적 관세 불확실성을 고려해야 하며, 일본은 지리적 이점과 고품질 수요가 크지만 폐쇄적인 공급망 구조가 진입 장벽으로 작용합니다. 현재 HS코드 선택 신뢰도가 낮고 검토가 필요한 상태이므로, 최종 규제 준수 결정을 내리기 전에 반드시 정확한 HS/HSK 코드 분류 확정이 선행되어야 합니다.
+            - heading "7일 내 실행 과제" [level=3] [ref=e212]
+            - list [ref=e214]:
+              - listitem [ref=e215]: 정확한 수출 품목 분류를 위해 관세사 및 전문 기관을 통한 HS/HSK 코드(8708.30) 재검토 및 확정
+              - listitem [ref=e216]: 중국 수출에 필수적인 CCC 인증 및 품질 경영 시스템(IATF 16949)의 최신 규제 적합성 파악
+              - listitem [ref=e217]: 일본 시장 진출을 위한 현지 완성차 공급망(Keiretsu) 분석 및 2026년 시행될 제품안전 4법 대응 계획 수립
+              - listitem [ref=e326]: 미국의 관세 변동 가능성과 전기차 보조금 정책 변화에 따른 제동장치 수요 영향 분석
+              - listitem [ref=e327]: 중국 내 알루미늄 합금 관련 반덤핑 규제가 제동장치 구성품에 미치는 범위 상세 확인
+              - listitem [ref=e328]: K-SURE 국가별 등급 및 결제 지연율 정보를 활용한 수출 대금 회수 리스크 관리 전략 마련
+            - heading "국가별 주의사항" [level=3] [ref=e218]
+            - generic [ref=e219]:
+              - generic [ref=e220]:
+                - paragraph [ref=e221]: 중화인민공화국(The People's Republic of China)
+                - list [ref=e222]:
+                  - listitem [ref=e223]: "인증: IATF 16949 (자동차 품질경영시스템), CMVSS(캐나다 자동차안전기준)"
+                  - listitem [ref=e224]: "규제: 반덤핑(규제중)"
+                  - listitem [ref=e225]: "결제·리스크: Country: 중국 | Grade: 2 | Evaluated: 2025-07-03"
+              - generic [ref=e226]:
+                - paragraph [ref=e227]: 미합중국(The United States of America)
+                - list [ref=e228]:
+                  - listitem [ref=e229]: "인증: 추천 단계 감지 1건, 상세 분석 미실행"
+                  - listitem [ref=e230]: "규제: 조회 결과 없음"
+                  - listitem [ref=e231]: "결제·리스크: 확실한 정보 없음"
+              - generic [ref=e232]:
+                - paragraph [ref=e233]: 일본(Japan)
+                - list [ref=e234]:
+                  - listitem [ref=e235]: "인증: S-JET인증 제도"
+                  - listitem [ref=e236]: "규제: 반덤핑(규제중)"
+                  - listitem [ref=e237]: "결제·리스크: Country: 일본 | Grade: 1 | Evaluated: 2025-12-30"
+            - heading "출처" [level=3] [ref=e238]
+            - generic [ref=e239]:
+              - generic [ref=e240]:
+                - generic [ref=e241]: KICOX 공장 생산정보
+                - generic [ref=e242]: KICOX
+                - generic [ref=e243]: 확실한 정보 없음
+                - generic [ref=e244]: 대기
+                - generic [ref=e245]: 확실한 정보 없음
+                - generic [ref=e246]: 없음
+                - link "원문" [ref=e247] [cursor=pointer]:
+                  - /url: https://www.data.go.kr/data/15087611/openapi.do
+              - generic [ref=e248]:
+                - generic [ref=e249]: KOTRA 국가 정보
+                - generic [ref=e250]: KOTRA
+                - generic [ref=e251]: 확실한 정보 없음
+                - generic [ref=e252]: 대기
+                - generic [ref=e253]: 확실한 정보 없음
+                - generic [ref=e254]: 없음
+                - link "원문" [ref=e255] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/kotra_nationalInformation/natnInfo/natnInfo
+              - generic [ref=e256]:
+                - generic [ref=e257]: KOTRA 해외시장 뉴스
+                - generic [ref=e258]: KOTRA
+                - generic [ref=e259]: 2026.04.25
+                - generic [ref=e260]: 조회 결과 없음
+                - generic [ref=e261]: "0"
+                - generic [ref=e262]: 없음
+                - link "원문" [ref=e263] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/kotra_overseasMarketNews/ovseaMrktNews/ovseaMrktNews
+              - generic [ref=e264]:
+                - generic [ref=e265]: KOTRA 해외인증 정보
+                - generic [ref=e266]: KOTRA
+                - generic [ref=e267]: 2026.04.25
+                - generic [ref=e268]: 정상
+                - generic [ref=e269]: "9"
+                - generic [ref=e270]: 없음
+                - link "원문" [ref=e271] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+              - generic [ref=e272]:
+                - generic [ref=e273]: KOTRA 수입규제 정보
+                - generic [ref=e274]: KOTRA
+                - generic [ref=e275]: 2026.04.25
+                - generic [ref=e276]: 정상
+                - generic [ref=e277]: "15"
+                - generic [ref=e278]: 없음
+                - link "원문" [ref=e279] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+              - generic [ref=e280]:
+                - generic [ref=e281]: K-SURE 국가위험 등급
+                - generic [ref=e282]: K-SURE
+                - generic [ref=e283]: 2026.04.25
+                - generic [ref=e284]: 정상
+                - generic [ref=e285]: "1"
+                - generic [ref=e286]: 없음
+                - link "원문" [ref=e287] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B552696/countrygrade/credit-grade
+              - generic [ref=e288]:
+                - generic [ref=e289]: K-SURE 업종위험 지수
+                - generic [ref=e290]: K-SURE
+                - generic [ref=e291]: 2026.04.25
+                - generic [ref=e292]: 정상
+                - generic [ref=e293]: "52"
+                - generic [ref=e294]: 없음
+                - link "원문" [ref=e295] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B552696/ksight/riskindex
+              - generic [ref=e296]:
+                - generic [ref=e297]: K-SURE 수출결제 정보
+                - generic [ref=e298]: K-SURE
+                - generic [ref=e299]: 2026.04.25
+                - generic [ref=e300]: 정상
+                - generic [ref=e301]: "1"
+                - generic [ref=e302]: 없음
+                - link "원문" [ref=e303] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B552696/exportPayment/getPaymentInfo
+              - generic [ref=e304]:
+                - generic [ref=e305]: 전략물자관리원 HSK 연계 정보
+                - generic [ref=e306]: Trade Security Institute
+                - generic [ref=e307]: 확실한 정보 없음
+                - generic [ref=e308]: 대기
+                - generic [ref=e309]: 확실한 정보 없음
+                - generic [ref=e310]: 없음
+                - link "원문" [ref=e311] [cursor=pointer]:
+                  - /url: https://yestrade.go.kr/openapi
+              - generic [ref=e312]:
+                - generic [ref=e313]: SafetyKorea 리콜 정보
+                - generic [ref=e314]: KATS
+                - generic [ref=e315]: 확실한 정보 없음
+                - generic [ref=e316]: 대기
+                - generic [ref=e317]: 확실한 정보 없음
+                - generic [ref=e318]: 없음
+                - link "원문" [ref=e319] [cursor=pointer]:
+                  - /url: https://www.safetykorea.kr/openapi
+            - generic [ref=e320]: 본 리포트는 공공데이터·뉴스를 가중 합산한 의사결정 보조 자료입니다. 확정 판단(전략물자, 인증 적합성, 결제조건)은 관세평가분류원·전략물자관리원·K-SURE 등 해당 기관 사전 확인을 권장합니다.
+    - generic [ref=e35]:
+      - link "1단계 기업·공장 검색" [ref=e36] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+        - text: "1"
+      - link "2단계 제품·HS 코드" [ref=e37] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+        - text: "2"
+      - link "3단계 후보국 추천 Top 3" [ref=e38] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+        - text: "3"
+      - link "4단계 국가 상세" [ref=e39] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+        - text: "4"
+      - link "5단계 전략물자·제품안전" [ref=e40] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+        - text: "5"
+      - link "6단계 리포트" [ref=e41] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+        - text: "6"
+    - generic [ref=e43]:
+      - button "이전" [ref=e44] [cursor=pointer]
+      - button "AI 요약 생성" [ref=e321] [cursor=pointer]:
+        - img
+        - text: AI 요약 생성
+      - button "PDF 다운로드" [ref=e322] [cursor=pointer]:
+        - img
+        - text: PDF 다운로드

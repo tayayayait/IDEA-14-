@@ -1,0 +1,100 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e147]:
+    - banner [ref=e148]:
+      - link "홈" [ref=e150] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e152]
+      - generic [ref=e155]:
+        - link "프로젝트" [ref=e156] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e157] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e158] [cursor=pointer]:
+          - img
+    - main [ref=e160]:
+      - generic [ref=e161]:
+        - generic [ref=e162]:
+          - paragraph [ref=e163]: 기획 요구사항 매핑
+          - paragraph [ref=e164]: 요구사항 4~7
+          - paragraph [ref=e165]: 인증·규제·국가/업종·결제 리스크 상세 검증
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - paragraph [ref=e168]: CN
+            - heading "중화인민공화국(The People&rsquo;s Republic of China)" [level=1] [ref=e169]
+            - generic [ref=e170]:
+              - status "위험도 우선검토" [ref=e171]: 우선검토
+              - generic [ref=e173]: 총점 90/100
+          - button "상세 분석 실행" [ref=e174] [cursor=pointer]:
+            - img
+            - text: 상세 분석 실행
+        - generic [ref=e175]:
+          - generic [ref=e176]:
+            - heading "목표시장 평가 요약" [level=3] [ref=e177]
+            - paragraph [ref=e178]: 목표시장 메모는 후보군 포함 신호이며 최종 순위는 점수 기준으로 결정됩니다.
+          - generic [ref=e179]:
+            - paragraph [ref=e180]: "입력 목표시장: Japan(JP)"
+            - paragraph [ref=e181]: "포함 여부: 기본 후보군 포함"
+            - paragraph [ref=e182]: "최종 순위: Rank 1"
+            - paragraph [ref=e183]: "후보 편입 근거: 인증 데이터 존재, HS 6자리 일치, 제품 키워드 일치, 수입 규제 데이터 존재, HS 4자리 접두 일치"
+            - paragraph [ref=e184]: "포함 이유: 인증 데이터 존재; HS 6자리 일치; 제품 키워드 일치; 수입 규제 데이터 존재; HS 4자리 접두 일치"
+            - paragraph [ref=e185]: "추천 근거: 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다."
+            - paragraph [ref=e186]: "낮은 추천 이유: 현지 기업과의 치열한 가격 경쟁과 자국 부품 우선 정책, 그리고 지정학적 불확실성이 리스크 요인입니다."
+            - paragraph [ref=e187]: "대안 시장: 미합중국(The United States of America)(US), 일본(Japan)(JP), 태국(TH)"
+        - generic [ref=e188]:
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - heading "필요 인증" [level=3] [ref=e191]
+              - paragraph [ref=e192]: "추천 단계 감지 수: 2건"
+            - paragraph [ref=e194]: 추천 단계에서 인증 2건이 감지되었습니다. 상세 분석을 다시 실행해 동기화하세요.
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - heading "규제·NTM" [level=3] [ref=e197]
+              - paragraph [ref=e198]: "추천 단계 감지 수: 15건"
+            - paragraph [ref=e200]: 추천 단계에서 규제 15건이 감지되었습니다. 상세 분석을 다시 실행해 동기화하세요.
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e203]
+              - paragraph [ref=e204]: 대금 회수 가능성과 국가 위험 등급
+            - generic [ref=e205]:
+              - paragraph [ref=e206]: K-SURE 등 리스크 데이터 없음 — 기관 확인 필요
+              - paragraph [ref=e207]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+          - generic [ref=e208]:
+            - generic [ref=e210]:
+              - generic [ref=e211]:
+                - heading "7일 내 다음 실행 과제" [level=3] [ref=e212]
+                - paragraph [ref=e213]: AI가 위 데이터를 바탕으로 1주일 내 실행 가능한 과제를 제안합니다.
+              - button "과제 생성" [ref=e214] [cursor=pointer]:
+                - img
+                - text: 과제 생성
+            - paragraph [ref=e216]: ‘과제 생성’을 눌러 7일 내 실행 과제를 받아보세요
+    - generic [ref=e218]:
+      - link "1단계 기업·공장 검색" [ref=e219] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+        - text: "1"
+      - link "2단계 제품·HS 코드" [ref=e220] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+        - text: "2"
+      - link "3단계 후보국 추천 Top 3" [ref=e221] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+        - text: "3"
+      - link "4단계 국가 상세" [ref=e222] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+        - text: "4"
+      - link "5단계 전략물자·제품안전" [ref=e223] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+        - text: "5"
+      - link "6단계 리포트" [ref=e224] [cursor=pointer]:
+        - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+        - text: "6"
+    - generic [ref=e226]:
+      - button "후보국으로" [ref=e227] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로 →" [ref=e228] [cursor=pointer]

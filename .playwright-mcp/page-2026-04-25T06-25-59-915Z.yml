@@ -1,0 +1,168 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e458]:
+    - banner [ref=e459]:
+      - link "홈" [ref=e461] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e463]
+        - generic [ref=e466]: 산단수출 코파일럿
+      - generic [ref=e467]:
+        - link "프로젝트" [ref=e468] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e469] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e470] [cursor=pointer]:
+          - img
+          - generic [ref=e471]: 로그아웃
+    - generic [ref=e472]:
+      - complementary [ref=e473]:
+        - paragraph [ref=e474]: 분석 단계
+        - navigation "분석 단계" [ref=e475]:
+          - link "1단계 기업·공장 검색" [ref=e476] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e478]
+            - generic [ref=e480]:
+              - generic [ref=e481]: 기업·공장 검색
+              - generic [ref=e482]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e483] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e485]
+            - generic [ref=e487]:
+              - generic [ref=e488]: 제품·HS 코드
+              - generic [ref=e489]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e490] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - img [ref=e492]
+            - generic [ref=e494]:
+              - generic [ref=e495]: 후보국 추천 Top 3
+              - generic [ref=e496]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e497] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+            - generic [ref=e498]: "4"
+            - generic [ref=e499]:
+              - generic [ref=e500]: 국가 상세
+              - generic [ref=e501]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e502] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e503]: "5"
+            - generic [ref=e504]:
+              - generic [ref=e505]: 전략물자·제품안전
+              - generic [ref=e506]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e507] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e508]: "6"
+            - generic [ref=e509]:
+              - generic [ref=e510]: 리포트
+              - generic [ref=e511]: 요구사항 10
+      - main [ref=e512]:
+        - generic [ref=e513]:
+          - generic [ref=e514]:
+            - paragraph [ref=e515]: 기획 요구사항 매핑
+            - paragraph [ref=e516]: 요구사항 4~7
+            - paragraph [ref=e517]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=e518]:
+            - generic [ref=e519]:
+              - paragraph [ref=e520]: CN
+              - heading "중화인민공화국(The People&rsquo;s Republic of China)" [level=1] [ref=e521]
+              - generic [ref=e522]:
+                - status "위험도 우선검토" [ref=e523]: 우선검토
+                - generic [ref=e525]: 총점 90/100
+            - button "상세 분석 실행" [disabled]:
+              - img
+              - text: 상세 분석 실행
+          - generic [ref=e527]:
+            - generic [ref=e528]:
+              - heading "목표시장 평가 요약" [level=3] [ref=e529]
+              - paragraph [ref=e530]: 목표시장 메모는 후보군 포함 신호이며 최종 순위는 점수 기준으로 결정됩니다.
+            - generic [ref=e531]:
+              - paragraph [ref=e532]: "입력 목표시장: Japan(JP)"
+              - paragraph [ref=e533]: "포함 여부: 기본 후보군 포함"
+              - paragraph [ref=e534]: "최종 순위: Rank 1"
+              - paragraph [ref=e535]: "후보 편입 근거: 인증 데이터 존재, HS 6자리 일치, 제품 키워드 일치, 수입 규제 데이터 존재, HS 4자리 접두 일치"
+              - paragraph [ref=e536]: "포함 이유: 인증 데이터 존재; HS 6자리 일치; 제품 키워드 일치; 수입 규제 데이터 존재; HS 4자리 접두 일치"
+              - paragraph [ref=e537]: "추천 근거: 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다."
+              - paragraph [ref=e538]: "낮은 추천 이유: 현지 기업과의 치열한 가격 경쟁과 자국 부품 우선 정책, 그리고 지정학적 불확실성이 리스크 요인입니다."
+              - paragraph [ref=e539]: "대안 시장: 미합중국(The United States of America)(US), 일본(Japan)(JP), 태국(TH)"
+          - generic [ref=e540]:
+            - generic [ref=e541]:
+              - generic [ref=e542]:
+                - heading "필요 인증" [level=3] [ref=e543]
+                - paragraph [ref=e544]: "추천 단계 감지 수: 2건"
+              - paragraph [ref=e546]: 추천 단계에서 인증 2건이 감지되었습니다. 상세 분석을 실행하면 본문과 출처 패널을 동기화합니다.
+            - generic [ref=e547]:
+              - generic [ref=e548]:
+                - heading "규제·NTM" [level=3] [ref=e549]
+                - paragraph [ref=e550]: "추천 단계 감지 수: 15건"
+              - paragraph [ref=e552]: 추천 단계에서 규제 15건이 감지되었습니다. 상세 분석을 실행하면 본문과 출처 패널을 동기화합니다.
+            - generic [ref=e553]:
+              - generic [ref=e554]:
+                - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e555]
+                - paragraph [ref=e556]: 대금 회수 가능성과 국가 위험 등급 · 행 수 0건
+              - generic [ref=e557]:
+                - paragraph [ref=e558]: 상세 분석 미실행 — ‘상세 분석 실행’을 눌러주세요.
+                - paragraph [ref=e559]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+            - generic [ref=e560]:
+              - generic [ref=e562]:
+                - generic [ref=e563]:
+                  - heading "7일 내 다음 실행 과제" [level=3] [ref=e564]
+                  - paragraph [ref=e565]: AI가 위 데이터를 바탕으로 1주일 내 실행 가능한 과제를 제안합니다.
+                - button "과제 생성" [ref=e566] [cursor=pointer]:
+                  - img
+                  - text: 과제 생성
+              - paragraph [ref=e568]: ‘과제 생성’을 눌러 7일 내 실행 과제를 받아보세요
+      - complementary [ref=e569]:
+        - generic [ref=e570]:
+          - generic [ref=e571]: 근거 패널
+          - button "근거 패널 접기" [ref=e572] [cursor=pointer]:
+            - img
+        - generic [ref=e574]:
+          - heading "출처" [level=3] [ref=e575]
+          - generic [ref=e576]:
+            - paragraph [ref=e577]: 분석 기준 코드
+            - paragraph [ref=e578]: HS 870830 · HSK 8708303000
+            - paragraph [ref=e579]: "적용 방식: 사용자 수동 선택 (44점)"
+            - paragraph [ref=e580]: "상태: 정보 부족 · 입력 정보가 부족해 오분류 가능성이 있습니다."
+            - paragraph [ref=e581]: 후속 단계 참고용 코드이며 최종 확정 전 추가 검증이 필요합니다.
+          - list [ref=e582]:
+            - listitem [ref=e583]:
+              - generic [ref=e584]:
+                - generic "출처 KOTRA" [ref=e585]: KOTRA
+                - link "중화인민공화국(The People&rsquo;s Republic of China) market profile" [ref=e586] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                  - img [ref=e587]
+                  - generic [ref=e591]: 중화인민공화국(The People&rsquo;s Republic of China) market profile
+            - listitem [ref=e592]:
+              - generic [ref=e593]:
+                - generic "출처 기타" [ref=e594]: 기타
+                - link "인증 매칭 2건" [ref=e595] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                  - img [ref=e596]
+                  - generic [ref=e600]: 인증 매칭 2건
+            - listitem [ref=e601]:
+              - generic [ref=e602]:
+                - generic "출처 기타" [ref=e603]: 기타
+                - link "수입규제 매칭 15건" [ref=e604] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                  - img [ref=e605]
+                  - generic [ref=e609]: 수입규제 매칭 15건
+            - listitem [ref=e610]:
+              - generic [ref=e611]:
+                - generic "출처 KOTRA" [ref=e612]: KOTRA
+                - 'link "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화" [ref=e613] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240216
+                  - img [ref=e614]
+                  - generic [ref=e618]: "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화"
+          - generic [ref=e619]:
+            - paragraph [ref=e620]: AI 상태
+            - generic [ref=e621]: 조회 중
+    - generic [ref=e623]:
+      - button "후보국으로" [ref=e624] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로 →" [ref=e625] [cursor=pointer]

@@ -1,0 +1,285 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "홈" [ref=e6] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e8]
+        - generic [ref=e11]: 산단수출 코파일럿
+      - generic [ref=e12]:
+        - link "프로젝트" [ref=e13] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e14] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e15] [cursor=pointer]:
+          - img
+          - generic [ref=e16]: 로그아웃
+    - generic [ref=e17]:
+      - complementary [ref=e18]:
+        - paragraph [ref=e19]: 분석 단계
+        - navigation "분석 단계" [ref=e20]:
+          - link "1단계 기업·공장 검색" [ref=e21] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - img [ref=e23]
+            - generic [ref=e25]:
+              - generic [ref=e26]: 기업·공장 검색
+              - generic [ref=e27]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e28] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - img [ref=e30]
+            - generic [ref=e32]:
+              - generic [ref=e33]: 제품·HS 코드
+              - generic [ref=e34]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e35] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e37]
+            - generic [ref=e39]:
+              - generic [ref=e40]: 후보국 추천 Top 3
+              - generic [ref=e41]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e42] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - img [ref=e44]
+            - generic [ref=e46]:
+              - generic [ref=e47]: 국가 상세
+              - generic [ref=e48]: 요구사항 4~7
+              - generic [ref=e49]: 국가 선택 필요
+          - link "5단계 전략물자·제품안전" [ref=e50] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - img [ref=e52]
+            - generic [ref=e54]:
+              - generic [ref=e55]: 전략물자·제품안전
+              - generic [ref=e56]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e57] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - generic [ref=e58]: "6"
+            - generic [ref=e59]:
+              - generic [ref=e60]: 리포트
+              - generic [ref=e61]: 요구사항 10
+      - main [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - paragraph [ref=e65]: 기획 요구사항 매핑
+            - paragraph [ref=e66]: 요구사항 10
+            - paragraph [ref=e67]: 최종 리포트/PDF 생성
+          - generic [ref=e68]:
+            - heading "6. 1페이지 제출 분석 리포트" [level=1] [ref=e69]
+            - paragraph [ref=e70]: A4 1페이지로 인쇄/공유 가능한 최종 요약 리포트입니다.
+            - generic [ref=e71]:
+              - generic [ref=e72]: KICOX 상태
+              - generic [ref=e73]: 대기
+              - generic [ref=e74]: SafetyKorea 상태
+              - generic [ref=e75]: 대기
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - paragraph [ref=e88]: AI 수출 준비 지원 1페이지 리포트
+                - heading "새 분석 2026. 4. 26." [level=2] [ref=e89]
+              - paragraph [ref=e91]: 발행일 2026.04.26
+            - generic [ref=e92]:
+              - paragraph [ref=e93]: 심사 핵심 요약
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - paragraph [ref=e96]: Top 3
+                  - list [ref=e97]:
+                    - listitem [ref=e98]: • 1. 독일연방공화국(The Federal Republic of Germany) (91점, 우선검토)
+                    - listitem [ref=e99]: • 2. 미합중국(The United States of America) (88점, 우선검토)
+                    - listitem [ref=e100]: • 3. 일본(Japan) (87점, 우선검토)
+                - generic [ref=e101]:
+                  - paragraph [ref=e102]: 핵심 리스크
+                  - list [ref=e103]:
+                    - listitem [ref=e104]: "• 전략물자: 제공된 HS/HSK 기준 전략물자 연계표에서 일치 항목이 없습니다."
+                    - listitem [ref=e105]: "• 제품안전: SafetyKorea 상태: 기관 확인 필요(API 키 미등록)"
+                - generic [ref=e106]:
+                  - paragraph [ref=e107]: 다음 액션
+                  - list [ref=e108]:
+                    - listitem [ref=e109]: • 제품의 구성 재질(유리 vs 플라스틱 케이스)에 따른 정확한 HS코드(7009.10) 적정성을 전문 관세사를 통해 재확인하기
+                    - listitem [ref=e110]: • 독일 및 유럽 시장 진출을 위한 필수 요건인 E-Mark 인증의 세부 항목과 현지 대행 기관 조사하기
+                    - listitem [ref=e111]: • 미국 시장 진입을 위해 DOT(미국 운송부) 및 SAE 안전 기준 부합 여부 자체 기술 점검하기
+            - generic [ref=e112]:
+              - generic [ref=e113]:
+                - paragraph [ref=e114]: 기업 정보
+                - generic [ref=e115]:
+                  - paragraph [ref=e116]: 삼성진공
+                  - paragraph [ref=e117]: 대구광역시 북구 노원로39길 17 (침산동)
+              - generic [ref=e118]:
+                - paragraph [ref=e119]: 제품 정보
+                - generic [ref=e120]:
+                  - paragraph [ref=e121]: 차량유리, 백밀러케이스
+                  - paragraph [ref=e122]: HS 700910 · HSK 7009100000
+            - generic [ref=e124]:
+              - paragraph [ref=e125]: 제품 분류 근거
+              - generic [ref=e126]:
+                - paragraph [ref=e127]: HS 700910 · HSK 7009100000
+                - paragraph [ref=e128]: "선택 소스: 검색 결과 1순위 자동 반영 (62점)"
+                - paragraph [ref=e129]: "상태: 확인 필요 · 확인 필요 상태로 진행 중입니다. 계약 전 코드 재확인이 필요합니다."
+                - paragraph [ref=e130]: "분류 검토 필요: 복수 품목이 섞여 있을 수 있으므로 품목 분리 후 코드를 다시 확인하세요."
+            - heading "수출 후보국 Top 3" [level=3] [ref=e131]
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - paragraph [ref=e134]: Rank 1 · DE
+                - paragraph [ref=e135]: 독일연방공화국(The Federal Republic of Germany)
+                - paragraph [ref=e136]: 91/100
+                - paragraph [ref=e137]: 우선검토
+                - paragraph [ref=e138]: "독일연방공화국(The Federal Republic of Germany): 2024년 예상됐던 경기회복이 지연되면서 고용안정과 인플레이션 둔화에도 불구하고 독일 GDP는 -0.5%를 기록하며 2002~2003년 이후 처음으로 2년 연속 마이너스 성장을 나타냈다. 2024년 상반기에는 ... | 제품 직접 근거: [기고] 다가오는 스마트 카의 시대: 차량용 반도체 시장의 본격 호황기는? | 유럽 최대의 자동차 생산국으로 고품질 부품에 대한 신뢰도가 높고 프리미엄 브랜드 부품 수요가 안정적입니다. | 해외인증정보 20건 수집 | 수입규제항목 30건 수집 | K-SURE country grade: 1 (2025-12-30) | K-SURE industry risk top: 농업 (RI 2) | K-SURE export payment (global): late rate 18.3% | Recent news: [2026-04-24] 독일 식품 보관 용품 시장, 친환경 전환과 고기능성 제품의 ..."
+              - generic [ref=e139]:
+                - paragraph [ref=e140]: Rank 2 · US
+                - paragraph [ref=e141]: 미합중국(The United States of America)
+                - paragraph [ref=e142]: 88/100
+                - paragraph [ref=e143]: 우선검토
+                - paragraph [ref=e144]: "미합중국(The United States of America): 2025년 3분기 미국 경제는 상반기 둔화세 이후 완만한 회복세를 이어가고 있다. 민간 부문 추정에 따르면, 3분기 실질 GDP 성장률은 연율 약 2.7% 수준으로, 2분기 3.8% 성장보다는 둔화했으나 견조한... | 제품 직접 근거: [기고] 현장에서 느끼는 미국 차량용 반도체 부족 사태 | 차량 부품 애프터마켓이 매우 활성화되어 있으며, 자가 정비 문화 발달로 인해 온라인 및 소매 유통 기회가 많습니다."
+              - generic [ref=e145]:
+                - paragraph [ref=e146]: Rank 3 · JP
+                - paragraph [ref=e147]: 일본(Japan)
+                - paragraph [ref=e148]: 87/100
+                - paragraph [ref=e149]: 우선검토
+                - paragraph [ref=e150]: "일본(Japan): 2024년 일본의 명목 GDP는 약 4조 190억 달러로 2023년 독일에 추월당해 세계 4위로 밀려난 이후, 2024년에도 여전히 미국, 중국, 독일 다음 4위를 기록하고 있다. 2024년의 일본 GDP 성장... | 제품 직접 근거: 일본 파나소닉, 차량용 배터리 분야에서 한국 기업과 경쟁 | 글로벌 완성차 메이커가 다수 포진해 있어 OEM 공급 기회가 존재하며 품질 중심의 안정적 거래가 가능합니다."
+            - heading "AI 요약" [level=3] [ref=e151]
+            - generic [ref=e152]: 독일, 미국, 일본이 주요 수출 우선 시장으로 분석되었으며, 특히 독일은 유럽 최대의 자동차 생산국으로서 프리미엄 부품 수요가 매우 안정적입니다. 미국은 대규모 애프터마켓과 자가 정비 문화가 발달해 유통 기회가 많으나, 시장별로 E-Mark나 DOT 등 까다로운 자동차 안전 인증 대응이 필수적입니다. 현재 설정된 HS코드(7009.10)는 '검토 필요' 상태이므로 최종 컴플라이언스 결정 전 실제 제품 규격에 따른 HS/HSK 코드의 확정 및 검증이 반드시 선행되어야 합니다.
+            - heading "실행 권고 사항" [level=3] [ref=e153]
+            - list [ref=e155]:
+              - listitem [ref=e156]: 제품의 구성 재질(유리 vs 플라스틱 케이스)에 따른 정확한 HS코드(7009.10) 적정성을 전문 관세사를 통해 재확인하기
+              - listitem [ref=e157]: 독일 및 유럽 시장 진출을 위한 필수 요건인 E-Mark 인증의 세부 항목과 현지 대행 기관 조사하기
+              - listitem [ref=e158]: 미국 시장 진입을 위해 DOT(미국 운송부) 및 SAE 안전 기준 부합 여부 자체 기술 점검하기
+              - listitem [ref=e276]: 일본 완성차 메이커(OEM) 공급을 위한 현지 품질 심사 절차 및 보수적인 벤더 등록 기준 파악하기
+              - listitem [ref=e277]: 전략물자관리시스템을 통해 해당 차량용 부품의 전략물자 판정 여부 공식 확인 절차 진행하기
+            - heading "전략물자 / 안전 플래그" [level=3] [ref=e159]
+            - list [ref=e160]:
+              - listitem [ref=e161]:
+                - text: 전략물자
+                - generic [ref=e162]: ": 제공된 HS/HSK 기준 전략물자 연계표에서 일치 항목이 없습니다."
+              - listitem [ref=e163]:
+                - text: 제품안전
+                - generic [ref=e164]: ": SafetyKorea 상태: 기관 확인 필요(API 키 미등록)"
+            - heading "국가별 유의사항" [level=3] [ref=e165]
+            - generic [ref=e166]:
+              - generic [ref=e167]:
+                - paragraph [ref=e168]: 독일연방공화국(The Federal Republic of Germany)
+                - list [ref=e169]:
+                  - listitem [ref=e170]: "인증: 인쇄장비 수입허가 및 사용관리 제도"
+                  - listitem [ref=e171]: "규제: 반덤핑(조사중)"
+                  - listitem [ref=e172]: "K-SURE 국가위험: Country: 독일 | Grade: 1 | Evaluated: 2025-12-30"
+                  - listitem [ref=e173]: "K-SURE 업종위험: Country: 독일 | Industry: 화학물질 및 화학제품 제조업; 의약품 제외 | Risk Index: 2"
+                  - listitem [ref=e174]: "K-SURE 수출결제: Scope: global | Late rate: 18.3% | Avg payment period: 73.5d | Avg late period: 16.8d | Top term: O/A(T/T 포함) (74.4%)"
+              - generic [ref=e175]:
+                - paragraph [ref=e176]: 미합중국(The United States of America)
+                - list [ref=e177]:
+                  - listitem [ref=e178]: "인증: 확실한 정보 없음"
+                  - listitem [ref=e179]: "규제: 확실한 정보 없음"
+                  - listitem [ref=e180]: "K-SURE 국가위험: 확실한 정보 없음"
+                  - listitem [ref=e181]: "K-SURE 업종위험: 확실한 정보 없음"
+                  - listitem [ref=e182]: "K-SURE 수출결제: 확실한 정보 없음"
+              - generic [ref=e183]:
+                - paragraph [ref=e184]: 일본(Japan)
+                - list [ref=e185]:
+                  - listitem [ref=e186]: "인증: 확실한 정보 없음"
+                  - listitem [ref=e187]: "규제: 확실한 정보 없음"
+                  - listitem [ref=e188]: "K-SURE 국가위험: 확실한 정보 없음"
+                  - listitem [ref=e189]: "K-SURE 업종위험: 확실한 정보 없음"
+                  - listitem [ref=e190]: "K-SURE 수출결제: 확실한 정보 없음"
+            - heading "출처 표" [level=3] [ref=e191]
+            - generic [ref=e192]:
+              - generic [ref=e193]:
+                - generic [ref=e194]: KICOX 공장 생산정보
+                - generic [ref=e195]: KICOX
+                - generic [ref=e196]: 확실한 정보 없음
+                - generic [ref=e197]: 미실행
+                - generic [ref=e198]: 확실한 정보 없음
+                - generic [ref=e199]: 확실한 정보 없음
+                - link "원문" [ref=e200] [cursor=pointer]:
+                  - /url: https://www.data.go.kr/data/15087611/openapi.do
+              - generic [ref=e201]:
+                - generic [ref=e202]: KOTRA 국가정보
+                - generic [ref=e203]: KOTRA
+                - generic [ref=e204]: 확실한 정보 없음
+                - generic [ref=e205]: 미실행
+                - generic [ref=e206]: 확실한 정보 없음
+                - generic [ref=e207]: 확실한 정보 없음
+                - link "원문" [ref=e208] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+              - generic [ref=e209]:
+                - generic [ref=e210]: KOTRA 해외시장뉴스
+                - generic [ref=e211]: KOTRA
+                - generic [ref=e212]: 2026.04.26
+                - generic [ref=e213]: 조회 성공
+                - generic [ref=e214]: "8"
+                - generic [ref=e215]: 확실한 정보 없음
+                - link "원문" [ref=e216] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/index.do
+              - generic [ref=e217]:
+                - generic [ref=e218]: KOTRA 해외인증정보
+                - generic [ref=e219]: KOTRA
+                - generic [ref=e220]: 2026.04.26
+                - generic [ref=e221]: 조회 성공
+                - generic [ref=e222]: "20"
+                - generic [ref=e223]: 확실한 정보 없음
+                - link "원문" [ref=e224] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+              - generic [ref=e225]:
+                - generic [ref=e226]: KOTRA 수입규제정보
+                - generic [ref=e227]: KOTRA
+                - generic [ref=e228]: 2026.04.26
+                - generic [ref=e229]: 조회 성공
+                - generic [ref=e230]: "30"
+                - generic [ref=e231]: 확실한 정보 없음
+                - link "원문" [ref=e232] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+              - generic [ref=e233]:
+                - generic [ref=e234]: K-SURE 국가위험등급
+                - generic [ref=e235]: K-SURE
+                - generic [ref=e236]: 2026.04.26
+                - generic [ref=e237]: 조회 성공
+                - generic [ref=e238]: "1"
+                - generic [ref=e239]: 확실한 정보 없음
+                - link "원문" [ref=e240] [cursor=pointer]:
+                  - /url: https://www.data.go.kr/data/15140201/openapi.do
+              - generic [ref=e241]:
+                - generic [ref=e242]: K-SURE 업종위험지수
+                - generic [ref=e243]: K-SURE
+                - generic [ref=e244]: 2026.04.26
+                - generic [ref=e245]: 조회 성공
+                - generic [ref=e246]: "35"
+                - generic [ref=e247]: 확실한 정보 없음
+                - link "원문" [ref=e248] [cursor=pointer]:
+                  - /url: https://www.data.go.kr/data/15132755/openapi.do
+              - generic [ref=e249]:
+                - generic [ref=e250]: K-SURE 수출결제정보
+                - generic [ref=e251]: K-SURE
+                - generic [ref=e252]: 2026.04.26
+                - generic [ref=e253]: 조회 성공
+                - generic [ref=e254]: "1"
+                - generic [ref=e255]: 확실한 정보 없음
+                - link "원문" [ref=e256] [cursor=pointer]:
+                  - /url: https://www.data.go.kr/data/15144259/openapi.do
+              - generic [ref=e257]:
+                - generic [ref=e258]: 전략물자관리원 HSK 연계정보
+                - generic [ref=e259]: Trade Security Institute
+                - generic [ref=e260]: 2026.04.26
+                - generic [ref=e261]: 조회 결과 없음
+                - generic [ref=e262]: "0"
+                - generic [ref=e263]: 확실한 정보 없음
+                - link "원문" [ref=e264] [cursor=pointer]:
+                  - /url: https://www.yestrade.go.kr/
+              - generic [ref=e265]:
+                - generic [ref=e266]: SafetyKorea 리콜정보
+                - generic [ref=e267]: KATS
+                - generic [ref=e268]: 2026.04.26
+                - generic [ref=e269]: 미실행 (API 승인 대기)
+                - generic [ref=e270]: "0"
+                - generic [ref=e271]: API 승인 대기
+                - link "원문" [ref=e272] [cursor=pointer]:
+                  - /url: https://www.safetykorea.kr/openapi
+            - generic [ref=e273]: 본 리포트는 공공데이터 조회 결과를 요약한 참고 자료입니다. 실제 계약 체결 전에는 최신 원문(인증기관, 규제기관, K-SURE 등)을 반드시 재확인하세요.
+    - generic [ref=e80]:
+      - button "이전" [ref=e81] [cursor=pointer]
+      - button "AI 요약 생성" [ref=e274] [cursor=pointer]:
+        - img
+        - text: AI 요약 생성
+      - button "PDF 내려받기" [ref=e275] [cursor=pointer]:
+        - img
+        - text: PDF 내려받기

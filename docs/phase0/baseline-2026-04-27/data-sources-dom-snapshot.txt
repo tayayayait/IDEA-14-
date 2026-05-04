@@ -1,0 +1,155 @@
+- region "Notifications (F8)":
+  - list
+- region "Notifications alt+T"
+- banner:
+  - link "홈":
+    - /url: /projects
+  - link "프로젝트":
+    - /url: /projects
+    - text: 프로젝트
+  - link "데이터 출처":
+    - /url: /data-sources
+    - text: 데이터 출처
+  - button "로그아웃":
+- main:
+  - heading "데이터 출처 및 API 상태" [level=1]
+  - paragraph: 실제 호출 로그를 기준으로 각 데이터 소스의 최신 상태를 표시합니다.
+  - paragraph: "최근 조회 시각: 2026.04.27 19:59"
+  - generic: KICOX 상태
+  - generic: 대기
+  - generic: SafetyKorea 상태
+  - generic: 대기
+  - generic: API 승인 대기
+  - heading "공공데이터 API 10종" [level=3]
+  - paragraph: 실제 호출 로그 기반으로 API 상태를 자동 반영합니다.
+  - paragraph: KICOX_Factory Production Info
+  - paragraph: KICOX
+  - paragraph: Factory registration and production information lookup
+  - generic: 대기
+  - paragraph: 미실행
+  - paragraph: "최근 조회: 정보 없음"
+  - paragraph: "HTTP 상태: 정보 없음"
+  - paragraph: "응답 건수: 정보 없음"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "Public Data Portal":
+    - /url: https://www.data.go.kr/data/15087611/openapi.do
+    - text: Public Data Portal
+  - paragraph: KOTRA_Country Info
+  - paragraph: KOTRA
+  - paragraph: Country-level market baseline information
+  - generic: 대기
+  - paragraph: 미실행
+  - paragraph: "최근 조회: 정보 없음"
+  - paragraph: "HTTP 상태: 정보 없음"
+  - paragraph: "응답 건수: 정보 없음"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "KOTRA":
+    - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+    - text: KOTRA
+  - paragraph: KOTRA_Overseas Market News
+  - paragraph: KOTRA
+  - paragraph: Collect overseas market news and trend signals
+  - generic: 정상
+  - paragraph: 조회 성공
+  - paragraph: "최근 조회: 2026.04.27 19:59"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 8"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 1"
+  - link "KOTRA":
+    - /url: https://dream.kotra.or.kr/kotranews/index.do
+    - text: KOTRA
+  - paragraph: KOTRA_Overseas Certification Info
+  - paragraph: KOTRA
+  - paragraph: Check overseas certification requirements
+  - generic: 조회 결과 없음
+  - paragraph: 조회 결과 없음
+  - paragraph: "최근 조회: 2026.04.27 19:59"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 0"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 1"
+  - link "KOTRA":
+    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+    - text: KOTRA
+  - paragraph: KOTRA_Import Regulation Info
+  - paragraph: KOTRA
+  - paragraph: Review import regulations and non-tariff barriers
+  - generic: 정상
+  - paragraph: 조회 성공
+  - paragraph: "최근 조회: 2026.04.27 19:59"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 27"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "KOTRA":
+    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+    - text: KOTRA
+  - paragraph: K-SURE_Country Risk Grade
+  - paragraph: K-SURE
+  - paragraph: Check country credit/risk grade
+  - generic: 정상
+  - paragraph: 조회 성공
+  - paragraph: "최근 조회: 2026.04.27 19:59"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 1"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "K-SURE":
+    - /url: https://www.data.go.kr/data/15140201/openapi.do
+    - text: K-SURE
+  - paragraph: K-SURE_Industry Risk Index
+  - paragraph: K-SURE
+  - paragraph: Check industry-level risk index
+  - generic: 정상
+  - paragraph: 조회 성공
+  - paragraph: "최근 조회: 2026.04.27 19:59"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 35"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "K-SURE":
+    - /url: https://www.data.go.kr/data/15132755/openapi.do
+    - text: K-SURE
+  - paragraph: K-SURE_Export Payment Info
+  - paragraph: K-SURE
+  - paragraph: Reference export payment terms and delay history
+  - generic: 정상
+  - paragraph: 조회 성공
+  - paragraph: "최근 조회: 2026.04.27 19:59"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 1"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "K-SURE":
+    - /url: https://www.data.go.kr/data/15144259/openapi.do
+    - text: K-SURE
+  - paragraph: Trade Security Institute_HSK Strategic Item Info
+  - paragraph: Trade Security Institute
+  - paragraph: Check strategic item status by HSK code
+  - generic: 조회 결과 없음
+  - paragraph: 조회 결과 없음
+  - paragraph: "최근 조회: 2026.04.27 19:16"
+  - paragraph: "HTTP 상태: 200"
+  - paragraph: "응답 건수: 0"
+  - paragraph: "오류 코드: 정보 없음"
+  - paragraph: "실패 횟수: 0"
+  - link "Trade Security Institute":
+    - /url: https://www.yestrade.go.kr/
+    - text: Trade Security Institute
+  - paragraph: KATS_SafetyKorea_Recall
+  - paragraph: KATS
+  - paragraph: Check product recall status
+  - generic: 대기
+  - paragraph: 미실행 (API 승인 대기)
+  - paragraph: "최근 조회: 2026.04.27 19:16"
+  - paragraph: "HTTP 상태: 정보 없음"
+  - paragraph: "응답 건수: 0"
+  - paragraph: "오류 코드: API 승인 대기"
+  - paragraph: "실패 횟수: 0"
+  - link "KATS":
+    - /url: https://www.safetykorea.kr/openapi
+    - text: KATS
+  - paragraph: SafetyKorea는 현재 API 승인 대기 상태로만 표시되며, 평가 결함으로 집계하지 않습니다.

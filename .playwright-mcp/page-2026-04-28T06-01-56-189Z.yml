@@ -1,0 +1,101 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e428]:
+    - banner [ref=e429]:
+      - link "홈" [ref=e431] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e433]
+        - generic [ref=e436]: 산단수출 코파일럿
+      - generic [ref=e437]:
+        - link "프로젝트" [ref=e438] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e439] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e440] [cursor=pointer]:
+          - img
+          - generic [ref=e441]: 로그아웃
+    - generic [ref=e442]:
+      - complementary [ref=e443]:
+        - paragraph [ref=e444]: 분석 단계
+        - navigation "분석 단계" [ref=e445]:
+          - link "1단계 기업·공장 검색" [ref=e446] [cursor=pointer]:
+            - /url: /projects/2fb209e7-7845-4fae-9753-c9d2d14c525e/company
+            - img [ref=e448]
+            - generic [ref=e450]:
+              - generic [ref=e451]: 기업·공장 검색
+              - generic [ref=e452]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e453] [cursor=pointer]:
+            - /url: /projects/2fb209e7-7845-4fae-9753-c9d2d14c525e/product
+            - img [ref=e455]
+            - generic [ref=e457]:
+              - generic [ref=e458]: 제품·HS 코드
+              - generic [ref=e459]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e460] [cursor=pointer]:
+            - /url: /projects/2fb209e7-7845-4fae-9753-c9d2d14c525e/countries
+            - generic [ref=e461]: "3"
+            - generic [ref=e462]:
+              - generic [ref=e463]: 후보국 추천 Top 3
+              - generic [ref=e464]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e465] [cursor=pointer]:
+            - /url: /projects/2fb209e7-7845-4fae-9753-c9d2d14c525e/countries
+            - generic [ref=e466]: "4"
+            - generic [ref=e467]:
+              - generic [ref=e468]: 국가 상세
+              - generic [ref=e469]: 요구사항 4~7
+              - generic [ref=e470]: 국가 선택 필요
+          - link "5단계 전략물자·제품안전" [ref=e471] [cursor=pointer]:
+            - /url: /projects/2fb209e7-7845-4fae-9753-c9d2d14c525e/safety
+            - generic [ref=e472]: "5"
+            - generic [ref=e473]:
+              - generic [ref=e474]: 전략물자·제품안전
+              - generic [ref=e475]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e476] [cursor=pointer]:
+            - /url: /projects/2fb209e7-7845-4fae-9753-c9d2d14c525e/report
+            - generic [ref=e477]: "6"
+            - generic [ref=e478]:
+              - generic [ref=e479]: 리포트
+              - generic [ref=e480]: 요구사항 10
+      - main [ref=e481]:
+        - generic [ref=e482]:
+          - generic [ref=e483]:
+            - paragraph [ref=e484]: 기획 요구사항 매핑
+            - paragraph [ref=e485]: 요구사항 3
+            - paragraph [ref=e486]: 후보국 추천 및 근거 점수화
+          - generic [ref=e487]:
+            - generic [ref=e488]:
+              - heading "3. 후보국 추천 Top 3" [level=1] [ref=e489]
+              - paragraph [ref=e490]: 후보군을 먼저 추출한 뒤, 후보군 내부에서만 점수와 순위를 계산합니다.
+            - button "추천 분석 실행" [ref=e491] [cursor=pointer]:
+              - img
+              - text: 추천 분석 실행
+          - generic [ref=e493]:
+            - paragraph [ref=e494]: 아직 추천 결과가 없습니다.
+            - paragraph [ref=e495]: 추천 실행을 눌러 HS·제품·뉴스·규제·목표시장 메모 신호로 후보국을 생성하세요.
+      - complementary [ref=e496]:
+        - generic [ref=e497]:
+          - generic [ref=e498]: 근거 패널
+          - button "근거 패널 접기" [ref=e499] [cursor=pointer]:
+            - img
+        - generic [ref=e501]:
+          - heading "근거 상태" [level=3] [ref=e502]
+          - paragraph [ref=e503]: 후보군으로 편입된 국가만 점수화해 순위를 계산합니다.
+          - generic [ref=e504]:
+            - paragraph [ref=e505]: 분석 기준 코드
+            - paragraph [ref=e506]: HS - · HSK -
+            - paragraph [ref=e507]: "적용 방식: 선택 이력 없음"
+            - paragraph [ref=e508]: "상태: 확인 필요 · 확인 필요 상태로 진행 중입니다. 계약 전 코드 재확인이 필요합니다."
+            - paragraph [ref=e509]: "확인 필요 상태로 진행: 후속 단계 분석은 진행되지만, 최종 확정 전 코드 재검증이 필요합니다."
+          - generic [ref=e510]:
+            - paragraph [ref=e511]: 현재 상태
+            - generic [ref=e512]: 대기
+    - generic [ref=e514]:
+      - button "이전" [ref=e515] [cursor=pointer]
+      - button "안전성 검토" [disabled]:
+        - text: 안전성 검토
+        - img

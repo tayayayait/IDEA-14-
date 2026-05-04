@@ -1,0 +1,144 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e16] [cursor=pointer]:
+          - img
+          - generic [ref=e17]: 로그아웃
+    - generic [ref=e18]:
+      - complementary [ref=e19]:
+        - paragraph [ref=e20]: 분석 단계
+        - navigation "분석 단계" [ref=e21]:
+          - link "1단계 기업·공장 검색" [ref=e22] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/company
+            - img [ref=e24]
+            - generic [ref=e26]:
+              - generic [ref=e27]: 기업·공장 검색
+              - generic [ref=e28]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e29] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/product
+            - generic [ref=e30]: "2"
+            - generic [ref=e31]:
+              - generic [ref=e32]: 제품·HS 코드
+              - generic [ref=e33]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e34] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/countries
+            - generic [ref=e35]: "3"
+            - generic [ref=e36]:
+              - generic [ref=e37]: 후보국 추천 Top 3
+              - generic [ref=e38]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e39] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/countries
+            - generic [ref=e40]: "4"
+            - generic [ref=e41]:
+              - generic [ref=e42]: 국가 상세
+              - generic [ref=e43]: 요구사항 4~7
+              - generic [ref=e44]: 국가 선택 필요
+          - link "5단계 전략물자·제품안전" [ref=e45] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/safety
+            - generic [ref=e46]: "5"
+            - generic [ref=e47]:
+              - generic [ref=e48]: 전략물자·제품안전
+              - generic [ref=e49]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e50] [cursor=pointer]:
+            - /url: /projects/799b8a8e-f03c-4f85-b957-9b7e60cde899/report
+            - generic [ref=e51]: "6"
+            - generic [ref=e52]:
+              - generic [ref=e53]: 리포트
+              - generic [ref=e54]: 요구사항 10
+      - main [ref=e55]:
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - paragraph [ref=e58]: 기획 요구사항 매핑
+            - paragraph [ref=e59]: 요구사항 2
+            - paragraph [ref=e60]: 제품/HS·HSK 코드 확정
+          - generic [ref=e62]:
+            - img [ref=e63]
+            - generic [ref=e67]:
+              - paragraph [ref=e68]: SK하이닉스 주식회사
+              - paragraph [ref=e69]: 청주테크노폴리스일반산업단지 · 업종 26111
+          - generic [ref=e70]:
+            - heading "2. 제품·HS 코드" [level=1] [ref=e71]
+            - paragraph [ref=e72]: 제품 정보를 입력하면 관세청 공식 코드표에서 HS/HSK 후보를 검색합니다. 확정 토글로 분석에 사용할 코드를 선택하세요.
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - heading "제품 정보" [level=3] [ref=e75]
+              - paragraph [ref=e76]: 핵심 부품·소재·용도를 함께 적으면 정확도가 높아집니다.
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - generic [ref=e79]: 제품명 *
+                - textbox "예) 전기차용 BLDC 모터" [ref=e80]: DRAM. NAND Flash
+                - paragraph [ref=e81]: 제품명을 1개 품목으로 입력하면 HS·HSK 후보 정확도가 높아집니다.
+              - generic [ref=e82]:
+                - text: 모델명
+                - textbox "예) BLDC-MTR-3000" [ref=e83]
+              - generic [ref=e84]:
+                - text: 목표 시장 메모
+                - textbox "예) 동남아 OEM 공급, 1차 베트남·인도네시아 우선" [ref=e85]
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - generic [ref=e88]: 제품 설명 *
+                  - button "AI 설명 초안 작성" [ref=e139] [cursor=pointer]:
+                    - img
+                    - text: AI 설명 초안 작성
+                - textbox "용도, 정격 출력, 소재, 인증, 응용 분야 등 (20~1000자)" [ref=e89]: "개요: DRAM은 전원이 공급되지 않으면 저장된 데이터가 소멸하는 휘발성 메모리 반도체이며, NAND Flash는 전원이 차단되어도 데이터를 유지하는 비휘발성 저장 장치입니다. 전자기기의 데이터 처리와 저장을 담당하는 핵심 부품으로 활용되나, 구체적인 제조 공법이나 성능 규격은 확실한 정보 없음입니다. 프로젝트 맥락: 충청북도 청주테크노폴리스일반산업단지에 위치한 SK하이닉스 주식회사는 반도체 제조업(26111)에 따라 해당 물품을 생산 및 관리합니다. 주요 원재료 구성은 DRAM 및 NAND Flash이며, 이외 제품과 관련된 개별적인 상세 키워드는 확실한 정보 없음으로 확인됩니다."
+                - paragraph [ref=e90]: 329/1000자
+                - generic [ref=e91]:
+                  - generic [ref=e92]: 정상
+                  - paragraph [ref=e140]: 제품의 범용적 정의와 제공된 기업의 산업적 위치 및 지역 정보를 결합하여 HS 분류를 위한 기초 설명을 작성하였습니다.
+              - generic [ref=e93]:
+                - text: 주요 부품/소재
+                - generic [ref=e94]:
+                  - textbox "태그 입력" [ref=e95]:
+                    - /placeholder: 부품/소재 입력 후 Enter (최대 20개)
+                  - generic [ref=e97]:
+                    - text: DRAM. NAND Flash
+                    - button "DRAM. NAND Flash 태그 제거" [ref=e98] [cursor=pointer]:
+                      - img
+                  - paragraph [ref=e99]: 1/20개, 태그당 최대 30자
+              - button "공식 데이터 기반 후보 검색" [active] [ref=e100] [cursor=pointer]:
+                - img
+                - text: 공식 데이터 기반 후보 검색
+          - generic [ref=e101]:
+            - heading "확정 코드" [level=3] [ref=e103]
+            - generic [ref=e104]:
+              - generic [ref=e105]:
+                - text: HS
+                - textbox "예) 850140" [ref=e106]
+                - paragraph [ref=e107]: 숫자 6~10자리
+              - generic [ref=e108]:
+                - text: HSK
+                - textbox "예) 8501401010" [ref=e109]
+                - paragraph [ref=e110]: 숫자 6~10자리
+              - generic [ref=e111] [cursor=pointer]:
+                - checkbox "분석에 이 코드를 사용한다 (확정)" [ref=e112]
+                - generic [ref=e113]: 분석에 이 코드를 사용한다 (확정)
+      - complementary [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]: 근거 패널
+          - button "근거 패널 접기" [ref=e117] [cursor=pointer]:
+            - img
+        - generic [ref=e119]:
+          - heading "근거 · 출처" [level=3] [ref=e120]
+          - paragraph [ref=e121]: HS·HSK 후보는 관세청 공식 코드 데이터(HS부호/표준품명)에서 검색한 결과를 기준으로 정렬해 제시합니다. AI는 후보 재정렬과 요약 근거 보조에만 사용됩니다.
+          - generic [ref=e122]:
+            - paragraph [ref=e123]: HS 후보 검색 상태
+            - generic [ref=e124]: 대기
+    - generic [ref=e126]:
+      - button "이전" [ref=e127] [cursor=pointer]
+      - button "확인 필요 상태로 진행" [ref=e128] [cursor=pointer]

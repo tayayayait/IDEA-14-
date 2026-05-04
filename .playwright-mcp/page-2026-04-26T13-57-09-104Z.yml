@@ -1,0 +1,460 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e2117]:
+    - banner [ref=e2118]:
+      - link "홈" [ref=e2120] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e2122]
+      - generic [ref=e2125]:
+        - link "프로젝트" [ref=e2126] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e2127] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e2128] [cursor=pointer]:
+          - img
+    - main [ref=e2130]:
+      - generic [ref=e2131]:
+        - generic [ref=e2132]:
+          - paragraph [ref=e2133]: 기획 요구사항 매핑
+          - paragraph [ref=e2134]: 요구사항 4~7
+          - paragraph [ref=e2135]: 인증·규제·국가/업종·결제 리스크 상세 검증
+        - generic [ref=e2136]:
+          - generic [ref=e2137]:
+            - paragraph [ref=e2138]: DE
+            - heading "독일연방공화국(The Federal Republic of Germany)" [level=1] [ref=e2139]
+            - generic [ref=e2140]:
+              - status "위험도 우선검토" [ref=e2141]: 우선검토
+              - generic [ref=e2143]: 총점 89/100
+          - button "상세 분석 실행" [ref=e2144] [cursor=pointer]:
+            - img
+            - text: 상세 분석 실행
+        - generic [ref=e2145]:
+          - generic [ref=e2146]:
+            - heading "목표시장 평가 요약" [level=3] [ref=e2147]
+            - paragraph [ref=e2148]: 목표시장 메모, 후보군 포함 신호, 최종 순위와 점수를 함께 표시합니다.
+          - generic [ref=e2149]:
+            - paragraph [ref=e2150]: "입력 목표시장: 확실한 정보 없음"
+            - paragraph [ref=e2151]: "포함 여부: 기본 후보군 포함"
+            - paragraph [ref=e2152]: "최종 순위: Rank 1"
+            - paragraph [ref=e2153]: "후보 편입 근거: 시장 뉴스 일치, 제품 키워드 일치"
+            - paragraph [ref=e2154]: "포함 이유: 시장 뉴스 일치; 제품 키워드 일치"
+            - paragraph [ref=e2155]: "추천 근거: 유럽 최대 자동차 생산국으로 OEM 및 고품질 애프터마켓 수요 견조"
+            - paragraph [ref=e2156]: "낮은 추천 이유: 매우 엄격한 EU 자동차 안전 규격 및 기술 표준 준수 필요"
+            - paragraph [ref=e2157]: "대안 시장: 일본(Japan)(JP), 미합중국(The United States of America)(US), 중화인민공화국(The People&rsquo;s Republic of China)(CN)"
+        - generic [ref=e2158]:
+          - generic [ref=e2159]:
+            - generic [ref=e2160]:
+              - heading "필요 인증" [level=3] [ref=e2161]
+              - paragraph [ref=e2162]: "출처 패널·본문 행 수: 10건"
+            - list [ref=e2164]:
+              - listitem [ref=e2165]:
+                - paragraph [ref=e2166]: "HS 제8443.32호에 해당하는 프린터 중 22/2018/TT-BTTTT Appendix 01에 따른 아래에 기재된 품목을 수입할 경우, 정보통신부(MIC)가 발급한 수입허가가 필요함 ① 도트매트릭스 프린터(Dot matrix printers) HS 8443.32.21 : A4 기준 분당 60매 이상 인쇄가 가능하거나, A3보다 긴 용지를 인쇄하는 데 사용되는 디지털 도트매트릭스 컬러 프린터 ② 레이저 프린터(Laser printers) HS 8443.32.31 : A4 기준 분당 60매 이상 인쇄가 가능하거나, A3보다 긴 용지를 인쇄하는 데 사용되는 디지털 레이저 컬러 프린터"
+                - generic [ref=e2167]:
+                  - paragraph [ref=e2168]: "필요서류: ① 수입허가 신청서 ② 수입하려는 각 인쇄장비의 카탈로그 ③ 유형별 필수 증빙서류의 인증 사본 - 인쇄업체 : 인쇄허가증(Printing License) 또는 인쇄활동 운영등록신고서 - 인쇄장비 수출&middot;입 허가기업 : 관련 법령에서 규정한 수출&middot;입 허가증 - 기관&middot;조직(법인격 보유) : 설립 결정문"
+                  - paragraph [ref=e2169]: "절차: 1. 허가대상 확인 다음 각 호의 인쇄장비를 수입하려는 경우, 정보통신부(MIC)의 수입허가를 받아야 함 ① 인쇄 필름 또는 인쇄판(플레이트) 제작 장비 ② 디지털, 오프셋, 플렉소, 그라비어, 레터프레스기술을 사용하는 프린터 ③ 제책 관련 장비: 절단기, 책 접기, 제본 새들 스티처, 후가공(마감) 라인 ④ 컬러 복사기, 컬러 복사 기능이 있는 프린터 * 정보통신부(MIC)장관 규정 Circular 22/2018/TT-BTTTT Appendix 01에서 HS 품목별로 허가대상을 상세히 규정함 2. 수입자격 확인 인쇄장비를 수입할 수 있는 자는 다음과 같음 ① 인쇄업체 ② 인쇄장비의 수출&middot;입이 법률에 의해 허가된 기업 ③ 법인격을 갖추고 내부 업무 수행을 위해 인쇄장비 사용이 허용된 기관&middot;조직 3. 수입 전 정보통신부(MIC) 수입허가 신청 법령에서 규정한 수입자격을 보유한 자는, 수입 전에 아래의 신청 서류를 준비하여 베트남 정보통신부(MIC)에 제출해야 한다. 4. 제출 방식 온라인 공공서비스 시스템 / 우편 / 인편 제출 4. 수입허가 제출서류 수입 자격을 보유한 신청자는 정보통신부(MIC)에 다음 수입허가 신청서류를 제출해야 한다. ① 수입허가 신청서 ② 수입하려는 각 인쇄장비의 카탈로그 ③ 유형별 필수 증빙서류의 인증 사본 - 인쇄업체 : 인쇄허가증(Printing License) 또는 인쇄활동 운영등록신고서 - 인쇄장비 수출&middot;입 허가기업 : 관련 법령에서 규정한 수출&middot;입 허가증 - 기관&middot;조직(법인격 보유) : 설립 결정문 5. 회신기한 정보통신부는 완비된 신청서를 접수한 날로부터 5 근무일 이내에 인쇄 장비 수입허가를 발급하여야 함 만약, 허가 발급을 거부하는 경우에는 거부 사유를 명확히 기재한 서면 회신을 발행하여야 함"
+                  - paragraph [ref=e2170]: "유효기간: 수입 건별 허가 제도 (법령상 명시된 유효기간 없음)"
+                  - paragraph [ref=e2171]: 예상 비용 확실한 정보 없음 / 예상 기간 5일
+                - link "KOTRA" [ref=e2172] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%ED%94%84%EB%A6%B0%ED%84%B0
+                  - img [ref=e2173]
+                  - text: KOTRA
+              - listitem [ref=e2177]:
+                - paragraph [ref=e2178]: 발효 식품류, 절임 식품류
+                - generic [ref=e2179]:
+                  - paragraph [ref=e2180]: "필요서류: ㅇ FDA 등록 (FR, FCE, SID, Labeling)에 필요한 서류 - 공장정보 : 공장명, 주소, 전화/팩스번호, 대표자명 - pH 4.6 이하 : 제품명, 살균온도/시간, 살균방법, 제품샘플 소량 - pH 4.7 이상 : 제품명, 제품명, 살균공정도, 열침투측정자료 (HP data), 살균공정근거자료, 제품샘플 소량 ㅇ FCS 테스트(FDA 21 CFR 규정)에 필요서류 - 기업정보 (기업명, 주소, 전화번호, 대표자명) - 제품정보 (제품명, 원료명, 시험용샘플 100cm X 100cm 또는 50g)"
+                  - paragraph [ref=e2181]: "절차: ㅇ 별도로 요구되는 인증은 없으며, 김치는 미 식품의약국(FDA)가 미 식품 관련 법에 따라 미국에서 유통되는 제품의 안전성을 관리 감독함 ㅇ 관련 법에 따라 FDA의 각종 식품 수입 규제를 준수해야 하며 대략적인 수출 절차는 하기와 같음 1. 수출 전 준비 수출 대상 김치의 성분(첨가물, 색소 등)이 미국에서 허용되는 성분인지 확인 2. FDA 및 공장&middot;공정 등록 김치를 제조&middot;포장&middot;보관하는 국내 공장은 FDA 식품시설등록(FFR / Food Facility Registration)을 통해 시설등록번호 획득 김치가 pH&middot;수분활성 등에 따라 산성/저산성 식품으로 분류될 경우, 공장등록(FCE) 및 공정등록(SID)이 요구될 수 있으므로 해당 조건을 충족하는지 확인 3. 라벨링&middot;영양성분 준비 제품명, 원재료, 알레르기 유발 성분, 순중량, 제조&middot;유통기한, 보관 방법, 제조업자&middot;주소, 원산지 등을 영문으로 표기하고, FDA 식품표시 규정을 지키는 라벨을 제작 영양성분표(Nutrition Facts)를 표시하기 위해 필수 영양성분 분석 시험을 진행하고, 결과를 바탕으로 라벨을 완성 4. 선적 전 사전통보 및 서류 선적 전에 미국 측에 식품 사전통보(Prior Notice)를 해야 하며, 수입자 또는 대행사가 FDA 시스템에 신고 인보이스, 패킹리스트, 선하증권(B/L) 등 기본 선적서류와 함께 FDA 등록번호, 사전통보번호(PNC) 등을 수입자에게 전달 5. 미국 도착 후 검사&middot;통관 미국 입항 후 세관(CBP) 신고와 동시에 FDA가 서류&middot;라벨&middot;제품에 대한 위험기반 검사를 진행할 수 있으며, 필요 시 샘플 검사(미생물, 잔류농약, 중금속 등)가 이뤄짐 문제가 없으면 통관&middot;세금 납부 후 물품이 반출되며, 만약 위반사항이 발견되면 보류&middot;반송&middot;폐기 조치가 있을 수 있으므로, 성분&middot;라벨&middot;위생관리(HACCP 등)를 사전에 철저히 준비하는 것이 중요함"
+                  - paragraph [ref=e2182]: "유효기간: ㅇ Facility Registration - 매 짝수년 10월 1일~12월 31일 사이 등록 갱신 필수 예) 2024년에 인증 받았으면, 2026년 말까지 유효함"
+                  - paragraph [ref=e2183]: 예상 비용 확실한 정보 없음 / 예상 기간 150일
+                - link "KOTRA" [ref=e2184] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EA%B9%80%EC%B9%98
+                  - img [ref=e2185]
+                  - text: KOTRA
+              - listitem [ref=e2189]:
+                - paragraph [ref=e2190]: 전열 시트
+                - generic [ref=e2191]:
+                  - paragraph [ref=e2192]: "필요서류: 1) 기술사양신고서 2) 위임장 (계약자의 대리인이 신청하는 경우) 3) 인증신청 보완서 및 인증신청 관련 확인사항 4) 제조공장 또는 사업장의 품질관리에 관한 설명서 5) 위탁생산 또는 수입에 관련된 계약 설명서 (위탁생산 또는 수입하는 경우에만 제출) 6) 출장시험 신청서 (출장시험을 희망하는 경우에만 제출)"
+                  - paragraph [ref=e2193]: "절차: 인증 신청->제품 시험->첫회 공장 조사->인증 등록->인증 마크 표지(부착)->첫회 로트 조사->첫회 공장 조사->출하"
+                  - paragraph [ref=e2194]: "유효기간: 5년"
+                  - paragraph [ref=e2195]: 예상 비용 확실한 정보 없음 / 예상 기간 60일
+                - link "KOTRA" [ref=e2196] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%A0%84%EC%97%B4%20%EC%8B%9C%ED%8A%B8
+                  - img [ref=e2197]
+                  - text: KOTRA
+              - listitem [ref=e2201]:
+                - paragraph [ref=e2202]: "ㅇ 품목 정의에 명시된 수입산 치과용 임플란트 ㅇ 예외 사례: 유통 등록 면제 대상 1. 연구, 테스트, 검사(실험, 성능 평가, 사용 지침 또는 기기 개조) 목적으로 수입된 치과용 임플란트 2. 인도주의적 의료 서비스 제공을 위해 수입된 치과용 임플란트 3. 무역 박람회 및 전시회 전시용, 제품 출시 행사용, 의료기관 증정용, 의료기관의 특별 진단용 혹은 특정 개인의 치료용으로 수입되는 치과용 임플란트 4. 중고 치과용 임플란트 - 연구 및 훈련용으로 수입되지만 인체 사용이나 치료 목적은 아님 - 무역 박람회나 전시회 참여, 소개 및 전시를 위한 재수출 목적의 일시적 수입 ㅇ 1~4번의 경우 수입 허가가 필요함 5. 기타 목적의 중고 치과용 임플란트는 수입이 금지됨필수"
+                - generic [ref=e2203]:
+                  - paragraph [ref=e2204]: "필요서류: ㅇ 수입산 치과용 임플란트 신규 유통 번호 급행 발급시 필요 서류 1. 신청서(10/2023/TT-BYT, 부록I, C&D등급 양식 제03.05) - 베트남 내 신청자 2. 유효한 ISO 13845 품질 관리 기준 적합성 증명서 - 외국 공급업체 3. 제품 소유주가 베트남 내 신청인을 위해 발급한 유효한 위임장 - 외국 공급업체 4. 제품 소유주가 발급한 보중 서비스 제공 자격 증명서(제품 소유주가 일회용 의료기기로 정의하거나 품목이 보증 대상이 아님을 증명하는 서류가 있는 경우는 제외) - 외국 공급업체 5. 유효한 CFS 또는 판매 허가증(한국산 제품의 경우 MFDS 발급) -- 외국 공급업체 6. ASEAN CSDT (공통 제출 서류 양식), 아래의 내용이 포함됨(상세 지침은 결정문 2426/QD-BYT 참조) - 베트남 내 신청자 6.1. - 베트남 내 신청자 - 한국산 치과용 임플란트(제품) 개요 - 상업적 판매 이력 - 사용 목적 및 사용법 - 세계 각국에서의 등록 현황 - 주요 안전성 및 성능 관련 정보 6.2. - 필수 원칙 준수 점검표(베트남어 또는 영어) -- 베트남 내 신청자 6.3. - 베트남 내 신청자 ㅇ 의료기기 설명 - 의료기기 설명 및 특징 - 사용 목적 - 표시사항 - 사용 설명서 - 금기사항 - 경고 - 주의사항 - 잠재적 부작용 - 대체 치료법 - 재료(베트남어 또는 영어) - 기타 관련 사양 - 기타 설명 정보 6.4. - 베트남 내 신청자 ㅇ 설계 검증 및 확인 문서 요약(베트남어 또는 영어) - 비임상 연구 - 임상 증거 6.5. - 베트남 내 신청자 ㅇ 라벨링 - 치과 임플란트 및 포장재에 부착된 원본 라벨 및 베트남어 부속 라벨 샘플 - 베트남어 사용 설명서 6.6. - 베트남 내 신청자 ㅇ 위험 분석(베트남어 또는 영어) - 위험 분석 결과 6.7. - 베트남 내 신청자 ㅇ 제조 정보 - 제조업체 정보 - 제조 공정 ㅇ 수입산 치과용 임플란트 신규 유통 번호 일반 발급시 필요 서류 1~6. 수입산 치과용 임플란트 신규 유통 번호 급행 발급시 필요 서류 1~6번과 같음 - 베트남 내 신청자, 외국 공급업체 7. 베트남 보건부 지정 기관이 발급한 ASEAN CSDT 문서 심사 결과 - 베트남 내 신청자"
+                  - paragraph [ref=e2205]: "절차: □ 인증을 위한 2단계 절차 1단계: 수입 전 절차 - 치과용 임플란트의 의료기기 분류 2단계: 수입 전 절차 - 치과용 임플란트의 의료기기 유통 등록 □ 1단계: 수입 전 절차(치과용 임플란트의 의료기기 분류) ㅇ 분류 기준 - 시행규칙 05/2022/TT-BYT, 부록I, 섹션1, 파트II, 항목B, 8호 참고 - 분류 결과는 시행규칙 05/2022/TT-BYT, 부록 II에 명시된 양식에 따라 제시됨 - 분류 결과는 보건부 의료기기 관리 온라인 공공 서비스 시스템에 공개 게시됨 ㅇ 1단계는 2단계 진행을 위해서 반드시 필요한 단계임 □ 2 단계: 수입 전 절차(치과용 임플란트의 의료기기 유통 등록) ㅇ 신규 유통 등록: 두가지 경우 - 유통을 위해 최초로 등록하는 치과용 임플란트 - 등록번호를 부여받았으나 아래의 변경 사항이 있는 경우 1. 제품 소유주 2. 분류, 용도 및 사용 목적 변경 3. 품질 기준 변경 4. 제조 공장 및 제품 코드 추가 5. 기능에 영향을 미치는 원재료 변경 ㅇ 급행 처리 절차를 통한 유통 등록 조건: 두가지 경우 - 호주, 캐나다, 중국, EU, 일본, 한국, 스위스, 영국, 미국으로부터 자유판매증명서(CFS) 또는 시장허가를 받은 치과용 임플란트 - 베트남 내 상업적 유통을 위한 수입허가증 또는 유통(등록) 번호나 유통(등록)증명서를 받은 치과용 임플란트(2022년 1월 1일 이전에 취소된 경우는 제외) ㅇ 유통증명서: 시행규칙 10/2023/TT-BYT의 부록IV, 형식 3번에 따라 보건부에서 발급 ㅇ 유통 번호 유효기간: 무기한 ㅇ 2단계 완료시 수입산 치과용 임플란트에 유통 번호가 발급되며 베트남 국내 시장에서 상업적 목적으로 제한 없이 자유롭게 수입 및 유통될 수 있음"
+                  - paragraph [ref=e2206]: "유효기간: ㅇ 유통번호 및 유통인증서는 무기한 유효함"
+                  - paragraph [ref=e2207]: 예상 비용 1 KRW / 예상 기간 10일
+                - link "KOTRA" [ref=e2208] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%B9%98%EA%B3%BC%EC%9A%A9%20%EC%9E%84%ED%94%8C%EB%9E%80%ED%8A%B8
+                  - img [ref=e2209]
+                  - text: KOTRA
+              - listitem [ref=e2213]:
+                - paragraph [ref=e2214]: "- PBT(폴리부틸렌 테레프탈레이트)"
+                - generic [ref=e2215]:
+                  - paragraph [ref=e2216]: "필요서류: 1. 제품 설명서 2. 사업자등록증 3. 제조기업 관련 계약서 4. 기타"
+                  - paragraph [ref=e2217]: "절차: - CQC 인증절차: 인증필요서류 준비하여 CQC 홈페이지에서 온라인으로 신청서를 제출-> CQC 접수 및 서류 검토-> 샘플 송부 통지서 발급-> 시험기관 선정 및 샘플 송부-> 시험기관 샘플 테스트-> 테스트 보고서 발급-> CQC 인증서 발급-> 초기 공장 심사-> 검사 결과 검토(통과의 경우)-> CQC 인증서 상태 정상 * 검사 결과 검토(미통과의 경우): 검사 요구에 따라 시정(시정 조치 기간, CQC 인증서 사용 일시 중지)-> 다시 공장 심사"
+                  - paragraph [ref=e2218]: "유효기간: 1년에 1번 정기 공장 심사해야 함. (공장심사 관련하여 발생하는 교통비 등 비용은 신청 기업에서 부담하며 공장 심사비 별도로 있음.)"
+                  - paragraph [ref=e2219]: 예상 비용 확실한 정보 없음 / 예상 기간 21일
+                - link "KOTRA" [ref=e2220] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=PBT(%ED%8F%B4%EB%A6%AC%EB%B6%80%ED%8B%B8%EB%A0%8C%20%ED%85%8C%EB%A0%88%ED%94%84%ED%83%88%EB%A0%88%EC%9D%B4%ED%8A%B8)
+                  - img [ref=e2221]
+                  - text: KOTRA
+              - listitem [ref=e2225]:
+                - paragraph [ref=e2226]: "- 적층 세라믹 커패시터"
+                - generic [ref=e2227]:
+                  - paragraph [ref=e2228]: "필요서류: 1. 제조기업 정보 2. 제품 설명서 3. 사업자등록증 4. ISO 9000 품질 경영 시스템 서류 5. 제조기업 관련 계약서 6. 기타"
+                  - paragraph [ref=e2229]: "절차: - CQC 인증절차: 인증필요서류 준비하여 CQC 홈페이지에서 온라인으로 신청서를 제출-> CQC 접수 및 서류 검토-> 샘플 송부 통지서 발급-> 시험기관 선정 및 샘플 송부-> 시험기관 샘플 테스트-> 테스트 보고서 발급-> 초기 공장 심사-> 검사 결과 검토-> 인증 심사 합격-> CQC 인증서 발급"
+                  - paragraph [ref=e2230]: "유효기간: 1년에 1번 정기 공장 심사해야 함. (공장심사 관련하여 발생하는 교통비 등 비용은 신청 기업에서 부담하며 공장 심사비 별도로 있음.)"
+                  - paragraph [ref=e2231]: 예상 비용 확실한 정보 없음 / 예상 기간 14일
+                - link "KOTRA" [ref=e2232] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%A0%81%EC%B8%B5%20%EC%84%B8%EB%9D%BC%EB%AF%B9%20%EC%BB%A4%ED%8C%A8%EC%8B%9C%ED%84%B0(MLCC)
+                  - img [ref=e2233]
+                  - text: KOTRA
+              - listitem [ref=e2237]:
+                - paragraph [ref=e2238]: 자동 세척건조 변기(비데)
+                - generic [ref=e2239]:
+                  - paragraph [ref=e2240]: "필요서류: 1. 제품형식 확인을 위한 제품사진 또는 도면 2. 제품 스펙 3. 회로도, 구성부품 리스트 4. 필요 시험규격명 관련 서류 5. 전기용품명 관련 서류 6. 정격전압 확인 관련 서류 7. 시험성적서 영문/일문 중 선택 8. 적합동등증명서 부본 필요수 확인 관련 서류 9. 제조사명 관련 서류 10. 제조국 관련 서류"
+                  - paragraph [ref=e2241]: "절차: 1. 일본국내 인증 기관 또는 한국을 비롯한 해외 지정 기관에서 제품 적합성 검사 실시 2. 승인 후 PSE 마크 부착"
+                  - paragraph [ref=e2242]: "유효기간: 취득 후 제품 갱신 불요"
+                  - paragraph [ref=e2243]: 예상 비용 확실한 정보 없음 / 예상 기간 84일
+                - link "KOTRA" [ref=e2244] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%9E%90%EB%8F%99%20%EC%84%B8%EC%B2%99%EA%B1%B4%EC%A1%B0%20%EB%B3%80%EA%B8%B0(%EB%B9%84%EB%8D%B0)
+                  - img [ref=e2245]
+                  - text: KOTRA
+              - listitem [ref=e2249]:
+                - paragraph [ref=e2250]: ㅇ 액체절연형(lubricant/oil-filled/liquid-immersed) 배전용 변압기 - 예시 ① 13.8 kV / 480 V, 1,000 kVA 유압식 배전 변압기 - 예시 ② 22.9 kV / 4160 V, 2,000 kVA 유압식 변압기 ㅇ 산업용, 상업용, 유틸리티용 배전 변압기 중 위 정의 범위에 해당하는 대부분의 유압식 변압기 ㅇ 미국 내 변전소, 공장, 상업 빌딩 등에 설치되는 일반 배전용 변압기필수
+                - generic [ref=e2251]:
+                  - paragraph [ref=e2252]: "필요서류: - 시험 성적서 - 모델기술자료 - DOE 효율 기준대비 적합성 검토표 - CCMS 제출용 엑셀/입력 데이터 파일 - 내부서약서 - 설계 문서 (의무는 아니나 Audit 대비)"
+                  - paragraph [ref=e2253]: "절차: ① 제품 설계 및 사양 검토 - 제품이 DOE 규정상 Distribution Transformer 정의에 해당하는지 확인 : 전압, kVA, 액체절연 여부 등 ② 효율 시험 계획 수립 - DOE가 지정한 시험방법(IEEE C57 계열 시험 기반)을 반영해 무부하 손실(no-load loss), 부하손실(load loss), 효율(%) 측정 계획을 수립 ③ 공인 시험(or 자사 시험) 진행 : 각 정격점에서의 효율이 DOE 기준표 이상인지 확인 - 자체 시험설비가 규정 충족 가능한 경우 자가 시험 가능 - 시험기관(국내/국외)을 활용해 시험성적서 확보 ④ DOE Self-Certification 자료 작성 : CCMS(Compliance Certification Management System)에 제출할 데이터 시트 준비 - 모델별(또는 모델군)로 다음 정보 정리: 제조사 정보, 모델명/타입, 정격(kVA, 전압, 위상 등), 측정된 효율값, 시험방법 및 조건 ⑤ DOE CCMS 시스템 등록 ⑥ 내부/외부 문서화 및 활용방법 : &ldquo;DOE 10 CFR Part 431 Subpart K 준수&rdquo; 문구를 카탈로그, 기술자료, 제안서(Proposal) 등에 명시"
+                  - paragraph [ref=e2254]: "유효기간: 유효기간 없음"
+                  - paragraph [ref=e2255]: 예상 비용 3,000 KRW / 예상 기간 14일
+                - link "KOTRA" [ref=e2256] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%9C%A0%EC%95%95%EC%8B%9D%20%EB%B3%80%EC%95%95%EA%B8%B0
+                  - img [ref=e2257]
+                  - text: KOTRA
+              - listitem [ref=e2261]:
+                - paragraph [ref=e2262]: 850440 전기 장비 및 전원 변환장치필수
+                - generic [ref=e2263]:
+                  - paragraph [ref=e2264]: "필요서류: 1. 기술구조문서(TCF)는 10년간 보관 필요 2. 기계류 CE 취득 시 전자파 적합성(EMC)* 지침(2014/30/EU)과 저전압(LVD)** 지침(2014/35/EU) 준수 및 시험 통과 필요 *전자파 적합성(EMC): 기기에서 방출되는 전자파 수준 평가 **지침과 저전압(LVD): 특정 전압 범위 내에서 전기 장비의 감전 및 기타 전기 위험에 대한 안전성 검사로 EU 및 EEA에서 전기 기기를 판매하는 제조업체 및 유통업체는 반드시 해당 지침을 준수하고 시험을 통과해야 함"
+                  - paragraph [ref=e2265]: "절차: 1. 제품이 적용되는 지침서(Directive) 파악 - 기계는 Machine Directive(2006/42/EC) - 기술자료분석/관련 규격, 적용 모듈 파악 및 요구조건 확인 2. 위험성 평가 3. 기술구조문서(TCF) 작성 - 제품 정의 - 사용 목적 - 디자인 문서 - 설계 및 생산 도면, 부품, 모듈 및 회로의 회로도 및 작업 절차에 대한 정보(간략히 기술) - 테스트 보고서 - 터키어 또는 원본 사용자 설명서 - 품질 경영 시스템(ISO 품질 경영 시스템 인증서, 제품 관련 규정에 명시된 경우) - 제품의 터키어 또는 영어 설치/조립 설명서 4. CE 인증서 발급 5. DoC(Declaration of Conformity) 선언 6. CE 인증마크 부착"
+                  - paragraph [ref=e2266]: "유효기간: 품목이 포함된 지침에 따라 3년 또는 5년"
+                  - paragraph [ref=e2267]: 예상 비용 1 KRW / 예상 기간 22일
+                - link "KOTRA" [ref=e2268] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=EV%20%EC%B6%A9%EC%A0%84%EC%86%8C(%EC%A0%84%EA%B8%B0%EC%B0%A8%20%EC%B6%A9%EC%A0%84%EC%86%8C)
+                  - img [ref=e2269]
+                  - text: KOTRA
+              - listitem [ref=e2273]:
+                - paragraph [ref=e2274]: "- 전압 공급이 220Vac, 50Hz인 벌크헤드형 LED 조명기구(Bulkhead Type LED Light Fittings), LED 다운라이트(LED Downlight) 또는 LED 플러드라이트(LED Floodlight) - 도로, 거리 및 터널 조명용으로 사용되며, 전압 공급이 1,000Vac, 50Hz 이하인 LED 도로 조명등(LED Road Light)"
+                - generic [ref=e2275]:
+                  - paragraph [ref=e2276]: "필요서류: 1. 인증 기관이 정한 양식에 따라 작성된 신청서 2. 수수료 3. 평가를 위한 품질 매뉴얼 및 관련 문서 4. 인증 기관과의 공식 연락을 담당할 공급업체의 담당자 정보"
+                  - paragraph [ref=e2277]: "절차: 공급업체가 인증 기관에 인증 신청서를 제출--> 공급업체는 LED 조명 제품의 샘플을 인증 기관에 제출하여 초기 형식 시험(initial type tests)을 진행--> 인증 기관은 LED 조명 제품의 시험 보고서를 검토--> 인증 기관은 LED 조명 제품 생산 공장의 생산 설비, 생산 공정 및 완제품을 평가--> 모든 평가가 완료되면, 인증 기관은 공급업체에게 적합성 인증서(Certificate of Conformity)를 발급"
+                  - paragraph [ref=e2278]: "유효기간: 1년 - 인증을 받은 LED 조명 제품은 인증 상태 유지를 위해 매년 재평가를 받아야 함 - 인증서 최초 발급 및 갱신 시, 공급업체는 연간 인증 비용을 납부해야 함"
+                  - paragraph [ref=e2279]: 예상 비용 확실한 정보 없음 / 예상 기간 확실한 정보 없음일
+                - link "KOTRA" [ref=e2280] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=LED%20%EC%A1%B0%EB%AA%85%20%EA%B8%B0%EA%B5%AC
+                  - img [ref=e2281]
+                  - text: KOTRA
+          - generic [ref=e2285]:
+            - generic [ref=e2286]:
+              - heading "규제·NTM" [level=3] [ref=e2287]
+              - paragraph [ref=e2288]: "출처 패널·본문 행 수: 20건"
+            - list [ref=e2290]:
+              - listitem [ref=e2291]:
+                - paragraph [ref=e2292]: 390120 / 반덤핑(조사중)
+                - paragraph [ref=e2293]: "시행일: 2026-04-02"
+                - paragraph [ref=e2294]: "품목: 고밀도 폴리에틸렌 | 규제: 반덤핑(조사중) | 대상국가: 아제르바이잔 | 지역/본부: CIS지역본부 | HS: 390120"
+                - generic [ref=e2295]:
+                  - button "상세 보기" [ref=e2296] [cursor=pointer]
+                  - link "KOTRA" [ref=e2297] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2298]
+                    - text: KOTRA
+              - listitem [ref=e2302]:
+                - paragraph [ref=e2303]: 731815 / 반덤핑(조사중)
+                - paragraph [ref=e2304]: "시행일: 2026-04-02"
+                - paragraph [ref=e2305]: "품목: 그 밖의 스크루(screw)와 너트(nut) | 규제: 반덤핑(조사중) | 대상국가: 말레이시아 | 지역/본부: CIS지역본부 | HS: 731815"
+                - generic [ref=e2306]:
+                  - button "상세 보기" [ref=e2307] [cursor=pointer]
+                  - link "KOTRA" [ref=e2308] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2309]
+                    - text: KOTRA
+              - listitem [ref=e2313]:
+                - paragraph [ref=e2314]: 731816 / 반덤핑(조사중)
+                - paragraph [ref=e2315]: "시행일: 2026-04-02"
+                - paragraph [ref=e2316]: "품목: 그 밖의 스크루(screw)와 너트(nut) | 규제: 반덤핑(조사중) | 대상국가: 말레이시아 | 지역/본부: CIS지역본부 | HS: 731816"
+                - generic [ref=e2317]:
+                  - button "상세 보기" [ref=e2318] [cursor=pointer]
+                  - link "KOTRA" [ref=e2319] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2320]
+                    - text: KOTRA
+              - listitem [ref=e2324]:
+                - paragraph [ref=e2325]: 390120 / 반덤핑(조사중)
+                - paragraph [ref=e2326]: "시행일: 2026-04-02"
+                - paragraph [ref=e2327]: "품목: 고밀도 폴리에틸렌 | 규제: 반덤핑(조사중) | 대상국가: 아제르바이잔 | 지역/본부: CIS지역본부 | HS: 390120"
+                - generic [ref=e2328]:
+                  - button "상세 보기" [ref=e2329] [cursor=pointer]
+                  - link "KOTRA" [ref=e2330] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2331]
+                    - text: KOTRA
+              - listitem [ref=e2335]:
+                - paragraph [ref=e2336]: 390120 / 반덤핑(조사중)
+                - paragraph [ref=e2337]: "시행일: 2026-04-02"
+                - paragraph [ref=e2338]: "품목: 고밀도 폴리에틸렌 | 규제: 반덤핑(조사중) | 대상국가: 아제르바이잔 | 지역/본부: CIS지역본부 | HS: 390120"
+                - generic [ref=e2339]:
+                  - button "상세 보기" [ref=e2340] [cursor=pointer]
+                  - link "KOTRA" [ref=e2341] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2342]
+                    - text: KOTRA
+              - listitem [ref=e2346]:
+                - paragraph [ref=e2347]: 390120 / 반덤핑(조사중)
+                - paragraph [ref=e2348]: "시행일: 2026-04-02"
+                - paragraph [ref=e2349]: "품목: 고밀도 폴리에틸렌 | 규제: 반덤핑(조사중) | 대상국가: 아제르바이잔 | 지역/본부: CIS지역본부 | HS: 390120"
+                - generic [ref=e2350]:
+                  - button "상세 보기" [ref=e2351] [cursor=pointer]
+                  - link "KOTRA" [ref=e2352] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2353]
+                    - text: KOTRA
+              - listitem [ref=e2357]:
+                - paragraph [ref=e2358]: 390120 / 반덤핑(조사중)
+                - paragraph [ref=e2359]: "시행일: 2026-04-02"
+                - paragraph [ref=e2360]: "품목: 고밀도 폴리에틸렌 | 규제: 반덤핑(조사중) | 대상국가: 아제르바이잔 | 지역/본부: CIS지역본부 | HS: 390120"
+                - generic [ref=e2361]:
+                  - button "상세 보기" [ref=e2362] [cursor=pointer]
+                  - link "KOTRA" [ref=e2363] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2364]
+                    - text: KOTRA
+              - listitem [ref=e2368]:
+                - paragraph [ref=e2369]: 854460 / 반덤핑(조사중)
+                - paragraph [ref=e2370]: "시행일: 2026-04-02"
+                - paragraph [ref=e2371]: "품목: 그 밖의 전기도체(전압이 1,000볼트를 초과하는 것으로 한정한다)(Other electric conductors, for a voltage exceeding 1,000 V) | 규제: 반덤핑(조사중) | 대상국가: 튀르키예, 아제르바이잔, 우즈베키스탄 | 지역/본부: CIS지역본부 | HS: 854460"
+                - generic [ref=e2372]:
+                  - button "상세 보기" [ref=e2373] [cursor=pointer]
+                  - link "KOTRA" [ref=e2374] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2375]
+                    - text: KOTRA
+              - listitem [ref=e2379]:
+                - paragraph [ref=e2380]: 722920 / 반덤핑(조사중)
+                - paragraph [ref=e2381]: "시행일: 2026-04-02"
+                - paragraph [ref=e2382]: "품목: 실리코망간강의 것(Of silico-manganese steel) | 규제: 반덤핑(조사중) | 대상국가: 말레이시아 | 지역/본부: CIS지역본부 | HS: 722920"
+                - generic [ref=e2383]:
+                  - button "상세 보기" [ref=e2384] [cursor=pointer]
+                  - link "KOTRA" [ref=e2385] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2386]
+                    - text: KOTRA
+              - listitem [ref=e2390]:
+                - paragraph [ref=e2391]: 391740 / 반덤핑(규제중)
+                - paragraph [ref=e2392]: "시행일: 2025-07-22"
+                - paragraph [ref=e2393]: "품목: 상수도 및 난방 시스템용 피팅(Fittings for water supply and heating systems) | 규제: 반덤핑(규제중) | 대상국가: 중국, 튀르키예 | 지역/본부: CIS지역본부 | HS: 391740"
+                - generic [ref=e2394]:
+                  - button "상세 보기" [ref=e2395] [cursor=pointer]
+                  - link "KOTRA" [ref=e2396] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2397]
+                    - text: KOTRA
+              - listitem [ref=e2401]:
+                - paragraph [ref=e2402]: 741220 / 반덤핑(규제중)
+                - paragraph [ref=e2403]: "시행일: 2025-07-22"
+                - paragraph [ref=e2404]: "품목: 상수도 및 난방 시스템용 피팅(Fittings for water supply and heating systems) | 규제: 반덤핑(규제중) | 대상국가: 중국, 튀르키예 | 지역/본부: CIS지역본부 | HS: 741220"
+                - generic [ref=e2405]:
+                  - button "상세 보기" [ref=e2406] [cursor=pointer]
+                  - link "KOTRA" [ref=e2407] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2408]
+                    - text: KOTRA
+              - listitem [ref=e2412]:
+                - paragraph [ref=e2413]: 721030 / 반덤핑(규제중)
+                - paragraph [ref=e2414]: "시행일: 2025-05-23"
+                - paragraph [ref=e2415]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721030"
+                - generic [ref=e2416]:
+                  - button "상세 보기" [ref=e2417] [cursor=pointer]
+                  - link "KOTRA" [ref=e2418] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2419]
+                    - text: KOTRA
+              - listitem [ref=e2423]:
+                - paragraph [ref=e2424]: 721041 / 반덤핑(규제중)
+                - paragraph [ref=e2425]: "시행일: 2025-05-23"
+                - paragraph [ref=e2426]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721041"
+                - generic [ref=e2427]:
+                  - button "상세 보기" [ref=e2428] [cursor=pointer]
+                  - link "KOTRA" [ref=e2429] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2430]
+                    - text: KOTRA
+              - listitem [ref=e2434]:
+                - paragraph [ref=e2435]: 721049 / 반덤핑(규제중)
+                - paragraph [ref=e2436]: "시행일: 2025-05-23"
+                - paragraph [ref=e2437]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721049"
+                - generic [ref=e2438]:
+                  - button "상세 보기" [ref=e2439] [cursor=pointer]
+                  - link "KOTRA" [ref=e2440] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2441]
+                    - text: KOTRA
+              - listitem [ref=e2445]:
+                - paragraph [ref=e2446]: 721050 / 반덤핑(규제중)
+                - paragraph [ref=e2447]: "시행일: 2025-05-23"
+                - paragraph [ref=e2448]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721050"
+                - generic [ref=e2449]:
+                  - button "상세 보기" [ref=e2450] [cursor=pointer]
+                  - link "KOTRA" [ref=e2451] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2452]
+                    - text: KOTRA
+              - listitem [ref=e2456]:
+                - paragraph [ref=e2457]: 721061 / 반덤핑(규제중)
+                - paragraph [ref=e2458]: "시행일: 2025-05-23"
+                - paragraph [ref=e2459]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721061"
+                - generic [ref=e2460]:
+                  - button "상세 보기" [ref=e2461] [cursor=pointer]
+                  - link "KOTRA" [ref=e2462] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2463]
+                    - text: KOTRA
+              - listitem [ref=e2467]:
+                - paragraph [ref=e2468]: 721069 / 반덤핑(규제중)
+                - paragraph [ref=e2469]: "시행일: 2025-05-23"
+                - paragraph [ref=e2470]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721069"
+                - generic [ref=e2471]:
+                  - button "상세 보기" [ref=e2472] [cursor=pointer]
+                  - link "KOTRA" [ref=e2473] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2474]
+                    - text: KOTRA
+              - listitem [ref=e2478]:
+                - paragraph [ref=e2479]: 721090 / 반덤핑(규제중)
+                - paragraph [ref=e2480]: "시행일: 2025-05-23"
+                - paragraph [ref=e2481]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721090"
+                - generic [ref=e2482]:
+                  - button "상세 보기" [ref=e2483] [cursor=pointer]
+                  - link "KOTRA" [ref=e2484] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2485]
+                    - text: KOTRA
+              - listitem [ref=e2489]:
+                - paragraph [ref=e2490]: 721220 / 반덤핑(규제중)
+                - paragraph [ref=e2491]: "시행일: 2025-05-23"
+                - paragraph [ref=e2492]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721220"
+                - generic [ref=e2493]:
+                  - button "상세 보기" [ref=e2494] [cursor=pointer]
+                  - link "KOTRA" [ref=e2495] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2496]
+                    - text: KOTRA
+              - listitem [ref=e2500]:
+                - paragraph [ref=e2501]: 721230 / 반덤핑(규제중)
+                - paragraph [ref=e2502]: "시행일: 2025-05-23"
+                - paragraph [ref=e2503]: "품목: 내식 플랫 제품(Corrosion resistance flat rolled products) | 규제: 반덤핑(규제중) | 대상국가: 러시아, 중국 | 지역/본부: CIS지역본부 | HS: 721230"
+                - generic [ref=e2504]:
+                  - button "상세 보기" [ref=e2505] [cursor=pointer]
+                  - link "KOTRA" [ref=e2506] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=03&pNatCd=276
+                    - img [ref=e2507]
+                    - text: KOTRA
+          - generic [ref=e2511]:
+            - generic [ref=e2512]:
+              - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e2513]
+              - paragraph [ref=e2514]: 국가등급 1건 / 업종위험 상위 3건 / 수출결제 1건
+            - generic [ref=e2515]:
+              - generic [ref=e2516]:
+                - generic [ref=e2517]:
+                  - paragraph [ref=e2518]: 국가 위험 등급
+                  - generic [ref=e2519]:
+                    - paragraph [ref=e2520]: 정보
+                    - paragraph [ref=e2521]: "국가명: 독일"
+                    - paragraph [ref=e2522]: "평가 등급: 1"
+                    - paragraph [ref=e2523]: "평가일: 2025-12-30"
+                    - link "K-SURE 출처" [ref=e2524] [cursor=pointer]:
+                      - /url: https://www.data.go.kr/data/15140201/openapi.do
+                      - img [ref=e2525]
+                      - text: K-SURE 출처
+                - generic [ref=e2529]:
+                  - paragraph [ref=e2530]: 업종 위험 지수 (상위 3)
+                  - list [ref=e2531]:
+                    - listitem [ref=e2532]:
+                      - paragraph [ref=e2533]: 정보
+                      - paragraph [ref=e2534]: "업종명: 고무 및 플라스틱제품 제조업"
+                      - paragraph [ref=e2535]: "위험 지수: 2"
+                      - link "K-SURE 출처" [ref=e2536] [cursor=pointer]:
+                        - /url: https://www.data.go.kr/data/15132755/openapi.do
+                        - img [ref=e2537]
+                        - text: K-SURE 출처
+                    - listitem [ref=e2541]:
+                      - paragraph [ref=e2542]: 정보
+                      - paragraph [ref=e2543]: "업종명: 화학물질 및 화학제품 제조업; 의약품 제외"
+                      - paragraph [ref=e2544]: "위험 지수: 2"
+                      - link "K-SURE 출처" [ref=e2545] [cursor=pointer]:
+                        - /url: https://www.data.go.kr/data/15132755/openapi.do
+                        - img [ref=e2546]
+                        - text: K-SURE 출처
+                    - listitem [ref=e2550]:
+                      - paragraph [ref=e2551]: 정보
+                      - paragraph [ref=e2552]: "업종명: 1차 금속 제조업"
+                      - paragraph [ref=e2553]: "위험 지수: 2"
+                      - link "K-SURE 출처" [ref=e2554] [cursor=pointer]:
+                        - /url: https://www.data.go.kr/data/15132755/openapi.do
+                        - img [ref=e2555]
+                        - text: K-SURE 출처
+                - generic [ref=e2559]:
+                  - paragraph [ref=e2560]: 수출결제 현황
+                  - generic [ref=e2561]:
+                    - paragraph [ref=e2562]: 주의
+                    - paragraph [ref=e2563]: 전세계 집계 참고자료
+                    - paragraph [ref=e2564]: "평균 결제기간: 73.5일"
+                    - paragraph [ref=e2565]: "연체율: 18.3%"
+                    - paragraph [ref=e2566]: "주요 결제조건: O/A(T/T 포함) (74.4%)"
+                    - link "K-SURE 출처" [ref=e2567] [cursor=pointer]:
+                      - /url: https://www.data.go.kr/data/15144259/openapi.do
+                      - img [ref=e2568]
+                      - text: K-SURE 출처
+              - paragraph [ref=e2572]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+          - generic [ref=e2573]:
+            - generic [ref=e2575]:
+              - generic [ref=e2576]:
+                - heading "7일 실행 과제" [level=3] [ref=e2577]
+                - paragraph [ref=e2578]: 상세 데이터를 기반으로 1주 내 실행 가능한 과제를 제안합니다.
+              - button "과제 생성" [ref=e2579] [cursor=pointer]:
+                - img
+                - text: 과제 생성
+            - paragraph [ref=e2581]: 과제 생성 버튼을 눌러 7일 실행 과제를 받아보세요.
+    - generic [ref=e2583]:
+      - link "1단계 기업·공장 검색" [ref=e2584] [cursor=pointer]:
+        - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+        - text: "1"
+      - link "2단계 제품·HS 코드" [ref=e2585] [cursor=pointer]:
+        - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+        - text: "2"
+      - link "3단계 후보국 추천 Top 3" [ref=e2586] [cursor=pointer]:
+        - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+        - text: "3"
+      - link "4단계 국가 상세" [ref=e2587] [cursor=pointer]:
+        - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries/DE
+        - text: "4"
+      - link "5단계 전략물자·제품안전" [ref=e2588] [cursor=pointer]:
+        - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+        - text: "5"
+      - link "6단계 리포트" [ref=e2589] [cursor=pointer]:
+        - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+        - text: "6"
+    - generic [ref=e2591]:
+      - button "후보국으로" [ref=e2592] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로" [ref=e2593] [cursor=pointer]

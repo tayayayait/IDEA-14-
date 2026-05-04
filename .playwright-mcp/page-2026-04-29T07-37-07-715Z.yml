@@ -1,0 +1,399 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e16] [cursor=pointer]:
+          - img
+          - generic [ref=e17]: 로그아웃
+    - generic [ref=e18]:
+      - complementary [ref=e19]:
+        - paragraph [ref=e20]: 분석 단계
+        - navigation "분석 단계" [ref=e21]:
+          - link "1단계 기업·공장 검색" [ref=e22] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/company
+            - generic [ref=e23]: "1"
+            - generic [ref=e24]:
+              - generic [ref=e25]: 기업·공장 검색
+              - generic [ref=e26]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e27] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/product
+            - img [ref=e29]
+            - generic [ref=e31]:
+              - generic [ref=e32]: 제품·HS 코드
+              - generic [ref=e33]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e34] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/countries
+            - generic [ref=e35]: "3"
+            - generic [ref=e36]:
+              - generic [ref=e37]: 후보국 추천 Top 3
+              - generic [ref=e38]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e39] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/countries/DE
+            - generic [ref=e40]: "4"
+            - generic [ref=e41]:
+              - generic [ref=e42]: 국가 상세
+              - generic [ref=e43]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e44] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/safety
+            - img [ref=e46]
+            - generic [ref=e48]:
+              - generic [ref=e49]: 전략물자·제품안전
+              - generic [ref=e50]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e51] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/report
+            - generic [ref=e52]: "6"
+            - generic [ref=e53]:
+              - generic [ref=e54]: 리포트
+              - generic [ref=e55]: 요구사항 10
+      - main [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - paragraph [ref=e59]: 기획 요구사항 매핑
+            - paragraph [ref=e60]: 요구사항 3
+            - paragraph [ref=e61]: 후보국 추천 및 근거 점수화
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - heading "3. 후보국 추천 Top 3" [level=1] [ref=e64]
+              - paragraph [ref=e65]: 후보군을 먼저 추출한 뒤, 후보군 내부에서만 점수와 순위를 계산합니다.
+            - button "추천 분석 실행" [ref=e66] [cursor=pointer]:
+              - img
+              - text: 추천 분석 실행
+          - generic [ref=e67]:
+            - button "1순위 독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]:
+                - generic [ref=e70]:
+                  - img [ref=e71]
+                  - text: 순위 1
+                - status "위험도 우선검토" [ref=e77]: 우선검토
+              - paragraph [ref=e79]: 독일연방공화국(The Federal Republic of Germany)
+              - paragraph [ref=e80]: DE
+              - paragraph [ref=e81]: 90/100
+              - paragraph [ref=e82]: "후보 편입 신호: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e83]: "편입 사유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e84]: "추천 근거: 결제 안전성이 가장 우수하며 온디바이스 AI 확산과 자동차 산업의 고도화로 고신뢰성 DRAM 수요가 지속됨."
+              - paragraph [ref=e85]: "낮은 점수 사유: 에너지 비용 상승 및 미국 관세 정책에 따른 제조업 전반의 가격 경쟁력 저하 우려가 있음."
+              - paragraph [ref=e86]: "대안 시장: United States(US), Japan(JP), China(CN)"
+              - paragraph [ref=e87]: 상세 보기
+            - button "2순위 미합중국(The United States of America) 상세 보기" [ref=e88] [cursor=pointer]:
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - img [ref=e91]
+                  - text: 순위 2
+                - status "위험도 우선검토" [ref=e97]: 우선검토
+              - paragraph [ref=e99]: 미합중국(The United States of America)
+              - paragraph [ref=e100]: US
+              - paragraph [ref=e101]: 87/100
+              - paragraph [ref=e102]: "후보 편입 신호: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e103]: "편입 사유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e104]: "추천 근거: AI 및 서버용 고성능 메모리 수요가 폭발적이며, 정부 주도의 반도체 공급망 재편으로 인한 투자 기회가 큼."
+              - paragraph [ref=e105]: "낮은 점수 사유: 대중국 규제 강화에 따른 공급망 복잡성 및 높은 관세 정책으로 인한 비용 상승 압박이 있음."
+              - paragraph [ref=e106]: "대안 시장: Germany(DE), Japan(JP), China(CN)"
+              - paragraph [ref=e107]: 상세 보기
+            - button "3순위 일본(Japan) 상세 보기" [ref=e108] [cursor=pointer]:
+              - generic [ref=e109]:
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - text: 순위 3
+                - status "위험도 우선검토" [ref=e117]: 우선검토
+              - paragraph [ref=e119]: 일본(Japan)
+              - paragraph [ref=e120]: JP
+              - paragraph [ref=e121]: 87/100
+              - paragraph [ref=e122]: "후보 편입 신호: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e123]: "편입 사유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e124]: "추천 근거: 반도체 후공정 기술 협력 강화 및 AI 반도체 시장 진출 기회가 매우 높으며 시장 점수가 가장 우수함."
+              - paragraph [ref=e125]: "낮은 점수 사유: 전반적인 경기 회복세가 취약하며 실질 임금 하락에 따른 내수 소비의 불확실성이 존재함."
+              - paragraph [ref=e126]: "대안 시장: Germany(DE), United States(US), China(CN)"
+              - paragraph [ref=e127]: 상세 보기
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - heading "입력 목표시장 평가" [level=3] [ref=e130]
+              - paragraph [ref=e131]: 목표시장 메모는 비교 대상 편입 신호이며, 순위를 강제하지 않습니다.
+            - paragraph [ref=e133]: 메모에서 목표시장을 찾지 못했습니다.
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - heading "뉴스 근거 (Top 3)" [level=3] [ref=e136]
+              - paragraph [ref=e137]: 점수 반영 근거 및 시장 배경 뉴스 원문입니다.
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - paragraph [ref=e140]: "선택 국가: 독일연방공화국(The Federal Republic of Germany)"
+                - combobox "국가 선택" [ref=e141] [cursor=pointer]:
+                  - generic: 순위 1 - 독일연방공화국(The Federal Republic of Germany)
+                  - img [ref=e142]
+              - table "뉴스 근거 표" [ref=e144]:
+                - rowgroup [ref=e145]:
+                  - row "구분 제목 국가 발행일 링크" [ref=e146]:
+                    - columnheader "구분" [ref=e147]
+                    - columnheader "제목" [ref=e148]
+                    - columnheader "국가" [ref=e149]
+                    - columnheader "발행일" [ref=e150]
+                    - columnheader "링크" [ref=e151]
+                - rowgroup [ref=e152]:
+                  - 'row "제품 뉴스 근거 온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다. 독일연방공화국(The Federal Republic of Germany) 2026-04-09 열기" [ref=e153]':
+                    - cell "제품 뉴스 근거" [ref=e154]
+                    - 'cell "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다." [ref=e155]':
+                      - paragraph [ref=e156]: "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상"
+                      - paragraph [ref=e157]: 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e158]
+                    - cell "2026-04-09" [ref=e159]
+                    - cell "열기" [ref=e160]:
+                      - link "열기" [ref=e161] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240151
+                  - row "제품 뉴스 근거 전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다. 독일연방공화국(The Federal Republic of Germany) 2026-04-08 열기" [ref=e162]:
+                    - cell "제품 뉴스 근거" [ref=e163]
+                    - cell "전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다." [ref=e164]:
+                      - paragraph [ref=e165]: 전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화
+                      - paragraph [ref=e166]: 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e167]
+                    - cell "2026-04-08" [ref=e168]
+                    - cell "열기" [ref=e169]:
+                      - link "열기" [ref=e170] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240002
+                  - row "제품 뉴스 근거 EU 공급망 재편 속 독일 반도체 산업의 부상과 진출 기회 유럽의 공급망 재편 기조 속에서 독일은 반도체 클러스터를 중심으로 생산 역량을 확대하는 한편, 공정 기술과 신소재 분야의 고도화를 추진하고 있다. 이에 따라 한국 기업은 소부장 분야에서 틈새시장 공략과 기술 협력 및 공동 연구개발을 병행하는 전략적 접근이 필요하다. 독일연방공화국(The Federal Republic of Germany) 2026-03-18 열기" [ref=e171]:
+                    - cell "제품 뉴스 근거" [ref=e172]
+                    - cell "EU 공급망 재편 속 독일 반도체 산업의 부상과 진출 기회 유럽의 공급망 재편 기조 속에서 독일은 반도체 클러스터를 중심으로 생산 역량을 확대하는 한편, 공정 기술과 신소재 분야의 고도화를 추진하고 있다. 이에 따라 한국 기업은 소부장 분야에서 틈새시장 공략과 기술 협력 및 공동 연구개발을 병행하는 전략적 접근이 필요하다." [ref=e173]:
+                      - paragraph [ref=e174]: EU 공급망 재편 속 독일 반도체 산업의 부상과 진출 기회
+                      - paragraph [ref=e175]: 유럽의 공급망 재편 기조 속에서 독일은 반도체 클러스터를 중심으로 생산 역량을 확대하는 한편, 공정 기술과 신소재 분야의 고도화를 추진하고 있다. 이에 따라 한국 기업은 소부장 분야에서 틈새시장 공략과 기술 협력 및 공동 연구개발을 병행하는 전략적 접근이 필요하다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e176]
+                    - cell "2026-03-18" [ref=e177]
+                    - cell "열기" [ref=e178]:
+                      - link "열기" [ref=e179] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239586
+                  - row "제품 뉴스 근거 독일 전략자산으로 자리 잡는 반도체 산업...바이에른 주, 글로벌 투자 거점으로 부상 유럽 Chips Act 시행과 독일&middot;바이에른의 반도체 육성 정책으로 유럽 내 차세대 반도체 생산 확대, 대규모 투자 및 보조금 지원이 진행 중이다. 본문에서는 바이에른의 반도체 산업 경쟁력과 투자환경, 정책 동향, 그리고 한국 기업의 진출 전략 등을 종합적으로 분석한다. 독일연방공화국(The Federal Republic of Germany) 2025-12-09 열기" [ref=e180]:
+                    - cell "제품 뉴스 근거" [ref=e181]
+                    - cell "독일 전략자산으로 자리 잡는 반도체 산업...바이에른 주, 글로벌 투자 거점으로 부상 유럽 Chips Act 시행과 독일&middot;바이에른의 반도체 육성 정책으로 유럽 내 차세대 반도체 생산 확대, 대규모 투자 및 보조금 지원이 진행 중이다. 본문에서는 바이에른의 반도체 산업 경쟁력과 투자환경, 정책 동향, 그리고 한국 기업의 진출 전략 등을 종합적으로 분석한다." [ref=e182]:
+                      - paragraph [ref=e183]: 독일 전략자산으로 자리 잡는 반도체 산업...바이에른 주, 글로벌 투자 거점으로 부상
+                      - paragraph [ref=e184]: 유럽 Chips Act 시행과 독일&middot;바이에른의 반도체 육성 정책으로 유럽 내 차세대 반도체 생산 확대, 대규모 투자 및 보조금 지원이 진행 중이다. 본문에서는 바이에른의 반도체 산업 경쟁력과 투자환경, 정책 동향, 그리고 한국 기업의 진출 전략 등을 종합적으로 분석한다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e185]
+                    - cell "2025-12-09" [ref=e186]
+                    - cell "열기" [ref=e187]:
+                      - link "열기" [ref=e188] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=236966
+                  - row "국가 뉴스 근거 독일 식품 보관 용품 시장, 친환경 전환과 고기능성 제품의 부상 독일 식품 보관 용품 시장은 경기 둔화와 환경 규제 강화로 실용성과 지속가능성 중심의 재편이 가속화되고 있다. 한국 기업은 유리&middot;스테인리스 등 친환경 소재와 기술력 기반 제품 전략 및 규제 대응을 통해 독일 시장 점유율 확대 기회를 모색할 필요가 있다. 독일연방공화국(The Federal Republic of Germany) 2026-04-24 열기" [ref=e189]:
+                    - cell "국가 뉴스 근거" [ref=e190]
+                    - cell "독일 식품 보관 용품 시장, 친환경 전환과 고기능성 제품의 부상 독일 식품 보관 용품 시장은 경기 둔화와 환경 규제 강화로 실용성과 지속가능성 중심의 재편이 가속화되고 있다. 한국 기업은 유리&middot;스테인리스 등 친환경 소재와 기술력 기반 제품 전략 및 규제 대응을 통해 독일 시장 점유율 확대 기회를 모색할 필요가 있다." [ref=e191]:
+                      - paragraph [ref=e192]: 독일 식품 보관 용품 시장, 친환경 전환과 고기능성 제품의 부상
+                      - paragraph [ref=e193]: 독일 식품 보관 용품 시장은 경기 둔화와 환경 규제 강화로 실용성과 지속가능성 중심의 재편이 가속화되고 있다. 한국 기업은 유리&middot;스테인리스 등 친환경 소재와 기술력 기반 제품 전략 및 규제 대응을 통해 독일 시장 점유율 확대 기회를 모색할 필요가 있다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e194]
+                    - cell "2026-04-24" [ref=e195]
+                    - cell "열기" [ref=e196]:
+                      - link "열기" [ref=e197] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240587
+                  - row "국가 뉴스 근거 생산성에서 효율성으로, 자동화와 AX로 재편되는 독일 제조업 유럽 최대의 제조 강국인 독일이 현재 심각한 구조적 변곡점에 직면해 있다. 이러한 위기를 타개하기 위해 독일 제조업계는 고비용 구조와 숙련공 부족이라는 난제를 산업 자동화, 협동 로봇, 산업용 AI 도입으로 돌파하고 있으며, 이를 통해 생산의 연속성을 확보하는 데 전력을 다하고 있다. 이러한 구조적 변화와 기술적 요구는 자동화 및 디지털 솔루션 분야에서 강점을 지닌 한국 기업들에 새로운 전략적 협력의 기회를 제공하고 있다. 독일연방공화국(The Federal Republic of Germany) 2026-04-23 열기" [ref=e198]:
+                    - cell "국가 뉴스 근거" [ref=e199]
+                    - cell "생산성에서 효율성으로, 자동화와 AX로 재편되는 독일 제조업 유럽 최대의 제조 강국인 독일이 현재 심각한 구조적 변곡점에 직면해 있다. 이러한 위기를 타개하기 위해 독일 제조업계는 고비용 구조와 숙련공 부족이라는 난제를 산업 자동화, 협동 로봇, 산업용 AI 도입으로 돌파하고 있으며, 이를 통해 생산의 연속성을 확보하는 데 전력을 다하고 있다. 이러한 구조적 변화와 기술적 요구는 자동화 및 디지털 솔루션 분야에서 강점을 지닌 한국 기업들에 새로운 전략적 협력의 기회를 제공하고 있다." [ref=e200]:
+                      - paragraph [ref=e201]: 생산성에서 효율성으로, 자동화와 AX로 재편되는 독일 제조업
+                      - paragraph [ref=e202]: 유럽 최대의 제조 강국인 독일이 현재 심각한 구조적 변곡점에 직면해 있다. 이러한 위기를 타개하기 위해 독일 제조업계는 고비용 구조와 숙련공 부족이라는 난제를 산업 자동화, 협동 로봇, 산업용 AI 도입으로 돌파하고 있으며, 이를 통해 생산의 연속성을 확보하는 데 전력을 다하고 있다. 이러한 구조적 변화와 기술적 요구는 자동화 및 디지털 솔루션 분야에서 강점을 지닌 한국 기업들에 새로운 전략적 협력의 기회를 제공하고 있다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e203]
+                    - cell "2026-04-23" [ref=e204]
+                    - cell "열기" [ref=e205]:
+                      - link "열기" [ref=e206] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240676
+                  - row "국가 뉴스 근거 드론이 바꾸는 안보 환경 &ndash; 독일 안티드론 전략과 Xponential Europe을 통한 진출 기회 드론 위협 확산에 따라 이를 탐지&middot;대응하는 안티드론 기술의 중요성이 빠르게 커지고 있다. 독일은 법&middot;제도 정비와 AI 기반 대응 체계 구축을 병행하며 관련 역량을 강화하고 있다. 이러한 흐름은 유럽 내 협력 수요 확대와 함께 국내 중소 방산기업의 시장 진출 기회를 확대시키고 있다. 독일연방공화국(The Federal Republic of Germany) 2026-04-13 열기" [ref=e207]:
+                    - cell "국가 뉴스 근거" [ref=e208]
+                    - cell "드론이 바꾸는 안보 환경 &ndash; 독일 안티드론 전략과 Xponential Europe을 통한 진출 기회 드론 위협 확산에 따라 이를 탐지&middot;대응하는 안티드론 기술의 중요성이 빠르게 커지고 있다. 독일은 법&middot;제도 정비와 AI 기반 대응 체계 구축을 병행하며 관련 역량을 강화하고 있다. 이러한 흐름은 유럽 내 협력 수요 확대와 함께 국내 중소 방산기업의 시장 진출 기회를 확대시키고 있다." [ref=e209]:
+                      - paragraph [ref=e210]: 드론이 바꾸는 안보 환경 &ndash; 독일 안티드론 전략과 Xponential Europe을 통한 진출 기회
+                      - paragraph [ref=e211]: 드론 위협 확산에 따라 이를 탐지&middot;대응하는 안티드론 기술의 중요성이 빠르게 커지고 있다. 독일은 법&middot;제도 정비와 AI 기반 대응 체계 구축을 병행하며 관련 역량을 강화하고 있다. 이러한 흐름은 유럽 내 협력 수요 확대와 함께 국내 중소 방산기업의 시장 진출 기회를 확대시키고 있다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e212]
+                    - cell "2026-04-13" [ref=e213]
+                    - cell "열기" [ref=e214]:
+                      - link "열기" [ref=e215] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239918
+                  - 'row "국가 뉴스 근거 식탁 위의 변화, EU 포장재법 앞에 서다: 독일 식품 바이어의 선제 대응과 한국 기업의 수출 기회 EU 포장 및 포장 폐기물 규정(PPWR, Regulation (EU) 2025/40)이 2025년 2월 발효되고 2026년 8월 본격 적용됨에 따라, 독일 식품 유통 바이어들이 규정 준수를 위한 자체 가이드라인을 마련하고 적합 포장재 소싱에 나서고 있다. 강화된 규제에 선제적으로 대응하여 준비를 마친 한국 기업은 현지 시장 진출 기회를 확보하는 데 있어 매우 유리한 고지를 점할 것으로 전망된다. 독일연방공화국(The Federal Republic of Germany) 2026-04-13 열기" [ref=e216]':
+                    - cell "국가 뉴스 근거" [ref=e217]
+                    - 'cell "식탁 위의 변화, EU 포장재법 앞에 서다: 독일 식품 바이어의 선제 대응과 한국 기업의 수출 기회 EU 포장 및 포장 폐기물 규정(PPWR, Regulation (EU) 2025/40)이 2025년 2월 발효되고 2026년 8월 본격 적용됨에 따라, 독일 식품 유통 바이어들이 규정 준수를 위한 자체 가이드라인을 마련하고 적합 포장재 소싱에 나서고 있다. 강화된 규제에 선제적으로 대응하여 준비를 마친 한국 기업은 현지 시장 진출 기회를 확보하는 데 있어 매우 유리한 고지를 점할 것으로 전망된다." [ref=e218]':
+                      - paragraph [ref=e219]: "식탁 위의 변화, EU 포장재법 앞에 서다: 독일 식품 바이어의 선제 대응과 한국 기업의 수출 기회"
+                      - paragraph [ref=e220]: EU 포장 및 포장 폐기물 규정(PPWR, Regulation (EU) 2025/40)이 2025년 2월 발효되고 2026년 8월 본격 적용됨에 따라, 독일 식품 유통 바이어들이 규정 준수를 위한 자체 가이드라인을 마련하고 적합 포장재 소싱에 나서고 있다. 강화된 규제에 선제적으로 대응하여 준비를 마친 한국 기업은 현지 시장 진출 기회를 확보하는 데 있어 매우 유리한 고지를 점할 것으로 전망된다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e221]
+                    - cell "2026-04-13" [ref=e222]
+                    - cell "열기" [ref=e223]:
+                      - link "열기" [ref=e224] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240471
+                  - 'row "국가 뉴스 근거 온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다. 독일연방공화국(The Federal Republic of Germany) 2026-04-09 열기" [ref=e225]':
+                    - cell "국가 뉴스 근거" [ref=e226]
+                    - 'cell "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다." [ref=e227]':
+                      - paragraph [ref=e228]: "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상"
+                      - paragraph [ref=e229]: 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e230]
+                    - cell "2026-04-09" [ref=e231]
+                    - cell "열기" [ref=e232]:
+                      - link "열기" [ref=e233] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240151
+                  - row "국가 뉴스 근거 전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다. 독일연방공화국(The Federal Republic of Germany) 2026-04-08 열기" [ref=e234]:
+                    - cell "국가 뉴스 근거" [ref=e235]
+                    - cell "전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다." [ref=e236]:
+                      - paragraph [ref=e237]: 전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화
+                      - paragraph [ref=e238]: 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e239]
+                    - cell "2026-04-08" [ref=e240]
+                    - cell "열기" [ref=e241]:
+                      - link "열기" [ref=e242] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240002
+                  - row "국가 뉴스 근거 스마트빌딩과 조명 기술의 결합, 독일 &lsquo;Light + Building 2026&rsquo; 참관기 독일 프랑크푸르트에서 개최된 국제 조명&middot;건축 전시회 &lsquo;Light + Building 2026&rsquo;은 조명, 전기설비, 에너지 기술이 결합된 스마트빌딩 중심 산업으로의 전환을 보여준 자리였다. LED, 스마트 조명, 에너지 연계 솔루션 등 한국 제품의 기술 경쟁력을 바탕으로 유럽 스마트빌딩 시장 진출 확대가 기대된다. 독일연방공화국(The Federal Republic of Germany) 2026-04-01 열기" [ref=e243]:
+                    - cell "국가 뉴스 근거" [ref=e244]
+                    - cell "스마트빌딩과 조명 기술의 결합, 독일 &lsquo;Light + Building 2026&rsquo; 참관기 독일 프랑크푸르트에서 개최된 국제 조명&middot;건축 전시회 &lsquo;Light + Building 2026&rsquo;은 조명, 전기설비, 에너지 기술이 결합된 스마트빌딩 중심 산업으로의 전환을 보여준 자리였다. LED, 스마트 조명, 에너지 연계 솔루션 등 한국 제품의 기술 경쟁력을 바탕으로 유럽 스마트빌딩 시장 진출 확대가 기대된다." [ref=e245]:
+                      - paragraph [ref=e246]: 스마트빌딩과 조명 기술의 결합, 독일 &lsquo;Light + Building 2026&rsquo; 참관기
+                      - paragraph [ref=e247]: 독일 프랑크푸르트에서 개최된 국제 조명&middot;건축 전시회 &lsquo;Light + Building 2026&rsquo;은 조명, 전기설비, 에너지 기술이 결합된 스마트빌딩 중심 산업으로의 전환을 보여준 자리였다. LED, 스마트 조명, 에너지 연계 솔루션 등 한국 제품의 기술 경쟁력을 바탕으로 유럽 스마트빌딩 시장 진출 확대가 기대된다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e248]
+                    - cell "2026-04-01" [ref=e249]
+                    - cell "열기" [ref=e250]:
+                      - link "열기" [ref=e251] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239919
+                  - 'row "국가 뉴스 근거 EU 화장품 규제 2026년 대전환: CMR&middot;미세플라스틱&middot;향료 표시 동시 강화 EU는 2026년을 전후해 화장품&middot;화학&middot;소비재 산업 전반에 대한 규제를 강화하고 있다. 특히 CMR 물질 제한, 미세플라스틱 사용 금지, 실록산 규제 확대, 향료 알레르기 표시 강화 등 여러 규제가 동시에 시행되면서 EU 시장에 진출한 한국 기업의 공급망 관리 부담도 커질 것으로 전망된다. 독일연방공화국(The Federal Republic of Germany) 2026-03-20 열기" [ref=e252]':
+                    - cell "국가 뉴스 근거" [ref=e253]
+                    - 'cell "EU 화장품 규제 2026년 대전환: CMR&middot;미세플라스틱&middot;향료 표시 동시 강화 EU는 2026년을 전후해 화장품&middot;화학&middot;소비재 산업 전반에 대한 규제를 강화하고 있다. 특히 CMR 물질 제한, 미세플라스틱 사용 금지, 실록산 규제 확대, 향료 알레르기 표시 강화 등 여러 규제가 동시에 시행되면서 EU 시장에 진출한 한국 기업의 공급망 관리 부담도 커질 것으로 전망된다." [ref=e254]':
+                      - paragraph [ref=e255]: "EU 화장품 규제 2026년 대전환: CMR&middot;미세플라스틱&middot;향료 표시 동시 강화"
+                      - paragraph [ref=e256]: EU는 2026년을 전후해 화장품&middot;화학&middot;소비재 산업 전반에 대한 규제를 강화하고 있다. 특히 CMR 물질 제한, 미세플라스틱 사용 금지, 실록산 규제 확대, 향료 알레르기 표시 강화 등 여러 규제가 동시에 시행되면서 EU 시장에 진출한 한국 기업의 공급망 관리 부담도 커질 것으로 전망된다.
+                    - cell "독일연방공화국(The Federal Republic of Germany)" [ref=e257]
+                    - cell "2026-03-20" [ref=e258]
+                    - cell "열기" [ref=e259]:
+                      - link "열기" [ref=e260] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239582
+          - generic [ref=e261]:
+            - generic [ref=e262]:
+              - heading "전체 후보국" [level=3] [ref=e263]
+              - paragraph [ref=e264]: 점수는 후보군 내부 비교로만 계산됩니다.
+            - table "후보국 순위 표" [ref=e266]:
+              - rowgroup [ref=e267]:
+                - row "국가 시장성 인증 규제 결제 안전성 총점 등급 상세" [ref=e268]:
+                  - columnheader "국가" [ref=e269]
+                  - columnheader "시장성" [ref=e270]
+                  - columnheader "인증" [ref=e271]
+                  - columnheader "규제" [ref=e272]
+                  - columnheader "결제" [ref=e273]
+                  - columnheader "안전성" [ref=e274]
+                  - columnheader "총점" [ref=e275]
+                  - columnheader "등급" [ref=e276]
+                  - columnheader "상세" [ref=e277]
+              - rowgroup [ref=e278]:
+                - row "독일연방공화국(The Federal Republic of Germany) DE 26 19 19 20 6 90 위험도 우선검토 독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e279]:
+                  - cell "독일연방공화국(The Federal Republic of Germany) DE" [ref=e280]
+                  - cell "26" [ref=e281]
+                  - cell "19" [ref=e282]
+                  - cell "19" [ref=e283]
+                  - cell "20" [ref=e284]
+                  - cell "6" [ref=e285]
+                  - cell "90" [ref=e286]
+                  - cell "위험도 우선검토" [ref=e287]:
+                    - status "위험도 우선검토" [ref=e288]: 우선검토
+                  - cell "독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e290]:
+                    - button "독일연방공화국(The Federal Republic of Germany) 상세 보기" [ref=e291] [cursor=pointer]: 상세 보기
+                - row "미합중국(The United States of America) US 28 19 18 16 6 87 위험도 우선검토 미합중국(The United States of America) 상세 보기" [ref=e292]:
+                  - cell "미합중국(The United States of America) US" [ref=e293]
+                  - cell "28" [ref=e294]
+                  - cell "19" [ref=e295]
+                  - cell "18" [ref=e296]
+                  - cell "16" [ref=e297]
+                  - cell "6" [ref=e298]
+                  - cell "87" [ref=e299]
+                  - cell "위험도 우선검토" [ref=e300]:
+                    - status "위험도 우선검토" [ref=e301]: 우선검토
+                  - cell "미합중국(The United States of America) 상세 보기" [ref=e303]:
+                    - button "미합중국(The United States of America) 상세 보기" [ref=e304] [cursor=pointer]: 상세 보기
+                - row "일본(Japan) JP 28 18 19 16 6 87 위험도 우선검토 일본(Japan) 상세 보기" [ref=e305]:
+                  - cell "일본(Japan) JP" [ref=e306]
+                  - cell "28" [ref=e307]
+                  - cell "18" [ref=e308]
+                  - cell "19" [ref=e309]
+                  - cell "16" [ref=e310]
+                  - cell "6" [ref=e311]
+                  - cell "87" [ref=e312]
+                  - cell "위험도 우선검토" [ref=e313]:
+                    - status "위험도 우선검토" [ref=e314]: 우선검토
+                  - cell "일본(Japan) 상세 보기" [ref=e316]:
+                    - button "일본(Japan) 상세 보기" [ref=e317] [cursor=pointer]: 상세 보기
+                - row "중화인민공화국(The People&rsquo;s Republic of China) CN 26 16 13 16 6 77 위험도 검토권장 중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e318]:
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) CN" [ref=e319]
+                  - cell "26" [ref=e320]
+                  - cell "16" [ref=e321]
+                  - cell "13" [ref=e322]
+                  - cell "16" [ref=e323]
+                  - cell "6" [ref=e324]
+                  - cell "77" [ref=e325]
+                  - cell "위험도 검토권장" [ref=e326]:
+                    - status "위험도 검토권장" [ref=e327]: 검토권장
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e329]:
+                    - button "중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e330] [cursor=pointer]: 상세 보기
+                - row "말레이시아 연방(Federation of Malaysia) MY 24 16 17 13 6 76 위험도 검토권장 말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e331]:
+                  - cell "말레이시아 연방(Federation of Malaysia) MY" [ref=e332]
+                  - cell "24" [ref=e333]
+                  - cell "16" [ref=e334]
+                  - cell "17" [ref=e335]
+                  - cell "13" [ref=e336]
+                  - cell "6" [ref=e337]
+                  - cell "76" [ref=e338]
+                  - cell "위험도 검토권장" [ref=e339]:
+                    - status "위험도 검토권장" [ref=e340]: 검토권장
+                  - cell "말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e342]:
+                    - button "말레이시아 연방(Federation of Malaysia) 상세 보기" [ref=e343] [cursor=pointer]: 상세 보기
+                - row "인도(The Republic of India) IN 25 15 16 13 6 75 위험도 검토권장 인도(The Republic of India) 상세 보기" [ref=e344]:
+                  - cell "인도(The Republic of India) IN" [ref=e345]
+                  - cell "25" [ref=e346]
+                  - cell "15" [ref=e347]
+                  - cell "16" [ref=e348]
+                  - cell "13" [ref=e349]
+                  - cell "6" [ref=e350]
+                  - cell "75" [ref=e351]
+                  - cell "위험도 검토권장" [ref=e352]:
+                    - status "위험도 검토권장" [ref=e353]: 검토권장
+                  - cell "인도(The Republic of India) 상세 보기" [ref=e355]:
+                    - button "인도(The Republic of India) 상세 보기" [ref=e356] [cursor=pointer]: 상세 보기
+                - row "멕시코합중국 (Estados Unidos Mexicanos) MX 23 15 16 11 6 71 위험도 검토권장 멕시코합중국 (Estados Unidos Mexicanos) 상세 보기" [ref=e357]:
+                  - cell "멕시코합중국 (Estados Unidos Mexicanos) MX" [ref=e358]
+                  - cell "23" [ref=e359]
+                  - cell "15" [ref=e360]
+                  - cell "16" [ref=e361]
+                  - cell "11" [ref=e362]
+                  - cell "6" [ref=e363]
+                  - cell "71" [ref=e364]
+                  - cell "위험도 검토권장" [ref=e365]:
+                    - status "위험도 검토권장" [ref=e366]: 검토권장
+                  - cell "멕시코합중국 (Estados Unidos Mexicanos) 상세 보기" [ref=e368]:
+                    - button "멕시코합중국 (Estados Unidos Mexicanos) 상세 보기" [ref=e369] [cursor=pointer]: 상세 보기
+                - row "베트남 사회주의 공화국(Socialist Republic of Vietnam) VN 22 15 15 5 6 63 위험도 검토권장 베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e370]:
+                  - cell "베트남 사회주의 공화국(Socialist Republic of Vietnam) VN" [ref=e371]
+                  - cell "22" [ref=e372]
+                  - cell "15" [ref=e373]
+                  - cell "15" [ref=e374]
+                  - cell "5" [ref=e375]
+                  - cell "6" [ref=e376]
+                  - cell "63" [ref=e377]
+                  - cell "위험도 검토권장" [ref=e378]:
+                    - status "위험도 검토권장" [ref=e379]: 검토권장
+                  - cell "베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e381]:
+                    - button "베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e382] [cursor=pointer]: 상세 보기
+      - complementary [ref=e383]:
+        - generic [ref=e384]:
+          - generic [ref=e385]: 근거 패널
+          - button "근거 패널 접기" [ref=e386] [cursor=pointer]:
+            - img
+        - generic [ref=e388]:
+          - heading "근거 상태" [level=3] [ref=e389]
+          - paragraph [ref=e390]: 후보군으로 편입된 국가만 점수화해 순위를 계산합니다.
+          - generic [ref=e391]:
+            - paragraph [ref=e392]: 분석 기준 코드
+            - paragraph [ref=e393]: HS 847330 · HSK 8473304060
+            - paragraph [ref=e394]: "적용 방식: 검색 결과 1순위 자동 반영 (100점)"
+            - paragraph [ref=e395]: "상태: 신뢰도 높음 · 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+          - generic [ref=e396]:
+            - paragraph [ref=e397]: 현재 상태
+            - generic [ref=e398]: 대기
+    - generic [ref=e400]:
+      - button "이전" [ref=e401] [cursor=pointer]
+      - button "안전성 검토" [ref=e402] [cursor=pointer]:
+        - text: 안전성 검토
+        - img

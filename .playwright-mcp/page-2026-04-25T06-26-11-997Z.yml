@@ -1,0 +1,393 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e626]:
+        - button "Close toast" [ref=e627] [cursor=pointer]:
+          - img [ref=e628]
+        - img [ref=e632]
+        - generic [ref=e635]: Failed to send a request to the Edge Function · 저장된 최신 데이터로 화면을 갱신했습니다
+  - generic [ref=e458]:
+    - banner [ref=e459]:
+      - link "홈" [ref=e461] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e463]
+        - generic [ref=e466]: 산단수출 코파일럿
+      - generic [ref=e467]:
+        - link "프로젝트" [ref=e468] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e469] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e470] [cursor=pointer]:
+          - img
+          - generic [ref=e471]: 로그아웃
+    - generic [ref=e472]:
+      - complementary [ref=e473]:
+        - paragraph [ref=e474]: 분석 단계
+        - navigation "분석 단계" [ref=e475]:
+          - link "1단계 기업·공장 검색" [ref=e476] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e478]
+            - generic [ref=e480]:
+              - generic [ref=e481]: 기업·공장 검색
+              - generic [ref=e482]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e483] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e485]
+            - generic [ref=e487]:
+              - generic [ref=e488]: 제품·HS 코드
+              - generic [ref=e489]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e490] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - img [ref=e492]
+            - generic [ref=e494]:
+              - generic [ref=e495]: 후보국 추천 Top 3
+              - generic [ref=e496]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e497] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+            - generic [ref=e498]: "4"
+            - generic [ref=e499]:
+              - generic [ref=e500]: 국가 상세
+              - generic [ref=e501]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e502] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e503]: "5"
+            - generic [ref=e504]:
+              - generic [ref=e505]: 전략물자·제품안전
+              - generic [ref=e506]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e507] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e508]: "6"
+            - generic [ref=e509]:
+              - generic [ref=e510]: 리포트
+              - generic [ref=e511]: 요구사항 10
+      - main [ref=e512]:
+        - generic [ref=e513]:
+          - generic [ref=e514]:
+            - paragraph [ref=e515]: 기획 요구사항 매핑
+            - paragraph [ref=e516]: 요구사항 4~7
+            - paragraph [ref=e517]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=e518]:
+            - generic [ref=e519]:
+              - paragraph [ref=e520]: CN
+              - heading "중화인민공화국(The People&rsquo;s Republic of China)" [level=1] [ref=e521]
+              - generic [ref=e522]:
+                - status "위험도 우선검토" [ref=e523]: 우선검토
+                - generic [ref=e525]: 총점 90/100
+            - button "상세 분석 실행" [ref=e526] [cursor=pointer]:
+              - img
+              - text: 상세 분석 실행
+          - generic [ref=e527]:
+            - generic [ref=e528]:
+              - heading "목표시장 평가 요약" [level=3] [ref=e529]
+              - paragraph [ref=e530]: 목표시장 메모는 후보군 포함 신호이며 최종 순위는 점수 기준으로 결정됩니다.
+            - generic [ref=e531]:
+              - paragraph [ref=e532]: "입력 목표시장: Japan(JP)"
+              - paragraph [ref=e533]: "포함 여부: 기본 후보군 포함"
+              - paragraph [ref=e534]: "최종 순위: Rank 1"
+              - paragraph [ref=e535]: "후보 편입 근거: 인증 데이터 존재, HS 6자리 일치, 제품 키워드 일치, 수입 규제 데이터 존재, HS 4자리 접두 일치"
+              - paragraph [ref=e536]: "포함 이유: 인증 데이터 존재; HS 6자리 일치; 제품 키워드 일치; 수입 규제 데이터 존재; HS 4자리 접두 일치"
+              - paragraph [ref=e537]: "추천 근거: 세계 최대의 자동차 생산 및 소비 시장으로, 다수의 인증 매칭과 규제 데이터가 존재하여 대량 공급 가능성이 가장 높습니다."
+              - paragraph [ref=e538]: "낮은 추천 이유: 현지 기업과의 치열한 가격 경쟁과 자국 부품 우선 정책, 그리고 지정학적 불확실성이 리스크 요인입니다."
+              - paragraph [ref=e539]: "대안 시장: 미합중국(The United States of America)(US), 일본(Japan)(JP), 태국(TH)"
+          - generic [ref=e540]:
+            - generic [ref=e541]:
+              - generic [ref=e542]:
+                - heading "필요 인증" [level=3] [ref=e543]
+                - paragraph [ref=e544]: "출처 패널·본문 행 수: 9건"
+              - list [ref=e636]:
+                - listitem [ref=e637]:
+                  - paragraph [ref=e638]: 승용차&middot;상용차용 브레이크 부품을 포함한 자동차 생산&middot;애프터마켓 공급품
+                  - generic [ref=e639]:
+                    - paragraph [ref=e640]: "필요서류: - 품질경영시스템 매뉴얼(QMS Manual) - 품질 절차서 및 지침서 - 생산&middot;공정 흐름도 (Process Flow Chart) - 위험분석 문서 (FMEA) - 제품 승인 절차 (PPAP) - 불량&middot;고객불만 대응 기록 - 내부 감사 기록 및 시정조치 보고서"
+                    - paragraph [ref=e641]: "절차: (1) 신청 &rarr; (2) 문서심사(품질경영시스템 매뉴얼) &rarr; (3) 1단계 심사(준비상태 평가) &rarr; (4) 2단계 심사(현장 심사) &rarr; (5) 시정조치 &rarr; (6) 인증서 발급 &rarr; (7) 연간 사후심사 및 3년 주기 갱신"
+                    - paragraph [ref=e642]: "유효기간: 3년 (연 1회 사후심사 필수)"
+                    - paragraph [ref=e643]: 예상 비용 2,000 KRW · 소요일 480일
+                  - link "KOTRA" [ref=e644] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e645]
+                    - text: KOTRA
+                - listitem [ref=e649]:
+                  - paragraph [ref=e650]: 드럼 브레이크용 라이닝과 디스크 브레이크용 라이닝 등 포함 필수
+                  - generic [ref=e651]:
+                    - paragraph [ref=e652]: "필요서류: ① 신청서 ② 신청인(위탁인, 생산자)의 등기등록증명서 ③ 생산자 및 위탁인 간의 위탁생산 협약 또는 계약(필요 시) ④ 유효한 생산허가증 ⑤ 유효한 생산제품 시험보고서. 제품설명서, 기술도면 등의 신청제품과 관련된 기타 상세 자료 ⑥ 1년 이내 실시한 유효한 생산공장 시험 보고서 ⑦ 유효한 생산 공장 품질관리 증명서 ⑧ 공장검사 조회표 ⑨ 기타 필요한 서류"
+                    - paragraph [ref=e653]: "절차: 신청 - 자료제출/심사 - 샘플테스트 - 테스트 보고서 심사 - 초기 공장 심사 - 인증완료/인증서 발급 - CCC마크신청/사용 - 사후심사"
+                    - paragraph [ref=e654]: "유효기간: 5년"
+                    - paragraph [ref=e655]: 예상 비용 확실한 정보 없음 · 소요일 126일
+                  - link "KOTRA" [ref=e656] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e657]
+                    - text: KOTRA
+                - listitem [ref=e661]:
+                  - paragraph [ref=e662]: 브레이크와 브레이크 패드 필수
+                  - generic [ref=e663]:
+                    - paragraph [ref=e664]: "필요서류: 1. 영문 사용설명서 2. 영문 사업자등록증 사본 3. 시험 성적서(Test report) 4. 안전관리부품 목록 5. 제품 도면 6. 제품 샘플 7. 제조공장의 품질 표준 인증서(ISO 9001/QS 9000/TS 16949 셋 중 하나)"
+                    - paragraph [ref=e665]: "절차: 1. 인증 신청 2. 공장 심사(Initial assessment) - 제품 형식 승인 이후, 제조사가 품질 시스템(ISO 9001) 혹은 적합한 품질 표준을 기반으로 제품의 양산 적합성(CoP)을 유지할 수 있는지 평가하는 사전 심사로 인증 최초 취득 시에만 진행 3. 참관 시험 및 서류 심사(Witness test and documentation) 1) 제조사는 인증 신청서와 함께 도면, 스펙 등의 제품 기본 정보 및 법규에서 요구하는 정보를 바탕으로 기술 시험 보고서 작성 2) 제출된 서류들을 검토 후 형식 승인 인증서 발급 4. 인증서 발급 및 양산 적합성 확인(CoP audit) - ECE 또는 EC 형식 승인을 사용하는 승인 기관은 생산된 부품이 형식을 준수하는지 확인하기 위해 제조사를 대상으로 CoP 감사를 통해 양산 적합성을 준수하는지 관리한다. 감사 후 제품이 기존 양산 적합성 조건을 만족시키지 못 할 경우 승인은 철회될 수 있다."
+                    - paragraph [ref=e666]: "유효기간: 인증 유효기간은 별도로 없으나 매년 사후 심사가 이루어지며, 심사 결과가 부적합 한 경우 인증이 철회될 수 있음"
+                    - paragraph [ref=e667]: 예상 비용 확실한 정보 없음 · 소요일 4일
+                  - link "KOTRA" [ref=e668] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e669]
+                    - text: KOTRA
+                - listitem [ref=e673]:
+                  - paragraph [ref=e674]: 자동차용 유압식 제동장치, 마찰식 제동장치, 비마찰식 제동장치
+                  - generic [ref=e675]:
+                    - paragraph [ref=e676]: "필요서류: -"
+                    - paragraph [ref=e677]: "절차: ㅇ 서류 심사 ㅇ 현장 심사 ㅇ 심사 결과의 문제가 발견될 경우 개선 사항 반영 ㅇ 최종 심사 완료 후, IATF 16949 인증 발급 및 IATF 데이터베이스 등록 ㅇ 심사 완료 후, 연례 심사를 통해 인증 갱신 가능"
+                    - paragraph [ref=e678]: "유효기간: 3년"
+                    - paragraph [ref=e679]: 예상 비용 확실한 정보 없음 · 소요일 확실한 정보 없음일
+                  - link "KOTRA" [ref=e680] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e681]
+                    - text: KOTRA
+                - listitem [ref=e685]:
+                  - paragraph [ref=e686]: 유압식 제동장치, 마찰식 제동장치, 엘리베이터용 제동장치(가버너)
+                  - generic [ref=e687]:
+                    - paragraph [ref=e688]: "필요서류: ◦ 필요서류 - 신청서 (반드시 당사가 제공한 중국어본 이어야 하고 거래처가 기입해야 함.) - 계열 신청시 모델별 차이를 설명 (당사가 제공, 거래처 날인) - 제품 중문 설명서 (거래처 제공) - 제품의 표찰 - 전기 회로도, 계통도 - 관련 소자와 부품 명세서 (당사 제공, 거래처 기입) - 사업자 등록증과 조직체 코드 (거래처 제공) - 샘플 2~3대 (거래처 제공) - 등록상표 (거래처 제공, 없을 시 제공할 필요 없음)"
+                    - paragraph [ref=e689]: "절차: TYPE C : 해외에서 제품시험(시험기관) 후에 해외에서 인증획득(인증기관)"
+                    - paragraph [ref=e690]: "유효기간: 5년"
+                    - paragraph [ref=e691]: 예상 비용 642 KRW · 소요일 확실한 정보 없음일
+                  - link "KOTRA" [ref=e692] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e693]
+                    - text: KOTRA
+                - listitem [ref=e697]:
+                  - paragraph [ref=e698]: 자동차용 유압식 제동장치, 마찰식 제동장치, 비마찰식 제동장치
+                  - generic [ref=e699]:
+                    - paragraph [ref=e700]: "필요서류: 확실한 정보 없음"
+                    - paragraph [ref=e701]: "절차: TYPE C : 해외에서 제품시험(시험기관) ; 해외에서 인증획득(인증기관)"
+                    - paragraph [ref=e702]: "유효기간: 4년"
+                    - paragraph [ref=e703]: 예상 비용 확실한 정보 없음 · 소요일 90일
+                  - link "KOTRA" [ref=e704] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e705]
+                    - text: KOTRA
+                - listitem [ref=e709]:
+                  - paragraph [ref=e710]: 자동차용 양상 부품 또는 공정에 대한 서비스를 제공하는 모든 기업
+                  - generic [ref=e711]:
+                    - paragraph [ref=e712]: "필요서류: 확실한 정보 없음"
+                    - paragraph [ref=e713]: "절차: TYPE A : 국내에서 제품시험(시험기관) 후에 국내에서 인증획득(인증기관)"
+                    - paragraph [ref=e714]: "유효기간: 3년"
+                    - paragraph [ref=e715]: 예상 비용 150 KRW · 소요일 28일
+                  - link "KOTRA" [ref=e716] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e717]
+                    - text: KOTRA
+                - listitem [ref=e721]:
+                  - paragraph [ref=e722]: 자동차용 유압식 제동장치, 마찰식 제동장치, 비마찰식 제동장치
+                  - generic [ref=e723]:
+                    - paragraph [ref=e724]: "필요서류: 확실한 정보 없음"
+                    - paragraph [ref=e725]: "절차: TYPE A : 국내에서 제품시험(시험기관) 후에 국내에서 인증획득(인증기관)"
+                    - paragraph [ref=e726]: "유효기간: -"
+                    - paragraph [ref=e727]: 예상 비용 400 KRW · 소요일 14일
+                  - link "KOTRA" [ref=e728] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e729]
+                    - text: KOTRA
+                - listitem [ref=e733]:
+                  - paragraph [ref=e734]: 자동차용 유압식 제동장치, 마찰식 제동장치, 비마찰식 제동장치 필수
+                  - generic [ref=e735]:
+                    - paragraph [ref=e736]: "필요서류: 확실한 정보 없음"
+                    - paragraph [ref=e737]: "절차: TYPE A : 국내에서 제품시험(시험기관) 후에 국내에서 인증획득(인증기관) 1. 적용 할 지침의 파악 2. 지침에 따른 필수 요구 사항 파악 3. 적합성 평가 절차의 선택 4. 적용 규격 및 시험 방법 결정 5. 기술 문서 작성 및 시험/ 형식 검사 / 품질 시스템 검사 6. 적합성 선언 (DoC) / 인증 심사 (CoC) 7. CE 마크 부착"
+                    - paragraph [ref=e738]: "유효기간: -"
+                    - paragraph [ref=e739]: 예상 비용 400 KRW · 소요일 14일
+                  - link "KOTRA" [ref=e740] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e741]
+                    - text: KOTRA
+            - generic [ref=e547]:
+              - generic [ref=e548]:
+                - heading "규제·NTM" [level=3] [ref=e549]
+                - paragraph [ref=e550]: "출처 패널·본문 행 수: 15건"
+              - list [ref=e745]:
+                - listitem [ref=e746]:
+                  - paragraph [ref=e747]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e748]: "시행일: 2025-03-22"
+                  - paragraph [ref=e749]: "품목: 합금 휠(Alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 일본, 튀르키예, 말레이시아, 태국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e750] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e751]
+                    - text: KOTRA
+                - listitem [ref=e755]:
+                  - paragraph [ref=e756]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e757]: "시행일: 2025-03-22"
+                  - paragraph [ref=e758]: "품목: 합금 휠(Alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 일본, 튀르키예, 말레이시아, 태국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e759] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e760]
+                    - text: KOTRA
+                - listitem [ref=e764]:
+                  - paragraph [ref=e765]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e766]: "시행일: 2025-03-22"
+                  - paragraph [ref=e767]: "품목: 합금 휠(Alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 일본, 튀르키예, 말레이시아, 태국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e768] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e769]
+                    - text: KOTRA
+                - listitem [ref=e773]:
+                  - paragraph [ref=e774]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e775]: "시행일: 2025-03-22"
+                  - paragraph [ref=e776]: "품목: 합금 휠(Alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 일본, 튀르키예, 말레이시아, 태국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e777] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e778]
+                    - text: KOTRA
+                - listitem [ref=e782]:
+                  - paragraph [ref=e783]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e784]: "시행일: 2025-03-22"
+                  - paragraph [ref=e785]: "품목: 합금 휠(Alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 일본, 튀르키예, 말레이시아, 태국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e786] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e787]
+                    - text: KOTRA
+                - listitem [ref=e791]:
+                  - paragraph [ref=e792]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e793]: "시행일: 2019-04-28"
+                  - paragraph [ref=e794]: "품목: 알루미늄 합금 바퀴(Aluminium alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e795] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e796]
+                    - text: KOTRA
+                - listitem [ref=e800]:
+                  - paragraph [ref=e801]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e802]: "시행일: 2019-04-28"
+                  - paragraph [ref=e803]: "품목: 알루미늄 합금 바퀴(Aluminium alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e804] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e805]
+                    - text: KOTRA
+                - listitem [ref=e809]:
+                  - paragraph [ref=e810]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e811]: "시행일: 2019-04-28"
+                  - paragraph [ref=e812]: "품목: 알루미늄 합금 바퀴(Aluminium alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e813] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e814]
+                    - text: KOTRA
+                - listitem [ref=e818]:
+                  - paragraph [ref=e819]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e820]: "시행일: 2019-04-28"
+                  - paragraph [ref=e821]: "품목: 알루미늄 합금 바퀴(Aluminium alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e822] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e823]
+                    - text: KOTRA
+                - listitem [ref=e827]:
+                  - paragraph [ref=e828]: 870870 · 반덤핑(규제중)
+                  - paragraph [ref=e829]: "시행일: 2019-04-28"
+                  - paragraph [ref=e830]: "품목: 알루미늄 합금 바퀴(Aluminium alloy wheels) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 870870"
+                  - link "KOTRA" [ref=e831] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e832]
+                    - text: KOTRA
+                - listitem [ref=e836]:
+                  - paragraph [ref=e837]: 401120 · 반덤핑(규제중)
+                  - paragraph [ref=e838]: "시행일: 2015-12-18"
+                  - paragraph [ref=e839]: "품목: 상업용 자동차 타이어(commercial vehicle tyres)/트럭용 타이어 (new pneumatic tyres rubber for trucks) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 401120"
+                  - link "KOTRA" [ref=e840] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e841]
+                    - text: KOTRA
+                - listitem [ref=e845]:
+                  - paragraph [ref=e846]: 401120 · 반덤핑(규제중)
+                  - paragraph [ref=e847]: "시행일: 2015-12-18"
+                  - paragraph [ref=e848]: "품목: 상업용 자동차 타이어(commercial vehicle tyres)/트럭용 타이어 (new pneumatic tyres rubber for trucks) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 401120"
+                  - link "KOTRA" [ref=e849] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e850]
+                    - text: KOTRA
+                - listitem [ref=e854]:
+                  - paragraph [ref=e855]: 401120 · 반덤핑(규제중)
+                  - paragraph [ref=e856]: "시행일: 2015-12-18"
+                  - paragraph [ref=e857]: "품목: 상업용 자동차 타이어(commercial vehicle tyres)/트럭용 타이어 (new pneumatic tyres rubber for trucks) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 401120"
+                  - link "KOTRA" [ref=e858] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e859]
+                    - text: KOTRA
+                - listitem [ref=e863]:
+                  - paragraph [ref=e864]: 401120 · 반덤핑(규제중)
+                  - paragraph [ref=e865]: "시행일: 2015-12-18"
+                  - paragraph [ref=e866]: "품목: 상업용 자동차 타이어(commercial vehicle tyres)/트럭용 타이어 (new pneumatic tyres rubber for trucks) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 401120"
+                  - link "KOTRA" [ref=e867] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e868]
+                    - text: KOTRA
+                - listitem [ref=e872]:
+                  - paragraph [ref=e873]: 401120 · 반덤핑(규제중)
+                  - paragraph [ref=e874]: "시행일: 2015-12-18"
+                  - paragraph [ref=e875]: "품목: 상업용 자동차 타이어(commercial vehicle tyres)/트럭용 타이어 (new pneumatic tyres rubber for trucks) | 규제: 반덤핑(규제중) | 대상국가: 중국 | 지역/본부: CIS지역본부 | HS: 401120"
+                  - link "KOTRA" [ref=e876] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e877]
+                    - text: KOTRA
+            - generic [ref=e553]:
+              - generic [ref=e554]:
+                - heading "결제·국가 리스크 (K-SURE)" [level=3] [ref=e555]
+                - paragraph [ref=e556]: 대금 회수 가능성과 국가 위험 등급 · 행 수 0건
+              - generic [ref=e557]:
+                - paragraph [ref=e558]: 조회 결과 없음
+                - paragraph [ref=e559]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+            - generic [ref=e560]:
+              - generic [ref=e562]:
+                - generic [ref=e563]:
+                  - heading "7일 내 다음 실행 과제" [level=3] [ref=e564]
+                  - paragraph [ref=e565]: AI가 위 데이터를 바탕으로 1주일 내 실행 가능한 과제를 제안합니다.
+                - button "과제 생성" [ref=e566] [cursor=pointer]:
+                  - img
+                  - text: 과제 생성
+              - paragraph [ref=e568]: ‘과제 생성’을 눌러 7일 내 실행 과제를 받아보세요
+      - complementary [ref=e569]:
+        - generic [ref=e570]:
+          - generic [ref=e571]: 근거 패널
+          - button "근거 패널 접기" [ref=e572] [cursor=pointer]:
+            - img
+        - generic [ref=e574]:
+          - heading "출처" [level=3] [ref=e575]
+          - generic [ref=e576]:
+            - paragraph [ref=e577]: 분석 기준 코드
+            - paragraph [ref=e578]: HS 870830 · HSK 8708303000
+            - paragraph [ref=e579]: "적용 방식: 사용자 수동 선택 (44점)"
+            - paragraph [ref=e580]: "상태: 정보 부족 · 입력 정보가 부족해 오분류 가능성이 있습니다."
+            - paragraph [ref=e581]: 후속 단계 참고용 코드이며 최종 확정 전 추가 검증이 필요합니다.
+          - list [ref=e582]:
+            - listitem [ref=e583]:
+              - generic [ref=e584]:
+                - generic "출처 KOTRA" [ref=e585]: KOTRA
+                - link "중화인민공화국(The People&rsquo;s Republic of China) market profile" [ref=e586] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                  - img [ref=e587]
+                  - generic [ref=e591]: 중화인민공화국(The People&rsquo;s Republic of China) market profile
+            - listitem [ref=e592]:
+              - generic [ref=e593]:
+                - generic "출처 기타" [ref=e594]: 기타
+                - link "인증 매칭 2건" [ref=e595] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                  - img [ref=e596]
+                  - generic [ref=e600]: 인증 매칭 2건
+            - listitem [ref=e601]:
+              - generic [ref=e602]:
+                - generic "출처 기타" [ref=e603]: 기타
+                - link "수입규제 매칭 15건" [ref=e604] [cursor=pointer]:
+                  - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                  - img [ref=e605]
+                  - generic [ref=e609]: 수입규제 매칭 15건
+            - listitem [ref=e610]:
+              - generic [ref=e611]:
+                - generic "출처 KOTRA" [ref=e612]: KOTRA
+                - 'link "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화" [ref=e613] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240216
+                  - img [ref=e614]
+                  - generic [ref=e618]: "안후이성의 성장 엔진: 신에너지차&middot;첨단기술&middot;현대서비스업의 3박자 조화"
+          - generic [ref=e619]:
+            - paragraph [ref=e620]: AI 상태
+            - generic [ref=e621]: 부분 산출
+    - generic [ref=e623]:
+      - button "후보국으로" [ref=e624] [cursor=pointer]:
+        - img
+        - text: 후보국으로
+      - button "안전성 검토로 →" [ref=e625] [cursor=pointer]

@@ -1,0 +1,177 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e413]:
+    - banner [ref=e414]:
+      - link "홈" [ref=e416] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e418]
+        - generic [ref=e421]: 산단수출 코파일럿
+      - generic [ref=e422]:
+        - link "프로젝트" [ref=e423] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e424] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e425] [cursor=pointer]:
+          - img
+          - generic [ref=e426]: 로그아웃
+    - main [ref=e428]:
+      - generic [ref=e429]:
+        - generic [ref=e430]:
+          - heading "데이터 출처 · API 상태" [level=1] [ref=e431]
+          - paragraph [ref=e432]: 본 서비스가 사용하는 공공데이터 API와 라이선스, 최근 호출 상태입니다.
+          - generic [ref=e433]:
+            - paragraph [ref=e434]: "데이터 기준일: 2026.04.24 18:12"
+            - paragraph [ref=e435]: 일부 API는 기관 정책/키 설정에 따라 부분 산출 또는 지연될 수 있습니다.
+        - generic [ref=e436]:
+          - generic [ref=e437]:
+            - heading "공공데이터 API 10종" [level=3] [ref=e438]
+            - paragraph [ref=e439]: 각 API 키가 등록되면 해당 단계가 실데이터로 자동 전환됩니다.
+          - table "데이터 출처 및 API 상태 표" [ref=e441]:
+            - caption [ref=e442]: 데이터 출처 및 API 최근 상태, 실패 횟수 목록
+            - rowgroup [ref=e443]:
+              - row "API 기관 용도 최근 상태 최근 조회 실패 횟수 라이선스" [ref=e444]:
+                - columnheader "API" [ref=e445]
+                - columnheader "기관" [ref=e446]
+                - columnheader "용도" [ref=e447]
+                - columnheader "최근 상태" [ref=e448]
+                - columnheader "최근 조회" [ref=e449]
+                - columnheader "실패 횟수" [ref=e450]
+                - columnheader "라이선스" [ref=e451]
+            - rowgroup [ref=e452]:
+              - row "KICOX_Factory Production Info KICOX Factory registration and production information lookup 대기 - 0 Public Data Portal" [ref=e453]:
+                - cell "KICOX_Factory Production Info" [ref=e454]
+                - cell "KICOX" [ref=e455]
+                - cell "Factory registration and production information lookup" [ref=e456]
+                - cell "대기" [ref=e457]:
+                  - generic [ref=e458]: 대기
+                - cell "-" [ref=e459]
+                - cell "0" [ref=e460]
+                - cell "Public Data Portal" [ref=e461]:
+                  - link "Public Data Portal" [ref=e462] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15087611/openapi.do
+                    - img [ref=e463]
+                    - text: Public Data Portal
+              - row "KOTRA_Country Info KOTRA Country-level market baseline information 정상 2026.04.24 15:39 0 KOTRA" [ref=e467]:
+                - cell "KOTRA_Country Info" [ref=e468]
+                - cell "KOTRA" [ref=e469]
+                - cell "Country-level market baseline information" [ref=e470]
+                - cell "정상" [ref=e471]:
+                  - generic [ref=e472]: 정상
+                - cell "2026.04.24 15:39" [ref=e473]
+                - cell "0" [ref=e474]
+                - cell "KOTRA" [ref=e475]:
+                  - link "KOTRA" [ref=e476] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/kotra_nationalInformation/natnInfo/natnInfo
+                    - img [ref=e477]
+                    - text: KOTRA
+              - row "KOTRA_Overseas Market News KOTRA Collect overseas market news and trend signals 정상 2026.04.24 18:12 0 KOTRA" [ref=e481]:
+                - cell "KOTRA_Overseas Market News" [ref=e482]
+                - cell "KOTRA" [ref=e483]
+                - cell "Collect overseas market news and trend signals" [ref=e484]
+                - cell "정상" [ref=e485]:
+                  - generic [ref=e486]: 정상
+                - cell "2026.04.24 18:12" [ref=e487]
+                - cell "0" [ref=e488]
+                - cell "KOTRA" [ref=e489]:
+                  - link "KOTRA" [ref=e490] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/kotra_overseasMarketNews/ovseaMrktNews/ovseaMrktNews
+                    - img [ref=e491]
+                    - text: KOTRA
+              - row "KOTRA_Overseas Certification Info KOTRA Check overseas certification requirements 정상 2026.04.24 18:12 0 KOTRA" [ref=e495]:
+                - cell "KOTRA_Overseas Certification Info" [ref=e496]
+                - cell "KOTRA" [ref=e497]
+                - cell "Check overseas certification requirements" [ref=e498]
+                - cell "정상" [ref=e499]:
+                  - generic [ref=e500]: 정상
+                - cell "2026.04.24 18:12" [ref=e501]
+                - cell "0" [ref=e502]
+                - cell "KOTRA" [ref=e503]:
+                  - link "KOTRA" [ref=e504] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/overseasAuthInfo/getOverseasAuthInfo
+                    - img [ref=e505]
+                    - text: KOTRA
+              - row "KOTRA_Import Regulation Info KOTRA Review import regulations and non-tariff barriers 정상 2026.04.24 18:12 0 KOTRA" [ref=e509]:
+                - cell "KOTRA_Import Regulation Info" [ref=e510]
+                - cell "KOTRA" [ref=e511]
+                - cell "Review import regulations and non-tariff barriers" [ref=e512]
+                - cell "정상" [ref=e513]:
+                  - generic [ref=e514]: 정상
+                - cell "2026.04.24 18:12" [ref=e515]
+                - cell "0" [ref=e516]
+                - cell "KOTRA" [ref=e517]:
+                  - link "KOTRA" [ref=e518] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B410001/DS00000128/getDS00000128
+                    - img [ref=e519]
+                    - text: KOTRA
+              - row "K-SURE_Country Risk Grade K-SURE Check country credit/risk grade 정상 2026.04.24 18:12 0 K-SURE" [ref=e523]:
+                - cell "K-SURE_Country Risk Grade" [ref=e524]
+                - cell "K-SURE" [ref=e525]
+                - cell "Check country credit/risk grade" [ref=e526]
+                - cell "정상" [ref=e527]:
+                  - generic [ref=e528]: 정상
+                - cell "2026.04.24 18:12" [ref=e529]
+                - cell "0" [ref=e530]
+                - cell "K-SURE" [ref=e531]:
+                  - link "K-SURE" [ref=e532] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B552696/countrygrade/credit-grade
+                    - img [ref=e533]
+                    - text: K-SURE
+              - row "K-SURE_Industry Risk Index K-SURE Check industry-level risk index 정상 2026.04.24 18:12 0 K-SURE" [ref=e537]:
+                - cell "K-SURE_Industry Risk Index" [ref=e538]
+                - cell "K-SURE" [ref=e539]
+                - cell "Check industry-level risk index" [ref=e540]
+                - cell "정상" [ref=e541]:
+                  - generic [ref=e542]: 정상
+                - cell "2026.04.24 18:12" [ref=e543]
+                - cell "0" [ref=e544]
+                - cell "K-SURE" [ref=e545]:
+                  - link "K-SURE" [ref=e546] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B552696/ksight/riskindex
+                    - img [ref=e547]
+                    - text: K-SURE
+              - row "K-SURE_Export Payment Info K-SURE Reference export payment terms and delay history 정상 2026.04.24 18:12 0 K-SURE" [ref=e551]:
+                - cell "K-SURE_Export Payment Info" [ref=e552]
+                - cell "K-SURE" [ref=e553]
+                - cell "Reference export payment terms and delay history" [ref=e554]
+                - cell "정상" [ref=e555]:
+                  - generic [ref=e556]: 정상
+                - cell "2026.04.24 18:12" [ref=e557]
+                - cell "0" [ref=e558]
+                - cell "K-SURE" [ref=e559]:
+                  - link "K-SURE" [ref=e560] [cursor=pointer]:
+                    - /url: https://apis.data.go.kr/B552696/exportPayment/getPaymentInfo
+                    - img [ref=e561]
+                    - text: K-SURE
+              - row "Trade Security Institute_HSK Strategic Item Info Trade Security Institute Check strategic item status by HSK code 정상 2026.04.24 14:58 0 Trade Security Institute" [ref=e565]:
+                - cell "Trade Security Institute_HSK Strategic Item Info" [ref=e566]
+                - cell "Trade Security Institute" [ref=e567]
+                - cell "Check strategic item status by HSK code" [ref=e568]
+                - cell "정상" [ref=e569]:
+                  - generic [ref=e570]: 정상
+                - cell "2026.04.24 14:58" [ref=e571]
+                - cell "0" [ref=e572]
+                - cell "Trade Security Institute" [ref=e573]:
+                  - link "Trade Security Institute" [ref=e574] [cursor=pointer]:
+                    - /url: https://yestrade.go.kr/openapi
+                    - img [ref=e575]
+                    - text: Trade Security Institute
+              - row "KATS_SafetyKorea_Recall KATS Check product recall status 오류 2026.04.24 14:58 2 KATS" [ref=e579]:
+                - cell "KATS_SafetyKorea_Recall" [ref=e580]
+                - cell "KATS" [ref=e581]
+                - cell "Check product recall status" [ref=e582]
+                - cell "오류" [ref=e583]:
+                  - generic [ref=e584]: 오류
+                - cell "2026.04.24 14:58" [ref=e585]
+                - cell "2" [ref=e586]
+                - cell "KATS" [ref=e587]:
+                  - link "KATS" [ref=e588] [cursor=pointer]:
+                    - /url: https://www.safetykorea.kr/openapi
+                    - img [ref=e589]
+                    - text: KATS
+        - paragraph [ref=e593]: 라이선스·이용약관은 각 제공기관 고지사항을 우선합니다. 자동 산출 결과는 참고자료이며 기관 확인이 필요합니다.

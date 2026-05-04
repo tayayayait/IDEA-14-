@@ -1,0 +1,154 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e1552]:
+        - button "Close toast" [ref=e1553] [cursor=pointer]:
+          - img [ref=e1554]
+        - img [ref=e1558]
+        - generic [ref=e1561]: 검색 조건은 1개 이상, 각 조건은 2자 이상 입력해 주세요
+  - generic [ref=e1427]:
+    - banner [ref=e1428]:
+      - link "홈" [ref=e1430] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e1432]
+        - generic [ref=e1435]: 산단수출 코파일럿
+      - generic [ref=e1436]:
+        - link "프로젝트" [ref=e1437] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e1438] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e1439] [cursor=pointer]:
+          - img
+          - generic [ref=e1440]: 로그아웃
+    - generic [ref=e1441]:
+      - complementary [ref=e1442]:
+        - paragraph [ref=e1443]: 분석 단계
+        - navigation "분석 단계" [ref=e1444]:
+          - link "1단계 기업·공장 검색" [ref=e1445] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/company
+            - generic [ref=e1446]: "1"
+            - generic [ref=e1447]:
+              - generic [ref=e1448]: 기업·공장 검색
+              - generic [ref=e1449]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e1450] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/product
+            - generic [ref=e1451]: "2"
+            - generic [ref=e1452]:
+              - generic [ref=e1453]: 제품·HS 코드
+              - generic [ref=e1454]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e1455] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries
+            - generic [ref=e1456]: "3"
+            - generic [ref=e1457]:
+              - generic [ref=e1458]: 후보국 추천 Top 3
+              - generic [ref=e1459]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e1460] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/countries/DE
+            - generic [ref=e1461]: "4"
+            - generic [ref=e1462]:
+              - generic [ref=e1463]: 국가 상세
+              - generic [ref=e1464]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e1465] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/safety
+            - generic [ref=e1466]: "5"
+            - generic [ref=e1467]:
+              - generic [ref=e1468]: 전략물자·제품안전
+              - generic [ref=e1469]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e1470] [cursor=pointer]:
+            - /url: /projects/7d5ec186-cc50-4605-8e0f-e54038cfba5b/report
+            - generic [ref=e1471]: "6"
+            - generic [ref=e1472]:
+              - generic [ref=e1473]: 리포트
+              - generic [ref=e1474]: 요구사항 10
+      - main [ref=e1475]:
+        - generic [ref=e1476]:
+          - generic [ref=e1477]:
+            - paragraph [ref=e1478]: 기획 요구사항 매핑
+            - paragraph [ref=e1479]: 요구사항 1
+            - paragraph [ref=e1480]: 기업·공장 기본 정보 수집
+          - generic [ref=e1481]:
+            - heading "1. 기업·공장 검색" [level=1] [ref=e1482]
+            - paragraph [ref=e1483]: 산업단지 입주기업을 검색하거나 직접 입력합니다.
+          - generic [ref=e1484]:
+            - generic [ref=e1485]:
+              - heading "KICOX 검색" [level=3] [ref=e1486]
+              - paragraph [ref=e1487]: 검색 조건 1개 이상, 텍스트 조건은 2자 이상 입력해야 조회됩니다.
+            - generic [ref=e1488]:
+              - generic [ref=e1489]:
+                - 'textbox "회사명 (예: ○○산업)" [ref=e1490]'
+                - 'textbox "산단명 (예: 반월시화)" [ref=e1491]'
+                - 'textbox "공장관리번호 (예: 115452009184637)" [ref=e1492]'
+                - 'textbox "생산품 키워드 (예: 모터, 센서)" [ref=e1493]'
+                - generic [ref=e1494]:
+                  - text: 지역
+                  - combobox "지역 선택" [ref=e1495] [cursor=pointer]:
+                    - generic: 지역 선택
+                    - img [ref=e1496]
+                - generic [ref=e1498]:
+                  - button "검색 실행" [active] [ref=e1499] [cursor=pointer]:
+                    - img
+                    - text: 검색 실행
+                  - button "조건 초기화" [ref=e1500] [cursor=pointer]:
+                    - img
+                    - text: 조건 초기화
+              - generic [ref=e1501]:
+                - paragraph [ref=e1502]: 선택 요약
+                - generic [ref=e1503]:
+                  - paragraph [ref=e1504]: "회사명: 삼성진공"
+                  - paragraph [ref=e1505]: "산단:"
+                  - paragraph [ref=e1506]: "공장관리번호: 000000000003748"
+                  - paragraph [ref=e1507]: "지역: 대구광역시"
+                  - paragraph [ref=e1508]: "생산품: 차량유리, 백밀러케이스"
+          - generic [ref=e1509]:
+            - generic [ref=e1510]:
+              - heading "기업 정보" [level=3] [ref=e1511]:
+                - img [ref=e1512]
+                - text: 기업 정보
+              - paragraph [ref=e1516]: 검색 결과를 채우거나 직접 입력해 주세요.
+            - generic [ref=e1517]:
+              - generic [ref=e1518]:
+                - generic [ref=e1519]: 회사명*
+                - textbox [ref=e1520]: 삼성진공
+              - generic [ref=e1521]:
+                - text: 산단명
+                - textbox [ref=e1522]
+              - generic [ref=e1523]:
+                - text: 공장관리번호
+                - textbox [ref=e1524]: "000000000003748"
+              - generic [ref=e1525]:
+                - text: 주소
+                - textbox [ref=e1526]: 대구광역시 북구 노원로39길 17 (침산동)
+              - generic [ref=e1527]:
+                - text: 지역
+                - textbox [ref=e1528]: 대구광역시
+              - generic [ref=e1529]:
+                - text: 업종 코드
+                - textbox [ref=e1530]: "30399"
+              - generic [ref=e1531]:
+                - text: 주요 생산품
+                - textbox [ref=e1532]: 차량유리, 백밀러케이스
+              - generic [ref=e1533]:
+                - text: 종업원 수
+                - spinbutton [ref=e1534]: "4"
+      - complementary [ref=e1535]:
+        - generic [ref=e1536]:
+          - generic [ref=e1537]: 근거 패널
+          - button "근거 패널 접기" [ref=e1538] [cursor=pointer]:
+            - img
+        - generic [ref=e1540]:
+          - heading "근거 · 출처" [level=3] [ref=e1541]
+          - paragraph [ref=e1542]: 기업 정보는 한국산업단지공단 입주기업 OpenAPI(KICOX)에서 조회합니다. 검색 결과가 없으면 직접 입력해 진행할 수 있으며, 입력값에는 ‘사용자 입력’ 배지가 붙습니다.
+          - generic [ref=e1543]:
+            - paragraph [ref=e1544]: 조회 상태
+            - generic [ref=e1545]:
+              - generic [ref=e1546]: 대기
+              - generic "출처 KICOX" [ref=e1547]: KICOX
+    - generic [ref=e1549]:
+      - button "취소" [ref=e1550] [cursor=pointer]
+      - button "저장 후 다음 단계" [ref=e1551] [cursor=pointer]

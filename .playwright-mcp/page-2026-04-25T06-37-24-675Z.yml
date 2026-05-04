@@ -1,0 +1,197 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e9]
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e16] [cursor=pointer]:
+          - img
+          - generic [ref=e17]: 로그아웃
+    - generic [ref=e18]:
+      - complementary [ref=e19]:
+        - paragraph [ref=e20]: 분석 단계
+        - navigation "분석 단계" [ref=e21]:
+          - link "1단계 기업·공장 검색" [ref=e22] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/company
+            - img [ref=e24]
+            - generic [ref=e26]:
+              - generic [ref=e27]: 기업·공장 검색
+              - generic [ref=e28]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e29] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/product
+            - img [ref=e31]
+            - generic [ref=e33]:
+              - generic [ref=e34]: 제품·HS 코드
+              - generic [ref=e35]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e36] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries
+            - img [ref=e38]
+            - generic [ref=e40]:
+              - generic [ref=e41]: 후보국 추천 Top 3
+              - generic [ref=e42]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e43] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/countries/CN
+            - img [ref=e45]
+            - generic [ref=e47]:
+              - generic [ref=e48]: 국가 상세
+              - generic [ref=e49]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e50] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/safety
+            - generic [ref=e51]: "5"
+            - generic [ref=e52]:
+              - generic [ref=e53]: 전략물자·제품안전
+              - generic [ref=e54]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e55] [cursor=pointer]:
+            - /url: /projects/a777323d-0f4a-420b-a479-44556dacde69/report
+            - generic [ref=e56]: "6"
+            - generic [ref=e57]:
+              - generic [ref=e58]: 리포트
+              - generic [ref=e59]: 요구사항 10
+      - main [ref=e60]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - paragraph [ref=e63]: 기획 요구사항 매핑
+            - paragraph [ref=e64]: 요구사항 8~9
+            - paragraph [ref=e65]: 전략물자 및 제품안전 검토
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - heading "5. 전략물자·제품안전" [level=1] [ref=e68]
+              - paragraph [ref=e69]: HS 기반 전략물자 가능성과 제품안전·리콜 유사사례를 검토합니다.
+            - button "검토 실행" [ref=e70] [cursor=pointer]:
+              - img
+              - text: 검토 실행
+          - generic [ref=e72]:
+            - img [ref=e73]
+            - paragraph [ref=e75]: 자동 판정 결과는 법적 확정이 아닙니다. 전략물자·인증·제품안전은 반드시 기관 사전 확인이 필요합니다.
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - heading "실행 피드백 · 전략물자" [level=3] [ref=e79]
+                - paragraph [ref=e80]: Trade Security Institute 연계 상태
+              - generic [ref=e81]:
+                - generic [ref=e82]:
+                  - paragraph [ref=e83]: 미실행
+                  - generic [ref=e84]: 대기
+                - paragraph [ref=e85]: 전략물자 검토를 아직 실행하지 않았습니다.
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - heading "실행 피드백 · SafetyKorea" [level=3] [ref=e88]
+                - paragraph [ref=e89]: 리콜·안전 공지 조회 상태
+              - generic [ref=e90]:
+                - generic [ref=e91]:
+                  - paragraph [ref=e92]: 미실행
+                  - generic [ref=e93]: 대기
+                - paragraph [ref=e94]: SafetyKorea 조회를 아직 실행하지 않았습니다.
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - generic [ref=e97]:
+                - heading "전략물자 검토 상태" [level=3] [ref=e98]
+                - paragraph [ref=e99]: HSK, 연계 품목, 통제번호 기준
+              - generic [ref=e100]:
+                - generic [ref=e101]:
+                  - paragraph [ref=e102]: HSK 코드 검토
+                  - paragraph [ref=e103]: "8708303000"
+                - generic [ref=e104]:
+                  - paragraph [ref=e105]: 분석 기준 코드 상태
+                  - paragraph [ref=e106]: 정보 부족 · 입력 정보가 부족해 오분류 가능성이 있습니다.
+                - generic [ref=e107]:
+                  - paragraph [ref=e108]: 연계 품목 확인
+                  - paragraph [ref=e109]: 확실한 정보 없음
+                - generic [ref=e110]:
+                  - paragraph [ref=e111]: 통제번호 매핑
+                  - paragraph [ref=e112]: 확실한 정보 없음
+                - generic [ref=e113]:
+                  - paragraph [ref=e114]: 기관 사전판정
+                  - paragraph [ref=e115]: 자동 판정이 아닌 기관 확인 절차 필요
+            - generic [ref=e116]:
+              - generic [ref=e117]:
+                - heading "제품안전 검토 상태" [level=3] [ref=e118]
+                - paragraph [ref=e119]: 리콜·안전인증·시험성적 기반
+              - generic [ref=e120]:
+                - generic [ref=e121]:
+                  - paragraph [ref=e122]: SafetyKorea 리콜 매칭
+                  - paragraph [ref=e123]: 확실한 정보 없음
+                - generic [ref=e124]:
+                  - paragraph [ref=e125]: 안전인증 대상 여부
+                  - paragraph [ref=e126]: 확실한 정보 없음
+                - generic [ref=e127]:
+                  - paragraph [ref=e128]: 판매중지/리콜 공지 점검
+                  - paragraph [ref=e129]: 확실한 정보 없음
+                - generic [ref=e130]:
+                  - paragraph [ref=e131]: 시험성적서 최신성 점검
+                  - paragraph [ref=e132]: 검토 필요
+          - generic [ref=e133]:
+            - heading "전략물자 상세" [level=3] [ref=e135]
+            - generic [ref=e136]:
+              - paragraph [ref=e137]: "HS: 870830"
+              - paragraph [ref=e138]: "HSK: 8708303000"
+              - paragraph [ref=e139]: "매칭 방식: none"
+              - paragraph [ref=e140]: "통제번호: 확실한 정보 없음"
+              - paragraph [ref=e141]: "기준일: 확실한 정보 없음"
+              - paragraph [ref=e142]: "출처: 전략물자 HSK 연계표"
+              - paragraph [ref=e143]: "적용 방식: 사용자 수동 선택"
+              - paragraph [ref=e144]: "후보 점수: 44점"
+              - paragraph [ref=e145]: "확인 필요: 예"
+          - generic [ref=e147]:
+            - img [ref=e148]
+            - paragraph [ref=e150]: 아직 검토 결과가 없습니다
+            - paragraph [ref=e151]: ‘검토 실행’을 누르면 HS·제품 정보를 토대로 전략물자 플래그·리콜 유사사례를 수집합니다.
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - heading "조치 체크리스트" [level=3] [ref=e154]
+              - paragraph [ref=e155]: 실행 후 리포트 단계로 이동하세요.
+            - generic [ref=e157]:
+              - generic [ref=e159]:
+                - checkbox "전략물자관리원(YESTrade) 자가판정 수행 체크" [ref=e160] [cursor=pointer]
+                - generic [ref=e161]:
+                  - paragraph [ref=e162]: 전략물자관리원(YESTrade) 자가판정 수행
+                  - paragraph [ref=e163]: "국가: - · 근거 API: SafetyKorea/K-SURE"
+                - generic [ref=e164]: 대기
+              - generic [ref=e166]:
+                - checkbox "SafetyKorea 리콜·안전 공지 재확인 체크" [ref=e167] [cursor=pointer]
+                - generic [ref=e168]:
+                  - paragraph [ref=e169]: SafetyKorea 리콜·안전 공지 재확인
+                  - paragraph [ref=e170]: "국가: - · 근거 API: SafetyKorea/K-SURE"
+                - generic [ref=e171]: 대기
+              - generic [ref=e173]:
+                - checkbox "필수 인증 서류 최신본 준비 체크" [ref=e174] [cursor=pointer]
+                - generic [ref=e175]:
+                  - paragraph [ref=e176]: 필수 인증 서류 최신본 준비
+                  - paragraph [ref=e177]: "국가: - · 근거 API: 전략물자관리원"
+                - generic [ref=e178]: 대기
+              - generic [ref=e180]:
+                - checkbox "기관 상담 일정 확보(관세평가분류원/무역안보관리원) 체크" [ref=e181] [cursor=pointer]
+                - generic [ref=e182]:
+                  - paragraph [ref=e183]: 기관 상담 일정 확보(관세평가분류원/무역안보관리원)
+                  - paragraph [ref=e184]: "국가: - · 근거 API: 전략물자관리원"
+                - generic [ref=e185]: 대기
+      - complementary [ref=e186]:
+        - generic [ref=e187]:
+          - generic [ref=e188]: 근거 패널
+          - button "근거 패널 접기" [ref=e189] [cursor=pointer]:
+            - img
+        - generic [ref=e191]:
+          - heading "근거 · 출처" [level=3] [ref=e192]
+          - paragraph [ref=e193]: 전략물자 자가판정은 전략물자관리원 기준을, 제품안전·리콜은 국가기술표준원·SafetyKorea를 따릅니다. 확정 판정은 해당 기관 사전 확인이 필요합니다.
+          - generic [ref=e194]:
+            - paragraph [ref=e195]: 상태
+            - generic [ref=e196]: 대기
+            - paragraph [ref=e197]: "최근 실행: 확실한 정보 없음"
+            - paragraph [ref=e198]: "전략물자 API: 미실행"
+            - paragraph [ref=e199]: "SafetyKorea API: 미실행"
+    - generic [ref=e201]:
+      - button "이전" [ref=e202] [cursor=pointer]
+      - button "검토 실행 후 리포트 생성" [disabled]

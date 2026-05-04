@@ -1,0 +1,382 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e403]:
+    - banner [ref=e404]:
+      - link "홈" [ref=e406] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e408]
+        - generic [ref=e411]: 산단수출 코파일럿
+      - generic [ref=e412]:
+        - link "프로젝트" [ref=e413] [cursor=pointer]:
+          - /url: /projects
+          - img
+          - text: 프로젝트
+        - link "데이터 출처" [ref=e414] [cursor=pointer]:
+          - /url: /data-sources
+          - img
+          - text: 데이터 출처
+        - button "로그아웃" [ref=e415] [cursor=pointer]:
+          - img
+          - generic [ref=e416]: 로그아웃
+    - generic [ref=e417]:
+      - complementary [ref=e418]:
+        - paragraph [ref=e419]: 분석 단계
+        - navigation "분석 단계" [ref=e420]:
+          - link "1단계 기업·공장 검색" [ref=e421] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/company
+            - generic [ref=e422]: "1"
+            - generic [ref=e423]:
+              - generic [ref=e424]: 기업·공장 검색
+              - generic [ref=e425]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e426] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/product
+            - img [ref=e428]
+            - generic [ref=e430]:
+              - generic [ref=e431]: 제품·HS 코드
+              - generic [ref=e432]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e433] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/countries
+            - img [ref=e435]
+            - generic [ref=e437]:
+              - generic [ref=e438]: 후보국 추천 Top 3
+              - generic [ref=e439]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e440] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/countries/DE
+            - generic [ref=e441]: "4"
+            - generic [ref=e442]:
+              - generic [ref=e443]: 국가 상세
+              - generic [ref=e444]: 요구사항 4~7
+          - link "5단계 전략물자·제품안전" [ref=e445] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/safety
+            - img [ref=e447]
+            - generic [ref=e449]:
+              - generic [ref=e450]: 전략물자·제품안전
+              - generic [ref=e451]: 요구사항 8~9
+          - link "6단계 리포트" [ref=e452] [cursor=pointer]:
+            - /url: /projects/ef5799ef-5187-4086-a0da-5e33879d1a81/report
+            - generic [ref=e453]: "6"
+            - generic [ref=e454]:
+              - generic [ref=e455]: 리포트
+              - generic [ref=e456]: 요구사항 10
+      - main [ref=e457]:
+        - generic [ref=e458]:
+          - generic [ref=e459]:
+            - paragraph [ref=e460]: 기획 요구사항 매핑
+            - paragraph [ref=e461]: 요구사항 4~7
+            - paragraph [ref=e462]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=e463]:
+            - generic [ref=e464]:
+              - paragraph [ref=e465]: DE
+              - heading "독일연방공화국(The Federal Republic of Germany)" [level=1] [ref=e466]
+              - generic [ref=e467]:
+                - status "위험도 우선검토" [ref=e468]: 우선검토
+                - generic [ref=e470]: 총점 90/100
+            - button "상세 분석 실행" [ref=e471] [cursor=pointer]:
+              - img
+              - text: 상세 분석 실행
+          - generic [ref=e472]:
+            - generic [ref=e473]:
+              - heading "목표시장 평가 요약" [level=3] [ref=e474]
+              - paragraph [ref=e475]: 목표시장 메모, 후보군 포함 신호, 최종 순위와 점수를 함께 표시합니다.
+            - generic [ref=e476]:
+              - paragraph [ref=e477]: "입력 목표시장: 확실한 정보 없음"
+              - paragraph [ref=e478]: "포함 여부: 기본 후보군 포함"
+              - paragraph [ref=e479]: "최종 순위: Rank 1"
+              - paragraph [ref=e480]: "후보 편입 근거: 시장 뉴스 일치, 제품 키워드 일치"
+              - paragraph [ref=e481]: "포함 이유: 시장 뉴스 일치; 제품 키워드 일치"
+              - paragraph [ref=e482]: "추천 근거: 결제 안전성이 가장 우수하며 온디바이스 AI 확산과 자동차 산업의 고도화로 고신뢰성 DRAM 수요가 지속됨."
+              - paragraph [ref=e483]: "낮은 추천 이유: 에너지 비용 상승 및 미국 관세 정책에 따른 제조업 전반의 가격 경쟁력 저하 우려가 있음."
+              - paragraph [ref=e484]: "대안시장: 미합중국(The United States of America)(US), 일본(Japan)(JP), 중화인민공화국(The People&rsquo;s Republic of China)(CN)"
+          - generic [ref=e485]:
+            - generic [ref=e486]:
+              - generic [ref=e487]:
+                - heading "필요 인증" [level=3] [ref=e488]
+                - paragraph [ref=e489]: 출처 표기·원문 확인 1건
+              - list [ref=e491]:
+                - listitem [ref=e492]:
+                  - paragraph [ref=e493]: 각종 분사용ㆍ분무용 기기(스프레이건과 이와 유사한 기기), 소화기 등필수
+                  - generic [ref=e494]:
+                    - paragraph [ref=e495]: "필요서류: 1. 신청서 2. 신청인의 사업자등록증 또는 등기등록증명서 사본 3. 생산공장 조직도 4. 인증신청 제품의 공정도 5. 핵심설비 정기검사 설비목록 6. 제품 조립도, 전기전압 도면 7. 인증서 신청 제품의 중문 라벨 및 경고 표시 8. 인증서 신청 제품 중문 설명서 9. 단일제품 코드의 모델별 차이점 설명서 10. 단일제품 코드의 모델별 외관 사진"
+                    - paragraph [ref=e496]: "절차: 중국에서 제품 검사 후 인증 취득"
+                    - paragraph [ref=e497]: "유효기간: 5년"
+                    - paragraph [ref=e498]: 예상 비용 정확한 정보 없음 / 예상 기간 42일
+                  - link "KOTRA" [ref=e499] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%A0%84%EB%8F%99%20%EB%B6%84%EB%AC%B4%EC%9A%A9%20%EA%B8%B0%EA%B8%B0%20(Projecting%20or%20fog%20spraying%20mechanical%20appliances%20for%20other%20purposes)
+                    - img [ref=e500]
+                    - text: KOTRA
+            - generic [ref=e504]:
+              - generic [ref=e505]:
+                - heading "규제·NTM" [level=3] [ref=e506]
+                - paragraph [ref=e507]: 출처 원문 기준 규제 0건
+              - generic [ref=e509]:
+                - paragraph [ref=e510]: 규제/NTM 캐시가 미동기화/오래됨 상태입니다.
+                - paragraph [ref=e511]: "사용 검색조건: query=country_code:DE, country_name:독일연방공화국(The Federal Republic of Germany), hs6:847330, hsk10:8473304060, product:반도체(DRAM), en:DRAM, tag:반도체, tag:dram; attempts=cache_status:0"
+                - paragraph [ref=e512]: "판정 상태: 캐시 미동기화/오래됨"
+                - paragraph [ref=e513]: "캐시 마지막 성공 시각: 정확한 정보 없음 / stale 기준 30일"
+                - paragraph [ref=e514]: "API 응답 상태: 200 / 수입규제 캐시가 아직 동기화되지 않았습니다"
+                - paragraph [ref=e515]: "검색 시도 요약: cache_status:0(200)"
+                - link "대체 확인 링크" [ref=e516] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+                  - img [ref=e517]
+                  - text: 대체 확인 링크
+                - paragraph [ref=e521]: "캐시 동기화 후 재실행 필요: 원문 기준으로 최종 판정이 필요합니다."
+            - generic [ref=e522]:
+              - generic [ref=e523]:
+                - heading "결제·국가 리스크(K-SURE)" [level=3] [ref=e524]
+                - paragraph [ref=e525]: 국가위험 1건, 입력 업종 기준 위험지수 1건, 수출결제 1건
+              - generic [ref=e526]:
+                - generic [ref=e527]:
+                  - generic [ref=e528]:
+                    - paragraph [ref=e529]: 국가 위험 등급
+                    - generic [ref=e530]:
+                      - paragraph [ref=e531]: 정보
+                      - paragraph [ref=e532]: "국가명: 독일"
+                      - paragraph [ref=e533]: "평가 등급: 1"
+                      - paragraph [ref=e534]: "평가일: 2025-12-30"
+                      - link "K-SURE 출처" [ref=e535] [cursor=pointer]:
+                        - /url: https://ksight.ksure.or.kr/rsrch/nation/nationView
+                        - img [ref=e536]
+                        - text: K-SURE 출처
+                  - generic [ref=e540]:
+                    - paragraph [ref=e541]: 업종 위험 지수(입력 업종 기준)
+                    - list [ref=e542]:
+                      - listitem [ref=e543]:
+                        - paragraph [ref=e544]: 정보
+                        - paragraph [ref=e545]: "업종명: 전자부품, 컴퓨터, 영상, 음향 및 통신장비 제조업"
+                        - paragraph [ref=e546]: "위험 지수: 2"
+                        - link "K-SURE 출처" [ref=e547] [cursor=pointer]:
+                          - /url: https://ksight.ksure.or.kr/risk-index
+                          - img [ref=e548]
+                          - text: K-SURE 출처
+                  - generic [ref=e552]:
+                    - paragraph [ref=e553]: 수출결제 현황
+                    - generic [ref=e554]:
+                      - paragraph [ref=e555]: 정보
+                      - paragraph [ref=e556]: "평균 결제기간: 57.5일"
+                      - paragraph [ref=e557]: "연체율: 6.2%"
+                      - paragraph [ref=e558]: "주요 결제조건: O/A(T/T 포함) (59.1%)"
+                      - link "K-SURE 출처" [ref=e559] [cursor=pointer]:
+                        - /url: https://ksight.ksure.or.kr/analysis/risk-advisor/payment
+                        - img [ref=e560]
+                        - text: K-SURE 출처
+                - paragraph [ref=e564]: K-SURE 데이터는 국가·업종 단위 참고자료입니다.
+            - generic [ref=e565]:
+              - generic [ref=e567]:
+                - generic [ref=e568]:
+                  - heading "7일 실행 과제" [level=3] [ref=e569]
+                  - paragraph [ref=e570]: 상세 데이터를 기반으로 1주 내 실행 가능한 과제를 제안합니다.
+                - button "과제 생성" [ref=e571] [cursor=pointer]:
+                  - img
+                  - text: 과제 생성
+              - paragraph [ref=e573]: 과제 생성 버튼을 눌러 7일 실행 과제를 받아보세요.
+      - complementary [ref=e574]:
+        - generic [ref=e575]:
+          - generic [ref=e576]: 근거 패널
+          - button "근거 패널 접기" [ref=e577] [cursor=pointer]:
+            - img
+        - generic [ref=e579]:
+          - heading "출처" [level=3] [ref=e580]
+          - generic [ref=e581]:
+            - paragraph [ref=e582]: 분석 기준 코드
+            - paragraph [ref=e583]: HS 847330 / HSK 8473304060
+            - paragraph [ref=e584]: "적용 방식: 검색 결과 1순위 자동 반영 (100)"
+            - paragraph [ref=e585]: "상태: 신뢰도 높음 / 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+          - list [ref=e586]:
+            - listitem [ref=e587]:
+              - generic [ref=e588]:
+                - generic "출처 KOTRA" [ref=e589]: KOTRA
+                - link "독일연방공화국(The Federal Republic of Germany) 국가·시장 프로필" [ref=e590] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                  - img [ref=e591]
+                  - generic [ref=e595]: 독일연방공화국(The Federal Republic of Germany) 국가·시장 프로필
+            - listitem [ref=e596]:
+              - generic [ref=e597]:
+                - generic "출처 K-SURE" [ref=e598]: K-SURE
+                - link "K-SURE country grade 1" [ref=e599] [cursor=pointer]:
+                  - /url: https://ksight.ksure.or.kr/rsrch/nation/nationView
+                  - img [ref=e600]
+                  - generic [ref=e604]: K-SURE country grade 1
+            - listitem [ref=e605]:
+              - generic [ref=e606]:
+                - generic "출처 K-SURE" [ref=e607]: K-SURE
+                - link "K-SURE export payment country" [ref=e608] [cursor=pointer]:
+                  - /url: https://ksight.ksure.or.kr/analysis/risk-advisor/payment
+                  - img [ref=e609]
+                  - generic [ref=e613]: K-SURE export payment country
+            - listitem [ref=e614]:
+              - generic [ref=e615]:
+                - generic "출처 무역안보관리원" [ref=e616]: 무역안보관리원
+                - link "Strategic item prefix6_candidate" [ref=e617] [cursor=pointer]:
+                  - /url: https://www.yestrade.go.kr/
+                  - img [ref=e618]
+                  - generic [ref=e622]: Strategic item prefix6_candidate
+            - listitem [ref=e623]:
+              - generic [ref=e624]:
+                - generic "출처 SafetyKorea" [ref=e625]: SafetyKorea
+                - link "SafetyKorea cert 1, recall 0" [ref=e626] [cursor=pointer]:
+                  - /url: https://www.safetykorea.kr/release/openapi
+                  - img [ref=e627]
+                  - generic [ref=e631]: SafetyKorea cert 1, recall 0
+            - listitem [ref=e632]:
+              - generic [ref=e633]:
+                - generic "출처 KOTRA" [ref=e634]: KOTRA
+                - paragraph [ref=e635]: 점수 반영
+                - 'link "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상" [ref=e636] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240151
+                  - img [ref=e637]
+                  - generic [ref=e641]: "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상"
+                - paragraph [ref=e642]: 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다.
+            - listitem [ref=e643]:
+              - generic [ref=e644]:
+                - generic "출처 KOTRA" [ref=e645]: KOTRA
+                - paragraph [ref=e646]: 점수 반영
+                - link "EU 공급망 재편 속 독일 반도체 산업의 부상과 진출 기회" [ref=e647] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239586
+                  - img [ref=e648]
+                  - generic [ref=e652]: EU 공급망 재편 속 독일 반도체 산업의 부상과 진출 기회
+                - paragraph [ref=e653]: 유럽의 공급망 재편 기조 속에서 독일은 반도체 클러스터를 중심으로 생산 역량을 확대하는 한편, 공정 기술과 신소재 분야의 고도화를 추진하고 있다. 이에 따라 한국 기업은 소부장 분야에서 틈새시장 공략과 기술 협력 및 공동 연구개발을 병행하는 전략적 접근이 필요하다.
+            - listitem [ref=e654]:
+              - generic [ref=e655]:
+                - generic "출처 KOTRA" [ref=e656]: KOTRA
+                - paragraph [ref=e657]: 점수 반영
+                - link "독일 전략자산으로 자리 잡는 반도체 산업...바이에른 주, 글로벌 투자 거점으로 부상" [ref=e658] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=236966
+                  - img [ref=e659]
+                  - generic [ref=e663]: 독일 전략자산으로 자리 잡는 반도체 산업...바이에른 주, 글로벌 투자 거점으로 부상
+                - paragraph [ref=e664]: 유럽 Chips Act 시행과 독일&middot;바이에른의 반도체 육성 정책으로 유럽 내 차세대 반도체 생산 확대, 대규모 투자 및 보조금 지원이 진행 중이다. 본문에서는 바이에른의 반도체 산업 경쟁력과 투자환경, 정책 동향, 그리고 한국 기업의 진출 전략 등을 종합적으로 분석한다.
+            - listitem [ref=e665]:
+              - generic [ref=e666]:
+                - generic "출처 KOTRA" [ref=e667]: KOTRA
+                - paragraph [ref=e668]: 점수 반영
+                - link "전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화" [ref=e669] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240002
+                  - img [ref=e670]
+                  - generic [ref=e674]: 전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화
+                - paragraph [ref=e675]: 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다.
+            - listitem [ref=e676]:
+              - generic [ref=e677]:
+                - generic "출처 KOTRA" [ref=e678]: KOTRA
+                - link "독일연방공화국(The Federal Republic of Germany) 국가·지역정보" [ref=e679] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+                  - img [ref=e680]
+                  - generic [ref=e684]: 독일연방공화국(The Federal Republic of Germany) 국가·지역정보
+            - listitem [ref=e685]:
+              - generic [ref=e686]:
+                - generic "출처 KOTRA" [ref=e687]: KOTRA
+                - paragraph [ref=e688]: 시장 배경
+                - link "독일 식품 보관 용품 시장, 친환경 전환과 고기능성 제품의 부상" [ref=e689] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240587
+                  - img [ref=e690]
+                  - generic [ref=e694]: 독일 식품 보관 용품 시장, 친환경 전환과 고기능성 제품의 부상
+                - paragraph [ref=e695]: 독일 식품 보관 용품 시장은 경기 둔화와 환경 규제 강화로 실용성과 지속가능성 중심의 재편이 가속화되고 있다. 한국 기업은 유리&middot;스테인리스 등 친환경 소재와 기술력 기반 제품 전략 및 규제 대응을 통해 독일 시장 점유율 확대 기회를 모색할 필요가 있다.
+            - listitem [ref=e696]:
+              - generic [ref=e697]:
+                - generic "출처 KOTRA" [ref=e698]: KOTRA
+                - paragraph [ref=e699]: 시장 배경
+                - link "생산성에서 효율성으로, 자동화와 AX로 재편되는 독일 제조업" [ref=e700] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240676
+                  - img [ref=e701]
+                  - generic [ref=e705]: 생산성에서 효율성으로, 자동화와 AX로 재편되는 독일 제조업
+                - paragraph [ref=e706]: 유럽 최대의 제조 강국인 독일이 현재 심각한 구조적 변곡점에 직면해 있다. 이러한 위기를 타개하기 위해 독일 제조업계는 고비용 구조와 숙련공 부족이라는 난제를 산업 자동화, 협동 로봇, 산업용 AI 도입으로 돌파하고 있으며, 이를 통해 생산의 연속성을 확보하는 데 전력을 다하고 있다. 이러한 구조적 변화와 기술적 요구는 자동화 및 디지털 솔루션 분야에서 강점을 지닌 한국 기업들에 새로운 전략적 협력의 기회를 제공하고 있다.
+            - listitem [ref=e707]:
+              - generic [ref=e708]:
+                - generic "출처 KOTRA" [ref=e709]: KOTRA
+                - paragraph [ref=e710]: 시장 배경
+                - link "드론이 바꾸는 안보 환경 &ndash; 독일 안티드론 전략과 Xponential Europe을 통한 진출 기회" [ref=e711] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239918
+                  - img [ref=e712]
+                  - generic [ref=e716]: 드론이 바꾸는 안보 환경 &ndash; 독일 안티드론 전략과 Xponential Europe을 통한 진출 기회
+                - paragraph [ref=e717]: 드론 위협 확산에 따라 이를 탐지&middot;대응하는 안티드론 기술의 중요성이 빠르게 커지고 있다. 독일은 법&middot;제도 정비와 AI 기반 대응 체계 구축을 병행하며 관련 역량을 강화하고 있다. 이러한 흐름은 유럽 내 협력 수요 확대와 함께 국내 중소 방산기업의 시장 진출 기회를 확대시키고 있다.
+            - listitem [ref=e718]:
+              - generic [ref=e719]:
+                - generic "출처 KOTRA" [ref=e720]: KOTRA
+                - paragraph [ref=e721]: 시장 배경
+                - 'link "식탁 위의 변화, EU 포장재법 앞에 서다: 독일 식품 바이어의 선제 대응과 한국 기업의 수출 기회" [ref=e722] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240471
+                  - img [ref=e723]
+                  - generic [ref=e727]: "식탁 위의 변화, EU 포장재법 앞에 서다: 독일 식품 바이어의 선제 대응과 한국 기업의 수출 기회"
+                - paragraph [ref=e728]: EU 포장 및 포장 폐기물 규정(PPWR, Regulation (EU) 2025/40)이 2025년 2월 발효되고 2026년 8월 본격 적용됨에 따라, 독일 식품 유통 바이어들이 규정 준수를 위한 자체 가이드라인을 마련하고 적합 포장재 소싱에 나서고 있다. 강화된 규제에 선제적으로 대응하여 준비를 마친 한국 기업은 현지 시장 진출 기회를 확보하는 데 있어 매우 유리한 고지를 점할 것으로 전망된다.
+            - listitem [ref=e729]:
+              - generic [ref=e730]:
+                - generic "출처 KOTRA" [ref=e731]: KOTRA
+                - paragraph [ref=e732]: 시장 배경
+                - 'link "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상" [ref=e733] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240151
+                  - img [ref=e734]
+                  - generic [ref=e738]: "온디바이스 AI 확산: 엣지 반도체, 차세대 산업 핵심으로 부상"
+                - paragraph [ref=e739]: 엣지 AI와 온디바이스 AI 확산으로 저전력 반도체와 AI 플랫폼 중심의 경쟁이 심화되고 있다. AI 기능이 기기로 이동하면서 피지컬 AI와 자율형 시스템이 산업 현장에 빠르게 적용되고 있으며, 유럽의 보안 규제 대응도 중요해지고 있다. 이에 따라 우리 기업은 기술 경쟁력과 규제 대응을 강화하고, KES 사업을 통해 협력 기회를 확대할 필요가 있다.
+            - listitem [ref=e740]:
+              - generic [ref=e741]:
+                - generic "출처 KOTRA" [ref=e742]: KOTRA
+                - paragraph [ref=e743]: 시장 배경
+                - link "전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화" [ref=e744] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=240002
+                  - img [ref=e745]
+                  - generic [ref=e749]: 전환기 맞은 독일 히트펌프 시장, 반등과 구조 변화
+                - paragraph [ref=e750]: 독일 히트펌프 시장은 난방법 개정 논의 속에서도 기술 고도화와 적용 범위 확대가 동시에 진행되며 전환기를 맞고 있다. 이에 따라 핵심 부품 및 통합 에너지 솔루션 분야에서 한국 기업의 진출 기회가 확대될 전망이다.
+            - listitem [ref=e751]:
+              - generic [ref=e752]:
+                - generic "출처 KOTRA" [ref=e753]: KOTRA
+                - paragraph [ref=e754]: 시장 배경
+                - link "스마트빌딩과 조명 기술의 결합, 독일 &lsquo;Light + Building 2026&rsquo; 참관기" [ref=e755] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239919
+                  - img [ref=e756]
+                  - generic [ref=e760]: 스마트빌딩과 조명 기술의 결합, 독일 &lsquo;Light + Building 2026&rsquo; 참관기
+                - paragraph [ref=e761]: 독일 프랑크푸르트에서 개최된 국제 조명&middot;건축 전시회 &lsquo;Light + Building 2026&rsquo;은 조명, 전기설비, 에너지 기술이 결합된 스마트빌딩 중심 산업으로의 전환을 보여준 자리였다. LED, 스마트 조명, 에너지 연계 솔루션 등 한국 제품의 기술 경쟁력을 바탕으로 유럽 스마트빌딩 시장 진출 확대가 기대된다.
+            - listitem [ref=e762]:
+              - generic [ref=e763]:
+                - generic "출처 KOTRA" [ref=e764]: KOTRA
+                - paragraph [ref=e765]: 시장 배경
+                - 'link "EU 화장품 규제 2026년 대전환: CMR&middot;미세플라스틱&middot;향료 표시 동시 강화" [ref=e766] [cursor=pointer]':
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=239582
+                  - img [ref=e767]
+                  - generic [ref=e771]: "EU 화장품 규제 2026년 대전환: CMR&middot;미세플라스틱&middot;향료 표시 동시 강화"
+                - paragraph [ref=e772]: EU는 2026년을 전후해 화장품&middot;화학&middot;소비재 산업 전반에 대한 규제를 강화하고 있다. 특히 CMR 물질 제한, 미세플라스틱 사용 금지, 실록산 규제 확대, 향료 알레르기 표시 강화 등 여러 규제가 동시에 시행되면서 EU 시장에 진출한 한국 기업의 공급망 관리 부담도 커질 것으로 전망된다.
+            - listitem [ref=e773]:
+              - generic [ref=e774]:
+                - generic "출처 KOTRA" [ref=e775]: KOTRA
+                - link "인증 매칭 1건" [ref=e776] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+                  - img [ref=e777]
+                  - generic [ref=e781]: 인증 매칭 1건
+            - listitem [ref=e782]:
+              - generic [ref=e783]:
+                - generic "출처 KOTRA" [ref=e784]: KOTRA
+                - link "수입규제 매칭 0건 (캐시 미동기화/오래됨)" [ref=e785] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+                  - img [ref=e786]
+                  - generic [ref=e790]: 수입규제 매칭 0건 (캐시 미동기화/오래됨)
+            - listitem [ref=e791]:
+              - generic [ref=e792]:
+                - generic "출처 K-SURE" [ref=e793]: K-SURE
+                - link "K-SURE 국가위험 매칭 1건" [ref=e794] [cursor=pointer]:
+                  - /url: https://ksight.ksure.or.kr/rsrch/nation/nationView
+                  - img [ref=e795]
+                  - generic [ref=e799]: K-SURE 국가위험 매칭 1건
+                - paragraph [ref=e800]: "Country: 독일 | Grade: 1 | Evaluated: 2025-12-30"
+            - listitem [ref=e801]:
+              - generic [ref=e802]:
+                - generic "출처 K-SURE" [ref=e803]: K-SURE
+                - link "K-SURE 업종위험 매칭 1건" [ref=e804] [cursor=pointer]:
+                  - /url: https://ksight.ksure.or.kr/risk-index
+                  - img [ref=e805]
+                  - generic [ref=e809]: K-SURE 업종위험 매칭 1건
+                - paragraph [ref=e810]: "Country: 독일 | Industry: 전자부품, 컴퓨터, 영상, 음향 및 통신장비 제조업 | Risk Index: 2"
+            - listitem [ref=e811]:
+              - generic [ref=e812]:
+                - generic "출처 K-SURE" [ref=e813]: K-SURE
+                - link "K-SURE 수출결제 매칭 1건" [ref=e814] [cursor=pointer]:
+                  - /url: https://ksight.ksure.or.kr/analysis/risk-advisor/payment
+                  - img [ref=e815]
+                  - generic [ref=e819]: K-SURE 수출결제 매칭 1건
+                - paragraph [ref=e820]: "Scope: country-specific | Late rate: 6.2% | Avg payment period: 57.5d | Avg late period: 17.0d | Top term: O/A(T/T 포함) (59.1%)"
+          - generic [ref=e821]:
+            - paragraph [ref=e822]: AI 상태
+            - generic [ref=e823]: 대기
+    - generic [ref=e825]:
+      - button "후보군으로" [ref=e826] [cursor=pointer]:
+        - img
+        - text: 후보군으로
+      - button "안전성 검토로" [ref=e827] [cursor=pointer]
