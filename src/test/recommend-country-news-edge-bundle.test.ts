@@ -46,15 +46,23 @@ describe("recommend-country-news edge bundle", () => {
     expect(source).toContain("selectNewsEvidence({ items: candidates, perCategoryLimit: COUNTRY_BACKGROUND_FALLBACK_LIMIT })");
   });
 
-  it("expands product and country query combinations while preserving relevance filters", () => {
+  it("uses official KOTRA market-news search fields for product and country lookups", () => {
     const source = read("supabase/functions/recommend-country-news/index.ts");
 
+    expect(source).toContain('url.searchParams.set("type", "json");');
+    expect(source).not.toContain('url.searchParams.set("_type", "json");');
+    expect(source).toContain("buildRepresentativeProductSearchTerms({");
+    expect(source).toContain("shouldUseRawProductNameQuery(product.name)");
+    expect(source).toContain("Infer the searchable product family before writing product_queries.");
+    expect(source).toContain("mixed model names, SKUs, options, components, or variants in any format");
     expect(source).toContain("for (const token of directTerms.slice(0, PRODUCT_DIRECT_TOKEN_QUERY_LIMIT))");
     expect(source).toContain("for (const token of descTokens.slice(0, PRODUCT_HS_DESCRIPTION_QUERY_LIMIT))");
     expect(source).toContain("pushHsProductCombinationQueries(product, directTerms, pushQuery)");
     expect(source).toContain("const countrySearchAliases = selectCountrySearchAliases(countryAliases, compactName);");
-    expect(source).toContain("for (const alias of countrySearchAliases)");
-    expect(source).toContain("for (const keyword of productKeywords.slice(0, COUNTRY_PRODUCT_KEYWORD_QUERY_LIMIT))");
+    expect(source).toContain("for (const alias of countrySearchAliases) pushQuery(alias);");
+    expect(source).not.toContain("for (const keyword of productKeywords.slice(0, COUNTRY_PRODUCT_KEYWORD_QUERY_LIMIT)) pushQuery(`${alias} ${keyword}`);");
+    expect(source).not.toContain("pushQuery(`${alias} ${product.hsCode.slice(0, 6)}`);");
+    expect(source).not.toContain("if (product.name && product.name !== \"N/A\") pushQuery(product.name);");
     expect(source).toContain("assessNewsRelevance({");
     expect(source).toContain("assessCountryNewsMatch({");
     expect(source).toContain("hasDefensibleProductExportFit({");
@@ -88,6 +96,13 @@ describe("recommend-country-news edge bundle", () => {
     expect(source).toContain('source.type === "product_evidence"');
     expect(source).toContain('source.type === "country_background"');
     expect(source).toContain('source.type === "news"');
+  });
+
+  it("keeps existing generated news when a later generation has fewer or empty sources", () => {
+    const source = read("supabase/functions/recommend-country-news/index.ts");
+
+    expect(source).toContain("const retainedNews = existingSources.filter(isNewsEvidenceSource);");
+    expect(source).toContain("return [...retained, ...newsSources, ...retainedNews];");
   });
 
   it("adds AI review with fallback and persists AI metadata on news sources", () => {

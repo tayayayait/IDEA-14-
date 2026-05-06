@@ -646,6 +646,20 @@ Deno.serve(async (req) => {
     }
     const canonicalTargetMarkets = canonicalizeTargetMarkets(product.targetMarkets);
 
+    const { data: existingCountryRows, error: existingCountryRowsError } = await supa
+      .from("project_countries")
+      .select("country_code,rationale")
+      .eq("project_id", projectId);
+    if (existingCountryRowsError) return json({ state: "error", error: existingCountryRowsError.message }, 500);
+
+    const persistentNewsEvidenceByCountry = new Map<string, Array<Record<string, unknown>>>();
+    for (const row of existingCountryRows ?? []) {
+      const record = asRecord(row);
+      const countryCode = asText(record.country_code).toUpperCase();
+      const newsSources = extractPersistentNewsEvidenceSources(record.rationale);
+      if (countryCode && newsSources.length > 0) persistentNewsEvidenceByCountry.set(countryCode, newsSources);
+    }
+
     await supa.from("project_countries").delete().eq("project_id", projectId);
 
     const preRows = analyses.map((analysis) => {
@@ -706,7 +720,10 @@ Deno.serve(async (req) => {
           low_recommendation_reason: lowRecommendationReason || null,
           alternative_markets: [] as Array<{ code: string; name: string }>,
           candidate_signals: signalLabels,
-          sources: buildDeferredRecommendationSources(analysis),
+          sources: mergePersistentNewsEvidenceSources(
+            buildDeferredRecommendationSources(analysis),
+            persistentNewsEvidenceByCountry.get(analysis.country.code) ?? [],
+          ),
         },
         used_fallback: !aiScore,
       };
@@ -2619,6 +2636,44 @@ type NewsEvidenceCandidate = {
   selectionReason: string;
   impactSummary: string;
 };
+
+function extractPersistentNewsEvidenceSources(rationale: unknown): Array<Record<string, unknown>> {
+  return dedupeSourceRecords(
+    asArray(asRecord(rationale).sources)
+      .map(asRecord)
+      .filter(isPersistentNewsEvidenceSource),
+  );
+}
+
+function mergePersistentNewsEvidenceSources(
+  sources: Array<Record<string, unknown>>,
+  persistentNewsSources: Array<Record<string, unknown>>,
+): Array<Record<string, unknown>> {
+  if (persistentNewsSources.length === 0) return sources;
+  return dedupeSourceRecords([...sources, ...persistentNewsSources]);
+}
+
+function isPersistentNewsEvidenceSource(source: Record<string, unknown>): boolean {
+  const type = asText(source.type).toLowerCase();
+  if (type !== "product_evidence" && type !== "country_background" && type !== "news") return false;
+  return Boolean(
+    asText(source.url) ||
+      asText(source.published_at) ||
+      asText(source.publishedAt) ||
+      asText(source.summary),
+  );
+}
+
+function dedupeSourceRecords(sources: Array<Record<string, unknown>>): Array<Record<string, unknown>> {
+  return dedupeByKey(sources, (source) =>
+    [
+      asText(source.type).toLowerCase(),
+      asText(source.title).toLowerCase(),
+      asText(source.country).toLowerCase(),
+      asText(source.published_at) || asText(source.publishedAt),
+      asText(source.url),
+    ].join("|"));
+}
 
 function buildEvidenceSources(analysis: CandidateCountryAnalysis, product?: ProductContext): Array<Record<string, unknown>> {
   const sources: Array<Record<string, unknown>> = [

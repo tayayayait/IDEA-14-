@@ -1,7 +1,7 @@
 ﻿# API 3 Connection Note (KOTRA Overseas Market News)
 
 Date: 2026-04-23
-Updated: 2026-05-01
+Updated: 2026-05-05
 
 ## Source Spec
 - Dataset: 대한무역투자진흥공사_해외시장뉴스
@@ -11,12 +11,31 @@ Updated: 2026-05-01
 
 ## Request Parameters Used
 - `serviceKey` (required)
-- `_type=json` (runtime JSON response)
+- `type=json` (runtime JSON response)
 - `numOfRows=8~30` (by use-case)
 - `pageNo=1`
-- `search1=<country name/alias>` (country background news lookup)
-- `search2=<product name/token>` (product-relevant news lookup)
-- `search8=Y` (summary/keyword/body fields included)
+- `search1=<country name/alias>` (country background news lookup; country-only)
+- `search2=<product name/token>` (product/title news lookup)
+- `search8=Y` (summary/keyword/body fields included for evidence enrichment)
+
+## Search Field Alignment (2026-05-05)
+- The public guide defines `search1` as country name and `search2` as news title.
+- Runtime calls now keep those meanings separate:
+  - country background news: `search1` receives only country aliases such as Korean name, English name, and compact country name.
+  - product news: `search2` receives product/title terms such as product name, HS/HSK-derived product words, selected official-description tokens, and AI-expanded product terms.
+- When the product name contains multiple model names, SKUs, options, components, or variants in any format, the raw composite name is not used as a primary `search2` query. The runtime first asks AI query expansion to infer representative product/title keywords from product name, HS/HSK, HS description, and product description. Deterministic fallback also removes obvious model/SKU-list noise and builds product-family terms such as `승용자동차`, `하이브리드 승용자동차`, `전기승용자동차`, `hybrid vehicle`, or `electric vehicle` when supported by HS/HSK and HS description context.
+- Removed country compound searches from `search1`, including `country + product`, `country + HS`, and `country + export-environment term`.
+- HS/HSK values are not sent through a dedicated HS parameter because the published API parameter list does not expose one for this endpoint. HS/HSK-derived words are used only as `search2` title/product terms.
+- `search4`/`search7` date range, `search5` industry category, and `search6` hot clip are not applied in v1 because the recommendation flow has no stable user-selected date/industry/hot-clip policy yet.
+- `search8=Y` is retained as an enrichment flag because it returns summary/keyword/body fields used in the evidence panel; it is not used as a search condition.
+
+## Country Source Guard (2026-05-06)
+- Product/title lookups through `search2` are not country-limited by the KOTRA API. They can return third-country articles when the title matches the product token.
+- Saved evidence now treats the KOTRA response `natn` field as the source-country guard:
+  - if `natn` matches the selected country, the article can become `selected_country_direct` when product/HS relevance also passes;
+  - if `natn` is present and does not match the selected country, selected-country mentions in title, summary, keywords, or body are background only (`country:source_metadata_mismatch`);
+  - if `natn` is blank, the existing title/summary/keyword/body country matching rules are used.
+- This prevents third-country product news, such as a Russia gasoline article that only mentions the United States in the body, from being shown as selected-country direct news for the United States.
 
 ## Runtime Verification
 Live call check on 2026-04-23:
@@ -113,8 +132,9 @@ Mapped fields:
   - Country-only or generic industry rows without product signal are excluded from default evidence unless they are recent macro export-environment news.
   - Recent macro export-environment rows are included only as background evidence and never raise recommendation scores.
 
-## Macro Export-Environment Policy (2026-04-30)
-- Country news queries include the country name alone plus export-environment terms such as `환율`, `금리`, `물가`, `수입 수요`, `공급망`, `무역정책`.
+## Macro Export-Environment Policy (2026-05-05)
+- Country news queries use country aliases only through `search1`.
+- Macro/export-environment relevance is determined after API results are returned, not by placing export-environment terms into `search1`.
 - A country news row can be included without product anchors only when:
   - the selected country is matched,
   - the row is `recent`, and
@@ -143,6 +163,9 @@ Mapped fields:
   - HS/HSK code
   - HS official name and product description/components/tags when available
   - selected country name/code
+- Query field policy:
+  - AI-expanded product queries are used only with `search2`.
+  - AI-expanded country queries are filtered to country aliases only before `search1`.
 - Product-context cleanup:
   - Search and judgement anchors are built from product name, HS/HSK code, HS official name, product description, and extracted component/tag tokens.
   - Sentence-fragment tokens such as `유통`, `구조`, `주요`, `특징`, `위해`, `등의`, `배경을`, `background`, and `structure` are excluded from product anchors.

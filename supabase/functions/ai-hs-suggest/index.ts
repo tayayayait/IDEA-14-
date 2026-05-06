@@ -1,16 +1,9 @@
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireAuthenticatedUser } from "../_shared/auth.ts";
-import {
-  buildFallbackRationale as buildRoleFallbackRationale,
-  normalizeMatchScores,
-  rankHsCandidates,
-  sortCandidatesByMatchScore as sortRoleCandidatesByMatchScore,
-  toHsCandidate,
-} from "./candidate-ranking.ts";
 
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const UNKNOWN_TEXT = "확실한 정보 없음";
-const AI_TIMEOUT_MS = 8000;
+const AI_TIMEOUT_MS = 15000;
 
 type SearchInput = {
   name: string;
@@ -42,11 +35,6 @@ type SuggestionResult = {
   rationale: string | null;
 };
 
-type AiRerankResult = {
-  orderedHsk: string[];
-  rationale: string | null;
-};
-
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -68,86 +56,45 @@ Deno.serve(async (req) => {
 
     if (!input.name) return json({ error: "name required" }, 400);
 
-    const ranked = rankHsCandidates(input);
-    if (ranked.length === 0) {
-      const emptyResult: SuggestionResult = {
+    const aiCandidates = await suggestHsCodeWithAi(input);
+
+    if (!aiCandidates || aiCandidates.length === 0) {
+      return json({
         state: "empty",
-        message: "관세청 HS부호/표준품명 데이터에서 일치 후보를 찾지 못했습니다.",
+        message: "AI가 대한민국 관세청 HSK 코드 정보를 기반으로 적절한 후보를 찾지 못했습니다.",
         candidates: [],
         rationale: "공식 코드 매칭 결과가 없어 후보를 생성하지 않았습니다.",
-      };
-      return json(emptyResult);
-    }
-
-    const normalized = normalizeMatchScores(ranked.slice(0, 12));
-    let candidates = normalized.map(toHsCandidate);
-    let rationale = buildRoleFallbackRationale(candidates, input);
-
-    const aiResult = await rerankWithAi(input, candidates);
-    if (aiResult.orderedHsk.length > 0) {
-      candidates = reorderCandidates(candidates, aiResult.orderedHsk);
-    } else {
-      candidates = sortRoleCandidatesByMatchScore(candidates);
-    }
-    if (aiResult.rationale) {
-      rationale = aiResult.rationale;
+      });
     }
 
     const result: SuggestionResult = {
       state: "success",
       message: null,
-      candidates: candidates.slice(0, 5),
-      rationale,
+      candidates: aiCandidates,
+      rationale: "AI가 입력된 제품 정보를 바탕으로 대한민국 관세청 HSK 체계를 분석하여 상위 후보를 직접 추천했습니다.",
     };
     return json(result);
   } catch (e) {
-    if (parsedInput && parsedInput.name) {
-      const ranked = rankHsCandidates(parsedInput);
-      const fallbackCandidates = ranked.slice(0, 5).map(toHsCandidate);
-      if (fallbackCandidates.length > 0) {
-        return json({
-          state: "partial_success",
-          message: `HS 추천 처리 중 예외가 발생해 규칙 기반 후보를 제공합니다: ${toErrorMessage(e)}`,
-          candidates: fallbackCandidates,
-          rationale: buildRoleFallbackRationale(fallbackCandidates, parsedInput),
-        });
-      }
-      return json({
-        state: "empty",
-        message: `HS 추천 처리 중 예외가 발생했습니다: ${toErrorMessage(e)}`,
-        candidates: [],
-        rationale: "공식 HS/HSK 데이터에서 유효 후보를 찾지 못했습니다.",
-      });
-    }
-    return json({ error: e instanceof Error ? e.message : "unknown" }, 500);
+    return json({
+      state: "empty",
+      message: `HS 추천 처리 중 예외가 발생했습니다: ${toErrorMessage(e)}`,
+      candidates: [],
+      rationale: "시스템 오류로 인해 HS 추천을 완료하지 못했습니다.",
+    });
   }
 });
 
-async function rerankWithAi(input: SearchInput, candidates: HsCandidate[]): Promise<AiRerankResult> {
+async function suggestHsCodeWithAi(input: SearchInput): Promise<HsCandidate[]> {
   const hasAiCredential = Boolean(Deno.env.get("LOVABLE_API_KEY") || Deno.env.get("GEMINI_API_KEY"));
-  if (!hasAiCredential || candidates.length < 2) {
-    return { orderedHsk: [], rationale: null };
-  }
+  if (!hasAiCredential) return [];
 
   const systemPrompt = [
-    "너는 관세청 공식 HS 데이터 기반 후보를 정렬하는 보조 분석기다.",
-    "절대 새로운 hs/hsk 코드를 생성하지 마라.",
-    "입력으로 받은 후보 hsk_code 중에서만 선택하라.",
-    "JSON만 반환하라.",
-    '스키마: {"ordered_hsk":["10자리코드"],"rationale":"한국어 근거"}',
-    "ordered_hsk는 길이 1~5, 중복 금지.",
+    "너는 대한민국 관세청 HS 부호 및 HSK 연계표 데이터 전문가다.",
+    "사용자가 입력한 제품 정보를 분석하여, 대한민국 관세청 2026년 체계에 가장 정확히 일치하는 10자리 HSK 코드 상위 3~5개를 추천하라.",
+    "절대 임의의 가짜 코드를 지어내지 말고, 실제 관세청에 존재하는 유효한 10자리 HSK 코드만을 사용하라.",
+    "반환 형식은 반드시 지정된 JSON 규격에 맞춰라.",
+    'JSON 스키마: {"candidates": [{"hsk_code": "10자리 숫자", "hs_code": "6자리 숫자", "official_name_ko": "국문 공식 품목명", "official_name_en": "영문 공식 품목명", "match_score": 0~100 숫자, "match_reason": "왜 이 코드를 추천했는지 구체적인 한글 설명", "standard_name": "해당할 경우 표준품명", "required_specs": "해당할 경우 필수규격"}]}'
   ].join(" ");
-
-  const payload = candidates.slice(0, 8).map((candidate) => ({
-    hs_code: candidate.hs_code,
-    hsk_code: candidate.hsk_code,
-    official_name_ko: candidate.official_name_ko,
-    official_name_en: candidate.official_name_en,
-    standard_name: candidate.standard_name,
-    required_specs: candidate.required_specs,
-    match_reason: candidate.match_reason,
-    match_score: candidate.match_score,
-  }));
 
   const userPrompt = [
     `제품명: ${input.name}`,
@@ -156,39 +103,42 @@ async function rerankWithAi(input: SearchInput, candidates: HsCandidate[]): Prom
     `구성/소재: ${input.components || UNKNOWN_TEXT}`,
     `모델명: ${input.modelName || UNKNOWN_TEXT}`,
     `목표시장 메모: ${input.targetMarketNote || UNKNOWN_TEXT}`,
-    `후보 목록: ${JSON.stringify(payload)}`,
   ].join("\n");
 
   try {
     const text = await callAiJson(systemPrompt, userPrompt);
-    const parsed = JSON.parse(text) as { ordered_hsk?: unknown; rationale?: unknown };
-    const allow = new Set(candidates.map((candidate) => candidate.hsk_code));
-    const ordered = Array.isArray(parsed.ordered_hsk)
-      ? parsed.ordered_hsk
-        .map((value) => normalizeCode(value))
-        .filter((code) => allow.has(code))
-      : [];
+    const parsed = JSON.parse(text) as { candidates?: any[] };
+    if (!parsed.candidates || !Array.isArray(parsed.candidates)) return [];
 
-    return {
-      orderedHsk: dedupe(ordered).slice(0, 5),
-      rationale: normalizeText(parsed.rationale),
-    };
+    return parsed.candidates.map((c, index) => {
+      const score = typeof c.match_score === 'number' ? c.match_score : (100 - index * 10);
+      const confidence = Math.max(0.1, Math.min(1, Number((score / 100).toFixed(2))));
+      
+      const officialKoName = normalizeText(c.official_name_ko) || UNKNOWN_TEXT;
+      const officialEnName = normalizeText(c.official_name_en) || UNKNOWN_TEXT;
+      const standardName = normalizeText(c.standard_name);
+      
+      let description = officialKoName;
+      if (officialEnName !== UNKNOWN_TEXT) description += ` (${officialEnName})`;
+      if (standardName) description += ` · 표준품명: ${standardName}`;
+
+      return {
+        hs_code: normalizeCode(c.hs_code).substring(0, 6) || normalizeCode(c.hsk_code).substring(0, 6),
+        hsk_code: normalizeCode(c.hsk_code),
+        description: description,
+        confidence: confidence,
+        source: "CUSTOMS_HS",
+        official_name_ko: officialKoName,
+        official_name_en: officialEnName,
+        standard_name: standardName || null,
+        required_specs: normalizeText(c.required_specs) || null,
+        match_reason: normalizeText(c.match_reason) || "AI 의미 기반 매칭",
+        match_score: score,
+      };
+    }).filter(c => c.hsk_code.length >= 6); 
   } catch {
-    return { orderedHsk: [], rationale: null };
+    return [];
   }
-}
-
-function reorderCandidates(candidates: HsCandidate[], orderedHsk: string[]): HsCandidate[] {
-  const byCode = new Map(candidates.map((candidate) => [candidate.hsk_code, candidate]));
-  const ordered: HsCandidate[] = [];
-  for (const hsk of orderedHsk) {
-    const candidate = byCode.get(hsk);
-    if (!candidate) continue;
-    ordered.push(candidate);
-    byCode.delete(hsk);
-  }
-  const rest = sortRoleCandidatesByMatchScore([...byCode.values()]);
-  return [...ordered, ...rest];
 }
 
 async function callAiJson(systemPrompt: string, userPrompt: string): Promise<string> {
@@ -259,10 +209,6 @@ function normalizeText(value: unknown): string {
 
 function normalizeCode(value: unknown): string {
   return normalizeText(String(value ?? "")).replace(/\D/g, "");
-}
-
-function dedupe(values: string[]): string[] {
-  return [...new Set(values.filter(Boolean))];
 }
 
 function asRecord(value: unknown): Record<string, unknown> {

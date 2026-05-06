@@ -1,28 +1,23 @@
-# Step4 regulation sync internal auth fix (2026-04-30)
+# Step4 regulation sync policy
 
-## Problem
-- `country-detail` can decide that the KOTRA import-regulation cache is missing or stale.
-- In that case it must call `sync-kotra-import-regulations`.
-- The deployed log only showed `booted` and `shutdown`, so the sync function was not actually processing a sync request.
+## Superseded on 2026-05-05
 
-## Change
-- `country-detail` now calls `sync-kotra-import-regulations` with `SUPABASE_SERVICE_ROLE_KEY` when it is available.
-- `sync-kotra-import-regulations` accepts this internal service-role call without requiring a user JWT lookup.
-- Normal user JWT calls are still accepted and still checked with `auth.getUser()`.
-- The sync function now logs:
-  - `sync-kotra-import-regulations started`
-  - `sync-kotra-import-regulations completed`
+The 2026-04-30 internal-auth sync policy is no longer active for `country-detail`.
 
-## Expected operation
+`country-detail` must not call `sync-kotra-import-regulations` during a user detail request because the sync function can page through the full KOTRA DS00000128 dataset and exceed Supabase Edge CPU budget.
+
+## Current operation
+
 1. `country-detail` checks `api_cache_status`.
-2. If the cache is unusable, it calls `sync-kotra-import-regulations` internally.
-3. The sync function updates `api_cache_status.active_batch_id` and `last_success_at`.
-4. `country-detail` rereads the cache and uses the refreshed rows.
+2. If the cache is ready, it reads only bounded country/product candidates.
+3. If the cache is missing, stale, or unreadable, it tries the bounded CSV backup query.
+4. If no bounded backup exists, it returns `stale` or `error`.
+5. Full KOTRA import-regulation cache sync must run as a separate admin or scheduled operation.
 
 ## Deployment
-Deploy both functions because `country-detail` and the sync function both changed.
+
+For this policy change, deploy `country-detail`.
 
 ```powershell
-npx supabase functions deploy country-detail --project-ref gnwhjqaxndbkqxecxjkn
-npx supabase functions deploy sync-kotra-import-regulations --project-ref gnwhjqaxndbkqxecxjkn
+pnpm dlx supabase functions deploy country-detail --project-ref gnwhjqaxndbkqxecxjkn
 ```

@@ -7,7 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Runtime files
 node_modules
 dist
 dist-ssr
@@ -15,14 +14,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
-
-# Project specific temp files
-kotra_cookie.txt
-console-all.txt
-pdf_output.txt
-pdf_output_utf8.txt
-network-*.txt
-tmp_*.html
 
 # Editor directories and files
 .vscode/*
@@ -34,3 +25,20 @@ tmp_*.html
 *.njsproj
 *.sln
 *.sw?
+
+# Temp & Logs
+*.txt
+*.html
+pdf_output.txt
+kotra_cookie.txt
+console-all.txt
+network-hs.txt
+network-phase2.txt
+
+# Documents
+*.hwp
+"~$*.hwp"
+
+# Supabase temp
+supabase/.temp/
+

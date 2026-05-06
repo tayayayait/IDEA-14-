@@ -37,6 +37,10 @@ export type KotraCertDetailItem = {
   applyTgtCmdltCn: string;
   expansApplyCmdltCn: string;
   cmdltDfnCn: string;
+  crtfcProsCn?: string;
+  needPapersCn?: string;
+  testStdrCn?: string;
+  etcCn?: string;
   arcvCn: string;
   crtfcTyVal: string;
   hscd: string;
@@ -46,6 +50,65 @@ export type KotraCertDetailItem = {
   ovrofInfo: string;
   othbcDt: string;
   regDt: string;
+  __match_decision?: KotraCertificationMatchDecision;
+  __match_strategy?: "country_hs_product" | "country_product_fallback";
+  __hs_match_level?: KotraCertificationHsMatchLevel;
+  __hs_score?: number;
+  __text_score?: number;
+  __category_score?: number;
+  __country_score?: number;
+  __final_score?: number;
+  __product_category?: KotraCertificationCategory;
+  __item_category?: KotraCertificationCategory;
+  __exclude_reason?: string;
+  __matched_keywords?: string[];
+};
+
+export type KotraCertificationMatchDecision = "confirmed" | "review" | "excluded";
+
+export type KotraCertificationHsMatchLevel =
+  | "hsk_exact"
+  | "hs_exact"
+  | "hs6_prefix"
+  | "hs4_prefix"
+  | "hs2_prefix"
+  | "missing"
+  | "mismatch";
+
+export type KotraCertificationCategory =
+  | "electronics_semiconductor"
+  | "automotive_transport"
+  | "food_agriculture_fishery"
+  | "cosmetics"
+  | "medical_pharma"
+  | "machinery_industrial"
+  | "chemical_material"
+  | "home_appliance"
+  | "telecom_it"
+  | "textile_apparel"
+  | "construction_material"
+  | "other";
+
+export type KotraCertificationClassifiedRow<T extends KotraCertDetailItem> = {
+  item: T;
+  decision: KotraCertificationMatchDecision;
+  countryScore: number;
+  hsScore: number;
+  textScore: number;
+  categoryScore: number;
+  finalScore: number;
+  hsMatchLevel: KotraCertificationHsMatchLevel;
+  productCategory: KotraCertificationCategory;
+  itemCategory: KotraCertificationCategory;
+  matchedKeywords: string[];
+  excludeReason: string;
+};
+
+export type KotraCertificationClassification<T extends KotraCertDetailItem> = {
+  confirmed: KotraCertificationClassifiedRow<T>[];
+  review: KotraCertificationClassifiedRow<T>[];
+  excluded: KotraCertificationClassifiedRow<T>[];
+  all: KotraCertificationClassifiedRow<T>[];
 };
 
 export type KotraImportRegulationDetailItem = {
@@ -190,6 +253,256 @@ const IMPORT_REGULATION_GENERIC_PRODUCT_TOKENS = new Set(
   ].map((token) => normalizeImportRegulationText(token)),
 );
 
+const KOTRA_CERTIFICATION_GENERIC_TERMS = new Set(
+  [
+    "certification",
+    "certificate",
+    "approval",
+    "registration",
+    "permit",
+    "license",
+    "standard",
+    "standards",
+    "testing",
+    "test",
+    "inspection",
+    "safety",
+    "regulation",
+    "regulatory",
+    "product",
+    "products",
+    "item",
+    "items",
+    "goods",
+    "commodity",
+    "commodities",
+    "import",
+    "export",
+    "manufacturing",
+    "manufacture",
+    "general",
+    "other",
+    "parts",
+    "part",
+    "component",
+    "components",
+    "device",
+    "devices",
+    "equipment",
+    "machine",
+    "machines",
+    "\uC778\uC99D",
+    "\uC2B9\uC778",
+    "\uD5C8\uAC00",
+    "\uB4F1\uB85D",
+    "\uC2DC\uD5D8",
+    "\uAC80\uC0AC",
+    "\uADDC\uC81C",
+    "\uC548\uC804",
+    "\uC81C\uD488",
+    "\uC0C1\uD488",
+    "\uD488\uBAA9",
+    "\uC218\uC785",
+    "\uC218\uCD9C",
+    "\uC81C\uC870",
+    "\uAE30\uD0C0",
+    "\uC77C\uBC18",
+    "\uBD80\uD488",
+    "\uC7A5\uCE58",
+    "\uAE30\uAE30",
+    "\uC7A5\uBE44",
+  ].map((token) => normalizeKotraCertificationText(token)),
+);
+
+const KOTRA_CERTIFICATION_CATEGORY_TERMS: Array<{
+  category: KotraCertificationCategory;
+  terms: Array<{ term: string; weight: number }>;
+}> = [
+  {
+    category: "medical_pharma",
+    terms: weightedTerms([
+      ["medical device", 4],
+      ["dental implant", 4],
+      ["contact lens", 4],
+      ["medical", 3],
+      ["pharma", 3],
+      ["drug", 3],
+      ["medicine", 3],
+      ["dental", 3],
+      ["implant", 3],
+      ["lens", 2],
+      ["\uC758\uB8CC\uAE30\uAE30", 4],
+      ["\uC758\uC57D\uD488", 4],
+      ["\uCE58\uACFC", 3],
+      ["\uC784\uD50C\uB780\uD2B8", 3],
+      ["\uCF58\uD0DD\uD2B8\uB80C\uC988", 4],
+    ]),
+  },
+  {
+    category: "cosmetics",
+    terms: weightedTerms([
+      ["cosmetic", 4],
+      ["cosmetics", 4],
+      ["cream", 1],
+      ["lotion", 2],
+      ["makeup", 3],
+      ["skin care", 3],
+      ["\uD654\uC7A5\uD488", 4],
+      ["\uD06C\uB9BC", 1],
+      ["\uB85C\uC158", 2],
+    ]),
+  },
+  {
+    category: "food_agriculture_fishery",
+    terms: weightedTerms([
+      ["food additive", 4],
+      ["seafood", 4],
+      ["fishery", 4],
+      ["agricultural", 3],
+      ["agriculture", 3],
+      ["food", 3],
+      ["fish", 3],
+      ["frozen", 2],
+      ["tuna", 3],
+      ["additive", 2],
+      ["\uC2DD\uD488", 4],
+      ["\uC218\uC0B0\uBB3C", 4],
+      ["\uB18D\uC0B0\uBB3C", 4],
+      ["\uB0C9\uB3D9", 2],
+      ["\uAC00\uB2E4\uB791\uC5B4", 4],
+    ]),
+  },
+  {
+    category: "telecom_it",
+    terms: weightedTerms([
+      ["wireless communication", 4],
+      ["communication device", 4],
+      ["telecommunication", 4],
+      ["telecom", 4],
+      ["wireless", 3],
+      ["network", 3],
+      ["router", 3],
+      ["antenna", 3],
+      ["radio", 2],
+      ["bluetooth", 3],
+      ["wifi", 3],
+      ["5g", 3],
+      ["\uBB34\uC120", 3],
+      ["\uD1B5\uC2E0", 4],
+      ["\uB124\uD2B8\uC6CC\uD06C", 3],
+    ]),
+  },
+  {
+    category: "electronics_semiconductor",
+    terms: weightedTerms([
+      ["semiconductor", 4],
+      ["integrated circuit", 4],
+      ["electronic component", 4],
+      ["electronics", 3],
+      ["electronic", 3],
+      ["electrical", 2],
+      ["dram", 4],
+      ["memory", 3],
+      ["chip", 3],
+      ["module", 2],
+      ["printer", 3],
+      ["\uBC18\uB3C4\uCCB4", 4],
+      ["\uC804\uC790", 3],
+      ["\uC804\uAE30", 2],
+      ["\uD504\uB9B0\uD130", 3],
+    ]),
+  },
+  {
+    category: "automotive_transport",
+    terms: weightedTerms([
+      ["automotive", 4],
+      ["vehicle", 4],
+      ["motor vehicle", 4],
+      ["transport", 3],
+      ["brake pad", 4],
+      ["brake", 3],
+      ["stroller", 3],
+      ["\uC790\uB3D9\uCC28", 4],
+      ["\uCC28\uB7C9", 4],
+      ["\uBE0C\uB808\uC774\uD06C", 3],
+    ]),
+  },
+  {
+    category: "machinery_industrial",
+    terms: weightedTerms([
+      ["industrial equipment", 4],
+      ["machinery", 4],
+      ["machine", 3],
+      ["equipment", 2],
+      ["apparatus", 2],
+      ["controller", 3],
+      ["motor", 3],
+      ["pump", 3],
+      ["valve", 3],
+      ["\uAE30\uACC4", 4],
+      ["\uC0B0\uC5C5\uC7A5\uBE44", 4],
+      ["\uC7A5\uBE44", 2],
+      ["\uBAA8\uD130", 3],
+    ]),
+  },
+  {
+    category: "chemical_material",
+    terms: weightedTerms([
+      ["chemical", 4],
+      ["material", 2],
+      ["plastic", 3],
+      ["resin", 3],
+      ["polymer", 3],
+      ["metal", 2],
+      ["steel", 3],
+      ["aluminum", 3],
+      ["\uD654\uD559", 4],
+      ["\uC18C\uC7AC", 2],
+      ["\uD50C\uB77C\uC2A4\uD2F1", 3],
+      ["\uCCA0\uAC15", 3],
+    ]),
+  },
+  {
+    category: "home_appliance",
+    terms: weightedTerms([
+      ["home appliance", 4],
+      ["household appliance", 4],
+      ["water purifier", 4],
+      ["refrigerator", 3],
+      ["washing machine", 3],
+      ["\uC0DD\uD65C\uAC00\uC804", 4],
+      ["\uC815\uC218\uAE30", 4],
+      ["\uB0C9\uC7A5\uACE0", 3],
+    ]),
+  },
+  {
+    category: "textile_apparel",
+    terms: weightedTerms([
+      ["textile", 4],
+      ["apparel", 4],
+      ["clothing", 4],
+      ["fabric", 3],
+      ["garment", 3],
+      ["\uC12C\uC720", 4],
+      ["\uC758\uB958", 4],
+      ["\uC9C1\uBB3C", 3],
+    ]),
+  },
+  {
+    category: "construction_material",
+    terms: weightedTerms([
+      ["construction material", 4],
+      ["building material", 4],
+      ["cement", 3],
+      ["glass", 2],
+      ["insulation", 3],
+      ["\uAC74\uCD95", 4],
+      ["\uAC74\uC124\uC790\uC7AC", 4],
+      ["\uC2DC\uBA58\uD2B8", 3],
+    ]),
+  },
+];
+
 export function buildCertificationSearchAttempts(context: CertificationSearchContext): DetailSearchAttempt[] {
   const maxAttempts = Math.max(1, context.maxAttempts ?? 12);
   const maxSpecificAttempts = Math.max(0, maxAttempts - 1);
@@ -254,120 +567,418 @@ export function buildCertificationMatchBasis(context: CertificationMatchBasisCon
   return parts.join(" / ");
 }
 
+export function classifyKotraCertificationMatches<T extends KotraCertDetailItem>(
+  items: T[],
+  context: DetailRelevanceContext,
+): KotraCertificationClassification<T> {
+  const all = items.map((item) => scoreKotraCertificationItem(item, context));
+  const confirmed = sortKotraCertificationRows(all.filter((row) => row.decision === "confirmed"));
+  const review = sortKotraCertificationRows(all.filter((row) => row.decision === "review"));
+  const excluded = sortKotraCertificationRows(all.filter((row) => row.decision === "excluded"));
+  return { confirmed, review, excluded, all };
+}
+
 export function rankCertificationsByDetailRelevance<T extends KotraCertDetailItem>(
   items: T[],
   context: DetailRelevanceContext,
 ): T[] {
-  if (items.length === 0) return [];
-
-  const countryAliases = normalizeCountryAliases(context.countryAliases);
-  const selectedCountryCode = context.countryCode.trim().toLowerCase();
-  const productTokens = normalizeCertificationProductTokens(context.productTokens, context);
-  if (productTokens.length === 0) return [];
-  const hsContext = buildHsContext(context.hsCode, context.hskCode);
-
-  const scored = items.map((item) => {
-    const commodityText = [
-      item.applyTgtCmdltCn,
-      item.expansApplyCmdltCn,
-      item.cmdltDfnCn,
-      item.nttSj,
-      item.systName,
-      item.systCn,
-      item.basisRegltnCn,
-    ].join(" ").toLowerCase();
-    const countryMatch = scoreCertificationCountrySignal(item, countryAliases, selectedCountryCode);
-    const hsScore = scoreStrictCertificationHsSignal(item.hscd, hsContext);
-    const tokenMatched = productTokens.some((token) => commodityText.includes(token));
-    const productScore = tokenMatched ? 4 : 0;
-    const metadataScore = (item.nttSj ? 1 : 0) + (item.crtfcTyVal || item.arcvCn ? 1 : 0);
-    const relevant = countryMatch.score > 0 && hsScore > 0 && tokenMatched;
-
-    return {
-      item,
-      relevant,
-      score: countryMatch.score + hsScore + productScore + metadataScore,
-      dateScore: parseDateScore(item.othbcDt || item.regDt),
-    };
-  });
-
-  const relevantRows = scored.filter((row) => row.relevant && row.score > 0);
-  if (relevantRows.length === 0) return [];
-
-  relevantRows.sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score;
-    return b.dateScore - a.dateScore;
-  });
-
-  const out: T[] = [];
-  const seen = new Set<string>();
-  for (const row of relevantRows) {
-    const key = `${row.item.hscd}|${row.item.systName}|${row.item.nttSj}|${row.item.nat}|${row.item.regn}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(row.item);
-    if (out.length >= 10) break;
-  }
-
-  return out;
+  return dedupeKotraCertificationItems(
+    classifyKotraCertificationMatches(items, context).confirmed.map((row) => row.item),
+    10,
+  );
 }
 
 export function rankCertificationsByProductFallback<T extends KotraCertDetailItem>(
   items: T[],
   context: DetailRelevanceContext,
 ): T[] {
-  if (items.length === 0) return [];
+  return dedupeKotraCertificationItems(
+    classifyKotraCertificationMatches(items, context).review.map((row) => row.item),
+    10,
+  );
+}
 
+function scoreKotraCertificationItem<T extends KotraCertDetailItem>(
+  item: T,
+  context: DetailRelevanceContext,
+): KotraCertificationClassifiedRow<T> {
   const countryAliases = normalizeCountryAliases(context.countryAliases);
-  const selectedCountryCode = context.countryCode.trim().toLowerCase();
-  const productTokens = normalizeCertificationProductTokens(context.productTokens, context);
-  if (productTokens.length === 0) return [];
+  const countryMatch = scoreCertificationCountrySignal(
+    item,
+    countryAliases,
+    context.countryCode.trim().toLowerCase(),
+  );
   const hsContext = buildHsContext(context.hsCode, context.hskCode);
+  const hsMatch = scoreKotraCertificationHsSignal(item.hscd, hsContext);
+  const productKeywords = buildKotraCertificationProductKeywords(context);
+  const matchText = buildKotraCertificationMatchText(item);
+  const textMatch = scoreKotraCertificationText(matchText, context.productName ?? "", productKeywords);
+  const productCategory = detectKotraCertificationCategory([
+    context.productName ?? "",
+    ...context.productTokens,
+  ].join(" "));
+  const itemCategory = detectKotraCertificationCategory(matchText);
+  const categoryMatch = scoreKotraCertificationCategoryMatch(productCategory, itemCategory);
+  const countryScore = countryMatch.score > 0 ? 10 : 0;
+  const finalScore = countryScore + hsMatch.score + textMatch.score + categoryMatch.score;
 
-  const scored = items.map((item) => {
-    const commodityText = [
-      item.applyTgtCmdltCn,
-      item.expansApplyCmdltCn,
-      item.cmdltDfnCn,
-      item.nttSj,
-      item.systName,
-      item.systCn,
-      item.basisRegltnCn,
-    ].join(" ").toLowerCase();
-    const countryMatch = scoreCertificationCountrySignal(item, countryAliases, selectedCountryCode);
-    const hsScore = scoreStrictCertificationHsSignal(item.hscd, hsContext);
-    const matchedTokenCount = productTokens.filter((token) => commodityText.includes(token)).length;
-    const productScore = matchedTokenCount * 4;
-    const metadataScore = (item.nttSj ? 1 : 0) + (item.crtfcTyVal || item.arcvCn ? 1 : 0);
-    const relevant = countryMatch.score > 0 && productScore > 0 && hsScore === 0;
+  let decision: KotraCertificationMatchDecision = "excluded";
+  let excludeReason = "";
 
-    return {
-      item,
-      relevant,
-      score: countryMatch.score + productScore + metadataScore,
-      dateScore: parseDateScore(item.othbcDt || item.regDt),
-    };
-  });
-
-  const relevantRows = scored.filter((row) => row.relevant && row.score > 0);
-  if (relevantRows.length === 0) return [];
-
-  relevantRows.sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score;
-    return b.dateScore - a.dateScore;
-  });
-
-  const out: T[] = [];
-  const seen = new Set<string>();
-  for (const row of relevantRows) {
-    const key = `${row.item.hscd}|${row.item.systName}|${row.item.nttSj}|${row.item.nat}|${row.item.regn}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(row.item);
-    if (out.length >= 10) break;
+  if (countryScore === 0) {
+    excludeReason = "country_mismatch";
+  } else if (categoryMatch.mismatch) {
+    excludeReason = "category_mismatch";
+  } else if (textMatch.genericOnly) {
+    excludeReason = "generic_keyword_only";
+  } else if (!textMatch.strong) {
+    excludeReason = "weak_product_relevance";
+  } else if (isStrongKotraCertificationHsLevel(hsMatch.level) && finalScore >= 90) {
+    decision = "confirmed";
+  } else if (hsMatch.level === "mismatch") {
+    if (textMatch.veryStrong && !categoryMatch.mismatch) {
+      decision = "review";
+    } else {
+      excludeReason = "hs_mismatch";
+    }
+  } else if (
+    hsMatch.level === "missing" ||
+    hsMatch.level === "hs4_prefix" ||
+    hsMatch.level === "hs2_prefix"
+  ) {
+    decision = "review";
+  } else {
+    excludeReason = "score_below_confirmed_threshold";
   }
 
+  if (decision !== "excluded") excludeReason = "";
+
+  const itemWithMetadata = withKotraCertificationMatchMetadata(item, {
+    decision,
+    hsMatchLevel: hsMatch.level,
+    hsScore: hsMatch.score,
+    textScore: textMatch.score,
+    categoryScore: categoryMatch.score,
+    countryScore,
+    finalScore,
+    productCategory,
+    itemCategory,
+    excludeReason,
+    matchedKeywords: textMatch.matchedKeywords,
+  });
+
+  return {
+    item: itemWithMetadata,
+    decision,
+    countryScore,
+    hsScore: hsMatch.score,
+    textScore: textMatch.score,
+    categoryScore: categoryMatch.score,
+    finalScore,
+    hsMatchLevel: hsMatch.level,
+    productCategory,
+    itemCategory,
+    matchedKeywords: textMatch.matchedKeywords,
+    excludeReason,
+  };
+}
+
+function scoreKotraCertificationHsSignal(
+  value: string,
+  context: { hsCode: string; hskCode: string; hsk6: string; hs4: string },
+): { score: number; level: KotraCertificationHsMatchLevel } {
+  const selectedHs6 = context.hsCode.length >= 6 ? context.hsCode.slice(0, 6) : context.hsk6;
+  const selectedHs4 = context.hs4 || selectedHs6.slice(0, 4);
+  const selectedHs2 = selectedHs6.slice(0, 2);
+  const candidates = extractHsCandidates(value);
+
+  if (candidates.length === 0) return { score: 0, level: "missing" };
+
+  for (const candidate of candidates) {
+    if (context.hskCode && candidate === context.hskCode) return { score: 100, level: "hsk_exact" };
+  }
+  for (const candidate of candidates) {
+    if (context.hsCode && candidate === context.hsCode) return { score: 80, level: "hs_exact" };
+  }
+  for (const candidate of candidates) {
+    if (selectedHs6 && candidate.slice(0, 6) === selectedHs6) return { score: 70, level: "hs6_prefix" };
+  }
+  for (const candidate of candidates) {
+    if (selectedHs4 && candidate.slice(0, 4) === selectedHs4) return { score: 40, level: "hs4_prefix" };
+  }
+  for (const candidate of candidates) {
+    if (selectedHs2 && candidate.slice(0, 2) === selectedHs2) return { score: 15, level: "hs2_prefix" };
+  }
+  return { score: -60, level: "mismatch" };
+}
+
+function buildKotraCertificationMatchText(item: KotraCertDetailItem): string {
+  return normalizeKotraCertificationText([
+    item.nttSj,
+    item.systName,
+    item.systCn,
+    item.applyTgtCmdltCn,
+    item.cmdltDfnCn,
+    item.expansApplyCmdltCn,
+    item.etcCn ?? "",
+  ].join(" "));
+}
+
+function buildKotraCertificationProductKeywords(context: DetailRelevanceContext): {
+  fullPhrase: string;
+  phrases: string[];
+  singles: string[];
+  generic: string[];
+} {
+  const normalizedProduct = normalizeKotraCertificationText(context.productName ?? "");
+  const words = normalizedProduct.split(/\s+/g).filter(Boolean);
+  const nongenericWords = words.filter((word) => !isGenericKotraCertificationTerm(word));
+  const phraseCandidates: string[] = [];
+  if (nongenericWords.length >= 2) {
+    phraseCandidates.push(nongenericWords.join(" "));
+    for (let index = 0; index < nongenericWords.length - 1; index += 1) {
+      phraseCandidates.push(nongenericWords.slice(index, index + 2).join(" "));
+    }
+  }
+
+  const normalizedTokens = normalizeTokens(context.productTokens)
+    .map((token) => normalizeKotraCertificationText(token))
+    .filter(Boolean);
+  const singles = dedupeStrings([...nongenericWords, ...normalizedTokens])
+    .filter((token) => !token.includes(" "))
+    .filter((token) => !isGenericKotraCertificationTerm(token));
+  const phrases = dedupeStrings([
+    ...phraseCandidates,
+    ...normalizedTokens.filter((token) => token.includes(" ") && !isGenericKotraCertificationTerm(token)),
+  ]).filter((token) => token.length >= 2);
+  const generic = dedupeStrings([...words, ...normalizedTokens]).filter(isGenericKotraCertificationTerm);
+
+  return {
+    fullPhrase: normalizedProduct && !isGenericKotraCertificationTerm(normalizedProduct) ? normalizedProduct : "",
+    phrases,
+    singles,
+    generic,
+  };
+}
+
+function scoreKotraCertificationText(
+  matchText: string,
+  productName: string,
+  keywords: ReturnType<typeof buildKotraCertificationProductKeywords>,
+): {
+  score: number;
+  strong: boolean;
+  veryStrong: boolean;
+  genericOnly: boolean;
+  matchedKeywords: string[];
+} {
+  if (!matchText) {
+    return { score: 0, strong: false, veryStrong: false, genericOnly: false, matchedKeywords: [] };
+  }
+
+  const normalizedProduct = normalizeKotraCertificationText(productName);
+  const matchedKeywords: string[] = [];
+  let score = 0;
+  let fullPhraseMatched = false;
+  let phraseMatched = false;
+
+  if (normalizedProduct && matchText.includes(normalizedProduct)) {
+    score += 60;
+    fullPhraseMatched = true;
+    matchedKeywords.push(normalizedProduct);
+  } else if (keywords.fullPhrase && matchText.includes(keywords.fullPhrase)) {
+    score += 60;
+    fullPhraseMatched = true;
+    matchedKeywords.push(keywords.fullPhrase);
+  }
+
+  const phraseMatches = keywords.phrases.filter((phrase) => phrase && matchText.includes(phrase));
+  if (phraseMatches.length > 0) {
+    score += Math.min(80, phraseMatches.length * 40);
+    phraseMatched = true;
+    matchedKeywords.push(...phraseMatches);
+  }
+
+  const textTokens = new Set(matchText.split(/\s+/g).filter(Boolean));
+  const singleMatches = keywords.singles.filter((token) => isKotraCertificationKeywordMatched(token, matchText, textTokens));
+  const strongSingleMatches = singleMatches.filter(isStrongSingleKotraCertificationKeyword);
+  if (singleMatches.length > 0) {
+    score += Math.min(60, singleMatches.length * 20);
+    matchedKeywords.push(...singleMatches);
+  }
+
+  const genericMatches = keywords.generic.filter((token) => isKotraCertificationKeywordMatched(token, matchText, textTokens));
+  if (score === 0 && genericMatches.length > 0) {
+    score += Math.min(5, genericMatches.length);
+    matchedKeywords.push(...genericMatches);
+  }
+
+  const genericOnly = score > 0 && singleMatches.length === 0 && phraseMatches.length === 0 && !fullPhraseMatched;
+  const strong = fullPhraseMatched || phraseMatched || strongSingleMatches.length > 0 || singleMatches.length >= 2;
+  const veryStrong = fullPhraseMatched || phraseMatches.length >= 1 || strongSingleMatches.length >= 2 || score >= 60;
+
+  return {
+    score,
+    strong,
+    veryStrong,
+    genericOnly,
+    matchedKeywords: dedupeStrings(matchedKeywords),
+  };
+}
+
+function detectKotraCertificationCategory(text: string): KotraCertificationCategory {
+  const normalizedText = normalizeKotraCertificationText(text);
+  if (!normalizedText) return "other";
+
+  let bestCategory: KotraCertificationCategory = "other";
+  let bestScore = 0;
+  for (const entry of KOTRA_CERTIFICATION_CATEGORY_TERMS) {
+    let score = 0;
+    for (const term of entry.terms) {
+      if (isKotraCertificationKeywordMatched(term.term, normalizedText, new Set(normalizedText.split(/\s+/g)))) {
+        score += term.weight;
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestCategory = entry.category;
+    }
+  }
+
+  return bestScore > 0 ? bestCategory : "other";
+}
+
+function scoreKotraCertificationCategoryMatch(
+  productCategory: KotraCertificationCategory,
+  itemCategory: KotraCertificationCategory,
+): { score: number; mismatch: boolean } {
+  if (productCategory === "other" || itemCategory === "other") return { score: 0, mismatch: false };
+  if (productCategory === itemCategory) return { score: 10, mismatch: false };
+  if (areKotraCertificationCategoriesCompatible(productCategory, itemCategory)) {
+    return { score: 5, mismatch: false };
+  }
+  return { score: -80, mismatch: true };
+}
+
+function areKotraCertificationCategoriesCompatible(
+  productCategory: KotraCertificationCategory,
+  itemCategory: KotraCertificationCategory,
+): boolean {
+  const pair = `${productCategory}:${itemCategory}`;
+  return new Set([
+    "electronics_semiconductor:machinery_industrial",
+    "machinery_industrial:electronics_semiconductor",
+    "electronics_semiconductor:telecom_it",
+    "telecom_it:electronics_semiconductor",
+    "food_agriculture_fishery:chemical_material",
+    "chemical_material:food_agriculture_fishery",
+    "medical_pharma:machinery_industrial",
+    "machinery_industrial:medical_pharma",
+  ]).has(pair);
+}
+
+function isStrongKotraCertificationHsLevel(level: KotraCertificationHsMatchLevel): boolean {
+  return level === "hsk_exact" || level === "hs_exact" || level === "hs6_prefix";
+}
+
+function isGenericKotraCertificationTerm(token: string): boolean {
+  return KOTRA_CERTIFICATION_GENERIC_TERMS.has(normalizeKotraCertificationText(token));
+}
+
+function isStrongSingleKotraCertificationKeyword(token: string): boolean {
+  if (!token || token.includes(" ") || /^\d+$/.test(token)) return false;
+  if (isGenericKotraCertificationTerm(token)) return false;
+  if (/[\uAC00-\uD7AF]/.test(token)) return token.length >= 2;
+  return token.length >= 4;
+}
+
+function isKotraCertificationKeywordMatched(
+  token: string,
+  normalizedText: string,
+  textTokens: Set<string>,
+): boolean {
+  if (!token) return false;
+  const normalizedToken = normalizeKotraCertificationText(token);
+  if (!normalizedToken) return false;
+  if (normalizedToken.includes(" ")) return normalizedText.includes(normalizedToken);
+  if (textTokens.has(normalizedToken)) return true;
+  if (/^[a-z0-9]+$/.test(normalizedToken)) {
+    const escaped = escapeRegExp(normalizedToken);
+    return new RegExp(`(^|\\s)${escaped}(?:s|es)?($|\\s)`).test(normalizedText);
+  }
+  if (/[\uAC00-\uD7AF]/.test(normalizedToken) && normalizedToken.length >= 2) {
+    return normalizedText.includes(normalizedToken);
+  }
+  return false;
+}
+
+function normalizeKotraCertificationText(value: string): string {
+  return String(value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+);/g, " ")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function withKotraCertificationMatchMetadata<T extends KotraCertDetailItem>(
+  item: T,
+  metadata: {
+    decision: KotraCertificationMatchDecision;
+    hsMatchLevel: KotraCertificationHsMatchLevel;
+    hsScore: number;
+    textScore: number;
+    categoryScore: number;
+    countryScore: number;
+    finalScore: number;
+    productCategory: KotraCertificationCategory;
+    itemCategory: KotraCertificationCategory;
+    excludeReason: string;
+    matchedKeywords: string[];
+  },
+): T {
+  return {
+    ...item,
+    __match_decision: metadata.decision,
+    __match_strategy: metadata.decision === "confirmed" ? "country_hs_product" : "country_product_fallback",
+    __hs_match_level: metadata.hsMatchLevel,
+    __hs_score: metadata.hsScore,
+    __text_score: metadata.textScore,
+    __category_score: metadata.categoryScore,
+    __country_score: metadata.countryScore,
+    __final_score: metadata.finalScore,
+    __product_category: metadata.productCategory,
+    __item_category: metadata.itemCategory,
+    __exclude_reason: metadata.excludeReason,
+    __matched_keywords: metadata.matchedKeywords,
+  };
+}
+
+function sortKotraCertificationRows<T extends KotraCertDetailItem>(
+  rows: KotraCertificationClassifiedRow<T>[],
+): KotraCertificationClassifiedRow<T>[] {
+  return [...rows].sort((a, b) => {
+    if (b.finalScore !== a.finalScore) return b.finalScore - a.finalScore;
+    return parseDateScore(b.item.othbcDt || b.item.regDt) - parseDateScore(a.item.othbcDt || a.item.regDt);
+  });
+}
+
+function dedupeKotraCertificationItems<T extends KotraCertDetailItem>(items: T[], limit: number): T[] {
+  const out: T[] = [];
+  const seen = new Set<string>();
+  for (const item of items) {
+    const key = `${item.hscd}|${item.systName}|${item.nttSj}|${item.nat}|${item.regn}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+    if (out.length >= limit) break;
+  }
   return out;
+}
+
+function weightedTerms(values: Array<[string, number]>): Array<{ term: string; weight: number }> {
+  return values.map(([term, weight]) => ({ term: normalizeKotraCertificationText(term), weight }));
 }
 
 export function rankImportRegulationsByDetailRelevance<T extends KotraImportRegulationDetailItem>(

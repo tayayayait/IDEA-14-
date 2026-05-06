@@ -196,7 +196,7 @@ export function AppShell({ children, currentStep, evidence, actionBar }: Props) 
               className="text-[0]"
             >
               <span className="order-2 text-sm">KC·리콜 조회</span>
-              <ShieldCheck className="h-4 w-4" />KC·리콜 조회
+              <ShieldCheck className="h-4 w-4" />
             </Link>
           </Button>
           <Button

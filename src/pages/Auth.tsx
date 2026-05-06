@@ -10,11 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/sonner";
 import { Compass, Loader2 } from "lucide-react";
 
+const CONTEST_DEMO_EMAIL = import.meta.env.VITE_CONTEST_DEMO_EMAIL?.trim() ?? "";
+const CONTEST_DEMO_PASSWORD = import.meta.env.VITE_CONTEST_DEMO_PASSWORD ?? "";
+const hasContestDemoLogin = Boolean(CONTEST_DEMO_EMAIL && CONTEST_DEMO_PASSWORD);
+
 export default function Auth() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<"signin" | "signup">("signin");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(CONTEST_DEMO_EMAIL);
+  const [password, setPassword] = useState(CONTEST_DEMO_PASSWORD);
   const [displayName, setDisplayName] = useState("");
   const [organization, setOrganization] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +35,14 @@ export default function Auth() {
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
 
+  const signInWithCredentials = async (targetEmail: string, targetPassword: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: targetEmail,
+      password: targetPassword,
+    });
+    if (error) throw error;
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -46,9 +58,24 @@ export default function Auth() {
         if (error) throw error;
         toast.success("가입이 시작되었습니다. 메일함을 확인해 주세요.");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        await signInWithCredentials(email, password);
       }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "오류가 발생했습니다";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onContestDemoLogin = async () => {
+    if (!hasContestDemoLogin) return;
+    setTab("signin");
+    setEmail(CONTEST_DEMO_EMAIL);
+    setPassword(CONTEST_DEMO_PASSWORD);
+    setLoading(true);
+    try {
+      await signInWithCredentials(CONTEST_DEMO_EMAIL, CONTEST_DEMO_PASSWORD);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "오류가 발생했습니다";
       toast.error(msg);
@@ -103,6 +130,11 @@ export default function Auth() {
                 </div>
                 <TabsContent value="signin" className="mt-0" />
                 <TabsContent value="signup" className="mt-0" />
+                {tab === "signin" && hasContestDemoLogin && (
+                  <Button type="button" variant="outline" className="w-full" onClick={onContestDemoLogin} disabled={loading}>
+                    공모전 데모 로그인
+                  </Button>
+                )}
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {tab === "signup" ? "가입하기" : "로그인"}

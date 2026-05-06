@@ -4,7 +4,6 @@ import {
   KSURE_PUBLIC_SOURCE_URLS,
   SAFETYKOREA_PUBLIC_SOURCE_URL,
   TRADE_SECURITY_PUBLIC_SOURCE_URL,
-  WTO_EPING_PUBLIC_SOURCE_URL,
 } from "@/lib/source-url";
 
 export interface ApiSpec {
@@ -67,16 +66,6 @@ export const API_REGISTRY: ApiSpec[] = [
     sourceUrl: KOTRA_PUBLIC_SOURCE_URLS.importRegulation,
     secret: "KOTRA_API_KEY",
     license: "KOTRA",
-  },
-  {
-    key: "wto_eping",
-    name: "WTO_ePing SPS/TBT Notifications",
-    org: "WTO",
-    purpose: "Collect SPS/TBT notification candidates by target market and HS code",
-    endpoint: "https://api.wto.org/eping/notifications/search",
-    sourceUrl: WTO_EPING_PUBLIC_SOURCE_URL,
-    secret: "WTO_API_KEY",
-    license: "WTO Developer Portal",
   },
   {
     key: "ksure_country_risk",

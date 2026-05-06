@@ -1,4 +1,4 @@
-import { normalizeReportText, REPORT_UNKNOWN_TEXT } from "@/lib/report-text";
+import { normalizeReportText, REPORT_UNKNOWN_TEXT, toSafePublicHref } from "@/lib/report-text";
 import { formatCustomsExportUsd, type CustomsExportStatus } from "@/lib/customs-export-evidence";
 import type { FeasibilityGrade, CountryEvidenceSnapshot } from "@/lib/report-feasibility";
 import {
@@ -630,9 +630,9 @@ const normalizeKotraEntryStrategy = (value: unknown): ReportKotraEntryStrategy |
     title: safeText(data.title, ""),
     publishedDate: safeText(data.publishedDate ?? data.published_date, ""),
     tradeOffice: safeText(data.tradeOffice ?? data.trade_office, ""),
-    sourceUrl: safeText(data.sourceUrl ?? data.source_url, ""),
+    sourceUrl: safeHrefText(data.sourceUrl ?? data.source_url),
     attachmentName: safeText(data.attachmentName ?? data.attachment_name, ""),
-    attachmentUrl: safeText(data.attachmentUrl ?? data.attachment_url, ""),
+    attachmentUrl: safeHrefText(data.attachmentUrl ?? data.attachment_url),
     usedPdf: false,
     basisSummary: "",
     limitations: normalizeTextArray(data.limitations),
@@ -853,6 +853,11 @@ const uniqueTexts = (values: string[], fallback: string[] = []): string[] => {
 const safeText = (value: unknown, fallback: string): string => {
   const normalized = normalizeReportText(typeof value === "number" ? String(value) : value as string | null | undefined);
   return normalized && normalized.length > 0 ? normalized : fallback;
+};
+
+const safeHrefText = (value: unknown): string => {
+  if (typeof value !== "string" && typeof value !== "number") return "";
+  return toSafePublicHref(String(value)) ?? "";
 };
 
 const asRecord = (value: unknown): Record<string, unknown> => (

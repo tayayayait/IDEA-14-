@@ -14,7 +14,6 @@ export const KSURE_PUBLIC_SOURCE_URLS = {
 export const TRADE_SECURITY_PUBLIC_SOURCE_URL = "https://www.yestrade.go.kr/";
 export const SAFETYKOREA_PUBLIC_SOURCE_URL = "https://www.safetykorea.kr/release/openapi";
 export const SAFETYKOREA_RECALL_LIST_URL = "https://www.safetykorea.kr/recall/recallList";
-export const WTO_EPING_PUBLIC_SOURCE_URL = "https://eping.wto.org/en/Search/Index";
 export type SafetyKoreaRecallScope = "domestic" | "foreign";
 
 type KotraImportRegCountryParams = {
@@ -105,10 +104,6 @@ export function toPublicSourceUrl(url: string | null | undefined): string | null
   if (lower.includes("safetykorea.kr/release/recall")) {
     return SAFETYKOREA_RECALL_LIST_URL;
   }
-  if (lower.includes("api.wto.org/eping") || lower.includes("eping.wto.org")) {
-    return WTO_EPING_PUBLIC_SOURCE_URL;
-  }
-
   return value;
 }
 

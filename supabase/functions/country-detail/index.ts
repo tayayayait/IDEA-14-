@@ -39,20 +39,7 @@ import {
   toImportRegulationItemFromCacheRow,
   normalizeImportRegulationCacheStatus,
   KOTRA_IMPORT_REGULATION_DEFAULT_STALE_DAYS,
-  shouldAttemptKotraImportRegulationApiSync,
 } from "../_shared/kotra-import-regulation-cache.ts";
-import {
-  buildWtoEpingTermPlan,
-  classifyWtoEpingNotification,
-  buildWtoEpingSearchUrl,
-  buildWtoEpingSummary,
-  normalizeWtoEpingNotification,
-  resolveWtoEpingCountryIds,
-  type WtoEpingClassification,
-  type WtoEpingNotification,
-  type WtoEpingQueryType,
-  type WtoEpingTermPlan,
-} from "../_shared/wto-eping.ts";
 
 const KOTRA_MARKET_NEWS_ENDPOINT =
   "https://apis.data.go.kr/B410001/kotra_overseasMarketNews/ovseaMrktNews/ovseaMrktNews";
@@ -78,13 +65,18 @@ const KSURE_INDUSTRY_RISK_PAGE = "https://ksight.ksure.or.kr/risk-index";
 const KSURE_EXPORT_PAYMENT_ENDPOINT =
   "https://apis.data.go.kr/B552696/exportPayment/getPaymentInfo";
 const KSURE_EXPORT_PAYMENT_PAGE = "https://ksight.ksure.or.kr/analysis/risk-advisor/payment";
-const WTO_EPING_NOTIFICATION_SEARCH_ENDPOINT = "https://api.wto.org/eping/notifications/search";
-const WTO_EPING_PAGE = "https://eping.wto.org/en/Search/Index";
 const KOTRA_NATIONAL_INFO_ENDPOINT =
   "https://apis.data.go.kr/B410001/kotra_nationalInformation/natnInfo/natnInfo";
 const EXTERNAL_FETCH_TIMEOUT_MS = 8000;
-const KOTRA_IMPORT_REGULATION_SYNC_TIMEOUT_MS = 25000;
+const KOTRA_CERT_SEARCH_ATTEMPT_LIMIT = 8;
+const KOTRA_CERT_PAGE_LIMIT = 1;
+const KOTRA_CERT_PAGE_SIZE = 20;
+const MAX_IMPORT_REGULATION_CACHE_ROWS = 500;
+const MAX_CSV_IMPORT_REGULATION_BACKUP_ROWS = 500;
+const MAX_IMPORT_REGULATION_PRODUCT_FILTERS = 6;
 const MAX_NEWS_QUERY_COUNT = 4;
+const KSURE_INDUSTRY_RISK_PAGE_LIMIT = 3;
+const KSURE_INDUSTRY_RISK_PAGE_SIZE = 200;
 
 const KSURE_INDUSTRY_CODE_CANDIDATE_MAP: Record<string, string[]> = {
   C29294: ["C29294", "29294", "C2929", "2929", "C292", "292", "C29", "29"],
@@ -217,6 +209,18 @@ type KotraCertItem = {
   crtfcInfoAtnotiCn: string;
   crtfcRqrmnPdCn: string;
   crtfcValidPdCn: string;
+  __match_decision?: "confirmed" | "review" | "excluded";
+  __match_strategy?: "country_hs_product" | "country_product_fallback";
+  __hs_match_level?: string;
+  __hs_score?: number;
+  __text_score?: number;
+  __category_score?: number;
+  __country_score?: number;
+  __final_score?: number;
+  __product_category?: string;
+  __item_category?: string;
+  __exclude_reason?: string;
+  __matched_keywords?: string[];
 };
 
 async function translateTextFast(text: string): Promise<string> {
@@ -294,39 +298,6 @@ type KotraImportRegulationResult = {
   };
 };
 
-type WtoEpingNotificationResult = {
-  ok: boolean;
-  status: number | null;
-  message: string;
-  detailState: DetailState;
-  items: WtoEpingNotification[];
-  broadItems: WtoEpingNotification[];
-  excludedItems: WtoEpingNotification[];
-  rawCount: number;
-  totalCount: number;
-  diagnostics: DetailSearchDiagnostics;
-  sourceUrl: string;
-};
-
-type WtoEpingSearchSpec = {
-  label: string;
-  queryType: WtoEpingQueryType;
-  hsCode?: string;
-  freeText?: string;
-};
-
-type WtoEpingAttemptResult = {
-  ok: boolean;
-  status: number | null;
-  message: string;
-  items: WtoEpingNotification[];
-  broadItems: WtoEpingNotification[];
-  excludedItems: WtoEpingNotification[];
-  totalCount: number;
-  rawCount: number;
-  attempt: DetailSearchAttemptLog;
-};
-
 type CsvImportRegulationBackupResult = {
   items: KotraImportRegulationItem[];
   reviewItems: KotraImportRegulationItem[];
@@ -335,17 +306,7 @@ type CsvImportRegulationBackupResult = {
 };
 
 type KotraImportRegulationFetchOptions = {
-  allowApiSync?: boolean;
   priorAttempts?: DetailSearchAttemptLog[];
-  sourceTypeOverride?: "kotra_api_sync";
-  syncAttempted?: boolean;
-  syncMessage?: string | null;
-};
-
-type KotraImportRegulationSyncResult = {
-  ok: boolean;
-  status: number | null;
-  message: string;
 };
 
 type KsureCountryGradeItem = {
@@ -481,7 +442,6 @@ Deno.serve(async (req) => {
 
     const kotraKey = resolveKotraKey();
     const ksureKey = resolveKsureKey();
-    const wtoKey = resolveWtoApiKey();
 
     await Promise.all([
       supa.from("project_certifications").delete().eq("project_id", projectId).eq("country_code", countryCode),
@@ -505,7 +465,6 @@ Deno.serve(async (req) => {
     const [
       certResult,
       regulationResult,
-      wtoEpingResult,
       ksureResult,
       ksureIndustryResult,
       ksurePaymentResult,
@@ -514,27 +473,13 @@ Deno.serve(async (req) => {
     ] =
       await Promise.all([
         fetchKotraOverseasCertInfo(detailContext, kotraKey),
-        fetchKotraImportRegulations(detailContext, supa, auth),
-        fetchWtoEpingNotifications(detailContext, wtoKey),
+        fetchKotraImportRegulations(detailContext, supa),
         fetchKsureCountryGrade({ countryCode, countryName }, ksureKey),
         fetchKsureIndustryRisks({ countryCode, countryName, industryCode }, ksureKey),
         fetchKsureExportPayment({ countryCode }, ksureKey),
         fetchKotraMarketNews({ countryCode, countryName }, kotraKey),
         fetchKotraNationalInfo(countryCode, kotraKey),
       ]);
-
-    const translatePromises: Promise<void>[] = [];
-    for (const item of wtoEpingResult.broadItems.slice(0, 10)) {
-      if (item.title) {
-        translatePromises.push(translateTextFast(item.title).then(t => { item.title = t; }));
-      }
-    }
-    for (const item of wtoEpingResult.items.slice(0, 10)) {
-      if (item.title) {
-        translatePromises.push(translateTextFast(item.title).then(t => { item.title = t; }));
-      }
-    }
-    await Promise.allSettled(translatePromises);
 
     const selectedNewsEvidence = classifyAndSelectNewsEvidence({
       items: newsResult.items,
@@ -543,6 +488,13 @@ Deno.serve(async (req) => {
       hsCode,
       relevanceTokens: productRelevanceTokens,
     });
+
+    const certClassificationSummary = buildKotraCertificationClassificationSummary(certResult);
+    if (certClassificationSummary.rawCount > 0) {
+      console.log(
+        `KOTRA overseas certification classification: raw ${certClassificationSummary.rawCount}, confirmed ${certClassificationSummary.confirmedCount}, review ${certClassificationSummary.reviewCount}, excluded ${certClassificationSummary.excludedCount}`,
+      );
+    }
 
     const certRows: Array<Record<string, unknown>> = [];
     if (certResult.ok && certResult.items.length > 0) {
@@ -605,6 +557,10 @@ Deno.serve(async (req) => {
           match_strategy: certResult.matchStrategy,
           hs_match: false,
           product_match: false,
+          raw_result_count: certClassificationSummary.rawCount,
+          confirmed_count: certClassificationSummary.confirmedCount,
+          review_count: certClassificationSummary.reviewCount,
+          excluded_count: certClassificationSummary.excludedCount,
         },
       });
     }
@@ -698,34 +654,6 @@ Deno.serve(async (req) => {
         },
       });
     }
-    if (wtoEpingResult.items.length > 0) {
-      regulationRows.push(
-        ...wtoEpingResult.items.slice(0, 10).map((item) =>
-          mapWtoEpingRegulationRow(item, {
-            projectId,
-            userId: userData.user.id,
-            countryCode,
-            countryName,
-            productName,
-            hsCode,
-            hskCode,
-            totalCount: wtoEpingResult.totalCount,
-          }),
-        ),
-      );
-    }
-    regulationRows.push(
-      buildWtoEpingPlaceholderRegulationRow({
-        projectId,
-        userId: userData.user.id,
-        countryCode,
-        countryName,
-        productName,
-        hsCode,
-        hskCode,
-        result: wtoEpingResult,
-      }),
-    );
     await supa.from("project_regulations").insert(regulationRows);
 
     const riskRows: Array<Record<string, unknown>> = [];
@@ -967,10 +895,7 @@ Deno.serve(async (req) => {
 
     const existingRationale = asRecord(countryRow?.rationale);
     const certDetailState = resolveDetailState(certResult.ok, certResult.items.length);
-    const regulationDetailState = resolveCombinedRegulationDetailState(
-      regulationResult.detailState,
-      wtoEpingResult.detailState,
-    );
+    const regulationDetailState = regulationResult.detailState;
     const sourcePairs = replaceDetailMatchedSources(
       normalizeRationaleSources(existingRationale.sources),
       {
@@ -1002,21 +927,6 @@ Deno.serve(async (req) => {
       title: `${countryName} country and market profile`,
       url: KOTRA_COUNTRY_INFO_PAGE,
       country: countryName,
-    });
-
-    sourcePairs.push({
-      type: "wto_eping",
-      title: buildDetailMatchedTitle(
-        "WTO ePing SPS/TBT",
-        wtoEpingResult.items.length,
-        wtoEpingResult.detailState,
-      ),
-      url: WTO_EPING_PAGE,
-      country: countryName,
-      summary: wtoEpingResult.ok
-        ? `WTO ePing notifications collected: ${wtoEpingResult.items.length} of ${wtoEpingResult.totalCount}`
-        : `WTO ePing fetch failed: ${wtoEpingResult.message}`,
-      score_relevant: false,
     });
 
     const ksureIndustryTop = ksureIndustryResult.items[0];
@@ -1088,8 +998,8 @@ Deno.serve(async (req) => {
 
     const regSummary = regulationResult.ok
       ? regulationItems.length > 0 || regulationReviewItems.length > 0
-        ? `Import-regulation records collected: confirmed ${regulationItems.length}, KOTRA review ${regulationReviewItems.length}, WTO ePing review ${wtoEpingResult.items.length}`
-        : `Import-regulation records: ${STATUS_TEXT.noResult} (hs=${hsCode || "N/A"}, country=${countryName}); WTO ePing review ${wtoEpingResult.items.length}`
+        ? `Import-regulation records collected: confirmed ${regulationItems.length}, KOTRA review ${regulationReviewItems.length}`
+        : `Import-regulation records: ${STATUS_TEXT.noResult} (hs=${hsCode || "N/A"}, country=${countryName})`
       : `Import-regulation fetch failed: ${regulationResult.message}`;
 
     const newsSummary = newsResult.ok
@@ -1127,8 +1037,8 @@ Deno.serve(async (req) => {
 
     const regSummaryKo = regulationResult.ok
       ? regulationItems.length > 0 || regulationReviewItems.length > 0
-        ? `Import-regulation records collected: confirmed ${regulationItems.length}, KOTRA review ${regulationReviewItems.length}, WTO ePing review ${wtoEpingResult.items.length}`
-        : `Import-regulation records: ${STATUS_TEXT.noResult} (hs=${hsCode || "N/A"}, country=${countryName}); WTO ePing review ${wtoEpingResult.items.length}`
+        ? `Import-regulation records collected: confirmed ${regulationItems.length}, KOTRA review ${regulationReviewItems.length}`
+        : `Import-regulation records: ${STATUS_TEXT.noResult} (hs=${hsCode || "N/A"}, country=${countryName})`
       : `Import-regulation fetch failed: ${regulationResult.message}`;
 
     const mergedSummary = [
@@ -1230,9 +1140,15 @@ Deno.serve(async (req) => {
           api_message: certResult.diagnostics.api_message,
           fallback_source_url: certResult.diagnostics.fallback_source_url,
           institution_review_required: certResult.diagnostics.institution_review_required,
+          raw_result_count: certClassificationSummary.rawCount,
+          confirmed_count: certClassificationSummary.confirmedCount,
+          review_count: certClassificationSummary.reviewCount,
+          excluded_count: certClassificationSummary.excludedCount,
+          classification_summary:
+            `API 원본 ${certClassificationSummary.rawCount}건 / 확정 ${certClassificationSummary.confirmedCount}건 / 검토 ${certClassificationSummary.reviewCount}건 / 제외 ${certClassificationSummary.excludedCount}건`,
         },
         message: certResult.ok
-          ? `country=${countryName}, item_count=${certResult.items.length}, hs=${hsCode || "N/A"}, hsk=${hskCode || "N/A"}, product=${productName || "N/A"}, attempts=${certResult.diagnostics.attempts.length}`
+          ? `country=${countryName}, raw_count=${certClassificationSummary.rawCount}, confirmed_count=${certClassificationSummary.confirmedCount}, review_count=${certClassificationSummary.reviewCount}, excluded_count=${certClassificationSummary.excludedCount}, hs=${hsCode || "N/A"}, hsk=${hskCode || "N/A"}, product=${productName || "N/A"}, attempts=${certResult.diagnostics.attempts.length}`
           : `country=${countryName}, error=${certResult.message}, attempts=${certResult.diagnostics.attempts.length}`,
       },
       {
@@ -1263,36 +1179,6 @@ Deno.serve(async (req) => {
         message: regulationResult.detailState === "error"
           ? `country=${countryName}, state=error, error=${regulationResult.message}, attempts=${regulationResult.diagnostics.attempts.length}`
           : `country=${countryName}, state=${regulationResult.detailState}, item_count=${regulationItems.length}, review_count=${regulationReviewItems.length}, hs=${hsCode || "N/A"}, hsk=${hskCode || "N/A"}, product=${productName || "N/A"}, attempts=${regulationResult.diagnostics.attempts.length}`,
-      },
-      {
-        user_id: userData.user.id,
-        project_id: projectId,
-        api_key_name: "wto_eping",
-        status: wtoEpingResult.detailState,
-        http_status: wtoEpingResult.status,
-        response_count: wtoEpingResult.items.length,
-        error_code: wtoEpingResult.ok ? null : "wto_eping_fetch_failed",
-        detail: {
-          country: countryName,
-          country_code: countryCode,
-          hs_code: hsCode || null,
-          hsk_code: hskCode || null,
-          product_name: productName || null,
-          total_count: wtoEpingResult.totalCount,
-          raw_count: wtoEpingResult.rawCount,
-          direct_count: wtoEpingResult.items.length,
-          broad_count: wtoEpingResult.broadItems.length,
-          excluded_count: wtoEpingResult.excludedItems.length,
-          query_terms: wtoEpingResult.diagnostics.query_terms,
-          search_attempts: wtoEpingResult.diagnostics.attempts,
-          api_status: wtoEpingResult.diagnostics.api_status,
-          api_message: wtoEpingResult.diagnostics.api_message,
-          fallback_source_url: wtoEpingResult.diagnostics.fallback_source_url,
-          institution_review_required: true,
-        },
-        message: wtoEpingResult.ok
-          ? `country=${countryName}, state=${wtoEpingResult.detailState}, direct_count=${wtoEpingResult.items.length}, broad_count=${wtoEpingResult.broadItems.length}, excluded_count=${wtoEpingResult.excludedItems.length}, raw_count=${wtoEpingResult.rawCount}, total_count=${wtoEpingResult.totalCount}, hs=${hsCode || "N/A"}`
-          : `country=${countryName}, error=${wtoEpingResult.message}, attempts=${wtoEpingResult.diagnostics.attempts.length}`,
       },
       {
         user_id: userData.user.id,
@@ -1431,10 +1317,6 @@ function resolveKsureKey(): string {
   );
 }
 
-function resolveWtoApiKey(): string {
-  return normalizeAuthKeyValue(Deno.env.get("WTO_API_KEY") || "");
-}
-
 function normalizeAuthKeyValue(value: string): string {
   const trimmed = value.trim();
   if (trimmed.length < 2) return trimmed;
@@ -1521,6 +1403,23 @@ function createDetailDiagnostics(params: {
   };
 }
 
+function buildKotraCertificationClassificationSummary(result: KotraCertResult): {
+  rawCount: number;
+  confirmedCount: number;
+  reviewCount: number;
+  excludedCount: number;
+} {
+  const rawCount = result.diagnostics.attempts.reduce((sum, attempt) => sum + Math.max(0, attempt.item_count), 0);
+  const confirmedCount = result.matchStrategy === "country_hs_product" ? result.items.length : 0;
+  const reviewCount = result.matchStrategy === "country_product_fallback" ? result.items.length : 0;
+  return {
+    rawCount,
+    confirmedCount,
+    reviewCount,
+    excludedCount: Math.max(0, rawCount - confirmedCount - reviewCount),
+  };
+}
+
 function formatSearchConditionSummary(diagnostics: DetailSearchDiagnostics): string {
   const queryText = diagnostics.query_terms.length > 0
     ? diagnostics.query_terms.join(", ")
@@ -1579,7 +1478,7 @@ async function fetchKotraOverseasCertInfo(
     englishTerms: params.englishTerms,
     tagTerms: params.tagTerms,
     countryTerms: params.countryTerms,
-    maxAttempts: 12,
+    maxAttempts: KOTRA_CERT_SEARCH_ATTEMPT_LIMIT,
   });
   const attemptLogs: DetailSearchAttemptLog[] = [];
   const relevanceContext = {
@@ -1600,8 +1499,8 @@ async function fetchKotraOverseasCertInfo(
 
   for (const attempt of attempts) {
     const isBaseQuery = attempt.label === "base_query";
-    const maxPages = isBaseQuery ? 8 : 1;
-    const numOfRows = isBaseQuery ? 100 : 20;
+    const maxPages = KOTRA_CERT_PAGE_LIMIT;
+    const numOfRows = KOTRA_CERT_PAGE_SIZE;
 
     for (let pageNo = 1; pageNo <= maxPages; pageNo += 1) {
       const result = await callKotraOverseasAuthEndpoint(attempt.filters, key, {
@@ -1756,456 +1655,13 @@ async function callKotraOverseasAuthEndpoint(
   return { ok: true, status: res.status, message: resultMsg || "NO ERROR", items };
 }
 
-async function fetchWtoEpingNotifications(
-  params: DetailContext,
-  key: string,
-): Promise<WtoEpingNotificationResult> {
-  const queryTerms = buildDetailQueryTerms(params);
-  const countryIds = resolveWtoEpingCountryIds(params.countryCode);
-  const attempts: DetailSearchAttemptLog[] = [];
-
-  if (!key) {
-    return {
-      ok: false,
-      status: null,
-      message: "WTO_API_KEY is missing",
-      detailState: "empty",
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      rawCount: 0,
-      totalCount: 0,
-      diagnostics: createDetailDiagnostics({
-        queryTerms,
-        attempts,
-        apiStatus: null,
-        apiMessage: "WTO_API_KEY is missing",
-        fallbackSourceUrl: WTO_EPING_PAGE,
-      }),
-      sourceUrl: WTO_EPING_PAGE,
-    };
-  }
-
-  if (countryIds.length === 0) {
-    return {
-      ok: true,
-      status: null,
-      message: "No WTO ePing member id mapped",
-      detailState: "empty",
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      rawCount: 0,
-      totalCount: 0,
-      diagnostics: createDetailDiagnostics({
-        queryTerms,
-        attempts,
-        apiStatus: null,
-        apiMessage: "No WTO ePing member id mapped",
-        fallbackSourceUrl: WTO_EPING_PAGE,
-      }),
-      sourceUrl: WTO_EPING_PAGE,
-    };
-  }
-
-  const termPlan = buildWtoEpingTermPlan({
-    productName: params.productName,
-    productDescription: params.productDescription,
-    productTags: params.productTags,
-    englishTerms: params.englishTerms,
-    tagTerms: params.tagTerms,
-    hsCode: params.hsCode,
-    hskCode: params.hskCode,
-  });
-  const specs = buildWtoEpingSearchSpecs(params, termPlan);
-  if (specs.length === 0) {
-    return {
-      ok: true,
-      status: null,
-      message: "HS code and product search terms are missing",
-      detailState: "empty",
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      rawCount: 0,
-      totalCount: 0,
-      diagnostics: createDetailDiagnostics({
-        queryTerms,
-        attempts,
-        apiStatus: null,
-        apiMessage: "HS code and product search terms are missing",
-        fallbackSourceUrl: WTO_EPING_PAGE,
-      }),
-      sourceUrl: WTO_EPING_PAGE,
-    };
-  }
-  const attemptResults = await Promise.all(
-    specs.map((spec) => fetchWtoEpingSearchAttempt(params, countryIds, key, spec, termPlan)),
-  );
-  attempts.push(...attemptResults.map((result) => result.attempt));
-
-  const successfulAttempts = attemptResults.filter((result) => result.ok);
-  if (successfulAttempts.length === 0) {
-    const firstError = attemptResults[0];
-    const message = firstError?.message || "WTO ePing fetch failed";
-    return {
-      ok: false,
-      status: firstError?.status ?? null,
-      message,
-      detailState: "error",
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      rawCount: 0,
-      totalCount: 0,
-      diagnostics: createDetailDiagnostics({
-        queryTerms,
-        attempts,
-        apiStatus: firstError?.status ?? null,
-        apiMessage: message,
-        fallbackSourceUrl: WTO_EPING_PAGE,
-      }),
-      sourceUrl: WTO_EPING_PAGE,
-    };
-  }
-
-  const rawTotalCount = successfulAttempts.reduce((sum, result) => sum + result.rawCount, 0);
-  const apiTotalCount = successfulAttempts.reduce((sum, result) => sum + result.totalCount, 0);
-  const items = dedupeWtoEpingNotifications(successfulAttempts.flatMap((result) => result.items)).slice(0, 10);
-  const broadItems = dedupeWtoEpingNotifications(successfulAttempts.flatMap((result) => result.broadItems)).slice(0, 10);
-  const excludedItems = dedupeWtoEpingNotifications(successfulAttempts.flatMap((result) => result.excludedItems)).slice(0, 10);
-  const totalCount = apiTotalCount || rawTotalCount || items.length;
-  const message = items.length > 0
-    ? "NO ERROR"
-    : rawTotalCount > 0 || broadItems.length > 0 || excludedItems.length > 0
-      ? `No direct WTO ePing notifications matched (${rawTotalCount} raw items, ${broadItems.length} broad, ${excludedItems.length} excluded)`
-      : "No WTO ePing notifications matched";
-
-  return {
-    ok: true,
-    status: successfulAttempts[0]?.status ?? null,
-    message,
-    detailState: items.length > 0 ? "success" : "empty",
-    items,
-    broadItems,
-    excludedItems,
-    rawCount: rawTotalCount,
-    totalCount,
-    diagnostics: createDetailDiagnostics({
-      queryTerms,
-      attempts,
-      apiStatus: successfulAttempts[0]?.status ?? null,
-      apiMessage: message,
-      fallbackSourceUrl: WTO_EPING_PAGE,
-    }),
-    sourceUrl: WTO_EPING_PAGE,
-  };
-}
-
-function buildWtoEpingSearchSpecs(params: DetailContext, termPlan: WtoEpingTermPlan): WtoEpingSearchSpec[] {
-  const hsDigits = params.hsCode.replace(/\D/g, "");
-  const hs6 = hsDigits.length >= 6 ? hsDigits.slice(0, 6) : hsDigits;
-  const hs4 = hsDigits.length >= 4 ? hsDigits.slice(0, 4) : "";
-  const exactTerms = termPlan.exactTerms.slice(0, 3);
-  const familyTerms = termPlan.familyTerms.slice(0, 4);
-
-  return [
-    hs6 ? { label: "wto_eping_hs6_country", queryType: "hs6", hsCode: hs6 } : null,
-    hs4 && hs4 !== hs6 ? { label: "wto_eping_hs4_country", queryType: "hs4", hsCode: hs4 } : null,
-    ...exactTerms.map((term) => ({
-      label: "wto_eping_exact_product_country",
-      queryType: "exact_product" as const,
-      freeText: term,
-    })),
-    ...familyTerms.map((term) => ({
-      label: "wto_eping_product_family_country",
-      queryType: "product_family" as const,
-      freeText: term,
-    })),
-  ].filter((spec): spec is WtoEpingSearchSpec => Boolean(spec));
-}
-
-function buildWtoEpingFreeTextTerms(params: DetailContext): string[] {
-  const terms = extractEnglishSearchTerms(
-    params.productName,
-    params.productDescription,
-    ...params.productTags,
-  );
-  return dedupeStrings(terms)
-    .filter((term) => /^[A-Z0-9][A-Z0-9-]{2,}$/i.test(term))
-    .filter((term) => /^[A-Z0-9-]+$/.test(term) || /\d/.test(term))
-    .filter((term) => !isWeakProductRelevanceToken(term.toLowerCase()))
-    .slice(0, 2);
-}
-
-async function fetchWtoEpingSearchAttempt(
-  params: DetailContext,
-  countryIds: string[],
-  key: string,
-  spec: WtoEpingSearchSpec,
-  termPlan: WtoEpingTermPlan,
-): Promise<WtoEpingAttemptResult> {
-  const url = buildWtoEpingSearchUrl(WTO_EPING_NOTIFICATION_SEARCH_ENDPOINT, {
-    countryIds,
-    hsCode: spec.hsCode,
-    freeText: spec.freeText,
-    page: 1,
-    pageSize: 10,
-  });
-  const filters: Record<string, string> = {};
-  for (const [key, value] of Object.entries({
-    countryIds: countryIds.join(","),
-    hs: spec.hsCode ?? "",
-    freeText: spec.freeText ?? "",
-    language: "1",
-  })) {
-    if (value) filters[key] = value;
-  }
-
-  const external = await fetchExternal(url, {
-    headers: {
-      "Ocp-Apim-Subscription-Key": key,
-    },
-  });
-  if (!external.ok) {
-    return {
-      ok: false,
-      status: null,
-      message: external.message,
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      totalCount: 0,
-      rawCount: 0,
-      attempt: {
-        label: spec.label,
-        filters,
-        status: null,
-        message: external.message,
-        item_count: 0,
-        raw_count: 0,
-        direct_count: 0,
-        broad_count: 0,
-        excluded_count: 0,
-      },
-    };
-  }
-
-  const res = external.response;
-  if (!res.ok) {
-    const message = `HTTP ${res.status}`;
-    return {
-      ok: false,
-      status: res.status,
-      message,
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      totalCount: 0,
-      rawCount: 0,
-      attempt: {
-        label: spec.label,
-        filters,
-        status: res.status,
-        message,
-        item_count: 0,
-        raw_count: 0,
-        direct_count: 0,
-        broad_count: 0,
-        excluded_count: 0,
-      },
-    };
-  }
-
-  const text = await res.text();
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(text);
-  } catch {
-    const message = "Invalid JSON response";
-    return {
-      ok: false,
-      status: res.status,
-      message,
-      items: [],
-      broadItems: [],
-      excludedItems: [],
-      totalCount: 0,
-      rawCount: 0,
-      attempt: {
-        label: spec.label,
-        filters,
-        status: res.status,
-        message,
-        item_count: 0,
-        raw_count: 0,
-        direct_count: 0,
-        broad_count: 0,
-        excluded_count: 0,
-      },
-    };
-  }
-
-  const rawItems = extractWtoEpingRecordList(parsed);
-  const allNormalized = rawItems
-    .map(normalizeWtoEpingNotification)
-    .filter((item) => item.documentSymbol || item.title || item.productsText)
-    .map((item) => ({
-      ...item,
-      matchScope: spec.label,
-      matchText: spec.hsCode || spec.freeText || "",
-      queryType: spec.queryType,
-    }));
-  const classifiedItems = allNormalized.map((item) => {
-    const classification = classifyWtoEpingNotification(item, {
-      hsCode: params.hsCode,
-      exactTerms: termPlan.exactTerms,
-      familyTerms: termPlan.familyTerms,
-    });
-    return {
-      ...item,
-      epingClassification: classification.classification,
-      epingScore: classification.score,
-      epingReason: classification.reason,
-      epingMatchedTerms: classification.matchedTerms,
-    };
-  });
-  const items = classifiedItems.filter((item) => item.epingClassification === "direct_candidate");
-  const broadItems = classifiedItems.filter((item) => item.epingClassification === "broad_reference");
-  const excludedItems = classifiedItems.filter((item) => item.epingClassification === "excluded_noise");
-  const totalCount = extractWtoEpingTotalCount(parsed, allNormalized.length);
-  const message = items.length > 0
-    ? "NO ERROR"
-    : allNormalized.length > 0
-      ? `No direct WTO ePing notifications in ${allNormalized.length} raw items`
-      : "No WTO ePing notifications matched";
-
-  return {
-    ok: true,
-    status: res.status,
-    message,
-    items,
-    broadItems,
-    excludedItems,
-    totalCount,
-    rawCount: allNormalized.length,
-    attempt: {
-      label: spec.label,
-      filters,
-      status: res.status,
-      message,
-      item_count: items.length,
-      raw_count: allNormalized.length,
-      direct_count: items.length,
-      broad_count: broadItems.length,
-      excluded_count: excludedItems.length,
-    },
-  };
-}
-
-function dedupeWtoEpingNotifications(items: WtoEpingNotification[]): WtoEpingNotification[] {
-  const seen = new Set<string>();
-  const out: WtoEpingNotification[] = [];
-  for (const item of items) {
-    const key = [
-      item.documentSymbol.trim().toUpperCase(),
-      item.sourceUrl.trim().toLowerCase(),
-      item.title.trim().toLowerCase(),
-    ].filter(Boolean).join("|");
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
-    out.push(item);
-  }
-  return out;
-}
-
-/**
- * HS 6자리 정밀 매칭 또는 제품 토큰 매칭으로 관련성 높은 ePing 통보문만 필터링.
- * HS 4자리(예: 8703) 수준의 느슨한 매칭으로 무관한 안전 규정이 대량 표시되는 문제를 해결.
- */
-function filterEpingByRelevance(
-  items: WtoEpingNotification[],
-  params: DetailContext,
-): WtoEpingNotification[] {
-  const hsDigits = params.hsCode.replace(/\D/g, "");
-  const hs6 = hsDigits.length >= 6 ? hsDigits.slice(0, 6) : "";
-  const hs4 = hsDigits.length >= 4 ? hsDigits.slice(0, 4) : "";
-  const productTokens = extractDetailProductTokens(
-    params.productName,
-    params.productDescription,
-    params.productTags,
-  );
-
-  return items.filter((item) => {
-    // 1. HS 6자리 정밀 매칭: item의 HS 코드 목록에 우리 HS6가 포함되는지
-    const itemHsText = item.hsCodeText || "";
-    const itemHsDigits = itemHsText.match(/\d{4,10}/g) || [];
-    if (hs6) {
-      const has6digitMatch = itemHsDigits.some((h) => {
-        const prefix = h.slice(0, 6);
-        return prefix === hs6;
-      });
-      if (has6digitMatch) return true;
-    }
-
-    const has4digitMatch = Boolean(hs4) &&
-      itemHsDigits.some((h) => h.length === 4 && h.slice(0, 4) === hs4);
-    if (has4digitMatch) return true;
-
-    // 2. 제품명/설명 토큰 매칭: 통보문 제목·제품·설명에 제품 토큰이 포함되는지
-    if (productTokens.length > 0) {
-      const haystack = [
-        item.title,
-        item.productsText,
-      ].join(" ").toLowerCase();
-      const hasProductMatch = productTokens.some(
-        (token) => token.length >= 3 && haystack.includes(token.toLowerCase()),
-      );
-      if (hasProductMatch) return true;
-    }
-
-    // 3. HS 4자리만 일치하고 제품 토큰 매칭 없으면 → 관련성 낮음, 필터링
-    return false;
-  });
-}
-
-function extractWtoEpingRecordList(parsed: unknown): unknown[] {
-  if (Array.isArray(parsed)) return parsed;
-  const record = asRecord(parsed);
-  for (const key of ["items", "notifications", "results", "records", "value"]) {
-    const value = record[key];
-    if (Array.isArray(value)) return value;
-  }
-  const data = record.data;
-  if (Array.isArray(data)) return data;
-  const dataRecord = asRecord(data);
-  for (const key of ["items", "notifications", "results", "records", "value"]) {
-    const value = dataRecord[key];
-    if (Array.isArray(value)) return value;
-  }
-  return [];
-}
-
-function extractWtoEpingTotalCount(parsed: unknown, fallback: number): number {
-  const records = [asRecord(parsed), asRecord(asRecord(parsed).data)];
-  for (const record of records) {
-    for (const key of ["totalCount", "count", "total", "totalResults", "recordCount"]) {
-      const value = Number(record[key]);
-      if (Number.isFinite(value) && value >= 0) return value;
-    }
-  }
-  return fallback;
-}
-
 async function fetchKotraImportRegulations(
   params: DetailContext,
   supa: ReturnType<typeof createClient>,
-  authHeader: string,
   options: KotraImportRegulationFetchOptions = {},
 ): Promise<KotraImportRegulationResult> {
   const queryTerms = buildDetailQueryTerms(params);
   const attemptLogs: DetailSearchAttemptLog[] = [...(options.priorAttempts ?? [])];
-  const allowApiSync = options.allowApiSync !== false;
   const relevanceContext = {
     countryCode: params.countryCode,
     countryAliases: getCountryAliases(params.countryCode, params.countryName),
@@ -2229,25 +1685,6 @@ async function fetchKotraImportRegulations(
       message: cacheStatusResponse.error.message,
       item_count: 0,
     });
-    if (allowApiSync) {
-      const syncResult = await invokeKotraImportRegulationSync(authHeader);
-      attemptLogs.push({
-        label: "api_sync",
-        filters: { reason: "cache_status_error" },
-        status: syncResult.status,
-        message: syncResult.message,
-        item_count: 0,
-      });
-      if (syncResult.ok) {
-        return await fetchKotraImportRegulations(params, supa, authHeader, {
-          allowApiSync: false,
-          priorAttempts: attemptLogs,
-          sourceTypeOverride: "kotra_api_sync",
-          syncAttempted: true,
-          syncMessage: syncResult.message,
-        });
-      }
-    }
     const backupResult = await fetchCsvImportRegulationBackup(params, supa, relevanceContext);
     attemptLogs.push(...backupResult.attempts);
     const backupHasRows = backupResult.items.length > 0 || backupResult.reviewItems.length > 0;
@@ -2282,8 +1719,8 @@ async function fetchKotraImportRegulations(
     cache_stale_after_days: normalizedCacheStatus?.staleAfterDays || KOTRA_IMPORT_REGULATION_DEFAULT_STALE_DAYS,
     cache_age_days: freshness.ageDays,
     cache_reason: freshness.reason,
-    sync_attempted: options.syncAttempted ?? false,
-    sync_message: options.syncMessage ?? null,
+    sync_attempted: false,
+    sync_message: null,
   };
 
   attemptLogs.push({
@@ -2296,29 +1733,8 @@ async function fetchKotraImportRegulations(
     item_count: 0,
   });
 
-  if (shouldAttemptKotraImportRegulationApiSync(normalizedCacheStatus, freshness, null)) {
+  if (freshness.stale || !normalizedCacheStatus?.activeBatchId) {
     const staleMessage = formatImportRegulationCacheStaleMessage(cacheMeta.cache_reason, cacheMeta.cache_stale_after_days);
-    if (allowApiSync) {
-      const syncResult = await invokeKotraImportRegulationSync(authHeader);
-      attemptLogs.push({
-        label: "api_sync",
-        filters: { reason: cacheMeta.cache_reason || "missing_active_batch_or_stale" },
-        status: syncResult.status,
-        message: syncResult.message,
-        item_count: 0,
-      });
-      if (syncResult.ok) {
-        return await fetchKotraImportRegulations(params, supa, authHeader, {
-          allowApiSync: false,
-          priorAttempts: attemptLogs,
-          sourceTypeOverride: "kotra_api_sync",
-          syncAttempted: true,
-          syncMessage: syncResult.message,
-        });
-      }
-      cacheMeta.sync_attempted = true;
-      cacheMeta.sync_message = syncResult.message;
-    }
     const backupResult = await fetchCsvImportRegulationBackup(params, supa, relevanceContext);
     attemptLogs.push(...backupResult.attempts);
     const backupHasRows = backupResult.items.length > 0 || backupResult.reviewItems.length > 0;
@@ -2360,53 +1776,40 @@ async function fetchKotraImportRegulations(
     };
   }
 
-  const pageSize = 1000;
-  const allItems: KotraImportRegulationItem[] = [];
-  let from = 0;
-  while (true) {
-    const to = from + pageSize - 1;
+  const cacheCandidateFilter = buildImportRegulationCacheCandidateFilter(params, relevanceContext);
+  if (!cacheCandidateFilter) {
+    attemptLogs.push({
+      label: "cache_candidates",
+      filters: { reason: "candidate_filter_empty" },
+      status: 200,
+      message: "cache_filter_empty",
+      item_count: 0,
+    });
+  } else {
     const cacheRowsResponse = await supa
       .from("kotra_import_regulation_cache")
-      .select("id,batch_id,is_active,hqurt_name,cmdlt_name,hscd,hscd_cn,reg_dt,regl_cn,iso_wd2_nat_cd,regl_str_de,regl_end_de,probe_tgt_nat_name,raw")
+      .select("id,batch_id,is_active,hqurt_name,cmdlt_name,hscd,hscd_cn,reg_dt,regl_cn,iso_wd2_nat_cd,regl_str_de,regl_end_de,probe_tgt_nat_name")
       .eq("batch_id", normalizedCacheStatus.activeBatchId)
       .eq("is_active", true)
+      .eq("iso_wd2_nat_cd", params.countryCode)
+      .or(cacheCandidateFilter)
       .order("id", { ascending: true })
-      .range(from, to);
+      .limit(MAX_IMPORT_REGULATION_CACHE_ROWS);
 
     if (cacheRowsResponse.error) {
       const errorMessage = cacheRowsResponse.error.message;
       attemptLogs.push({
-        label: `cache_page_${Math.floor(from / pageSize) + 1}`,
+        label: "cache_candidates",
         filters: {
           batch_id: normalizedCacheStatus.activeBatchId,
-          from: String(from),
-          to: String(to),
+          country_code: params.countryCode,
+          filter: cacheCandidateFilter,
+          limit: String(MAX_IMPORT_REGULATION_CACHE_ROWS),
         },
         status: null,
         message: errorMessage,
         item_count: 0,
       });
-      if (shouldAttemptKotraImportRegulationApiSync(normalizedCacheStatus, freshness, errorMessage) && allowApiSync) {
-        const syncResult = await invokeKotraImportRegulationSync(authHeader);
-        attemptLogs.push({
-          label: "api_sync",
-          filters: { reason: "cache_read_error" },
-          status: syncResult.status,
-          message: syncResult.message,
-          item_count: 0,
-        });
-        if (syncResult.ok) {
-          return await fetchKotraImportRegulations(params, supa, authHeader, {
-            allowApiSync: false,
-            priorAttempts: attemptLogs,
-            sourceTypeOverride: "kotra_api_sync",
-            syncAttempted: true,
-            syncMessage: syncResult.message,
-          });
-        }
-        cacheMeta.sync_attempted = true;
-        cacheMeta.sync_message = syncResult.message;
-      }
       const backupResult = await fetchCsvImportRegulationBackup(params, supa, relevanceContext);
       attemptLogs.push(...backupResult.attempts);
       const backupHasRows = backupResult.items.length > 0 || backupResult.reviewItems.length > 0;
@@ -2449,53 +1852,44 @@ async function fetchKotraImportRegulations(
     }
 
     const chunk = asArray(cacheRowsResponse.data)
-      .map((row) => {
-        const item = toImportRegulationItemFromCacheRow(row);
-        return options.sourceTypeOverride ? { ...item, __source: options.sourceTypeOverride } : item;
-      })
+      .map((row) => toImportRegulationItemFromCacheRow(row))
       .filter((item) => item.HSCD || item.CMDLT_NAME || item.REGL_CN);
     attemptLogs.push({
-      label: `cache_page_${Math.floor(from / pageSize) + 1}`,
+      label: "cache_candidates",
       filters: {
         batch_id: normalizedCacheStatus.activeBatchId,
-        from: String(from),
-        to: String(to),
-        numOfRows: String(pageSize),
+        country_code: params.countryCode,
+        filter: cacheCandidateFilter,
+        limit: String(MAX_IMPORT_REGULATION_CACHE_ROWS),
       },
       status: 200,
       message: "cache_read_ok",
       item_count: chunk.length,
     });
 
-    allItems.push(...chunk);
-    if (chunk.length < pageSize) {
-      break;
+    const ranked = rankImportRegulationsByDetailRelevance(chunk, relevanceContext)
+      .map((item) => ({ ...item, __match_strategy: "kr_origin_country_hs" as const }));
+    const reviewRanked = rankImportRegulationsByProductReview(chunk, relevanceContext)
+      .map((item) => ({ ...item, __match_strategy: "kr_origin_product_review" as const }));
+    if (ranked.length > 0 || reviewRanked.length > 0) {
+      return {
+        ok: true,
+        status: 200,
+        message: "cache_read_ok",
+        detailState: "success",
+        items: ranked,
+        reviewItems: reviewRanked,
+        diagnostics: createDetailDiagnostics({
+          queryTerms,
+          attempts: attemptLogs,
+          apiStatus: 200,
+          apiMessage: "cache_read_ok",
+          fallbackSourceUrl: KOTRA_IMPORT_REGULATION_PAGE,
+        }),
+        sourceUrl: KOTRA_IMPORT_REGULATION_PAGE,
+        cacheMeta,
+      };
     }
-    from += pageSize;
-  }
-
-  const ranked = rankImportRegulationsByDetailRelevance(allItems, relevanceContext)
-    .map((item) => ({ ...item, __match_strategy: "kr_origin_country_hs" as const }));
-  const reviewRanked = rankImportRegulationsByProductReview(allItems, relevanceContext)
-    .map((item) => ({ ...item, __match_strategy: "kr_origin_product_review" as const }));
-  if (ranked.length > 0 || reviewRanked.length > 0) {
-    return {
-      ok: true,
-      status: 200,
-      message: "cache_read_ok",
-      detailState: "success",
-      items: ranked,
-      reviewItems: reviewRanked,
-      diagnostics: createDetailDiagnostics({
-        queryTerms,
-        attempts: attemptLogs,
-        apiStatus: 200,
-        apiMessage: "cache_read_ok",
-        fallbackSourceUrl: KOTRA_IMPORT_REGULATION_PAGE,
-      }),
-      sourceUrl: KOTRA_IMPORT_REGULATION_PAGE,
-      cacheMeta,
-    };
   }
 
   const backupResult = await fetchCsvImportRegulationBackup(params, supa, relevanceContext);
@@ -2540,47 +1934,6 @@ async function fetchKotraImportRegulations(
   };
 }
 
-async function invokeKotraImportRegulationSync(authHeader: string): Promise<KotraImportRegulationSyncResult> {
-  const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-  const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-  if (!supabaseUrl) {
-    return { ok: false, status: null, message: "SUPABASE_URL is missing" };
-  }
-  if (!supabaseServiceRoleKey && !authHeader) {
-    return { ok: false, status: null, message: "SUPABASE_SERVICE_ROLE_KEY or user Authorization is missing" };
-  }
-
-  const syncAuthHeader = supabaseServiceRoleKey ? `Bearer ${supabaseServiceRoleKey}` : authHeader;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), KOTRA_IMPORT_REGULATION_SYNC_TIMEOUT_MS);
-  try {
-    const response = await fetch(`${supabaseUrl}/functions/v1/sync-kotra-import-regulations`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: syncAuthHeader,
-      },
-      body: JSON.stringify({ numOfRows: 200 }),
-      signal: controller.signal,
-    });
-    const text = await response.text();
-    let parsed: Record<string, unknown> = {};
-    try {
-      parsed = asRecord(JSON.parse(text));
-    } catch {
-      parsed = {};
-    }
-    const ok = response.ok && asBoolean(parsed.ok);
-    const message = asText(parsed.message) || (ok ? "KOTRA import regulation cache sync completed" : `HTTP ${response.status}`);
-    return { ok, status: response.status, message };
-  } catch (error) {
-    return { ok: false, status: null, message: toExternalFetchMessage(error) };
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-
 async function fetchCsvImportRegulationBackup(
   params: DetailContext,
   supa: ReturnType<typeof createClient>,
@@ -2594,57 +1947,76 @@ async function fetchCsvImportRegulationBackup(
   },
 ): Promise<CsvImportRegulationBackupResult> {
   const attempts: DetailSearchAttemptLog[] = [];
-  const pageSize = 2000;
   const matchedItems: KotraImportRegulationItem[] = [];
-  let from = 0;
 
-  while (true) {
-    const to = from + pageSize - 1;
-    const response = await supa
-      .from("kotra_csv_import_regulation_cache")
-      .select("id,regulation_country_code,regulation_country_name,regulation_country_normalized,hs_code_raw,hs_code_normalized,item_name,regulation_type,target_country_text,decision_period,decision_tariff,korea_target_yn,is_korea_target,is_active")
-      .eq("is_active", true)
-      .order("id", { ascending: true })
-      .range(from, to);
-
-    if (response.error) {
-      attempts.push({
-        label: `csv_backup_page_${Math.floor(from / pageSize) + 1}`,
-        filters: { from: String(from), to: String(to), is_active: "true" },
-        status: null,
-        message: response.error.message,
-        item_count: 0,
-      });
-      return {
-        items: [],
-        reviewItems: [],
-        attempts,
-        message: response.error.message,
-      };
-    }
-
-    const chunk = asArray(response.data);
-    let matchedInChunk = 0;
-    for (const entry of chunk) {
-      if (!isCsvBackupCountryMatched(entry, params, relevanceContext.countryAliases)) continue;
-      if (!isCsvBackupKoreaTarget(entry)) continue;
-      const item = toImportRegulationItemFromCsvBackupRow(entry, params.countryCode);
-      if (!item.HSCD && !item.CMDLT_NAME && !item.REGL_CN) continue;
-      matchedItems.push(item);
-      matchedInChunk += 1;
-    }
-
+  const csvCandidateFilter = buildCsvImportRegulationBackupCandidateFilter(params, relevanceContext);
+  if (!csvCandidateFilter) {
     attempts.push({
-      label: `csv_backup_page_${Math.floor(from / pageSize) + 1}`,
-      filters: { from: String(from), to: String(to), is_active: "true" },
+      label: "csv_backup_candidates",
+      filters: { reason: "candidate_filter_empty" },
       status: 200,
-      message: "csv_backup_read_ok",
-      item_count: matchedInChunk,
+      message: "csv_backup_filter_empty",
+      item_count: 0,
     });
-
-    if (chunk.length < pageSize) break;
-    from += pageSize;
+    return {
+      items: [],
+      reviewItems: [],
+      attempts,
+      message: "csv_backup_filter_empty",
+    };
   }
+
+  const response = await supa
+    .from("kotra_csv_import_regulation_cache")
+    .select("id,regulation_country_code,regulation_country_name,regulation_country_normalized,hs_code_raw,hs_code_normalized,item_name,regulation_type,target_country_text,decision_period,decision_tariff,korea_target_yn,is_korea_target,is_active")
+    .eq("is_active", true)
+    .eq("regulation_country_code", params.countryCode)
+    .or(csvCandidateFilter)
+    .order("id", { ascending: true })
+    .limit(MAX_CSV_IMPORT_REGULATION_BACKUP_ROWS);
+
+  if (response.error) {
+    attempts.push({
+      label: "csv_backup_candidates",
+      filters: {
+        country_code: params.countryCode,
+        filter: csvCandidateFilter,
+        limit: String(MAX_CSV_IMPORT_REGULATION_BACKUP_ROWS),
+      },
+      status: null,
+      message: response.error.message,
+      item_count: 0,
+    });
+    return {
+      items: [],
+      reviewItems: [],
+      attempts,
+      message: response.error.message,
+    };
+  }
+
+  const chunk = asArray(response.data);
+  let matchedInChunk = 0;
+  for (const entry of chunk) {
+    if (!isCsvBackupCountryMatched(entry, params, relevanceContext.countryAliases)) continue;
+    if (!isCsvBackupKoreaTarget(entry)) continue;
+    const item = toImportRegulationItemFromCsvBackupRow(entry, params.countryCode);
+    if (!item.HSCD && !item.CMDLT_NAME && !item.REGL_CN) continue;
+    matchedItems.push(item);
+    matchedInChunk += 1;
+  }
+
+  attempts.push({
+    label: "csv_backup_candidates",
+    filters: {
+      country_code: params.countryCode,
+      filter: csvCandidateFilter,
+      limit: String(MAX_CSV_IMPORT_REGULATION_BACKUP_ROWS),
+    },
+    status: 200,
+    message: "csv_backup_read_ok",
+    item_count: matchedInChunk,
+  });
 
   const ranked = rankImportRegulationsByDetailRelevance(matchedItems, relevanceContext)
     .slice(0, 30)
@@ -2681,6 +2053,95 @@ async function fetchCsvImportRegulationBackup(
     attempts,
     message: "csv_backup_no_match",
   };
+}
+
+function buildImportRegulationCacheCandidateFilter(
+  params: DetailContext,
+  relevanceContext: { productTokens: string[] },
+): string {
+  return joinPostgrestOrFilters([
+    ...buildImportRegulationHsFilterParts(params.hsCode, params.hskCode, {
+      codeColumn: "hscd",
+      textColumn: "hscd_cn",
+    }),
+    ...buildImportRegulationProductFilterParts(relevanceContext.productTokens, [
+      "cmdlt_name",
+      "hscd_cn",
+      "regl_cn",
+    ]),
+  ]);
+}
+
+function buildCsvImportRegulationBackupCandidateFilter(
+  params: DetailContext,
+  relevanceContext: { productTokens: string[] },
+): string {
+  return joinPostgrestOrFilters([
+    ...buildImportRegulationHsFilterParts(params.hsCode, params.hskCode, {
+      codeColumn: "hs_code_normalized",
+      textColumn: "hs_code_raw",
+    }),
+    ...buildImportRegulationProductFilterParts(relevanceContext.productTokens, [
+      "item_name",
+      "regulation_type",
+    ]),
+  ]);
+}
+
+function buildImportRegulationHsFilterParts(
+  hsCode: string,
+  hskCode: string,
+  columns: { codeColumn: string; textColumn: string },
+): string[] {
+  const hsk = normalizeHsOrHsk(hskCode);
+  const hs6 = normalizeHsCode(hsCode) || normalizeHsCode(hskCode);
+  const hs4 = hs6.length >= 4 ? hs6.slice(0, 4) : "";
+  const values = dedupeStrings([
+    hsk.length >= 6 ? hsk : "",
+    hs6.length >= 6 ? hs6 : "",
+    hs4,
+  ]);
+
+  const filters: string[] = [];
+  for (const rawValue of values) {
+    const value = toPostgrestIlikeValue(rawValue);
+    if (!value) continue;
+    filters.push(`${columns.codeColumn}.ilike.${value}%`);
+    filters.push(`${columns.textColumn}.ilike.%${value}%`);
+  }
+  return filters;
+}
+
+function buildImportRegulationProductFilterParts(tokens: string[], columns: string[]): string[] {
+  const filterTokens = dedupeStrings(tokens)
+    .map(toPostgrestIlikeValue)
+    .filter(isUsefulImportRegulationFilterToken)
+    .slice(0, MAX_IMPORT_REGULATION_PRODUCT_FILTERS);
+
+  const filters: string[] = [];
+  for (const token of filterTokens) {
+    for (const column of columns) {
+      filters.push(`${column}.ilike.%${token}%`);
+    }
+  }
+  return filters;
+}
+
+function joinPostgrestOrFilters(filters: string[]): string {
+  return dedupeStrings(filters).join(",");
+}
+
+function toPostgrestIlikeValue(value: string): string {
+  return value
+    .replace(/[%(),"]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isUsefulImportRegulationFilterToken(token: string): boolean {
+  if (!token || /^\d+$/.test(token)) return false;
+  if (/[\uAC00-\uD7AF]/.test(token)) return token.length >= 2;
+  return token.length >= 3;
 }
 
 function formatImportRegulationCacheStaleMessage(
@@ -2959,8 +2420,8 @@ async function fetchKsureIndustryRisks(
     };
   }
 
-  const maxPages = 10;
-  const pageSize = 200;
+  const maxPages = KSURE_INDUSTRY_RISK_PAGE_LIMIT;
+  const pageSize = KSURE_INDUSTRY_RISK_PAGE_SIZE;
   const countryMatched: KsureIndustryRiskItem[] = [];
   let firstError: KsureIndustryRiskResult | null = null;
 
@@ -3609,6 +3070,17 @@ function mapCertificationRow(
       match_strategy: context.matchStrategy,
       hs_match: !isFallback,
       product_match: true,
+      match_decision: item.__match_decision ?? (isFallback ? "review" : "confirmed"),
+      hs_match_level: item.__hs_match_level ?? null,
+      hs_score: item.__hs_score ?? null,
+      text_score: item.__text_score ?? null,
+      category_score: item.__category_score ?? null,
+      country_score: item.__country_score ?? null,
+      final_score: item.__final_score ?? null,
+      detected_product_category: item.__product_category ?? null,
+      detected_item_category: item.__item_category ?? null,
+      exclude_reason: item.__exclude_reason ?? null,
+      matched_keywords: item.__matched_keywords ?? [],
       applicable_items: applicableItems,
       required_docs: item.needPapersCn || STATUS_TEXT.noCertainInfo,
       procedure: item.crtfcProsCn || STATUS_TEXT.noCertainInfo,
@@ -3710,242 +3182,6 @@ function mapRegulationRow(
       reg_end_date_raw: item.REGL_END_DE || "",
     },
   };
-}
-
-function mapWtoEpingRegulationRow(
-  item: WtoEpingNotification,
-  context: {
-    projectId: string;
-    userId: string;
-    countryCode: string;
-    countryName: string;
-    productName: string;
-    hsCode: string;
-    hskCode: string;
-    totalCount: number;
-  },
-): Record<string, unknown> {
-  const regulationType = buildWtoEpingRegulationType(item);
-  const sourceUrl = item.sourceUrl || WTO_EPING_PAGE;
-
-  return {
-    project_id: context.projectId,
-    user_id: context.userId,
-    country_code: context.countryCode,
-    topic: item.documentSymbol || regulationType || "WTO ePing SPS/TBT notification",
-    summary: buildWtoEpingSummary(item),
-    effective_date: item.distributionDate || null,
-    source_org: "WTO ePing",
-    source_url: sourceUrl,
-    raw: {
-      detail_state: "success",
-      input_country_code: context.countryCode,
-      input_country_name: context.countryName,
-      input_product_name: context.productName,
-      input_hs_code: context.hsCode,
-      input_hsk_code: context.hskCode,
-      match_confidence: "review_required",
-      match_strategy: "wto_eping_sps_tbt",
-      match_priority: "wto_eping",
-      matched_tokens: resolveEpingMatchedTokens(item, context.hsCode),
-      source_type: "wto_eping",
-      eping_classification: item.epingClassification ?? "direct_candidate",
-      eping_score: item.epingScore ?? null,
-      eping_query_type: item.queryType ?? STATUS_TEXT.noCertainInfo,
-      eping_reason: item.epingReason ?? STATUS_TEXT.noCertainInfo,
-      eping_matched_terms: item.epingMatchedTerms ?? [],
-      hs_match: resolveEpingHsMatchLevel(item, context.hsCode) !== "none",
-      hs_match_level: resolveEpingHsMatchLevel(item, context.hsCode),
-      product_match: Boolean(resolveEpingProductMatchedText(item)),
-      match_basis_label: resolveEpingMatchBasisLabel(item, context.hsCode),
-      eping_query_scope: item.matchScope || STATUS_TEXT.noCertainInfo,
-      eping_query_text: item.matchText || STATUS_TEXT.noCertainInfo,
-      origin_country_fixed: "KR",
-      origin_target_match: false,
-      import_country_match: true,
-      hs_code: item.hsCodeText || context.hsCode || STATUS_TEXT.noCertainInfo,
-      hsk_code: context.hskCode || STATUS_TEXT.noCertainInfo,
-      regulation_type: regulationType || STATUS_TEXT.noCertainInfo,
-      effective_date: item.distributionDate || STATUS_TEXT.noCertainInfo,
-      comment_deadline_date: item.commentDeadlineDate || STATUS_TEXT.noCertainInfo,
-      product_name: item.productsText || context.productName || STATUS_TEXT.noCertainInfo,
-      notifying_member: item.notifyingMember || STATUS_TEXT.noCertainInfo,
-      notification_area: item.area || STATUS_TEXT.noCertainInfo,
-      notification_type: item.notificationType || STATUS_TEXT.noCertainInfo,
-      document_symbol: item.documentSymbol || STATUS_TEXT.noCertainInfo,
-      notification_title: item.title || STATUS_TEXT.noCertainInfo,
-      source_url: sourceUrl,
-      fallback_source_url: WTO_EPING_PAGE,
-      wto_total_count: context.totalCount,
-      review_reason: "WTO ePing SPS/TBT notification candidate. Verify the original notice and product specification.",
-    },
-  };
-}
-
-function buildWtoEpingPlaceholderRegulationRow(context: {
-  projectId: string;
-  userId: string;
-  countryCode: string;
-  countryName: string;
-  productName: string;
-  hsCode: string;
-  hskCode: string;
-  result: WtoEpingNotificationResult;
-}): Record<string, unknown> {
-  const result = context.result;
-  const isMissingKey = /WTO_API_KEY is missing/i.test(result.message) ||
-    /WTO_API_KEY is missing/i.test(result.diagnostics.api_message ?? "");
-  const detailState = result.items.length > 0 && result.detailState === "success" ? "empty" : result.detailState;
-  const rawCount = result.rawCount || sumWtoEpingRawAttemptCount(result.diagnostics.attempts);
-  const directCount = result.items.length;
-  const broadCount = result.broadItems.length;
-  const excludedCount = result.excludedItems.length;
-  const summary = isMissingKey
-    ? "WTO_API_KEY 미설정으로 WTO ePing SPS/TBT 통보문 조회를 실행하지 못했습니다."
-    : detailState === "empty"
-      ? `WTO ePing 직접 후보 ${directCount}건, 광역 참고 ${broadCount}건, 제외 ${excludedCount}건입니다.`
-      : `WTO ePing SPS/TBT 통보문 조회 실패: ${toApiErrorMessage(result.message)}`;
-
-  return {
-    project_id: context.projectId,
-    user_id: context.userId,
-    country_code: context.countryCode,
-    topic: "WTO ePing SPS/TBT",
-    summary,
-    effective_date: null,
-    source_org: "WTO ePing",
-    source_url: result.sourceUrl || WTO_EPING_PAGE,
-    raw: {
-      detail_state: detailState,
-      input_country_code: context.countryCode,
-      input_country_name: context.countryName,
-      input_product_name: context.productName,
-      input_hs_code: context.hsCode,
-      input_hsk_code: context.hskCode,
-      country_name: context.countryName,
-      hs_code: context.hsCode || STATUS_TEXT.noCertainInfo,
-      hsk_code: context.hskCode || STATUS_TEXT.noCertainInfo,
-      product_name: context.productName || STATUS_TEXT.noCertainInfo,
-      source_type: "wto_eping",
-      match_confidence: "review_required",
-      match_strategy: "wto_eping_sps_tbt",
-      match_priority: "wto_eping",
-      hs_match: false,
-      product_match: false,
-      import_country_match: false,
-      origin_country_fixed: "KR",
-      origin_target_match: false,
-      api_status: result.status,
-      api_message: isMissingKey ? "WTO_API_KEY is missing" : result.diagnostics.api_message,
-      search_terms: result.diagnostics.query_terms,
-      search_attempts: result.diagnostics.attempts,
-      fallback_source_url: result.diagnostics.fallback_source_url,
-      institution_review_required: true,
-      wto_total_count: result.totalCount,
-      wto_raw_count: rawCount,
-      raw_count: rawCount,
-      direct_count: directCount,
-      broad_count: broadCount,
-      excluded_count: excludedCount,
-      broad_references: compactWtoEpingReferences(result.broadItems),
-      excluded_samples: compactWtoEpingReferences(result.excludedItems),
-      wto_api_key_missing: isMissingKey,
-    },
-  };
-}
-
-function compactWtoEpingReferences(items: WtoEpingNotification[]): Array<Record<string, unknown>> {
-  return items.slice(0, 5).map((item) => ({
-    document_symbol: item.documentSymbol,
-    title: item.title,
-    products_text: item.productsText,
-    hs_code_text: item.hsCodeText,
-    notifying_member: item.notifyingMember,
-    area: item.area,
-    distribution_date: item.distributionDate,
-    source_url: item.sourceUrl,
-    eping_classification: item.epingClassification,
-    eping_score: item.epingScore,
-    eping_query_type: item.queryType,
-    eping_reason: item.epingReason,
-    eping_matched_terms: item.epingMatchedTerms ?? [],
-  }));
-}
-
-function sumWtoEpingRawAttemptCount(attempts: DetailSearchAttemptLog[]): number {
-  return attempts.reduce((sum, attempt) => sum + (attempt.raw_count ?? attempt.item_count ?? 0), 0);
-}
-
-function buildWtoEpingRegulationType(item: WtoEpingNotification): string {
-  const area = item.area.trim();
-  const type = item.notificationType.trim();
-  if (area && type && !type.toUpperCase().includes(area.toUpperCase())) {
-    return `${area} ${type}`;
-  }
-  return type || area;
-}
-
-function resolveEpingMatchConfidence(item: WtoEpingNotification, hsCode: string): string {
-  const hs6 = hsCode.replace(/\D/g, "").slice(0, 6);
-  if (hs6.length >= 6) {
-    const itemHsDigits = (item.hsCodeText || "").match(/\d{4,10}/g) || [];
-    if (itemHsDigits.some((h) => h.slice(0, 6) === hs6)) return "high";
-  }
-  return "review_required";
-}
-
-function resolveEpingMatchedTokens(item: WtoEpingNotification, hsCode: string): string[] {
-  const tokens: string[] = [];
-  if (Array.isArray(item.epingMatchedTerms)) {
-    tokens.push(...item.epingMatchedTerms.map((term) => asText(term)).filter(Boolean));
-  }
-  const hs6 = hsCode.replace(/\D/g, "").slice(0, 6);
-  const hs4 = hsCode.replace(/\D/g, "").slice(0, 4);
-  if (hs6.length >= 6) {
-    const itemHsDigits = (item.hsCodeText || "").match(/\d{4,10}/g) || [];
-    const matched = itemHsDigits.find((h) => h.slice(0, 6) === hs6);
-    if (matched) tokens.push(`HS ${matched}`);
-  }
-  if (tokens.length === 0 && hs4.length >= 4) {
-    const itemHsDigits = (item.hsCodeText || "").match(/\d{4,10}/g) || [];
-    const matched = itemHsDigits.find((h) => h.length === 4 && h.slice(0, 4) === hs4);
-    if (matched) tokens.push(`HS ${matched}`);
-  }
-  const productMatch = resolveEpingProductMatchedText(item);
-  if (productMatch) tokens.push(productMatch);
-  if (tokens.length === 0 && hsCode) tokens.push(hsCode);
-  return tokens;
-}
-
-function resolveEpingHsMatchLevel(item: WtoEpingNotification, hsCode: string): string {
-  const hs6 = hsCode.replace(/\D/g, "").slice(0, 6);
-  if (hs6.length >= 6) {
-    const itemHsDigits = (item.hsCodeText || "").match(/\d{4,10}/g) || [];
-    if (itemHsDigits.some((h) => h.slice(0, 6) === hs6)) return "hs6_prefix";
-    if (itemHsDigits.some((h) => h.slice(0, 4) === hs6.slice(0, 4))) return "hs4_prefix";
-  }
-  return "none";
-}
-
-function resolveEpingMatchBasisLabel(item: WtoEpingNotification, hsCode: string): string {
-  const level = resolveEpingHsMatchLevel(item, hsCode);
-  if (level === "hs6_prefix") return "HS 6자리 정밀 매칭";
-  if (level === "hs4_prefix") return "HS 4자리 검토 매칭";
-  if (resolveEpingProductMatchedText(item)) return "제품 키워드 매칭";
-  return "관련성 필터 통과";
-}
-
-function resolveEpingProductMatchedText(item: WtoEpingNotification): string {
-  if (
-    (
-      item.matchScope === "wto_eping_free_text_country" ||
-      item.matchScope === "wto_eping_exact_product_country" ||
-      item.matchScope === "wto_eping_product_family_country"
-    ) && item.matchText
-  ) {
-    return `제품 키워드 ${item.matchText}`;
-  }
-  return "";
 }
 
 function buildRegulationSummary(item: KotraImportRegulationItem): string {
@@ -4576,16 +3812,6 @@ function normalizeSourceUrl(url: string): string {
 function resolveDetailState(ok: boolean, itemCount: number): DetailState {
   if (!ok) return "error";
   return itemCount > 0 ? "success" : "empty";
-}
-
-function resolveCombinedRegulationDetailState(
-  kotraState: DetailState,
-  wtoState: DetailState,
-): DetailState {
-  if (kotraState === "success" || wtoState === "success") return "success";
-  if (kotraState === "error" && wtoState === "error") return "error";
-  if (kotraState === "stale" && wtoState !== "success") return "stale";
-  return kotraState;
 }
 
 function countSuccessfulDetailRows(rows: Array<Record<string, unknown>>): number {

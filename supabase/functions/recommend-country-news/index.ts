@@ -7,12 +7,13 @@ import {
   buildNewsRelevanceText,
   buildNewsSelectionReason,
   buildProductRelevanceTokens,
+  buildRepresentativeProductSearchTerms,
   classifyNewsForProductContext,
   classifyNewsCategory,
   classifyNewsRecency,
   COUNTRY_ALIAS_MAP,
   COUNTRY_NAME_BY_CODE,
-  EXPORT_ENVIRONMENT_QUERY_TERMS,
+  extractNewsSourceText,
   extractProductTokens,
   hasDefensibleProductExportFit,
   isWeakProductRelevanceToken,
@@ -48,10 +49,6 @@ const COUNTRY_NEWS_QUERY_LIMIT = 20;
 const COUNTRY_NEWS_ROWS_PER_QUERY = 20;
 const COUNTRY_BASE_QUERY_LIMIT = 18;
 const COUNTRY_SEARCH_ALIAS_LIMIT = 3;
-const COUNTRY_PRODUCT_KEYWORD_QUERY_LIMIT = 3;
-const COUNTRY_STRONG_TOKEN_QUERY_LIMIT = 4;
-const COUNTRY_HS_DESCRIPTION_QUERY_LIMIT = 3;
-const COUNTRY_EXPORT_ENV_QUERY_LIMIT = 8;
 const COUNTRY_AI_EXPANDED_QUERY_LIMIT = 14;
 const AI_NEWS_REVIEW_CANDIDATE_LIMIT = 60;
 const NEWS_EVIDENCE_PER_CATEGORY_LIMIT = 6;
@@ -59,21 +56,6 @@ const COUNTRY_BACKGROUND_FALLBACK_LIMIT = 5;
 const ARTICLE_BODY_MAX_LENGTH = 12000;
 const ARTICLE_BODY_FETCH_CONCURRENCY = 2;
 const ARTICLE_BODY_MIN_USEFUL_LENGTH = 300;
-const COUNTRY_EXPORT_NEWS_TERMS = [
-  "소비",
-  "소매",
-  "수입 수요",
-  "물류",
-  "관세",
-  "통관",
-  "retail",
-  "consumer demand",
-  "import demand",
-  "logistics",
-  "customs",
-  "tariff",
-] as const;
-
 const COUNTRY_NEWS_QUERY: Record<string, string[]> = {
   AE: ["United Arab Emirates", "UAE", "아랍에미리트"],
   BR: ["Brazil", "브라질"],
@@ -322,10 +304,19 @@ function buildProductNewsQueries(product: ProductContext): string[] {
   const directTerms = product.relevanceTokens
     .filter((token) => !isWeakProductRelevanceToken(token))
     .filter((token) => !/^\d{4,}$/.test(token))
+    .filter((token) => !isNoisyCompositeProductQuery(token))
     .filter((token) => token.length >= 3 || token.includes(" ") || (token.length === 2 && isKorean(token)));
   const queryHints = buildProductQueryHints(product);
+  const representativeTerms = buildRepresentativeProductSearchTerms({
+    productName: product.name,
+    hsCode: product.hsCode,
+    hsDescription: product.hsDescription,
+    tokens: product.relevanceTokens,
+    tags: product.tags,
+  });
 
-  if (product.name && product.name !== "N/A") pushQuery(product.name);
+  for (const term of representativeTerms) pushQuery(term);
+  if (shouldUseRawProductNameQuery(product.name)) pushQuery(product.name);
   for (const token of directTerms.slice(0, PRODUCT_DIRECT_TOKEN_QUERY_LIMIT)) pushQuery(token);
   if (product.hsCode.length >= 6) pushQuery(product.hsCode.slice(0, 6));
   pushHsProductCombinationQueries(product, directTerms, pushQuery);
@@ -350,6 +341,45 @@ function pushHsProductCombinationQueries(
   for (const token of directTerms.slice(0, PRODUCT_HS_COMBINATION_TOKEN_LIMIT)) {
     pushQuery(`${hs4} ${token}`);
   }
+}
+
+function shouldUseRawProductNameQuery(value: string): boolean {
+  const cleaned = value.replace(/\s+/g, " ").trim();
+  if (!cleaned || cleaned === "N/A") return false;
+  return !isNoisyCompositeProductQuery(cleaned);
+}
+
+function isNoisyCompositeProductQuery(value: string): boolean {
+  const cleaned = value.replace(/\s+/g, " ").trim();
+  if (!cleaned) return false;
+  if (/[(（][^()（）]*[,;/·][^()（）]*[)）]/.test(cleaned)) return true;
+  if (/[\[\]()[\]（）]/.test(cleaned) && cleaned.length > 40) return true;
+  if (cleaned.split(/[,;]/g).length >= 3) return true;
+  if (hasVariantOrModelListQuery(cleaned)) return true;
+  if (cleaned.length > 80) return true;
+  return false;
+}
+
+function hasVariantOrModelListQuery(value: string): boolean {
+  const words = value
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+    .split(/\s+/g)
+    .map((word) => word.trim())
+    .filter(Boolean);
+  const modelLikeCount = words.filter(isModelOrVariantQueryToken).length;
+  if (modelLikeCount >= 2) return true;
+  const modelLabelCount = words.filter((word) => /^(?:[a-z0-9가-힣_-]+)?(?:model|모델)(?:[a-z0-9가-힣_-]+)?$/i.test(word)).length;
+  return modelLabelCount >= 2;
+}
+
+function isModelOrVariantQueryToken(token: string): boolean {
+  if (!token || token.length > 24) return false;
+  if (/^(?=.*[a-z])(?=.*\d)[a-z0-9가-힣]+$/i.test(token)) return true;
+  if (/^[a-z]{1,5}\d+[a-z0-9-]*$/i.test(token)) return true;
+  if (/^\d+[a-z]{1,5}[a-z0-9-]*$/i.test(token)) return true;
+  if (/^(?:[a-z0-9가-힣_-]+)?(?:model|모델)(?:[a-z0-9가-힣_-]+)?$/i.test(token)) return true;
+  return false;
 }
 
 function buildProductQueryHints(product: ProductContext): string[] {
@@ -387,7 +417,10 @@ async function fetchCountryMarketNews(
   product: ProductContext,
   expandedQueries: string[] = [],
 ): Promise<KotraNewsResult> {
-  const queries = dedupeQueryTerms([...buildCountryNewsQueries(country, product), ...expandedQueries]).slice(0, COUNTRY_NEWS_QUERY_LIMIT);
+  const queries = dedupeQueryTerms([
+    ...buildCountryNewsQueries(country),
+    ...filterCountryAliasQueries(expandedQueries, country),
+  ]).slice(0, COUNTRY_NEWS_QUERY_LIMIT);
   if (queries.length === 0) return { ok: true, status: 200, message: "No query terms", query: "", queryCount: 0, items: [] };
 
   const results = await mapWithConcurrency(
@@ -398,7 +431,7 @@ async function fetchCountryMarketNews(
   return mergeNewsResults(results, queries);
 }
 
-function buildCountryNewsQueries(country: SeedCountry, product: ProductContext): string[] {
+function buildCountryNewsQueries(country: SeedCountry): string[] {
   const countryAliases: string[] = [];
   for (const alias of COUNTRY_ALIAS_MAP[country.code] ?? []) {
     const cleaned = alias.trim();
@@ -411,23 +444,6 @@ function buildCountryNewsQueries(country: SeedCountry, product: ProductContext):
   const compactName = country.name.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
   if (compactName && !countryAliases.includes(compactName)) countryAliases.push(compactName);
   const countrySearchAliases = selectCountrySearchAliases(countryAliases, compactName);
-  const primaryAlias = countrySearchAliases[0] ?? compactName;
-
-  const productKeywords: string[] = [];
-  if (product.name && product.name !== "N/A") productKeywords.push(product.name);
-  const strongTokens = product.relevanceTokens
-    .filter((token) => !isWeakProductRelevanceToken(token) && !/^\d{4,}$/.test(token) && token.length >= 2)
-    .slice(0, COUNTRY_STRONG_TOKEN_QUERY_LIMIT);
-  for (const token of strongTokens) {
-    if (!productKeywords.includes(token)) productKeywords.push(token);
-  }
-  if (product.hsDescription) {
-    const descParts = product.hsDescription
-      .split(/[\s/·,()]+/g)
-      .map((token) => token.trim())
-      .filter((token) => token.length >= 2 && !isWeakProductRelevanceToken(token) && !/^\d{4,}$/.test(token));
-    productKeywords.push(...descParts.slice(0, COUNTRY_HS_DESCRIPTION_QUERY_LIMIT));
-  }
 
   const out: string[] = [];
   const pushQuery = (value: string) => {
@@ -436,16 +452,23 @@ function buildCountryNewsQueries(country: SeedCountry, product: ProductContext):
     out.push(cleaned);
   };
 
-  for (const alias of countrySearchAliases) {
-    for (const keyword of productKeywords.slice(0, COUNTRY_PRODUCT_KEYWORD_QUERY_LIMIT)) pushQuery(`${alias} ${keyword}`);
-    if (product.hsCode.length >= 6) pushQuery(`${alias} ${product.hsCode.slice(0, 6)}`);
-  }
   for (const alias of countrySearchAliases) pushQuery(alias);
-  for (const alias of countrySearchAliases) {
-    for (const term of EXPORT_ENVIRONMENT_QUERY_TERMS.slice(0, COUNTRY_EXPORT_ENV_QUERY_LIMIT)) pushQuery(`${alias} ${term}`);
-  }
-  for (const term of COUNTRY_EXPORT_NEWS_TERMS) pushQuery(`${primaryAlias} ${term}`);
   return out.slice(0, COUNTRY_BASE_QUERY_LIMIT);
+}
+
+function filterCountryAliasQueries(queries: string[], country: SeedCountry): string[] {
+  const compactName = country.name.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+  const allowedAliases = dedupeQueryTerms([
+    ...(COUNTRY_ALIAS_MAP[country.code] ?? []),
+    ...(COUNTRY_NEWS_QUERY[country.code] ?? []),
+    compactName,
+  ]).map(normalizeCountryAliasQuery);
+  const allowed = new Set(allowedAliases);
+  return queries.filter((query) => allowed.has(normalizeCountryAliasQuery(query)));
+}
+
+function normalizeCountryAliasQuery(value: string): string {
+  return value.replace(/\s+/g, " ").trim().toLowerCase();
 }
 
 function selectCountrySearchAliases(countryAliases: string[], compactName: string): string[] {
@@ -471,7 +494,11 @@ async function expandNewsQueriesWithAi(
     "Return strict JSON only.",
     "Use KOTRA API as the only news source; do not invent articles.",
     "Keep queries short and searchable.",
-    "Include direct product terms, HS names, product-family terms, and country export-environment terms.",
+    "Infer the searchable product family before writing product_queries.",
+    "If the product contains mixed model names, SKUs, options, components, or variants in any format, do not copy the raw product string.",
+    "Split or collapse such inputs into representative title keywords: HS standard item name, generic product family, and at most one well-known representative model.",
+    "Use product_queries for product/title terms and country_queries only for country name aliases.",
+    "Do not combine country names with product, HS, or export-environment terms in country_queries.",
     "Do not add unrelated narrow industries unless they are part of the product context.",
     "Schema: {\"product_queries\":[\"...\"],\"country_queries\":[\"...\"]}",
   ].join(" ");
@@ -483,16 +510,17 @@ async function expandNewsQueriesWithAi(
     `HS description: ${product.hsDescription || "N/A"}`,
     `Tags: ${product.tags.join(", ") || "N/A"}`,
     `Country: ${country.name}(${country.code})`,
-    "Return product queries for direct/adjacent product evidence and country queries for macro export-environment evidence.",
+    "Return product queries for direct/adjacent product evidence and country queries as country aliases only.",
   ].join("\n");
 
   try {
     const aiText = await callAiJson(systemPrompt, userPrompt);
     const parsed = asRecord(JSON.parse(aiText));
+    const aiProductQueries = asArray(parsed.product_queries).map(asText).filter((query) => !isNoisyCompositeProductQuery(query));
     return {
       product: dedupeQueryTerms([
+        ...aiProductQueries,
         ...fallback.product,
-        ...asArray(parsed.product_queries).map(asText),
       ]).slice(0, PRODUCT_AI_EXPANDED_QUERY_LIMIT),
       country: dedupeQueryTerms([
         ...fallback.country,
@@ -511,21 +539,23 @@ function buildFallbackExpandedNewsQueries(
   const terms = product.relevanceTokens
     .filter((token) => !isWeakProductRelevanceToken(token))
     .filter((token) => !/^\d{4,}$/.test(token))
+    .filter((token) => !isNoisyCompositeProductQuery(token))
     .slice(0, PRODUCT_DIRECT_TOKEN_QUERY_LIMIT);
-  const countryName = country.name.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+  const representativeTerms = buildRepresentativeProductSearchTerms({
+    productName: product.name,
+    hsCode: product.hsCode,
+    hsDescription: product.hsDescription,
+    tokens: product.relevanceTokens,
+    tags: product.tags,
+  });
   const hints = buildProductQueryHints(product);
   return {
     product: dedupeQueryTerms([
-      product.name,
-      product.hsDescription,
+      ...representativeTerms,
       ...terms,
       ...hints,
     ]).slice(0, PRODUCT_AI_EXPANDED_QUERY_LIMIT),
-    country: dedupeQueryTerms([
-      ...terms.slice(0, COUNTRY_PRODUCT_KEYWORD_QUERY_LIMIT).map((term) => `${countryName} ${term}`),
-      ...hints.slice(0, 3).map((term) => `${countryName} ${term}`),
-      ...COUNTRY_EXPORT_NEWS_TERMS.map((term) => `${countryName} ${term}`),
-    ]).slice(0, COUNTRY_AI_EXPANDED_QUERY_LIMIT),
+    country: buildCountryNewsQueries(country).slice(0, COUNTRY_AI_EXPANDED_QUERY_LIMIT),
   };
 }
 
@@ -547,12 +577,17 @@ async function reviewNewsCandidatesWithAi(
     "Do not create or cite articles not provided in candidates.",
     "Classify each candidate as direct_product, adjacent_value_chain, broad_macro_export_env, or unrelated.",
     "Your category and scores are the final product/export relevance decision for saving or rejecting each candidate.",
+    "COUNTRY MATCHING: Analyze the text and source_text to infer the true target country (inferred_country_code).",
+    "If the inferred country differs from the Selected country:",
+    "- DO NOT classify it as direct_product.",
+    "- If it contains strong product-specific news impacting the global supply chain, market, or competitors (e.g., export bans in another country), classify it as adjacent_value_chain.",
+    "- Otherwise, if it has no global/competitor relevance to the product, you MUST classify it as unrelated (reject_reason: country_mismatch).",
     "direct_product includes exact_product, product_family, or hs_family evidence.",
     "Use direct_product when the article covers product market, demand, imports, regulation, certification, sales, or product-use evidence for the product name, HS/HSK family, or inferred product family.",
     "adjacent_value_chain basis must be component, material, demand_channel, distribution_channel, regulation_certification, or logistics_customs.",
     "Generic manufacturing, generic plastics, generic logistics, or a different narrow industry is unrelated unless tied to the product context.",
     "broad_macro_export_env is allowed for national export conditions such as GDP, demand, exchange rates, tariffs, customs, logistics cost, consumer sentiment, purchasing power, or import demand.",
-    "Schema: {\"articles\":[{\"id\":\"...\",\"category\":\"direct_product\",\"product_link_score\":0,\"country_link_score\":0,\"export_impact_score\":0,\"basis\":\"exact_product|product_family|hs_family|component|material|demand_channel|distribution_channel|regulation_certification|logistics_customs|macro|none\",\"reject_reason\":\"...\"}]}",
+    "Schema: {\"articles\":[{\"id\":\"...\",\"inferred_country_code\":\"US\",\"category\":\"direct_product\",\"product_link_score\":0,\"country_link_score\":0,\"export_impact_score\":0,\"basis\":\"exact_product|product_family|hs_family|component|material|demand_channel|distribution_channel|regulation_certification|logistics_customs|macro|none\",\"reject_reason\":\"...\"}]}",
   ].join(" ");
   const payload = uniqueItems.map((item, index) => ({
     id: String(index),
@@ -560,6 +595,7 @@ async function reviewNewsCandidatesWithAi(
     summary: item.cntntSumar,
     keywords: item.kwrd,
     body_excerpt: stripHtml(item.newsBdt).slice(0, 900),
+    source_text: extractNewsSourceText(item.newsBdt),
     country_metadata: [item.natn, item.regn].filter(Boolean).join(" / "),
     published_at: item.othbcDt,
   }));
@@ -656,7 +692,7 @@ async function fetchKotraNewsByQuery(
 ): Promise<KotraNewsResult> {
   const url = new URL(KOTRA_MARKET_NEWS_ENDPOINT);
   url.searchParams.set("serviceKey", key);
-  url.searchParams.set("_type", "json");
+  url.searchParams.set("type", "json");
   url.searchParams.set("numOfRows", String(numOfRows));
   url.searchParams.set("pageNo", "1");
   url.searchParams.set(searchParam, query);
@@ -989,14 +1025,15 @@ function resolveNewsScope(
 }
 
 function replaceNewsEvidenceSources(existingSources: RationaleSource[], newsSources: RationaleSource[]): RationaleSource[] {
-  const retained = existingSources.filter((source) =>
-    source.type === "product_evidence" ||
-      source.type === "country_background" ||
-      source.type === "news"
-      ? false
-      : true
-  );
-  return [...retained, ...newsSources];
+  const retained = existingSources.filter((source) => !isNewsEvidenceSource(source));
+  const retainedNews = existingSources.filter(isNewsEvidenceSource);
+  return [...retained, ...newsSources, ...retainedNews];
+}
+
+function isNewsEvidenceSource(source: RationaleSource): boolean {
+  return source.type === "product_evidence" ||
+    source.type === "country_background" ||
+    source.type === "news";
 }
 
 function buildProductContext(raw: Record<string, unknown> | null): ProductContext {

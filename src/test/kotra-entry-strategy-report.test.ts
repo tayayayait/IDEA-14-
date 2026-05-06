@@ -63,6 +63,46 @@ describe("KOTRA entry strategy report integration", () => {
     });
   });
 
+  it("preserves KOTRA attachment query params in normalized report drafts", () => {
+    const rawAttachmentUrl =
+      "https://dream.kotra.or.kr/ajaxa/fileCpnt/fileDown.do?gbn=n01&amp;nttSn=237789&amp;atFileSn=114941&amp;pFrontYn=Y";
+
+    const draft = normalizeReportDraft({
+      countryStrategies: [{
+        countryCode: "US",
+        countryName: "US",
+        feasibilityGrade: "conditional",
+        position: "Top 1",
+        entryMode: "Office consultation",
+        entryStrategy: "Use current evidence.",
+        requiredChecks: [],
+        certRegChecklist: [],
+        paymentRiskAssessment: "",
+        riskResponse: "",
+        evidenceLimits: [],
+        evidenceRefs: [],
+        newsImpactAnalysis: "",
+        marketOpportunity: "",
+        kotraEntryStrategy: {
+          status: "available",
+          title: "2026 US Entry Strategy",
+          publishedDate: "2025-12-22",
+          tradeOffice: "Washington DC",
+          sourceUrl: "https://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?MENU_ID=70&CONTENTS_NO=1&bbsGbn=00&bbsSn=506&pNttSn=237789",
+          attachmentName: "2026 US Entry Strategy.pdf",
+          attachmentUrl: rawAttachmentUrl,
+          usedPdf: false,
+          basisSummary: "",
+          limitations: [],
+        },
+      }],
+    }, evidence);
+
+    expect(draft.countryStrategies[0].kotraEntryStrategy?.attachmentUrl).toBe(
+      "https://dream.kotra.or.kr/ajaxa/fileCpnt/fileDown.do?gbn=n01&nttSn=237789&atFileSn=114941&pFrontYn=Y",
+    );
+  });
+
   it("does not preserve PDF-analysis assumptions in report drafts", () => {
     const draft = normalizeReportDraft({
       countryStrategies: [{

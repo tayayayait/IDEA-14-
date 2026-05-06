@@ -2,8 +2,8 @@ export type DetailSectionState = "not_run" | "ready" | "empty" | "error" | "stal
 export type DetailRowState = "success" | "empty" | "error" | "stale";
 export type CountryDetailApiState = "idle" | "running" | "success" | "partial_success" | "error" | "stale";
 export type DetailContextKind = "certification" | "regulation";
-export type CertificationSourceKind = "kotra_overseas_cert" | "sme_overseas_cert" | "unknown_certification";
-export type RegulationSourceKind = "kotra_import_regulation" | "wto_eping" | "unknown_regulation";
+export type CertificationSourceKind = "kotra_overseas_cert" | "unknown_certification";
+export type RegulationSourceKind = "kotra_import_regulation" | "unknown_regulation";
 export type CurrentDetailContext = {
   countryCode?: string | null;
   productName?: string | null;
@@ -87,9 +87,6 @@ export function getCertificationSourceKind(row: DetailLikeRow): CertificationSou
   const sourceType = asText(raw.source_type).toLowerCase();
   const sourceOrg = asText(row.source_org).toLowerCase();
 
-  if (sourceType === "sme_overseas_cert" || sourceOrg.includes("중소벤처기업부")) {
-    return "sme_overseas_cert";
-  }
   if (sourceType === "kotra_overseas_cert" || sourceOrg === "kotra") {
     return "kotra_overseas_cert";
   }
@@ -101,7 +98,6 @@ export function getRegulationSourceKind(row: DetailLikeRow): RegulationSourceKin
   const sourceType = asText(raw.source_type).toLowerCase();
   const sourceOrg = asText(row.source_org).toLowerCase();
 
-  if (sourceType === "wto_eping" || sourceOrg === "wto eping") return "wto_eping";
   if (
     sourceOrg === "kotra" ||
     sourceType === "kotra_cache" ||

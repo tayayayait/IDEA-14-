@@ -6,6 +6,15 @@ const edgeSource = () =>
   readFileSync(join(process.cwd(), "supabase/functions/recommend-countries/index.ts"), "utf8");
 
 describe("recommend-countries edge budget", () => {
+  it("preserves generated news evidence across recommendation reruns", () => {
+    const source = edgeSource();
+
+    expect(source).toContain('select("country_code,rationale")');
+    expect(source).toContain("const persistentNewsEvidenceByCountry =");
+    expect(source).toContain("extractPersistentNewsEvidenceSources(");
+    expect(source).toContain("mergePersistentNewsEvidenceSources(");
+  });
+
   it("keeps customs trade work out of the recommendation function", () => {
     const source = edgeSource();
 

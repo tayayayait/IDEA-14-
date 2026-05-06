@@ -26,7 +26,7 @@ import {
 } from "@/lib/hs-selection-policy";
 
 const UNKNOWN_TEXT = "확실한 정보 없음";
-const HS_SUGGEST_TIMEOUT_MS = 16000;
+const HS_SUGGEST_TIMEOUT_MS = 20000;
 const RECOMMEND_COUNTRIES_TIMEOUT_MS = 120000;
 type HsSelectionSource = "auto" | "manual";
 
@@ -293,7 +293,7 @@ export default function Step2Product() {
       return;
     }
 
-    const draft = sanitize(result.data?.description ?? "");
+    const draft = buildDescriptionParagraphs(sanitize(result.data?.description ?? ""));
     if (!draft) {
       setDescriptionAiState("empty");
       if (!silent) toast.warning("AI 설명 초안을 생성하지 못했습니다.");
@@ -433,7 +433,7 @@ export default function Step2Product() {
         return;
       }
 
-      const draft = sanitize(draftResult.data?.description ?? "");
+      const draft = buildDescriptionParagraphs(sanitize(draftResult.data?.description ?? ""));
       if (!draft) {
         setDescriptionAiState("empty");
         return;
@@ -1031,6 +1031,23 @@ function readString(value: unknown): string {
 
 function cleanText(value: string): string {
   return value.replace(/\s+/g, " ").trim();
+}
+
+function buildDescriptionParagraphs(text: string): string {
+  const normalized = text
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((line) => line.replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .join(" ");
+  if (!normalized) return "";
+
+  const sentences = normalized
+    .match(/[^.!?。！？]+[.!?。！？]+(?:["'”’)]*)?|[^.!?。！？]+$/g)
+    ?.map((sentence) => sentence.trim())
+    .filter(Boolean);
+
+  return sentences?.length ? sentences.join("\n\n") : normalized;
 }
 
 function normalizeCode(code: string): string {

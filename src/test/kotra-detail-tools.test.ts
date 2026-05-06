@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildCertificationMatchBasis,
   buildCertificationSearchAttempts,
+  classifyKotraCertificationMatches,
   rankCertificationsByDetailRelevance,
   rankCertificationsByProductFallback,
   rankImportRegulationsByDetailRelevance,
@@ -352,6 +353,98 @@ describe("kotra-detail-tools", () => {
     );
 
     expect(ranked.map((item) => item.systName)).toEqual(["Germany DRAM Program"]);
+  });
+
+  it("classifies HS strong certification matches as confirmed only after product and category checks", () => {
+    const result = classifyKotraCertificationMatches(
+      [
+        certificationRow({
+          systName: "Vietnam Wireless Communication Device Program",
+          nat: "Socialist Republic of Vietnam",
+          hscd: "851762",
+          applyTgtCmdltCn: "wireless communication device",
+          nttSj: "Wireless communication device certification",
+        }),
+        certificationRow({
+          systName: "Vietnam Food Device Program",
+          nat: "Vietnam",
+          hscd: "851762",
+          applyTgtCmdltCn: "food additive device",
+          nttSj: "Food certification",
+        }),
+      ],
+      {
+        countryCode: "VN",
+        countryAliases: ["Vietnam", "Socialist Republic of Vietnam"],
+        hsCode: "851762",
+        hskCode: "8517629000",
+        productName: "wireless communication device",
+        productTokens: ["wireless", "communication", "device"],
+      },
+    );
+
+    expect(result.confirmed.map((row) => row.item.systName)).toEqual([
+      "Vietnam Wireless Communication Device Program",
+    ]);
+    expect(result.excluded.map((row) => row.item.systName)).toContain("Vietnam Food Device Program");
+  });
+
+  it("allows HS-missing certification rows only as review when product relevance is strong", () => {
+    const result = classifyKotraCertificationMatches(
+      [
+        certificationRow({
+          systName: "Vietnam Wireless Device No HS Program",
+          nat: "Vietnam",
+          hscd: "",
+          applyTgtCmdltCn: "wireless communication device",
+          nttSj: "Wireless communication device certification",
+        }),
+        certificationRow({
+          systName: "Vietnam General Product No HS Program",
+          nat: "Vietnam",
+          hscd: "",
+          applyTgtCmdltCn: "general product certification",
+          nttSj: "General product certification",
+        }),
+      ],
+      {
+        countryCode: "VN",
+        countryAliases: ["Vietnam", "Socialist Republic of Vietnam"],
+        hsCode: "851762",
+        hskCode: "8517629000",
+        productName: "wireless communication device",
+        productTokens: ["wireless", "communication", "device"],
+      },
+    );
+
+    expect(result.confirmed).toEqual([]);
+    expect(result.review.map((row) => row.item.systName)).toEqual(["Vietnam Wireless Device No HS Program"]);
+    expect(result.excluded.map((row) => row.item.systName)).toContain("Vietnam General Product No HS Program");
+  });
+
+  it("keeps HS partial certification matches out of confirmed results", () => {
+    const result = classifyKotraCertificationMatches(
+      [
+        certificationRow({
+          systName: "Vietnam Wireless Device HS4 Program",
+          nat: "Vietnam",
+          hscd: "851700",
+          applyTgtCmdltCn: "wireless communication device",
+          nttSj: "Wireless communication device certification",
+        }),
+      ],
+      {
+        countryCode: "VN",
+        countryAliases: ["Vietnam", "Socialist Republic of Vietnam"],
+        hsCode: "851762",
+        hskCode: "8517629000",
+        productName: "wireless communication device",
+        productTokens: ["wireless", "communication", "device"],
+      },
+    );
+
+    expect(result.confirmed).toEqual([]);
+    expect(result.review.map((row) => row.item.systName)).toEqual(["Vietnam Wireless Device HS4 Program"]);
   });
 
   it("builds certification match basis from selected market, HS/HSK, and product", () => {

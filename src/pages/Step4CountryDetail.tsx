@@ -53,6 +53,12 @@ import {
 import { normalizeExecutionState, toApiChipState, type ExecutionState } from "@/lib/execution-state";
 import { useRunningProgress } from "@/hooks/useRunningProgress";
 import { normalizeReportText } from "@/lib/report-text";
+import {
+  buildNationalInfoPresentation,
+  cleanNationalInfoText,
+  type NationalInfoKind,
+  type NationalInfoPresentation,
+} from "@/lib/kotra-national-info";
 
 type AiNewsCategory = "direct_product" | "adjacent_value_chain" | "broad_macro_export_env" | "unrelated";
 
@@ -131,6 +137,9 @@ type DetailSourceModel<T> = {
   sectionState: "not_run" | "ready" | "empty" | "error" | "stale";
 };
 
+const KOTRA_CERT_NO_DIRECT_INFO_MESSAGE =
+  "KOTRA 해외인증정보 API에서 현재 입력한 국가·HS Code·제품명 기준으로 직접 관련된 해외인증 정보가 확인되지 않았습니다.\n다만 인증 필요 여부는 제품의 세부 사양, 용도, 구성품, 현지 수입자 요건에 따라 달라질 수 있으므로 최종 수출 전 현지 인증기관 또는 KOTRA 무역관 확인이 필요합니다.";
+
 export default function Step4CountryDetail() {
   const { session, loading: authLoading } = useAuthGuard();
   const { invoke, retryInSec, isRetrying } = useApiCall();
@@ -141,8 +150,6 @@ export default function Step4CountryDetail() {
   const [certs, setCerts] = useState<CertRow[]>([]);
   const [regs, setRegs] = useState<RegRow[]>([]);
   const [risks, setRisks] = useState<RiskRow[]>([]);
-  const [tasks, setTasks] = useState<{ text: string; done: boolean }[]>([]);
-  const [taskGenerating, setTaskGenerating] = useState(false);
   const [aiState, setAiState] = useState<ExecutionState>("idle");
   const [analysisCode, setAnalysisCode] = useState(() => buildProductAnalysisCode(null));
   const [analysisProductName, setAnalysisProductName] = useState("");
@@ -265,17 +272,14 @@ export default function Step4CountryDetail() {
   const detailExecuted = certs.length > 0 || regs.length > 0 || risks.length > 0 || !!nationalInfo;
   const visibleSources = filterVisibleSources(country?.rationale?.sources);
   const currentCertRows = filterRowsByCurrentDetailContext(certs, currentDetailContext, "certification");
-  const currentRegRows = filterRowsByCurrentDetailContext(regs, currentDetailContext, "regulation");
+  const currentRegRows = filterRowsByCurrentDetailContext(regs, currentDetailContext, "regulation")
+    .filter((row) => getRegulationSourceKind(row) === "kotra_import_regulation");
   const kotraCertSource = buildCertSourceModel(
     currentCertRows.filter((row) => getCertificationSourceKind(row) === "kotra_overseas_cert"),
     detailExecuted,
   );
   const kotraRegSource = buildRegSourceModel(
-    currentRegRows.filter((row) => getRegulationSourceKind(row) === "kotra_import_regulation"),
-    detailExecuted,
-  );
-  const wtoEpingSource = buildRegSourceModel(
-    currentRegRows.filter((row) => getRegulationSourceKind(row) === "wto_eping"),
+    currentRegRows,
     detailExecuted,
   );
   const certSuccessfulRows = getSuccessfulDetailRows(currentCertRows);
@@ -327,52 +331,11 @@ export default function Step4CountryDetail() {
     successfulRowCount: regConfirmedRows.length,
   });
 
-  const generateTasks = async () => {
-    if (!country || taskGenerating) return;
-    setTaskGenerating(true);
-    try {
-      const requestPayload = {
-        country_code: country.country_code,
-        country_name: country.country_name,
-        certs,
-        regs,
-        risks,
-      };
-      const result = await invoke<{ tasks?: string[]; message?: string; state?: string }>(
-        "ai-action-tasks",
-        requestPayload,
-        { timeoutMs: 12000, retryOn429: false, retryOn500: true, retry500DelayMs: 800 },
-      );
-      if (!result.ok) {
-        const message = sanitize(result.message ?? "과제 생성 실패");
-        const fallbackTasks = buildRuleBasedActionTasks(requestPayload);
-        if (fallbackTasks.length > 0) {
-          setTasks(fallbackTasks.map((text) => ({ text: sanitize(text), done: false })));
-          toast.warning(`${message} 규칙 기반 과제로 대체했습니다.`);
-          return;
-        }
-        toast.error(message);
-        return;
-      }
-      const taskList = ((result.data?.tasks ?? []) as string[]).map((text) => sanitize(text)).filter((text) => text.length > 0);
-      const normalizedTasks = taskList.length > 0 ? taskList : buildRuleBasedActionTasks(requestPayload);
-      setTasks(normalizedTasks.map((text) => ({ text, done: false })));
-      if (normalizeExecutionState(result.data?.state, "success") === "partial_success") {
-        toast.warning(sanitize(result.message ?? "AI 과제를 부분 결과로 생성했습니다."));
-      }
-    } finally {
-      setTaskGenerating(false);
-    }
-  };
-
   const renderCertRow = (row: CertRow) => (
     <li key={row.id} className="rounded-md border border-border p-3">
       <p className="font-medium">
         {certValue(row, "applicable_items", row.scheme ?? "정확한 정보 없음")}
         {row.required ? <span className="ml-2 text-xs text-risk-high">필수</span> : null}
-        {isCertReviewRequired(row) ? (
-          <span className="ml-2 text-xs text-risk-reviewable">HS 미검증 대체 후보</span>
-        ) : null}
       </p>
       <div className="mt-1 space-y-1 text-xs text-muted-foreground">
         <p>매칭 기준: {certValue(row, "match_basis", "정확한 정보 없음")}</p>
@@ -403,7 +366,6 @@ export default function Step4CountryDetail() {
     const sourceUrl = resolveRegSourceUrl(row, cc ?? country?.country_code ?? null);
     const sourceLabel = resolveRegSourceLabel(row);
     const backupSource = isRegBackupSource(row);
-    const wtoEpingSource = isWtoEpingRegSource(row);
     const matchConfidence = readDetailRawText(row.raw ?? null, "match_confidence").toLowerCase();
     const reviewRequired = isRegReviewRequired(row) && matchConfidence !== "high";
     const matchBasisLabel = resolveRegMatchBasisLabel(row);
@@ -411,101 +373,6 @@ export default function Step4CountryDetail() {
     const translatedRegType = translateRegulationType(
       regValue(row, "regulation_type", row.topic ?? "정확한 정보 없음"),
     );
-
-    // WTO ePing 전용 구조화 카드
-    if (wtoEpingSource) {
-      const docSymbol = regValue(row, "document_symbol", "");
-      const notifyingMember = regValue(row, "notifying_member", "");
-      const notifTitle = regValue(row, "notification_title", "");
-      const hsCode = regValue(row, "hs_code", "");
-      const effectiveDate = regValue(row, "effective_date", row.effective_date ?? "");
-      const commentDeadline = regValue(row, "comment_deadline_date", "");
-      const area = regValue(row, "notification_area", "");
-
-      return (
-        <li key={row.id} className="rounded-md border border-border p-3 space-y-2">
-          {/* 헤더: 규제유형 + 매칭 뱃지 */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {area ? (
-              <span className="inline-block rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-semibold text-blue-700">
-                {area}
-              </span>
-            ) : null}
-            <span className="font-medium text-sm">{translatedRegType}</span>
-            {reviewRequired ? (
-              <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700">검토 필요</span>
-            ) : matchConfidence === "high" ? (
-              <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-medium text-emerald-700">HS 정밀 매칭</span>
-            ) : null}
-          </div>
-
-          {/* 구조화된 정보 테이블 */}
-          <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs">
-            {docSymbol ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">문서번호</span>
-                <span className="font-mono text-[11px]">{docSymbol}</span>
-              </>
-            ) : null}
-            {notifyingMember ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">통보국</span>
-                <span>{translateCountryName(notifyingMember)}</span>
-              </>
-            ) : null}
-            {notifTitle ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">제목</span>
-                <span className="line-clamp-2">{notifTitle}</span>
-              </>
-            ) : null}
-            {hsCode ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">HS 코드</span>
-                <span>{hsCode}</span>
-              </>
-            ) : null}
-            {effectiveDate ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">배포일</span>
-                <span>{effectiveDate}</span>
-              </>
-            ) : null}
-            {commentDeadline && commentDeadline !== "정확한 정보 없음" ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">의견마감</span>
-                <span>{commentDeadline}</span>
-              </>
-            ) : null}
-            {matchBasisLabel ? (
-              <>
-                <span className="text-muted-foreground whitespace-nowrap">매칭 기준</span>
-                <span>{matchBasisLabel}{matchedTokensLabel ? ` · ${matchedTokensLabel}` : ""}</span>
-              </>
-            ) : null}
-          </div>
-
-          {reviewRequired ? (
-            <p className="text-[11px] text-amber-600">
-              WTO ePing 통보문 기반 후보입니다. 원문과 제품 스펙 확인이 필요합니다.
-            </p>
-          ) : null}
-
-          {/* 액션 버튼 */}
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            <Button type="button" size="sm" variant="outline" onClick={() => setSelectedReg(row)}>
-              상세 보기
-            </Button>
-            {sourceUrl ? (
-              <a href={sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-brand hover:underline">
-                <ExternalLink className="h-3 w-3" />
-                {sourceLabel}
-              </a>
-            ) : null}
-          </div>
-        </li>
-      );
-    }
 
     // 일반 규제(KOTRA 등) 카드
     return (
@@ -575,20 +442,20 @@ export default function Step4CountryDetail() {
             <SourceStatusPill source={source} />
           </div>
           <p className="text-xs text-muted-foreground">
-            확정 {source.confirmedRows.length}건 / 검토 후보 {source.reviewRows.length}건
+            확정 인증정보 {source.confirmedRows.length}건 / 검토 필요 인증정보 {source.reviewRows.length}건
           </p>
         </CardHeader>
         <CardContent>
           {source.sectionState === "not_run" ? (
             <Empty msg={notRunMessage ?? "상세 분석 미실행 상태입니다. 대상국 분석 실행을 눌러주세요."} />
           ) : contextMismatch ? (
-            <Empty msg="현재 제품명/HS코드 기준으로 확인된 해외인증 정보가 없습니다. 단, 인증정보 없음은 인증 불필요를 의미하지 않으므로 세부 HS코드와 제품 용도를 기준으로 추가 확인이 필요합니다." />
+            <Empty msg={KOTRA_CERT_NO_DIRECT_INFO_MESSAGE} />
           ) : source.sectionState !== "ready" ? (
             <SourceZeroResultNotice source={source} emptyMessage={emptyMessage} />
           ) : (
             <div className="space-y-4">
               <div>
-                <p className="mb-2 text-sm font-medium">확정 {source.confirmedRows.length}건</p>
+                <p className="mb-2 text-sm font-medium">확정 인증정보 {source.confirmedRows.length}건</p>
                 {source.confirmedRows.length > 0 ? (
                   <ul className="space-y-3">{source.confirmedRows.map(renderCertRow)}</ul>
                 ) : (
@@ -598,7 +465,7 @@ export default function Step4CountryDetail() {
               {source.reviewRows.length > 0 ? (
                 <div>
                   <p className="mb-2 text-sm font-medium text-risk-reviewable">
-                    검토 후보 {source.reviewRows.length}건
+                    검토 필요 인증정보 {source.reviewRows.length}건
                   </p>
                   <ul className="space-y-3">{source.reviewRows.map(renderCertRow)}</ul>
                 </div>
@@ -619,8 +486,6 @@ export default function Step4CountryDetail() {
     notRunMessage?: string;
   }) => {
     const { title, description, source, emptyMessage, contextMismatch = false, notRunMessage } = params;
-    const isWtoEpingCard = title === "WTO ePing SPS/TBT";
-    const wtoStats = isWtoEpingCard ? resolveWtoEpingStats(source.placeholderRow?.raw ?? null, source.reviewRows.length) : null;
     return (
       <Card>
         <CardHeader>
@@ -632,9 +497,7 @@ export default function Step4CountryDetail() {
             <SourceStatusPill source={source} />
           </div>
           <p className="text-xs text-muted-foreground">
-            {wtoStats
-              ? `직접 연관 ${wtoStats.directCount}건 / 연관 참고 ${wtoStats.broadCount}건 / 제외 ${wtoStats.excludedCount}건`
-              : `확정 ${source.confirmedRows.length}건 / 검토 후보 ${source.reviewRows.length}건`}
+            확정 {source.confirmedRows.length}건 / 검토 후보 {source.reviewRows.length}건
           </p>
         </CardHeader>
         <CardContent>
@@ -643,10 +506,7 @@ export default function Step4CountryDetail() {
           ) : contextMismatch ? (
             <Empty msg="현재 제품명/HS코드 기준으로 확인된 해외인증 정보가 없습니다. 단, 인증정보 없음은 인증 불필요를 의미하지 않으므로 세부 HS코드와 제품 용도를 기준으로 추가 확인이 필요합니다." />
           ) : source.sectionState !== "ready" ? (
-            <div className="space-y-3">
-              <SourceZeroResultNotice source={source} emptyMessage={emptyMessage} />
-              {isWtoEpingCard ? <WtoBroadReferencePanel raw={source.placeholderRow?.raw ?? null} /> : null}
-            </div>
+            <SourceZeroResultNotice source={source} emptyMessage={emptyMessage} />
           ) : (
             <div className="space-y-4">
               <div>
@@ -665,7 +525,6 @@ export default function Step4CountryDetail() {
                   <ul className="space-y-3">{source.reviewRows.map(renderRegRow)}</ul>
                 </div>
               ) : null}
-              {isWtoEpingCard ? <WtoBroadReferencePanel raw={source.placeholderRow?.raw ?? null} /> : null}
             </div>
           )}
         </CardContent>
@@ -792,12 +651,12 @@ export default function Step4CountryDetail() {
               </div>
               {detailExecuted ? (
                 <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-                  <p>핵심 리스크: {resolveKeyRisks(kotraRegSource, kotraCertSource, wtoEpingSource)}</p>
+                  <p>핵심 리스크: {resolveKeyRisks(kotraRegSource, kotraCertSource)}</p>
                   <p>다음 확인사항: {resolveNextCheckItems(kotraRegSource, kotraCertSource)}</p>
                 </div>
               ) : null}
             </div>
-            <Button onClick={runDetail} disabled={authLoading || !session || aiRunning || taskGenerating} className="min-h-11">
+            <Button onClick={runDetail} disabled={authLoading || !session || aiRunning} className="min-h-11">
               {aiRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               {aiRunning ? "상세 데이터 조회 중..." : "상세 분석 실행"}
             </Button>
@@ -859,7 +718,7 @@ export default function Step4CountryDetail() {
               title: "KOTRA 해외인증·규격",
               description: "국가·HS/HSK·제품 기준 KOTRA 해외인증 API 결과",
               source: kotraCertSource,
-              emptyMessage: "KOTRA 해외인증 API에서 국가·HS·제품 기준 인증 정보 없음",
+              emptyMessage: KOTRA_CERT_NO_DIRECT_INFO_MESSAGE,
               contextMismatch: certCurrentContextMismatch,
               notRunMessage: certMatchedCount > 0
                 ? `추천 단계에서 인증 ${certMatchedCount}건이 감지되었습니다. 상세 분석을 실행하면 출처별 카드에 동기화됩니다.`
@@ -877,15 +736,11 @@ export default function Step4CountryDetail() {
                 : undefined,
             })}
 
-            {renderRegSourceCard({
-              title: "WTO ePing SPS/TBT",
-              description: "국가·HS/HS4·제품 키워드 기준 WTO SPS/TBT 통보문 검토 후보",
-              source: wtoEpingSource,
-              emptyMessage: "직접 연관된 WTO ePing 규제 없음",
-              contextMismatch: regCurrentContextMismatch,
-            })}
-
-            <NationalInfoCard nationalInfo={nationalInfo} detailExecuted={detailExecuted} />
+            <NationalInfoCard
+              nationalInfo={nationalInfo}
+              detailExecuted={detailExecuted}
+              productContext={currentDetailContext}
+            />
 
             <Card className="md:col-span-2">
               <CardHeader>
@@ -1027,51 +882,6 @@ export default function Step4CountryDetail() {
               </CardContent>
             </Card>
 
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <div className="flex items-end justify-between">
-                  <div>
-                    <CardTitle className="text-base">7일 실행 과제</CardTitle>
-                    <CardDescription>상세 데이터를 기반으로 1주 내 실행 가능한 과제를 제안합니다.</CardDescription>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={generateTasks}
-                    disabled={taskGenerating || aiRunning || !country}
-                    className="min-h-11"
-                  >
-                    {taskGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                    {taskGenerating ? "과제 생성 중..." : "과제 생성"}
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {tasks.length === 0 ? (
-                  <Empty msg="과제 생성 버튼을 눌러 7일 실행 과제를 받아보세요." />
-                ) : (
-                  <ul className="space-y-2">
-                    {tasks.map((task, idx) => (
-                      <li key={idx}>
-                        <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border p-3 hover:bg-muted/30">
-                          <input
-                            type="checkbox"
-                            checked={task.done}
-                            onChange={(e) =>
-                              setTasks((arr) => arr.map((row, j) => (j === idx ? { ...row, done: e.target.checked } : row)))
-                            }
-                            className="mt-0.5 h-4 w-4 accent-brand"
-                          />
-                          <span className={task.done ? "text-sm text-muted-foreground line-through" : "text-sm"}>
-                            {task.text}
-                          </span>
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </CardContent>
-            </Card>
           </div>
 
           <Dialog open={Boolean(selectedReg)} onOpenChange={(open) => !open && setSelectedReg(null)}>
@@ -1079,44 +889,21 @@ export default function Step4CountryDetail() {
               <DialogHeader>
                 <DialogTitle>규제 상세 정보</DialogTitle>
                 <DialogDescription>
-                  {selectedReg && isWtoEpingRegSource(selectedReg)
-                    ? "WTO ePing 통보문 상세 정보입니다. 한국어로 번역되어 제공됩니다."
-                    : "KOTRA DS00000128 API/cache 및 국별 대세계 수입규제 CSV 기준 상세입니다."}
+                  KOTRA DS00000128 API/cache 및 국별 대세계 수입규제 CSV 기준 상세입니다.
                 </DialogDescription>
               </DialogHeader>
               {selectedReg ? (
                 <div className="space-y-2 text-sm max-h-[70vh] overflow-y-auto pr-2">
-                  {isWtoEpingRegSource(selectedReg) ? (
-                    // WTO ePing 전용 필드 매핑
-                    <>
-                      <RegDetailRow label="문서 번호" value={regValue(selectedReg, "document_symbol", "정확한 정보 없음")} />
-                      <RegDetailRow label="통보국" value={translateCountryName(regValue(selectedReg, "notifying_member", "정확한 정보 없음"))} />
-                      <RegDetailRow label="통보 분야" value={regValue(selectedReg, "notification_area", "정확한 정보 없음")} />
-                      <RegDetailRow label="규제 유형" value={translateRegulationType(regValue(selectedReg, "regulation_type", selectedReg.topic ?? "정확한 정보 없음"))} />
-                      <RegDetailRow label="HS 코드" value={regValue(selectedReg, "hs_code", "정확한 정보 없음")} />
-                      <RegDetailRow label="대상 제품" value={regValue(selectedReg, "products", "정확한 정보 없음")} />
-                      <RegDetailRow label="제목" value={regValue(selectedReg, "notification_title", "정확한 정보 없음")} multiline />
-                      <RegDetailRow label="요약" value={translateEpingSummary(sanitizeNullable(selectedReg.summary) ?? "정확한 정보 없음")} multiline />
-                      <RegDetailRow label="배포일" value={regValue(selectedReg, "effective_date", selectedReg.effective_date ?? "정확한 정보 없음")} />
-                      <RegDetailRow label="의견마감일" value={regValue(selectedReg, "comment_deadline_date", "정확한 정보 없음")} />
-                      <RegDetailRow label="매칭 기준" value={resolveRegMatchBasisLabel(selectedReg) + (resolveRegMatchedTokensLabel(selectedReg) ? ` / ${resolveRegMatchedTokensLabel(selectedReg)}` : "")} />
-                      <RegDetailRow label="근거 소스" value={resolveRegSourceLabel(selectedReg)} />
-                    </>
-                  ) : (
-                    // 기존 KOTRA/일반 필드 매핑
-                    <>
-                      <RegDetailRow label="HS 코드" value={regValue(selectedReg, "hs_code", "정확한 정보 없음")} />
-                      <RegDetailRow label="품목명" value={regValue(selectedReg, "product_name", "정확한 정보 없음")} />
-                      <RegDetailRow label="규제 유형" value={translateRegulationType(regValue(selectedReg, "regulation_type", selectedReg.topic ?? "정확한 정보 없음"))} />
-                      <RegDetailRow label="규제 대상국" value={regValue(selectedReg, "probe_target_country", "정확한 정보 없음")} />
-                      <RegDetailRow label="지역 본부" value={regValue(selectedReg, "hq_region", "정확한 정보 없음")} />
-                      <RegDetailRow label="시행일" value={regValue(selectedReg, "effective_date", selectedReg.effective_date ?? "정확한 정보 없음")} />
-                      <RegDetailRow label="종료일" value={regValue(selectedReg, "regulation_end_date", "정확한 정보 없음")} />
-                      <RegDetailRow label="등록일" value={regValue(selectedReg, "reg_input_date_raw", "정확한 정보 없음")} />
-                      <RegDetailRow label="근거 소스" value={resolveRegSourceLabel(selectedReg)} />
-                      <RegDetailRow label="요약" value={sanitizeNullable(selectedReg.summary) ?? "정확한 정보 없음"} multiline />
-                    </>
-                  )}
+                  <RegDetailRow label="HS 코드" value={regValue(selectedReg, "hs_code", "정확한 정보 없음")} />
+                  <RegDetailRow label="품목명" value={regValue(selectedReg, "product_name", "정확한 정보 없음")} />
+                  <RegDetailRow label="규제 유형" value={translateRegulationType(regValue(selectedReg, "regulation_type", selectedReg.topic ?? "정확한 정보 없음"))} />
+                  <RegDetailRow label="규제 대상국" value={regValue(selectedReg, "probe_target_country", "정확한 정보 없음")} />
+                  <RegDetailRow label="지역 본부" value={regValue(selectedReg, "hq_region", "정확한 정보 없음")} />
+                  <RegDetailRow label="시행일" value={regValue(selectedReg, "effective_date", selectedReg.effective_date ?? "정확한 정보 없음")} />
+                  <RegDetailRow label="종료일" value={regValue(selectedReg, "regulation_end_date", "정확한 정보 없음")} />
+                  <RegDetailRow label="등록일" value={regValue(selectedReg, "reg_input_date_raw", "정확한 정보 없음")} />
+                  <RegDetailRow label="근거 소스" value={resolveRegSourceLabel(selectedReg)} />
+                  <RegDetailRow label="요약" value={sanitizeNullable(selectedReg.summary) ?? "정확한 정보 없음"} multiline />
                 </div>
               ) : null}
             </DialogContent>
@@ -1241,90 +1028,16 @@ function SourceZeroResultNotice<T extends { raw?: Record<string, unknown> | null
   );
 }
 
-function resolveWtoEpingStats(raw: Record<string, unknown> | null, directFallback: number) {
-  return {
-    directCount: readRawNumber(raw, "direct_count", directFallback),
-    broadCount: readRawNumber(raw, "broad_count", 0),
-    excludedCount: readRawNumber(raw, "excluded_count", 0),
-    rawCount: readRawNumber(raw, "raw_count", readRawNumber(raw, "wto_raw_count", 0)),
-  };
-}
-
-function translateEpingReason(reason: string): string {
-  if (!reason) return "";
-  const normalized = reason.toLowerCase();
-  if (normalized === "hs6_exact_match") return "HS코드(6자리) 일치";
-  if (normalized === "hs4_broad_match") return "상위 HS분류(4자리) 일치";
-  if (normalized === "product_family_term_match") return "제품군 키워드 포함";
-  if (normalized === "query_term_broad_match") return "제품 관련어 포함";
-  return reason;
-}
-
-function WtoBroadReferencePanel({ raw }: { raw: Record<string, unknown> | null }) {
-  const stats = resolveWtoEpingStats(raw, 0);
-  const references = normalizeRawRecordArray(raw?.broad_references);
-  if (stats.broadCount <= 0 && references.length === 0) return null;
-
-  return (
-    <details className="rounded-md border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
-      <summary className="cursor-pointer text-sm font-medium text-foreground">
-        연관 규제 동향 참고 ({stats.broadCount}건)
-      </summary>
-      <p className="mt-2 font-medium text-amber-700">※ 직접적인 규제 대상이 아닐 수 있으나, 해당 산업군과 연관된 참고용 동향입니다.</p>
-      <div className="mt-2 space-y-2">
-        {references.length > 0 ? references.map((item, index) => {
-          const title = readRecordText(item, "title") || readRecordText(item, "document_symbol") || "제목 정보 없음";
-          const symbol = readRecordText(item, "document_symbol");
-          const hs = readRecordText(item, "hs_code_text");
-          const reason = readRecordText(item, "eping_reason");
-          const sourceUrl = readRecordText(item, "source_url");
-
-          return (
-            <div key={`${symbol || title}-${index}`} className="border-t border-border pt-2 pb-1 first:border-t-0 first:pt-0">
-              <p className="line-clamp-2 text-foreground font-medium">{title}</p>
-              <div className="mt-1 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-                <p className="text-muted-foreground">
-                  {[symbol, hs ? `HS ${hs}` : "", translateEpingReason(reason)].filter(Boolean).join(" · ")}
-                </p>
-                <div className="flex items-center gap-3 text-xs font-medium">
-                  {sourceUrl ? (
-                    <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-primary hover:underline">
-                      원문 <ExternalLink className="h-3 w-3" />
-                    </a>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          );
-        }) : (
-          <p>연관 규제 통보문 요약이 없습니다.</p>
-        )}
-      </div>
-    </details>
-  );
-}
-
 function resolveSourceApiMessage(raw: Record<string, unknown> | null): string {
   const message = readDetailRawText(raw, "api_message");
   const normalized = message.toLowerCase();
   if (!message) return "";
-  if (normalized.includes("wto_api_key is missing")) return "WTO_API_KEY 미설정";
-  if (normalized.includes("no direct wto eping notifications matched")) {
-    const rawCount = readRawNumber(raw, "raw_count", readRawNumber(raw, "wto_raw_count", 0));
-    const broadCount = readRawNumber(raw, "broad_count", 0);
-    return `조회 결과: 통보문 ${rawCount}건 발견 (직접 연관 0건, 연관 참고 ${broadCount}건)`;
-  }
-  if (normalized.includes("no direct wto eping notifications in")) {
-    const rawCount = readRawNumber(raw, "raw_count", readRawNumber(raw, "wto_raw_count", 0));
-    return `조회 결과: 통보문 ${rawCount}건 발견 (직접 연관 0건)`;
-  }
   if (normalized.includes("after product relevance filter")) {
     const rawCount = message.match(/\((\d+) raw items\)/i)?.[1];
     return rawCount
       ? `조회 결과: 통보문 ${rawCount}건 중 제품 관련 매칭 없음`
       : "조회 결과: 제품 관련 매칭 통보문 없음";
   }
-  if (normalized.includes("no wto eping notifications matched")) return "WTO API 정상 조회, 연관 통보문 없음";
   if (normalized.includes("cache_filter_match_0_csv_backup_no_match")) return "API/cache 및 CSV 백업 정상 조회, 매칭 0건";
   if (normalized.includes("cache_filter_match_0_csv_backup_used")) return "API/cache 0건 후 CSV 백업 매칭 사용";
   if (normalized.includes("cache_empty_csv_backup")) return "API/cache 0건 후 CSV 백업 확인";
@@ -1351,9 +1064,6 @@ function resolveSourceSearchSummary(raw: Record<string, unknown> | null): string
   if (sourceType === "kotra_cache" || sourceType === "kotra_api_sync" || sourceType === "csv_backup") {
     return `KOTRA DS00000128 API/cache와 국별 대세계 수입규제 CSV를 함께 확인했습니다${criteria ? ` (${criteria})` : ""}.`;
   }
-  if (sourceType === "wto_eping") {
-    return `확인 기준: 대상 국가, HS코드 및 제품 키워드로 검색을 수행했습니다${criteria ? ` (${criteria})` : ""}.`;
-  }
   if (sourceType === "kotra_overseas_cert") {
     return `KOTRA 해외인증 API를 국가·HS·제품 기준으로 확인했습니다${criteria ? ` (${criteria})` : ""}.`;
   }
@@ -1365,8 +1075,7 @@ function resolveDetailSourceStatus<T extends { raw?: Record<string, unknown> | n
 ): { label: string; kind: "idle" | "ready" | "empty" | "missing_key" | "error" | "stale"; className: string } {
   const raw = source.placeholderRow?.raw ?? null;
   const apiMessage = readDetailRawText(raw, "api_message").toLowerCase();
-  const keyMissing = apiMessage.includes("api_key is missing") ||
-    readDetailRawText(raw, "wto_api_key_missing").toLowerCase() === "true";
+  const keyMissing = apiMessage.includes("api_key is missing");
 
   if (source.sectionState === "not_run") {
     return { label: "미실행", kind: "idle", className: "bg-muted text-muted-foreground" };
@@ -1416,11 +1125,6 @@ function isRegBackupSource(row: RegRow): boolean {
   return sourceType === "csv_backup";
 }
 
-function isWtoEpingRegSource(row: RegRow): boolean {
-  const sourceType = readDetailRawText(row.raw ?? null, "source_type").toLowerCase();
-  return sourceType === "wto_eping";
-}
-
 function resolveRegSourceUrl(row: RegRow, countryCodeIso2: string | null): string | null {
   if (isRegBackupSource(row)) {
     return sanitizeNullable(row.source_url);
@@ -1435,9 +1139,6 @@ function resolveRegSourceLabel(row: RegRow): string {
   if (isRegBackupSource(row)) {
     return "KOTRA CSV 백업";
   }
-  if (isWtoEpingRegSource(row)) {
-    return "WTO ePing";
-  }
   return row.source_org || "출처";
 }
 
@@ -1450,7 +1151,6 @@ function resolveRegMatchBasisLabel(row: RegRow): string {
   // 백엔드에서 전달된 한국어 라벨 우선 사용
   const backendLabel = readDetailRawText(row.raw ?? null, "match_basis_label");
   if (backendLabel) return backendLabel;
-  if (isWtoEpingRegSource(row)) return "WTO 통보국+HS 검색";
   const priority = readDetailRawText(row.raw ?? null, "match_priority");
   if (priority === "1") return "1순위 국가+HS/HSK 정확 일치";
   if (priority === "2") return "2순위 국가+HS6 일치";
@@ -1469,7 +1169,6 @@ function formatRegSourceTypeLabel(sourceType: string): string {
   if (normalized === "csv_backup") return "CSV 백업";
   if (normalized === "kotra_api_sync") return "실시간 API 동기화";
   if (normalized === "kotra_cache") return "캐시";
-  if (normalized === "wto_eping") return "WTO ePing SPS/TBT 통보";
   return "정확한 정보 없음";
 }
 
@@ -1522,18 +1221,6 @@ function readRawNumber(raw: Record<string, unknown> | null, key: string, fallbac
   const value = raw[key];
   const numeric = typeof value === "number" ? value : typeof value === "string" ? Number(value) : NaN;
   return Number.isFinite(numeric) ? Math.max(0, Math.trunc(numeric)) : fallback;
-}
-
-function normalizeRawRecordArray(value: unknown): Array<Record<string, unknown>> {
-  if (!Array.isArray(value)) return [];
-  return value.filter((entry): entry is Record<string, unknown> => Boolean(entry) && typeof entry === "object" && !Array.isArray(entry));
-}
-
-function readRecordText(record: Record<string, unknown>, key: string): string {
-  const value = record[key];
-  if (typeof value === "string") return sanitize(value);
-  if (typeof value === "number" && Number.isFinite(value)) return String(value);
-  return "";
 }
 
 function normalizeDetailTextArray(value: unknown): string[] {
@@ -1824,39 +1511,6 @@ function toNumber(value: unknown): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function buildRuleBasedActionTasks(payload: {
-  country_code: string;
-  country_name: string;
-  certs: CertRow[];
-  regs: RegRow[];
-  risks: RiskRow[];
-}): string[] {
-  const countryName = sanitize(payload.country_name || payload.country_code || "대상국");
-  const certCount = payload.certs.filter((row) => readDetailRawText(row.raw ?? null, "detail_state") === "success").length;
-  const regCount = payload.regs.filter((row) => readDetailRawText(row.raw ?? null, "detail_state") === "success").length;
-  const paymentCount = payload.risks.filter(
-    (row) =>
-      (sanitizeNullable(row.category)?.toLowerCase() ?? "") === "k_sure_payment"
-      && readDetailRawText(row.raw ?? null, "detail_state") === "success",
-  ).length;
-
-  const tasks: string[] = [
-    `1일차: ${countryName} 대상 HS/HSK 코드와 제품 영문명을 최종 확정하세요.`,
-    certCount > 0
-      ? `2일차: 인증 ${certCount}건의 필수 문서·소요기간·비용을 체크리스트로 정리하세요.`
-      : "2일차: 해외인증 상세 분석을 재실행하고 기관 원문 링크로 요구사항을 확정하세요.",
-    regCount > 0
-      ? `3일차: 규제·NTM ${regCount}건의 시행일과 적용 범위를 검토해 통관 리스크를 줄이세요.`
-      : "3일차: 수입규제·NTM 상세 분석을 재실행하고 0건 사유를 기록하세요.",
-    paymentCount > 0
-      ? "4일차: K-SURE 결제위험(결제기간·연체율·결제조건)을 거래조건에 반영하세요."
-      : "4일차: K-SURE 결제위험 데이터를 재조회하고 fallback 여부를 구분해 기록하세요.",
-    "5~7일차: 출처·조회일·원문 링크를 갱신하고 최종 리포트를 재생성하세요.",
-  ];
-
-  return [...new Set(tasks.map((task) => sanitize(task)).filter((task) => task.length > 0))].slice(0, 6);
-}
-
 const REGULATION_TYPE_TRANSLATIONS: Record<string, string> = {
   "Regular notification": "정기 통보",
   "regular notification": "정기 통보",
@@ -1872,33 +1526,6 @@ const REGULATION_TYPE_TRANSLATIONS: Record<string, string> = {
   "Addendum": "부록",
   "Revision": "개정",
 };
-
-const COUNTRY_NAME_KO: Record<string, string> = {
-  "united states of america": "미국",
-  "united states": "미국",
-  "usa": "미국",
-  "china": "중국",
-  "japan": "일본",
-  "germany": "독일",
-  "vietnam": "베트남",
-  "indonesia": "인도네시아",
-  "india": "인도",
-  "mexico": "멕시코",
-  "poland": "폴란드",
-  "malaysia": "말레이시아",
-  "thailand": "태국",
-  "brazil": "브라질",
-  "turkey": "튀르키예",
-  "turkiye": "튀르키예",
-  "korea, republic of": "대한민국",
-  "european union": "유럽연합",
-};
-
-function translateCountryName(raw: string): string {
-  if (!raw || raw === "정확한 정보 없음") return raw;
-  const lower = raw.trim().toLowerCase();
-  return COUNTRY_NAME_KO[lower] || raw;
-}
 
 function translateRegulationType(raw: string): string {
   if (!raw || raw === "정확한 정보 없음") return raw;
@@ -1929,35 +1556,6 @@ function translateRegulationType(raw: string): string {
   return raw;
 }
 
-function translateEpingSummary(summary: string): string {
-  if (!summary || summary === "정확한 정보 없음") return summary;
-
-  // 1. 문서 기호 보호 (G/TBT/N/USA/331 등 내부 국가코드 번역 방지)
-  const docSymbols: string[] = [];
-  let result = summary.replace(/G\/[A-Z]+\/N\/[A-Z]+\/[\w./]+/g, (match) => {
-    docSymbols.push(match);
-    return `__DOCSYM_${docSymbols.length - 1}__`;
-  });
-
-  // 2. 국가명 번역 (문서 기호 제외된 상태에서)
-  for (const [eng, ko] of Object.entries(COUNTRY_NAME_KO)) {
-    const regex = new RegExp(eng.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
-    result = result.replace(regex, ko);
-  }
-
-  // 3. 문서 기호 복원
-  result = result.replace(/__DOCSYM_(\d+)__/g, (_, idx) => docSymbols[Number(idx)] ?? "");
-
-  // 4. 공통 라벨 번역
-  result = result
-    .replace(/\bDistributed:\s*/gi, "배포일: ")
-    .replace(/\bComments? due:\s*/gi, "의견마감: ")
-    .replace(/\bProducts?:\s*/gi, "대상 제품: ")
-    .replace(/\bHS:\s*/gi, "HS: ");
-
-  return result;
-}
-
 /* ────────── 종합판정 배지 ────────── */
 
 function OverallVerdictBadge({ score }: { score: number | null | undefined }) {
@@ -1981,13 +1579,10 @@ function resolveOverallVerdict(score: number | null | undefined): { label: strin
 function resolveKeyRisks(
   regSource: { confirmedRows: RegRow[]; reviewRows: RegRow[] },
   certSource: { confirmedRows: CertRow[] },
-  wtoSource: { confirmedRows: RegRow[]; reviewRows: RegRow[] },
 ): string {
   const parts: string[] = [];
   const regCount = regSource.confirmedRows.length + regSource.reviewRows.length;
   if (regCount > 0) parts.push(`수입규제 ${regCount}건`);
-  const wtoCount = wtoSource.confirmedRows.length + wtoSource.reviewRows.length;
-  if (wtoCount > 0) parts.push(`WTO SPS/TBT ${wtoCount}건`);
   if (certSource.confirmedRows.length === 0) parts.push("인증정보 미확인");
   if (parts.length === 0) return "특이사항 없음";
   return parts.join(", ");
@@ -2008,131 +1603,16 @@ function resolveNextCheckItems(
   return items.join(", ");
 }
 
-function cleanNationalInfoText(value: unknown): string {
-  if (typeof value !== "string") return "";
-  let text = value
-    .replace(/&lsquo;/gi, "‘")
-    .replace(/&rsquo;/gi, "’")
-    .replace(/&ldquo;/gi, "“")
-    .replace(/&rdquo;/gi, "”")
-    .replace(/&middot;/gi, "·")
-    .replace(/&rArr;/gi, "→")
-    .replace(/&amp;/gi, "&")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&#39;/gi, "'")
-    .replace(/&quot;/gi, '"')
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/p>/gi, "\n")
-    .replace(/<[^>]*>/g, "");
-
-  text = text.replace(/\n{3,}/g, "\n\n");
-  text = text.replace(/[ \t]+/g, " ");
-
-  if (typeof window !== "undefined" && window.DOMParser) {
-    const doc = new DOMParser().parseFromString(text, "text/html");
-    text = doc.documentElement.textContent || text;
-  }
-
-  return text.trim();
-}
-
-function buildNationalInfoSummary(label: string, text: string): string[] {
-  if (!text) return ["제공된 참고정보가 없습니다."];
-
-  const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-  let summaryLines: string[] = [];
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const isBullet = /^(ㅇ|-|\d+[\)\.]|•|※|□|■)\s*/.test(line);
-    
-    if (isBullet) {
-      let combined = line.replace(/^(ㅇ|-|\d+[\)\.]|•|※|□|■)\s*/, "").trim();
-      let j = i + 1;
-      
-      while (j < lines.length && !/^(ㅇ|-|\d+[\)\.]|•|※|□|■)\s*/.test(lines[j]) && combined.length < 200) {
-        const nextLine = lines[j].trim();
-        if (nextLine.length > 0) {
-          const endsWithPunctuation = /[.!?다]$/.test(combined);
-          const sep = endsWithPunctuation ? " " : ": ";
-          combined += sep + nextLine;
-        }
-        j++;
-      }
-      
-      i = j - 1;
-
-      let sClean = combined.replace(/[\r\n]+/g, " ").replace(/\s+/g, " ");
-      if (sClean.length > 130) {
-        const sentenceMatch = sClean.match(/^([^.!?]+[.!?])/);
-        if (sentenceMatch && sentenceMatch[1].length > 30 && sentenceMatch[1].length <= 150) {
-           sClean = sentenceMatch[1].trim();
-        } else {
-           const truncated = sClean.substring(0, 140);
-           const conj = truncated.match(/.*(고|며|으나|지만)(?=\s|,)/);
-           if (conj && conj[0].length > 40) {
-             sClean = conj[0].replace(/,\s*$/, "") + "다.";
-           } else {
-             const lastSpace = truncated.lastIndexOf(' ');
-             sClean = truncated.substring(0, lastSpace > 60 ? lastSpace : 120) + "다.";
-           }
-        }
-      }
-      
-      if (sClean.length >= 10 && !summaryLines.includes(sClean)) {
-        summaryLines.push(sClean);
-      }
-      
-      if (summaryLines.length >= 4) break;
-    }
-  }
-
-  if (summaryLines.length === 0) {
-    const sentences = text.match(/[^.!?\n]+[.!?\n]+/g) || [text];
-    summaryLines = sentences.slice(0, 3).map(s => {
-      let sClean = s.trim().replace(/[\r\n]+/g, " ").replace(/\s+/g, " ");
-      if (sClean.length > 130) {
-        const truncated = sClean.substring(0, 140);
-        const conj = truncated.match(/.*(고|며|으나|지만)(?=\s|,)/);
-        if (conj && conj[0].length > 40) {
-            sClean = conj[0].replace(/,\s*$/, "") + "다.";
-        } else {
-            const lastSpace = truncated.lastIndexOf(' ');
-            sClean = truncated.substring(0, lastSpace > 60 ? lastSpace : 120) + "다.";
-        }
-      }
-      return sClean;
-    }).filter(s => s.length >= 15);
-  }
-
-  if (summaryLines.length === 0) return ["내용이 너무 짧아 요약할 수 없습니다. 원문을 확인해주세요."];
-  return summaryLines.slice(0, 4);
-}
-
-function NationalInfoSection({
-  label,
-  value,
-  summary,
-}: {
-  label: string;
-  value: string;
-  summary?: string[];
-}) {
+function NationalInfoSection({ presentation }: { presentation: NationalInfoPresentation }) {
   const [isOpen, setIsOpen] = useState(false);
   
-  if (!value) return null;
+  if (!presentation.rawText) return null;
 
   return (
     <div className="rounded-md border border-border bg-card overflow-hidden">
       <div className="p-3 border-b border-border bg-muted/10">
-        <h4 className="font-semibold text-sm text-foreground">{label}</h4>
-        {summary && summary.length > 0 && (
-          <ul className="mt-2 space-y-1 pl-4 list-disc text-xs text-muted-foreground">
-            {summary.map((line, idx) => (
-              <li key={idx}>{line}</li>
-            ))}
-          </ul>
-        )}
+        <h4 className="font-semibold text-sm text-foreground">{presentation.label}</h4>
+        <NationalInfoSummaryGroups presentation={presentation} />
       </div>
       <details 
         className="group text-sm" 
@@ -2140,19 +1620,64 @@ function NationalInfoSection({
         onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
       >
         <summary className="cursor-pointer font-medium text-primary px-3 py-2 hover:bg-muted/50 list-none flex items-center justify-between border-t border-transparent">
-          <span className="text-xs">
-            {isOpen ? "원문 접기" : "자세히 보기"}
-          </span>
-          <span className="text-muted-foreground text-xs">{isOpen ? "▲" : "▼"}</span>
+          <span className="text-xs">{isOpen ? "원문 닫기" : "자세히 보기"}</span>
+          <span className="text-muted-foreground text-xs">{isOpen ? "접기" : "펼치기"}</span>
         </summary>
-        <div className="p-3 pt-0 border-t border-border bg-muted/5">
-          <p className="whitespace-pre-line text-muted-foreground leading-relaxed text-xs mt-3">
-            {value}
-          </p>
+        <div className="space-y-3 p-3 border-t border-border bg-muted/5">
+          {formatNationalInfoRawParagraphs(presentation.rawText).map((paragraph, index) => (
+            <p key={index} className="whitespace-pre-line text-muted-foreground leading-relaxed text-xs">
+              {paragraph}
+            </p>
+          ))}
         </div>
       </details>
     </div>
   );
+}
+
+function NationalInfoSummaryGroups({ presentation }: { presentation: NationalInfoPresentation }) {
+  const hasGroupedSummary =
+    presentation.direct.length > 0 || presentation.common.length > 0 || presentation.conditional.length > 0;
+
+  if (!hasGroupedSummary) {
+    return (
+      <ul className="mt-2 space-y-1 pl-4 list-disc text-xs text-muted-foreground">
+        {presentation.defaultBullets.map((line, idx) => (
+          <li key={idx}>{line}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  return (
+    <div className="mt-3 space-y-3">
+      <NationalInfoBulletGroup title="직접 관련" bullets={presentation.direct} />
+      <NationalInfoBulletGroup title="공통 참고" bullets={presentation.common} />
+      <NationalInfoBulletGroup title="조건부 확인" bullets={presentation.conditional} />
+    </div>
+  );
+}
+
+function NationalInfoBulletGroup({ title, bullets }: { title: string; bullets: string[] }) {
+  if (bullets.length === 0) return null;
+  return (
+    <div>
+      <p className="text-xs font-semibold text-foreground">{title}</p>
+      <ul className="mt-1 space-y-1 pl-4 list-disc text-xs text-muted-foreground">
+        {bullets.slice(0, 3).map((line, idx) => (
+          <li key={idx}>{line}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function formatNationalInfoRawParagraphs(value: string): string[] {
+  const paragraphs = value
+    .split(/\n\s*\n/g)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+  return paragraphs.length > 0 ? paragraphs : [value];
 }
 
 const NATIONAL_INFO_FIELDS = [
@@ -2167,12 +1692,59 @@ const NATIONAL_INFO_FIELDS = [
   { key: "expBhrcCmdltCntnt", label: "수출유망품목" },
 ];
 
+function getNationalInfoKind(key: string): NationalInfoKind {
+  if (key === "ecnmyTrendCntnt" || key === "ecnmyPrsptCntnt") return "common";
+  return "regulated";
+}
+
+function NationalInfoRelevanceOverview({ presentations }: { presentations: NationalInfoPresentation[] }) {
+  const direct = dedupeNationalInfoBullets(
+    presentations.flatMap((presentation) =>
+      presentation.direct.filter((line) => !line.startsWith("현재 원문에서 해당 HS코드")),
+    ),
+  );
+  const common = dedupeNationalInfoBullets(presentations.flatMap((presentation) => presentation.common)).slice(0, 3);
+  const conditional = dedupeNationalInfoBullets(
+    presentations.flatMap((presentation) => presentation.conditional),
+  ).slice(0, 3);
+  const directBullets =
+    direct.length > 0 ? direct.slice(0, 3) : ["현재 원문에서 해당 HS코드 또는 제품명과 직접 일치하는 규제는 확인되지 않았습니다."];
+
+  return (
+    <div className="rounded-md border border-amber-200 bg-amber-50 p-4">
+      <h4 className="font-semibold text-amber-900 text-sm flex items-center gap-2">
+        <Sparkles className="h-4 w-4 text-amber-600" />
+        제품 관련성 요약
+      </h4>
+      <div className="mt-3 grid gap-3 md:grid-cols-3">
+        <NationalInfoBulletGroup title="직접 관련" bullets={directBullets} />
+        <NationalInfoBulletGroup title="공통 참고" bullets={common} />
+        <NationalInfoBulletGroup title="조건부 확인" bullets={conditional} />
+      </div>
+    </div>
+  );
+}
+
+function dedupeNationalInfoBullets(values: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const value of values) {
+    const text = value.trim();
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    out.push(text);
+  }
+  return out;
+}
+
 function NationalInfoCard({
   nationalInfo,
   detailExecuted,
+  productContext,
 }: {
   nationalInfo: Record<string, unknown> | null;
   detailExecuted: boolean;
+  productContext: CurrentDetailContext;
 }) {
   if (!detailExecuted) {
     return (
@@ -2208,8 +1780,18 @@ function NationalInfoCard({
     .map(({ key, label }) => {
       const raw = nationalInfo[key];
       const text = cleanNationalInfoText(raw);
-      const summary = buildNationalInfoSummary(label, text);
-      return { key, label, text, summary };
+      const kind = getNationalInfoKind(key);
+      const presentation = buildNationalInfoPresentation({
+        label,
+        text,
+        context: {
+          productName: productContext.productName,
+          hsCode: productContext.hsCode,
+          hskCode: productContext.hskCode,
+        },
+        kind,
+      });
+      return { key, label, text, kind, presentation };
     })
     .filter(({ text }) => text.length > 0);
 
@@ -2239,25 +1821,16 @@ function NationalInfoCard({
       </CardHeader>
       <CardContent className="space-y-4">
         
-        {/* 핵심 체크포인트 */}
-        <div className="rounded-md border border-amber-200 bg-amber-50 p-4">
-          <h4 className="font-semibold text-amber-900 text-sm flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-amber-600" />
-            핵심 체크포인트
-          </h4>
-          <ul className="mt-2 space-y-1 pl-5 list-disc text-xs text-amber-800">
-            {sections.some(s => s.key === "entrPrcstCntnt") && <li>통관 지연 가능성 확인</li>}
-            {(sections.some(s => s.key === "tarifSystSumryCntnt") || sections.some(s => s.key === "tarifCnfrmMthCntnt")) && <li>HS 8자리 기준 관세율 재확인</li>}
-            {sections.some(s => s.key === "tarifSystSumryCntnt") && <li>FTA/CEPA 적용 시 원산지 증빙 확인</li>}
-            {(sections.some(s => s.key === "tbtCntnt") || sections.some(s => s.key === "crtfcSystCntnt")) && <li>TBT·인증제도 해당 여부 확인</li>}
-            {sections.length === 0 && <li>국가별 세부 규제를 수출 전에 면밀히 검토하세요.</li>}
-          </ul>
-        </div>
+        <NationalInfoRelevanceOverview
+          presentations={sections
+            .filter((section) => section.kind === "regulated")
+            .map((section) => section.presentation)}
+        />
 
         {/* 요약 중심의 항목 섹션 */}
         <div className="space-y-3">
-          {sections.map(({ label, text, summary }) => (
-            <NationalInfoSection key={label} label={label} value={text} summary={summary} />
+          {sections.map(({ label, presentation }) => (
+            <NationalInfoSection key={label} presentation={presentation} />
           ))}
         </div>
 

@@ -80,11 +80,11 @@ Deno.serve(async (req) => {
       "Begin with a direct definition, not a question.",
       `Do not start with a question such as '${productSubject}\uB780 \uBB34\uC5C7\uC778\uAC00\uC694?'.`,
       "Do not include a missing-info section.",
-      "Use product-name general knowledge only for overview.",
-      "Describe product-name-based characteristics and operating principles after the definition.",
+      "Use product-name general knowledge for overview and common characteristics.",
+      "Describe common physical/chemical characteristics and uses based on general knowledge.",
       "Use provided project inputs only for project context.",
-      "Never invent numeric specs, process details, certifications, or composition ratios.",
-      `If a required fact is missing, use '${UNKNOWN_TEXT}' naturally inside the relevant sentence.`,
+      "Do not invent highly specific numeric specs or certifications, but you MUST describe general properties for common items (e.g., fuel, wood, tools).",
+      `If a required specific fact is missing, use '${UNKNOWN_TEXT}' naturally, but do not use it for basic general knowledge.`,
       "Target total description length: 280-520 Korean characters.",
       `Schema: {"description":"...","overview":"...","features":"...","project_context":"...","rationale":"..."}`,
     ].join(" ");
@@ -110,35 +110,38 @@ Deno.serve(async (req) => {
       `- Never output '${SECTION_MISSING}:' label.`,
       "- Never use speculative phrasing like infrastructure-based export context.",
     ].join("\n");
-
     try {
       const txt = await callAiJson(systemPrompt, userPrompt);
       const parsed = parseDraftJson(txt);
 
-      const sectionFromDescription = extractSections(readString(parsed.description));
-      const overviewCandidate =
-        normalizeNullableText(readString(parsed.overview)) ??
-        normalizeNullableText(sectionFromDescription.overview ?? "");
-      const featuresCandidate =
-        normalizeNullableText(readString(parsed.features)) ??
-        normalizeNullableText(sectionFromDescription.features ?? "");
-      const contextCandidate =
-        normalizeNullableText(readString(parsed.project_context)) ??
-        normalizeNullableText(sectionFromDescription.projectContext ?? "");
+      // AI가 생성한 설명을 최우선으로 사용합니다.
+      let description = normalizeNullableText(readString(parsed.description));
 
-      const overview = sanitizeOverview(overviewCandidate, productSubject);
-      const features = sanitizeFeatures(featuresCandidate, productSubject, input);
-      const projectContext = sanitizeProjectContext(contextCandidate, input);
-      const description = composeDescription(overview, features, projectContext);
+      // 만약 AI가 description을 비워두고 overview, features만 주었다면 합쳐서 사용
+      if (!description) {
+        const overview = normalizeNullableText(readString(parsed.overview)) ?? "";
+        const features = normalizeNullableText(readString(parsed.features)) ?? "";
+        const projectContext = normalizeNullableText(readString(parsed.project_context)) ?? "";
+        description = normalizeText(`${overview} ${features} ${projectContext}`);
+      }
+
+      // 그래도 비어있다면 규칙 기반 텍스트 생성
+      if (!description) {
+        const overview = buildProductOverview(productSubject);
+        const features = buildProductFeatures(productSubject, input);
+        const projectContext = buildStrictProjectContext(input);
+        description = normalizeText(`${overview} ${features} ${projectContext}`);
+      }
+
       const rationale = normalizeNullableText(readString(parsed.rationale));
 
       return json({
         description,
-        overview,
-        features,
-        project_context: projectContext,
+        overview: readString(parsed.overview) || null,
+        features: readString(parsed.features) || null,
+        project_context: readString(parsed.project_context) || null,
         rationale,
-        state: description ? "success" : "empty",
+        state: "success",
       });
     } catch (aiError) {
       console.error("ai-product-description fallback", toErrorMessage(aiError));

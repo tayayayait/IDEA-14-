@@ -44,7 +44,7 @@ export function buildProductInterpretationHint(name: string, input: ProductDescr
   if (isElectronicMaterial(source) || isElectronicComponent(source)) {
     return "\uC785\uB825\uAC12\uC758 \uC804\uC790\uC790\uB8CC\uB294 \uC804\uC790\uC7AC\uB8CC \uB610\uB294 \uC804\uC790\uBD80\uD488 \uACC4\uC5F4\uB85C \uD574\uC11D\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4. \uC138\uBD80 \uC18C\uC7AC\u00B7\uD615\uC0C1\u00B7\uACF5\uC815 \uC815\uBCF4\uB294 \uD655\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.";
   }
-  return "\uC81C\uD488\uBA85\uC758 \uBA85\uC0AC\uAD6C\uB97C \uAE30\uC900\uC73C\uB85C \uC6A9\uB3C4\uC640 \uAE30\uB2A5\uC744 \uCD94\uB860\uD558\uB418, \uD655\uC778\uB418\uC9C0 \uC54A\uC740 \uC18C\uC7AC\u00B7\uADDC\uACA9\u00B7\uC778\uC99D\u00B7\uC218\uCE58\uB294 \uB2E8\uC815\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.";
+  return "제품명(일반 명사)을 기준으로 해당 제품의 보편적인 용도, 특성, 성질을 설명하세요. 특수 규격이 없다면 일반적인 수준의 상식을 바탕으로 자연스럽게 설명합니다.";
 }
 
 export function buildProductOverview(productSubject: string): string {
@@ -70,7 +70,7 @@ export function buildProductOverview(productSubject: string): string {
   if (/(?:\uC804\uB3D9\uAE30|\uBAA8\uD130)/.test(productSubject)) {
     return `${subjectWithParticle} \uC804\uAE30 \uC5D0\uB108\uC9C0\uB97C \uD68C\uC804 \uC6B4\uB3D9\uC73C\uB85C \uBCC0\uD658\uD574 \uAE30\uACC4\uB97C \uAD6C\uB3D9\uD558\uB294 \uC7A5\uCE58\uC785\uB2C8\uB2E4.`;
   }
-  return `${subjectWithParticle} \uC81C\uD488\uBA85\uC5D0\uC11C \uD655\uC778\uB418\uB294 \uC6A9\uB3C4\uC640 \uAE30\uB2A5\uC744 \uAE30\uC900\uC73C\uB85C \uC124\uBA85\uD560 \uC218 \uC788\uB294 \uC81C\uD488\uC785\uB2C8\uB2E4.`;
+  return `${subjectWithParticle} 일상이나 산업 현장에서 널리 사용되는 일반적인 특징과 용도를 가진 제품입니다.`;
 }
 
 export function buildProductFeatures(productSubject: string, input: ProductDescriptionInput): string {
@@ -105,7 +105,7 @@ export function buildProductFeatures(productSubject: string, input: ProductDescr
   if (/(?:\uD38C\uD504)/.test(source)) {
     return "\uC720\uCCB4\uB97C \uC774\uC1A1\uD558\uAC70\uB098 \uC555\uB825\uC744 \uD615\uC131\uD558\uB294 \uC7A5\uCE58\uB85C, \uC774\uC1A1 \uB300\uC0C1\uACFC \uC791\uB3D9 \uBC29\uC2DD\uC5D0 \uB530\uB77C \uD2B9\uC131\uC774 \uB2EC\uB77C\uC9D1\uB2C8\uB2E4.";
   }
-  return `${productSubject} \uC81C\uD488\uBA85\uB9CC\uC73C\uB85C \uD655\uC815 \uAC00\uB2A5\uD55C \uC138\uBD80 \uD2B9\uC131\uC740 ${UNKNOWN_TEXT}\uC774\uBA70, \uC6A9\uB3C4\u00B7\uC18C\uC7AC\u00B7\uADDC\uACA9 \uD655\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.`;
+  return `${productSubject}의 일반적인 물리·화학적 특성이나 범용적인 용도를 기준으로 설명할 수 있으며, 구체적인 규격은 모델에 따라 다를 수 있습니다.`;
 }
 
 function buildSource(productSubject: string, input: ProductDescriptionInput): string {

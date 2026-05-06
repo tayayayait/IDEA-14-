@@ -11,8 +11,8 @@ Date: 2026-05-01
 
 ## Fix
 
-- Edge AI rerank timeout: 8,000 ms.
-- Step 2 `ai-hs-suggest` client timeout: 16,000 ms.
+- Edge AI rerank timeout: 15,000 ms.
+- Step 2 `ai-hs-suggest` client timeout: 20,000 ms.
 - Removed duplicate HS catalog ranking initialization from the Edge entrypoint. Ranking now initializes only in `candidate-ranking.ts`.
 
 ## Verification

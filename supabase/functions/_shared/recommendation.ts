@@ -258,7 +258,7 @@ export const COUNTRY_ALIAS_MAP: Record<string, string[]> = {
   TH: ["Thailand", "\uD0DC\uAD6D"],
   TR: ["Turkey", "Turkiye", "\uD280\uB974\uD0A4\uC608", "\uD130\uD0A4"],
   US: ["United States", "United States of America", "USA", "US", "\uBBF8\uAD6D", "\uBBF8\uD569\uC911\uAD6D"],
-  VN: ["Vietnam", "\uBCA0\uD2B8\uB0A8"],
+  VN: ["Vietnam", "Socialist Republic of Vietnam", "\uBCA0\uD2B8\uB0A8", "\uBCA0\uD2B8\uB0A8 \uC0AC\uD68C\uC8FC\uC758 \uACF5\uD654\uAD6D"],
 };
 
 const HANGUL_TRAILING_MARKET_SUFFIXES = ["시장", "수출", "진출", "대상", "향", "내"];
@@ -618,6 +618,54 @@ export function extractProductTokens(productName: string, productDescription = "
       .filter((token) => token.length >= 2)
       .filter((token) => !COMMON_STOPWORDS.has(token)),
   ).slice(0, 60);
+}
+
+export function buildRepresentativeProductSearchTerms(input: {
+  productName: string;
+  hsCode?: string;
+  hsDescription?: string;
+  tokens?: string[];
+  tags?: string[];
+}): string[] {
+  const productName = cleanSearchTerm(input.productName);
+  const hsCode = normalizeHsCode(input.hsCode ?? "");
+  const hsDescription = cleanSearchTerm(input.hsDescription ?? "");
+  const context = normalizeSearchText([
+    productName,
+    hsCode,
+    hsDescription,
+    ...(input.tokens ?? []),
+    ...(input.tags ?? []),
+  ].join(" "));
+  const out: string[] = [];
+  const push = (value: string) => {
+    const cleaned = cleanSearchTerm(value);
+    const key = cleaned.toLowerCase();
+    if (!cleaned || cleaned.length < 2 || out.some((entry) => entry.toLowerCase() === key)) return;
+    out.push(cleaned);
+  };
+
+  if (isPassengerVehicleSearchContext(hsCode, context)) {
+    const hybrid = isHybridVehicleSearchContext(hsCode, context);
+    const electric = isElectricVehicleSearchContext(hsCode, context);
+    if (hybrid) push("하이브리드 승용자동차");
+    if (electric) push("전기승용자동차");
+    push("승용자동차");
+    if (hybrid) push("하이브리드 자동차");
+    if (electric) {
+      push("전기차");
+      push("electric vehicle");
+    }
+    if (hybrid) push("hybrid vehicle");
+    push("passenger car");
+  }
+
+  for (const term of extractStandardProductNameTerms(hsDescription)) push(term);
+  const collapsedName = collapseCompositeProductName(productName);
+  if (collapsedName !== productName) push(collapsedName);
+  if (!isCompositeProductSearchTerm(productName)) push(productName);
+
+  return out.slice(0, 10);
 }
 
 export function buildProductRelevanceTokens(productName: string, hsCode: string, baseTokens: string[]): string[] {
@@ -1134,6 +1182,22 @@ export function assessCountryNewsMatch(input: AssessCountryNewsMatchInput): Coun
   const summaryCodes = detectCountryCodesFromText(input.summary ?? "");
   const keywordsCodes = detectCountryCodesFromText(input.keywords ?? "");
   const directCodes = dedupeStrings([...metadataCodes, ...titleCodes, ...summaryCodes, ...keywordsCodes]);
+  const bodyCodes = detectCountryCodesFromText(input.body ?? "");
+  const sourceCountryText = cleanText(input.natn ?? "");
+  const sourceCountryConflicts = Boolean(sourceCountryText) &&
+    !detectCountryCodesFromText(sourceCountryText).includes(countryCode);
+  if (sourceCountryConflicts) {
+    const backgroundCodes = dedupeStrings([...directCodes, ...bodyCodes]);
+    if (backgroundCodes.includes(countryCode)) {
+      return {
+        type: "background_country",
+        reason: "country:source_metadata_mismatch",
+        directCodes,
+        backgroundCodes,
+      };
+    }
+    return { type: "mismatch", reason: "country:source_metadata_mismatch", directCodes, backgroundCodes };
+  }
 
   if (metadataCodes.includes(countryCode)) {
     return { type: "direct_country", reason: "country:source_metadata", directCodes, backgroundCodes: [] };
@@ -1148,7 +1212,6 @@ export function assessCountryNewsMatch(input: AssessCountryNewsMatchInput): Coun
     return { type: "direct_country", reason: "country:summary", directCodes, backgroundCodes: [] };
   }
 
-  const bodyCodes = detectCountryCodesFromText(input.body ?? "");
   const bodyHasOtherCountry = bodyCodes.some((code) => code !== countryCode);
   const directTextHasOtherCountry = directCodes.some((code) => code !== countryCode);
   if (!directTextHasOtherCountry && !bodyHasOtherCountry && bodyCodes.includes(countryCode)) {
@@ -2004,6 +2067,98 @@ function tokenizeValue(value: string): string[] {
   return splitWords(normalizeSearchText(value));
 }
 
+function cleanSearchTerm(value: string): string {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
+function isPassengerVehicleSearchContext(hsCode: string, context: string): boolean {
+  return hsCode.startsWith("8703") ||
+    /승용자동차|승용차|passenger car|passenger motor car|아이오닉|소나타|그랜저|grand(e|u)r|sonata|ioniq/.test(context);
+}
+
+function isHybridVehicleSearchContext(hsCode: string, context: string): boolean {
+  return hsCode.startsWith("870340") || /하이브리드|hybrid/.test(context);
+}
+
+function isElectricVehicleSearchContext(hsCode: string, context: string): boolean {
+  return hsCode.startsWith("870380") || /전기승용자동차|전기차|electric vehicle|only electric|ev\b/.test(context);
+}
+
+function extractStandardProductNameTerms(value: string): string[] {
+  const markerMatch = /표준품명\s*:\s*([^·\n\r]+)/.exec(value);
+  const source = markerMatch?.[1] ?? value;
+  const terms: string[] = [];
+  const patterns = [
+    /하이브리드\s*승용자동차/g,
+    /전기\s*승용자동차/g,
+    /전기승용자동차/g,
+    /승용자동차/g,
+    /하이브리드\s*자동차/g,
+    /전기차/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of source.matchAll(pattern)) {
+      terms.push(cleanSearchTerm(match[0]));
+    }
+  }
+  return dedupeStrings(terms);
+}
+
+function collapseCompositeProductName(value: string): string {
+  const cleaned = cleanSearchTerm(value);
+  if (hasVariantOrModelList(cleaned)) {
+    const family = extractKnownProductFamilyTerm(cleaned);
+    if (family) return family;
+  }
+  const match = /^(.+?)[(（]([^()（）]+)[)）]/.exec(cleaned);
+  if (!match) return cleaned;
+  const base = cleanSearchTerm(match[1]);
+  const inner = match[2];
+  if (!base) return cleaned;
+  if (/[,\u00B7;/]/.test(inner) || splitWords(normalizeSearchText(inner)).length >= 3) return base;
+  return cleaned;
+}
+
+function isCompositeProductSearchTerm(value: string): boolean {
+  const cleaned = cleanSearchTerm(value);
+  if (!cleaned) return false;
+  const parenthetical = /[(（][^()（）]*[,\u00B7;/][^()（）]*[)）]/.test(cleaned);
+  const bracketedLong = /[\[\]()[\]（）]/.test(cleaned) && cleaned.length > 40;
+  const commaList = cleaned.split(/[,;]/g).length >= 3;
+  return parenthetical || bracketedLong || commaList || hasVariantOrModelList(cleaned);
+}
+
+function hasVariantOrModelList(value: string): boolean {
+  const words = splitWords(normalizeSearchText(value));
+  const modelLikeCount = words.filter(isModelOrVariantToken).length;
+  if (modelLikeCount >= 2) return true;
+  const modelLabelCount = words.filter((word) => /^(?:[a-z0-9가-힣_-]+)?(?:model|모델)(?:[a-z0-9가-힣_-]+)?$/i.test(word)).length;
+  return modelLabelCount >= 2;
+}
+
+function isModelOrVariantToken(token: string): boolean {
+  const normalized = normalizeToken(token);
+  if (!normalized || normalized.length > 24) return false;
+  if (/^(?=.*[a-z])(?=.*\d)[a-z0-9가-힣]+$/i.test(normalized)) return true;
+  if (/^[a-z]{1,5}\d+[a-z0-9-]*$/i.test(normalized)) return true;
+  if (/^\d+[a-z]{1,5}[a-z0-9-]*$/i.test(normalized)) return true;
+  if (/^(?:[a-z0-9가-힣_-]+)?(?:model|모델)(?:[a-z0-9가-힣_-]+)?$/i.test(normalized)) return true;
+  return false;
+}
+
+function extractKnownProductFamilyTerm(value: string): string {
+  const text = normalizeSearchText(value);
+  const families = [
+    { pattern: /하이브리드\s*승용자동차|하이브리드\s*승용차/, term: "하이브리드 승용자동차" },
+    { pattern: /전기\s*승용자동차|전기\s*승용차/, term: "전기승용자동차" },
+    { pattern: /승용자동차|승용차/, term: "승용자동차" },
+    { pattern: /hybrid passenger car|hybrid vehicle/, term: "hybrid vehicle" },
+    { pattern: /electric passenger car|electric vehicle|\bev\b/, term: "electric vehicle" },
+    { pattern: /passenger car|passenger motor car/, term: "passenger car" },
+  ];
+  return families.find((family) => family.pattern.test(text))?.term ?? "";
+}
+
 function normalizeToken(value: string): string {
   return normalizeSearchText(value).trim();
 }
@@ -2278,4 +2433,25 @@ function toPublishedAtScore(value: string | null | undefined): number {
   if (!normalized) return Number.NEGATIVE_INFINITY;
   const parsed = Date.parse(`${normalized}T00:00:00Z`);
   return Number.isFinite(parsed) ? parsed : Number.NEGATIVE_INFINITY;
+}
+
+export function extractNewsSourceText(body: string | null | undefined): string {
+  const text = String(body ?? "").trim();
+  if (!text) return "";
+
+  // 기사 하단 1500자 추출 후 태그 제거
+  const tail = text.slice(-1500).replace(/<[^>]+>/g, " ");
+
+  // '자료:' 또는 '출처:' 로 시작하는 마지막 문단(또는 줄) 추출
+  const match = tail.match(/(?:자료|출처)\s*:\s*([^]+)$/i);
+  if (match && match[1]) {
+    // 너무 길면 자름
+    return match[1].trim().slice(0, 300);
+  }
+
+  // 매치 안되면 그냥 무역관 이름이라도 있는지 확인
+  const officeMatch = tail.match(/(KOTRA\s*[가-힣]+무역관|[가-힣]+무역관)/i);
+  if (officeMatch && officeMatch[1]) return officeMatch[1].trim();
+
+  return "";
 }

@@ -273,24 +273,16 @@ describe("step4-detail-consistency", () => {
       raw: { source_type: "kotra_overseas_cert" },
     })).toBe("kotra_overseas_cert");
     expect(getCertificationSourceKind({
-      source_org: "중소벤처기업부 (AI 분석)",
-      raw: { source_type: "sme_overseas_cert" },
-    })).toBe("sme_overseas_cert");
-    expect(getCertificationSourceKind({
       source_org: "Unknown",
       raw: { source_type: "manual" },
     })).toBe("unknown_certification");
   });
 
-  it("classifies regulation source rows without mixing KOTRA and WTO ePing", () => {
+  it("classifies regulation source rows for KOTRA only", () => {
     expect(getRegulationSourceKind({
       source_org: "KOTRA",
       raw: { source_type: "csv_backup" },
     })).toBe("kotra_import_regulation");
-    expect(getRegulationSourceKind({
-      source_org: "WTO ePing",
-      raw: { source_type: "wto_eping" },
-    })).toBe("wto_eping");
     expect(getRegulationSourceKind({
       source_org: "Unknown",
       raw: { source_type: "manual" },

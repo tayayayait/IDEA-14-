@@ -1399,19 +1399,86 @@ function rankCountryRows(rows: CountryRow[]): CountryRow[] {
 }
 
 async function persistCustomsExportEvidence(projectId: string, rows: CountryRow[]): Promise<void> {
-  const results = await Promise.all(rows.map((row) => supabase
+  if (rows.length === 0) return;
+  const countryCodes = rows.map((row) => row.country_code);
+  const { data: currentRows, error: currentRowsError } = await supabase
+    .from("project_countries")
+    .select("country_code,rationale,updated_at")
+    .eq("project_id", projectId)
+    .in("country_code", countryCodes);
+  if (currentRowsError) throw currentRowsError;
+
+  const currentRationaleByCountry = new Map(
+    ((currentRows as Array<{ country_code: string; rationale: unknown; updated_at: string | null }> | null) ?? [])
+      .map((row) => [row.country_code, { rationale: row.rationale, updatedAt: row.updated_at ?? null }] as const),
+  );
+
+  await Promise.all(rows.map((row) => persistCustomsExportEvidenceRow(
+    projectId,
+    row,
+    currentRationaleByCountry.get(row.country_code) ?? { rationale: row.rationale, updatedAt: null },
+  )));
+}
+
+type CountryRationaleSnapshot = {
+  rationale: unknown;
+  updatedAt: string | null;
+};
+
+async function persistCustomsExportEvidenceRow(
+  projectId: string,
+  row: CountryRow,
+  snapshot: CountryRationaleSnapshot,
+  attempt = 0,
+): Promise<void> {
+  let request = supabase
     .from("project_countries")
     .update({
       market_score: row.market_score,
       total_score: row.total_score,
       rank: row.rank,
-      rationale: mergeCustomsExportEvidenceIntoRationale(row.rationale, row._customsExpDlr ?? null) as Json,
+      rationale: mergeCustomsExportEvidenceIntoRationale(
+        snapshot.rationale,
+        row._customsExpDlr ?? null,
+      ) as Json,
     })
     .eq("project_id", projectId)
-    .eq("country_code", row.country_code)));
+    .eq("country_code", row.country_code);
 
-  const failed = results.find((result) => result.error);
-  if (failed?.error) throw failed.error;
+  if (snapshot.updatedAt) {
+    request = request.eq("updated_at", snapshot.updatedAt);
+  }
+
+  const { data, error } = await request.select("country_code").maybeSingle();
+  if (error) throw error;
+  if (data) return;
+
+  if (snapshot.updatedAt && attempt < 2) {
+    const latest = await fetchCurrentCountryRationale(projectId, row.country_code);
+    if (!latest) return;
+    await persistCustomsExportEvidenceRow(projectId, row, latest, attempt + 1);
+    return;
+  }
+
+  if (snapshot.updatedAt) throw new Error("Concurrent country rationale update could not be merged");
+}
+
+async function fetchCurrentCountryRationale(
+  projectId: string,
+  countryCode: string,
+): Promise<CountryRationaleSnapshot | null> {
+  const { data, error } = await supabase
+    .from("project_countries")
+    .select("rationale,updated_at")
+    .eq("project_id", projectId)
+    .eq("country_code", countryCode)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  return {
+    rationale: data.rationale,
+    updatedAt: data.updated_at ?? null,
+  };
 }
 
 export function formatCustomsExportAmount(amount: number | null | undefined): string {

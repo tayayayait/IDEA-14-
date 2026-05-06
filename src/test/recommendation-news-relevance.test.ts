@@ -6,6 +6,7 @@ import {
   buildExportImpactSummary,
   buildNewsRelevanceText,
   buildNewsSelectionReason,
+  buildRepresentativeProductSearchTerms,
   classifyNewsForProductContext,
   buildProductRelevanceTokens,
   classifyNewsCategory,
@@ -21,6 +22,35 @@ import {
 } from "../../supabase/functions/_shared/recommendation";
 
 describe("recommendation news relevance", () => {
+  it("collapses mixed vehicle model names into representative product search terms", () => {
+    const rawName = "승용자동차(IG그랜저, DN8소나타, CE아이오닉6, ME아이오닉9)";
+    const terms = buildRepresentativeProductSearchTerms({
+      productName: rawName,
+      hsCode: "870340",
+      hsDescription:
+        "하이브리드 자동차[불꽃점화식 내연기관과 전기모터를 모두 동력원으로 갖춘 것(승용자동차)] · 표준품명: 하이브리드 승용자동차",
+    });
+
+    expect(terms[0]).toBe("하이브리드 승용자동차");
+    expect(terms).toContain("승용자동차");
+    expect(terms).toContain("하이브리드 자동차");
+    expect(terms).toContain("hybrid vehicle");
+    expect(terms).not.toContain(rawName);
+  });
+
+  it("drops unpunctuated model and SKU lists from representative product queries", () => {
+    const rawName = "IG Grandeur DN8 Sonata CE Ioniq6 ME Ioniq9 passenger car";
+    const terms = buildRepresentativeProductSearchTerms({
+      productName: rawName,
+      hsCode: "870340",
+      hsDescription: "Standard product name: hybrid passenger car",
+    });
+
+    expect(terms).toContain("hybrid vehicle");
+    expect(terms).toContain("passenger car");
+    expect(terms).not.toContain(rawName);
+  });
+
   it("keeps HS signals but does not inject hardcoded product synonyms", () => {
     const tokens = buildProductRelevanceTokens("automotive brake pad", "870830", ["brake", "pad"]);
 
@@ -163,6 +193,20 @@ describe("recommendation news relevance", () => {
 
     expect(result.type).toBe("direct_country");
     expect(result.reason).toBe("country:body");
+  });
+
+  it("does not promote third-country source articles to direct when only the body mentions the selected country", () => {
+    const result = assessCountryNewsMatch({
+      countryCode: "US",
+      title: "Russia gasoline export restrictions continue",
+      summary: "The government keeps fuel-market stabilization measures in place.",
+      body: "The policy may affect United States fuel prices and diesel import conditions.",
+      natn: "\uB7EC\uC2DC\uC544",
+      regn: "Europe",
+    });
+
+    expect(result.type).toBe("background_country");
+    expect(result.reason).toBe("country:source_metadata_mismatch");
   });
 
   it("classifies another-country article that only impacts the selected country as background", () => {

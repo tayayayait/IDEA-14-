@@ -94,6 +94,16 @@ describe("step3 news enrichment UI", () => {
     expect(source).toContain("articleBodyOriginalLength: source.article_body_original_length");
   });
 
+  it("persists customs export evidence against freshly loaded rationale so saved news is not dropped", () => {
+    const source = readFileSync(join(process.cwd(), "src/pages/Step3Countries.tsx"), "utf8");
+
+    expect(source).toContain('select("country_code,rationale,updated_at")');
+    expect(source).toContain("const currentRationaleByCountry =");
+    expect(source).toContain("currentRationaleByCountry.get(row.country_code) ?? { rationale: row.rationale, updatedAt: null }");
+    expect(source).toContain('.eq("updated_at", snapshot.updatedAt)');
+    expect(source).toContain("persistCustomsExportEvidenceRow(");
+  });
+
   it("allows enough client timeout for Gemini article-body report generation", () => {
     const source = readFileSync(join(process.cwd(), "src/pages/Step6Report.tsx"), "utf8");
 
