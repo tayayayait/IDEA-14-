@@ -5,6 +5,51 @@ import path from "path";
 const reactPath = path.resolve(__dirname, "node_modules/react");
 const reactDomPath = path.resolve(__dirname, "node_modules/react-dom");
 
+function getNodePackageName(id: string) {
+  const normalized = id.split("?")[0].replace(/\\/g, "/");
+  const nodeModulesMarker = "/node_modules/";
+  const index = normalized.lastIndexOf(nodeModulesMarker);
+
+  if (index === -1) return null;
+
+  const packagePath = normalized.slice(index + nodeModulesMarker.length);
+  const segments = packagePath.split("/");
+
+  if (segments[0]?.startsWith("@")) {
+    return segments.length > 1 ? `${segments[0]}/${segments[1]}` : null;
+  }
+
+  return segments[0] || null;
+}
+
+function isReactRuntimePackage(packageName: string) {
+  return (
+    packageName === "react" ||
+    packageName === "react-dom" ||
+    packageName === "scheduler" ||
+    packageName === "use-sync-external-store" ||
+    packageName.startsWith("@radix-ui/") ||
+    packageName.startsWith("@floating-ui/") ||
+    [
+      "@tanstack/react-query",
+      "cmdk",
+      "class-variance-authority",
+      "clsx",
+      "lucide-react",
+      "react-router",
+      "react-router-dom",
+      "react-remove-scroll",
+      "react-remove-scroll-bar",
+      "react-style-singleton",
+      "sonner",
+      "tailwind-merge",
+      "use-callback-ref",
+      "use-sidecar",
+      "vaul",
+    ].includes(packageName)
+  );
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
@@ -34,28 +79,17 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-          if (id.includes("react-router-dom")) return "vendor-router";
-          if (id.includes("react-dom") || id.includes("react/")) return "vendor-react";
-          if (id.includes("@supabase/")) return "vendor-supabase";
-          if (id.includes("@tanstack/")) return "vendor-query";
-          if (id.includes("recharts")) return "vendor-chart";
-          if (
-            id.includes("@radix-ui/") ||
-            id.includes("lucide-react") ||
-            id.includes("class-variance-authority") ||
-            id.includes("clsx") ||
-            id.includes("tailwind-merge") ||
-            id.includes("sonner") ||
-            id.includes("vaul") ||
-            id.includes("cmdk")
-          ) {
-            return "vendor-ui";
-          }
-          if (id.includes("react-hook-form") || id.includes("@hookform/resolvers") || id.includes("zod")) {
+          const packageName = getNodePackageName(id);
+
+          if (!packageName) return;
+          if (isReactRuntimePackage(packageName)) return "vendor-react";
+          if (packageName.startsWith("@supabase/")) return "vendor-supabase";
+          if (packageName.startsWith("@tanstack/")) return "vendor-query";
+          if (packageName === "recharts") return "vendor-chart";
+          if (packageName === "react-hook-form" || packageName === "@hookform/resolvers" || packageName === "zod") {
             return "vendor-form";
           }
-          if (id.includes("date-fns")) return "vendor-date";
+          if (packageName === "date-fns") return "vendor-date";
           return undefined;
         },
       },
