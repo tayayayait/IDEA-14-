@@ -38,8 +38,9 @@ network-phase2.txt
 # Documents
 *.hwp
 "~$*.hwp"
-"~$*.docx"
 
 # Supabase temp
 supabase/.temp/
 
+
+.vercel
