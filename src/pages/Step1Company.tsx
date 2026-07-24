@@ -298,7 +298,7 @@ export default function Step1Company() {
             <div className="flex items-start gap-2 rounded-md border border-risk-high/30 bg-risk-high-soft p-3 text-sm text-risk-high">
               <AlertCircle className="mt-0.5 h-4 w-4" />
               <div>
-                <p className="font-medium">API 인증 정보 미설정 또는 호출 실패</p>
+                <p className="font-medium">KICOX 조회에 실패했습니다</p>
                 <p className="text-xs">{errMsg ?? "잠시 후 다시 시도하거나 직접 입력으로 진행하세요."}</p>
               </div>
             </div>

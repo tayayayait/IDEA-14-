@@ -30,14 +30,35 @@ describe("step4 source cards UI", () => {
     expect(source).toContain("API/cache 정상 조회, 매칭 0건");
   });
 
-  it("renders KOTRA certification results as verified confirmed/review groups only", () => {
+  it("renders KOTRA certification results as direct-match/review groups only", () => {
     const source = readFileSync(join(process.cwd(), "src/pages/Step4CountryDetail.tsx"), "utf8");
 
     expect(source).not.toContain("HS 미검증 대체 후보");
-    expect(source).toContain("확정 인증정보");
-    expect(source).toContain("검토 필요 인증정보");
+    expect(source).toContain("직접 일치 인증정보");
+    expect(source).toContain("추가 검토 인증정보");
     expect(source).toContain("직접 관련된 해외인증 정보가 확인되지 않았습니다");
     expect(source).not.toContain("API 원본 ");
+  });
+
+  it("keeps the certification result compact while exposing summary, facts, details, and source", () => {
+    const source = readFileSync(join(process.cwd(), "src/pages/Step4CountryDetail.tsx"), "utf8");
+
+    expect(source).toContain("buildCertificationSummary(row)");
+    expect(source).toContain("핵심 정리");
+    expect(source).toContain("필요 서류");
+    expect(source).toContain("근거 기준");
+    expect(source).toContain("비용·기간");
+    expect(source).toContain("KOTRA 최종 업데이트");
+    expect(source).toContain("KOTRA API 원문 펼치기");
+    expect(source).toContain("KOTRA 원문 확인");
+    expect(source).toContain("setSelectedCert(row)");
+    expect(source).not.toContain('className="line-clamp-3">절차:');
+    expect(source).not.toContain("line-clamp-3 text-xs leading-relaxed");
+    expect(source).not.toContain("line-clamp-2 text-foreground");
+    expect(source).toContain("decodeCertificationText");
+    expect(source).toContain('value.replace(/&sect;/gi, "§")');
+    expect(source).toContain("formatCertificationValidity(row)");
+    expect(source).toContain("if (cost === period) return cost;");
   });
 
   it("renders KOTRA national info through categorized summaries and details-only raw text", () => {

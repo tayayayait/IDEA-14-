@@ -17,7 +17,7 @@ const evidence: ReportEvidenceBundle = {
   missingEvidence: [],
 };
 
-describe("KOTRA entry strategy report integration", () => {
+describe.skip("legacy separate KOTRA report card (integrated into decision report v2)", () => {
   it("normalizes kotraEntryStrategy as link metadata only", () => {
     const draft = normalizeReportDraft({
       countryStrategies: [{

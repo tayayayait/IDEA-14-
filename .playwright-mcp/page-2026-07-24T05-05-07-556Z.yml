@@ -1,0 +1,276 @@
+- generic [ref=f5e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f5e4]:
+    - banner [ref=f5e5]:
+      - link "홈" [ref=f5e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f5e12]: 산단수출 코파일럿
+      - generic [ref=f5e13]:
+        - link "프로젝트" [ref=f5e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f5e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f5e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f5e18] [cursor=pointer]
+    - main [ref=f5e21]:
+      - generic [ref=f5e22]:
+        - generic [ref=f5e23]:
+          - heading "데이터 출처 및 API 상태" [level=1] [ref=f5e24]
+          - paragraph [ref=f5e25]: 실제 호출 로그를 기준으로 각 데이터 소스의 최신 상태를 표시합니다.
+          - generic [ref=f5e26]:
+            - paragraph [ref=f5e27]: "최근 조회 시각: 2026.07.24 01:43"
+            - generic [ref=f5e28]:
+              - generic [ref=f5e29]: KICOX 상태
+              - generic [ref=f5e30]: 정상
+              - generic [ref=f5e31]: SafetyKorea 상태
+              - generic [ref=f5e32]: 대기
+        - generic [ref=f5e33]:
+          - generic [ref=f5e34]:
+            - heading "공공데이터 API 10종" [level=3] [ref=f5e35]
+            - paragraph [ref=f5e36]: 실제 호출 로그 기반으로 API 상태를 자동 반영합니다.
+          - table "데이터 출처 및 API 상태 표" [ref=f5e38]:
+            - caption [ref=f5e39]: 데이터 출처, API 상태, 최근 조회 이력 표
+            - rowgroup [ref=f5e40]:
+              - row [ref=f5e41]:
+                - columnheader "API" [ref=f5e42]
+                - columnheader "기관" [ref=f5e43]
+                - columnheader "용도" [ref=f5e44]
+                - columnheader "최근 상태" [ref=f5e45]
+                - columnheader "최근 조회" [ref=f5e46]
+                - columnheader "HTTP" [ref=f5e47]
+                - columnheader "응답 건수" [ref=f5e48]
+                - columnheader "오류 코드" [ref=f5e49]
+                - columnheader "실패 횟수" [ref=f5e50]
+                - columnheader "라이선스" [ref=f5e51]
+            - rowgroup [ref=f5e52]:
+              - row [ref=f5e53]:
+                - cell "KICOX_Factory Production Info" [ref=f5e54]
+                - cell "KICOX" [ref=f5e55]
+                - cell "Factory registration and production information lookup" [ref=f5e56]
+                - cell "정상 조회 성공" [ref=f5e57]:
+                  - generic [ref=f5e58]:
+                    - generic [ref=f5e59]: 정상
+                    - paragraph [ref=f5e60]: 조회 성공
+                - cell "2026.07.21 19:25" [ref=f5e61]
+                - cell "200" [ref=f5e62]
+                - cell "20" [ref=f5e63]
+                - cell "정보 없음" [ref=f5e64]
+                - cell "8" [ref=f5e65]
+                - cell [ref=f5e66]:
+                  - link "Public Data Portal" [ref=f5e67] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/data/15087611/openapi.do
+              - row [ref=f5e72]:
+                - cell "KOTRA_Country Info" [ref=f5e73]
+                - cell "KOTRA" [ref=f5e74]
+                - cell "Country-level market baseline information" [ref=f5e75]
+                - cell "정상 조회 성공" [ref=f5e76]:
+                  - generic [ref=f5e77]:
+                    - generic [ref=f5e78]: 정상
+                    - paragraph [ref=f5e79]: 조회 성공
+                - cell "2026.07.21 19:29" [ref=f5e80]
+                - cell "200" [ref=f5e81]
+                - cell "4" [ref=f5e82]
+                - cell "정보 없음" [ref=f5e83]
+                - cell "0" [ref=f5e84]
+                - cell [ref=f5e85]:
+                  - link "KOTRA" [ref=f5e86] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/kotranews/cms/com/index.do?MENU_ID=30
+              - row [ref=f5e91]:
+                - cell "KOTRA_Overseas Market News" [ref=f5e92]
+                - cell "KOTRA" [ref=f5e93]
+                - cell "Collect overseas market news and trend signals" [ref=f5e94]
+                - cell "부분 산출 조회 결과 없음" [ref=f5e95]:
+                  - generic [ref=f5e96]:
+                    - generic [ref=f5e97]: 부분 산출
+                    - paragraph [ref=f5e98]: 조회 결과 없음
+                - cell "2026.07.24 01:43" [ref=f5e99]
+                - cell "200" [ref=f5e100]
+                - cell "0" [ref=f5e101]
+                - cell "정보 없음" [ref=f5e102]
+                - cell "7" [ref=f5e103]
+                - cell [ref=f5e104]:
+                  - link "KOTRA" [ref=f5e105] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/kotranews/index.do
+              - row [ref=f5e110]:
+                - cell "KOTRA_Overseas Certification Info" [ref=f5e111]
+                - cell "KOTRA" [ref=f5e112]
+                - cell "Check overseas certification requirements" [ref=f5e113]
+                - cell "정상 조회 성공" [ref=f5e114]:
+                  - generic [ref=f5e115]:
+                    - generic [ref=f5e116]: 정상
+                    - paragraph [ref=f5e117]: 조회 성공
+                - cell "2026.07.24 01:43" [ref=f5e118]
+                - cell "200" [ref=f5e119]
+                - cell "1" [ref=f5e120]
+                - cell "정보 없음" [ref=f5e121]
+                - cell "0" [ref=f5e122]
+                - cell [ref=f5e123]:
+                  - link "KOTRA" [ref=f5e124] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+              - row [ref=f5e129]:
+                - cell "KOTRA_Import Regulation Info" [ref=f5e130]
+                - cell "KOTRA" [ref=f5e131]
+                - cell "Review import regulations and non-tariff barriers" [ref=f5e132]
+                - cell "정상 조회 성공" [ref=f5e133]:
+                  - generic [ref=f5e134]:
+                    - generic [ref=f5e135]: 정상
+                    - paragraph [ref=f5e136]: 조회 성공
+                - cell "2026.07.24 01:43" [ref=f5e137]
+                - cell "200" [ref=f5e138]
+                - cell "4" [ref=f5e139]
+                - cell "정보 없음" [ref=f5e140]
+                - cell "0" [ref=f5e141]
+                - cell [ref=f5e142]:
+                  - link "KOTRA" [ref=f5e143] [cursor=pointer]:
+                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+              - row [ref=f5e148]:
+                - cell "K-SURE_Country Risk Grade" [ref=f5e149]
+                - cell "K-SURE" [ref=f5e150]
+                - cell "Check country credit/risk grade" [ref=f5e151]
+                - cell "정상 조회 성공" [ref=f5e152]:
+                  - generic [ref=f5e153]:
+                    - generic [ref=f5e154]: 정상
+                    - paragraph [ref=f5e155]: 조회 성공
+                - cell "2026.07.24 01:43" [ref=f5e156]
+                - cell "200" [ref=f5e157]
+                - cell "1" [ref=f5e158]
+                - cell "정보 없음" [ref=f5e159]
+                - cell "1" [ref=f5e160]
+                - cell [ref=f5e161]:
+                  - link "K-SURE" [ref=f5e162] [cursor=pointer]:
+                    - /url: https://ksight.ksure.or.kr/rsrch/nation/nationView
+              - row [ref=f5e167]:
+                - cell "K-SURE_Industry Risk Index" [ref=f5e168]
+                - cell "K-SURE" [ref=f5e169]
+                - cell "Check industry-level risk index" [ref=f5e170]
+                - cell "정상 조회 성공" [ref=f5e171]:
+                  - generic [ref=f5e172]:
+                    - generic [ref=f5e173]: 정상
+                    - paragraph [ref=f5e174]: 조회 성공
+                - cell "2026.07.24 01:43" [ref=f5e175]
+                - cell "200" [ref=f5e176]
+                - cell "1" [ref=f5e177]
+                - cell "정보 없음" [ref=f5e178]
+                - cell "3" [ref=f5e179]
+                - cell [ref=f5e180]:
+                  - link "K-SURE" [ref=f5e181] [cursor=pointer]:
+                    - /url: https://ksight.ksure.or.kr/risk-index
+              - row [ref=f5e186]:
+                - cell "K-SURE_Export Payment Info" [ref=f5e187]
+                - cell "K-SURE" [ref=f5e188]
+                - cell "Reference export payment terms and delay history" [ref=f5e189]
+                - cell "정상 조회 성공" [ref=f5e190]:
+                  - generic [ref=f5e191]:
+                    - generic [ref=f5e192]: 정상
+                    - paragraph [ref=f5e193]: 조회 성공
+                - cell "2026.07.24 01:43" [ref=f5e194]
+                - cell "200" [ref=f5e195]
+                - cell "1" [ref=f5e196]
+                - cell "정보 없음" [ref=f5e197]
+                - cell "3" [ref=f5e198]
+                - cell [ref=f5e199]:
+                  - link "K-SURE" [ref=f5e200] [cursor=pointer]:
+                    - /url: https://ksight.ksure.or.kr/analysis/risk-advisor/payment
+              - row [ref=f5e205]:
+                - cell "Trade Security Institute_HSK Strategic Item Info" [ref=f5e206]
+                - cell "Trade Security Institute" [ref=f5e207]
+                - cell "Check strategic item status by HSK code" [ref=f5e208]
+                - cell "대기 미실행" [ref=f5e209]:
+                  - generic [ref=f5e210]:
+                    - generic [ref=f5e211]: 대기
+                    - paragraph [ref=f5e212]: 미실행
+                - cell "정보 없음" [ref=f5e213]
+                - cell "정보 없음" [ref=f5e214]
+                - cell "정보 없음" [ref=f5e215]
+                - cell "정보 없음" [ref=f5e216]
+                - cell "0" [ref=f5e217]
+                - cell [ref=f5e218]:
+                  - link "Trade Security Institute" [ref=f5e219] [cursor=pointer]:
+                    - /url: https://www.yestrade.go.kr/
+              - row [ref=f5e224]:
+                - cell "KATS_SafetyKorea_Recall" [ref=f5e225]
+                - cell "KATS" [ref=f5e226]
+                - cell "Check product recall status" [ref=f5e227]
+                - cell "대기 미실행" [ref=f5e228]:
+                  - generic [ref=f5e229]:
+                    - generic [ref=f5e230]: 대기
+                    - paragraph [ref=f5e231]: 미실행
+                - cell "정보 없음" [ref=f5e232]
+                - cell "정보 없음" [ref=f5e233]
+                - cell "정보 없음" [ref=f5e234]
+                - cell "정보 없음" [ref=f5e235]
+                - cell "0" [ref=f5e236]
+                - cell [ref=f5e237]:
+                  - link "KATS" [ref=f5e238] [cursor=pointer]:
+                    - /url: https://www.safetykorea.kr/release/openapi
+              - row [ref=f5e243]:
+                - cell "관세청_품목별 국가별 수출입실적(GW)" [ref=f5e244]
+                - cell "관세청" [ref=f5e245]
+                - cell "국가별 수출입 무역 통계 조회 및 점수 부스트 반영" [ref=f5e246]
+                - cell "대기 미실행" [ref=f5e247]:
+                  - generic [ref=f5e248]:
+                    - generic [ref=f5e249]: 대기
+                    - paragraph [ref=f5e250]: 미실행
+                - cell "정보 없음" [ref=f5e251]
+                - cell "정보 없음" [ref=f5e252]
+                - cell "정보 없음" [ref=f5e253]
+                - cell "정보 없음" [ref=f5e254]
+                - cell "0" [ref=f5e255]
+                - cell [ref=f5e256]:
+                  - link "관세청" [ref=f5e257] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15096822
+        - generic [ref=f5e262]:
+          - generic [ref=f5e263]:
+            - heading "CSV 캐시 데이터 3종" [level=3] [ref=f5e264]
+            - paragraph [ref=f5e265]: "supabase `api_cache_status` 기준 동기화 상태를 표시합니다."
+          - table "CSV 캐시 동기화 상태 표" [ref=f5e267]:
+            - caption [ref=f5e268]: CSV 캐시 3종 동기화 상태
+            - rowgroup [ref=f5e269]:
+              - row [ref=f5e270]:
+                - columnheader "데이터" [ref=f5e271]
+                - columnheader "상태" [ref=f5e272]
+                - columnheader "최근 성공" [ref=f5e273]
+                - columnheader "최근 시도" [ref=f5e274]
+                - columnheader "건수(total/fetched/upserted)" [ref=f5e275]
+                - columnheader "출처" [ref=f5e276]
+            - rowgroup [ref=f5e277]:
+              - row [ref=f5e278]:
+                - cell "수출 지역 순위" [ref=f5e279]
+                - cell "오래됨 오래됨 (30일 기준 초과)" [ref=f5e280]:
+                  - generic [ref=f5e281]:
+                    - generic [ref=f5e282]: 오래됨
+                    - paragraph [ref=f5e283]: 오래됨 (30일 기준 초과)
+                - cell "2026.04.29 17:22" [ref=f5e284]
+                - cell "2026.04.29 17:22" [ref=f5e285]
+                - cell "238 / 238 / 238" [ref=f5e286]
+                - cell [ref=f5e287]:
+                  - link "공공데이터포털" [ref=f5e288] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EC%88%98%EC%B6%9C%20%EC%A7%80%EC%97%AD%20%EC%88%9C%EC%9C%84
+              - row [ref=f5e293]:
+                - cell "국별 대세계 수입규제 현황" [ref=f5e294]
+                - cell "오래됨 오래됨 (30일 기준 초과)" [ref=f5e295]:
+                  - generic [ref=f5e296]:
+                    - generic [ref=f5e297]: 오래됨
+                    - paragraph [ref=f5e298]: 오래됨 (30일 기준 초과)
+                - cell "2026.04.29 17:22" [ref=f5e299]
+                - cell "2026.04.29 17:22" [ref=f5e300]
+                - cell "31,406 / 31,406 / 31,406" [ref=f5e301]
+                - cell [ref=f5e302]:
+                  - link "공공데이터포털" [ref=f5e303] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EA%B5%AD%EB%B3%84%20%EB%8C%80%EC%84%B8%EA%B3%84%20%EC%88%98%EC%9E%85%EA%B7%9C%EC%A0%9C%20%ED%98%84%ED%99%A9
+              - row [ref=f5e308]:
+                - cell "무역관 정보" [ref=f5e309]
+                - cell "정상 사용 가능" [ref=f5e310]:
+                  - generic [ref=f5e311]:
+                    - generic [ref=f5e312]: 정상
+                    - paragraph [ref=f5e313]: 사용 가능
+                - cell "2026.04.29 17:22" [ref=f5e314]
+                - cell "2026.04.29 17:22" [ref=f5e315]
+                - cell "127 / 127 / 127" [ref=f5e316]
+                - cell [ref=f5e317]:
+                  - link "공공데이터포털" [ref=f5e318] [cursor=pointer]:
+                    - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EB%8C%80%ED%95%9C%EB%AC%B4%EC%97%AD%ED%88%AC%EC%9E%90%EC%A7%84%ED%9D%A5%EA%B3%B5%EC%82%AC_%EB%AC%B4%EC%97%AD%EA%B4%80%20%EC%A0%95%EB%B3%B4
+        - paragraph [ref=f5e323]: SafetyKorea는 현재 API 승인 대기 상태로만 표시되며, 평가 결함으로 집계하지 않습니다.

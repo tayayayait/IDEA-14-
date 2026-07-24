@@ -107,6 +107,6 @@ describe("step3 news enrichment UI", () => {
   it("allows enough client timeout for Gemini article-body report generation", () => {
     const source = readFileSync(join(process.cwd(), "src/pages/Step6Report.tsx"), "utf8");
 
-    expect(source).toContain("{ timeoutMs: 120000, retryOn429: false, retryOn500: true, retry500DelayMs: 800 }");
+    expect(source).toContain("{ timeoutMs: 240000, retryOn429: false, retryOn500: true, retry500DelayMs: 800 }");
   });
 });

@@ -1,0 +1,671 @@
+- generic:
+  - generic:
+    - list
+    - region "Notifications alt+T"
+    - generic:
+      - banner:
+        - generic:
+          - link:
+            - /url: /projects
+            - generic: 산단수출 코파일럿
+        - generic:
+          - link:
+            - /url: /projects
+            - text: 프로젝트
+          - link:
+            - /url: /data-sources
+            - text: 데이터 출처
+          - link:
+            - /url: /kc-recall
+            - generic: KC·리콜 조회
+          - button:
+            - generic: 로그아웃
+      - generic:
+        - complementary:
+          - paragraph: 분석 단계
+          - navigation:
+            - link:
+              - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/company
+              - generic:
+                - generic: 기업·공장 검색
+                - generic: 요구사항 1
+            - link:
+              - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/product
+              - generic:
+                - generic: 제품·HS 코드
+                - generic: 요구사항 2
+            - link:
+              - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries
+              - generic:
+                - generic: 후보국 추천 Top 3
+                - generic: 요구사항 3
+            - link:
+              - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries/CN
+              - generic: "4"
+              - generic:
+                - generic: 국가 상세
+                - generic: 요구사항 4~7
+            - link:
+              - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/report
+              - generic: "5"
+              - generic:
+                - generic: 리포트
+                - generic: 요구사항 8
+        - main:
+          - generic:
+            - generic:
+              - paragraph: 기획 요구사항 매핑
+              - paragraph: 요구사항 4~7
+              - paragraph: 인증·규제·국가/업종·결제 리스크 상세 검증
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - paragraph: CN
+                        - heading [level=1]: 중화인민공화국(The People&rsquo;s Republic of China)
+                      - generic:
+                        - generic:
+                          - text: 제품
+                          - strong: 타이어
+                        - generic:
+                          - text: HS6
+                          - strong: "401110"
+                        - generic:
+                          - text: HSK10
+                          - strong: "4011100000"
+                      - paragraph: 분석은 HSK10 정확 일치 → HS6 → 제품명 순으로 적용됩니다. 제품 설명과 품목코드가 다르면 결과도 달라질 수 있습니다.
+                      - paragraph:
+                        - text: 최종 갱신 2026. 7. 20. 오후 5:05
+                        - generic: · 1개 공급자 실패, 마지막 정상 데이터 유지
+                    - generic:
+                      - button: 데이터 갱신
+                      - button: 상세 분석
+                  - generic:
+                    - generic:
+                      - paragraph: 수출 적합도
+                      - paragraph: 조건부 검토
+                      - paragraph: 일부 요건을 확인한 뒤 수출 여부를 결정해야 합니다.
+                    - generic:
+                      - paragraph: 시장 기회 점수
+                      - paragraph: 84/100
+                      - paragraph: 시장 규모·성장성 기준이며 규제 위험은 포함하지 않습니다.
+                    - generic:
+                      - paragraph: 근거 충족도
+                      - paragraph: 50%
+                      - paragraph: 확인 4건 · 참고 3건 · 추가 확인 4건
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - heading [level=3]: 수출 진입장벽 요약
+                      - generic:
+                        - generic:
+                          - paragraph: 포함 이유
+                          - paragraph: 인증 데이터 존재; HS 6자리 일치; 제품 키워드 일치; HS 4자리 접두 일치; 수입 규제 데이터 존재; 시장 뉴스 일치
+                        - generic:
+                          - paragraph: 긍정 요인
+                          - paragraph: 중국은 세계 최대 자동차 시장으로서 타이어 교체 및 신차 장착 수요가 압도적이며, 신에너지차 산업의 성장은 고성능 타이어 시장의 확대를 가속화하고 있습니다. 한국산 제품의 기술력을 바탕으로 프리미엄 시장을 공략하기 좋습니다.
+                        - generic:
+                          - paragraph: 주의 요인
+                          - paragraph: 자국 기업들의 강력한 가격 경쟁력과 116건에 달하는 방대한 수입 규제는 시장 진입을 어렵게 합니다. 또한 내수 부진과 부동산 경기 침체로 인한 디플레이션 압박이 지속되고 있어 소비 심리 위축이 우려됩니다.
+                        - generic:
+                          - paragraph: 대안시장
+                          - paragraph: 베트남 사회주의 공화국(Socialist Republic of Vietnam)(VN), 태국(TH), 브라질 연방 공화국(The Federal Republic of Brazil)(BR)
+                        - paragraph: "후보 편입 근거: 인증 데이터 존재, HS 6자리 일치, 제품 키워드 일치, HS 4자리 접두 일치, 수입 규제 데이터 존재, 시장 뉴스 일치"
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - heading [level=3]: KOTRA 해외인증·규격
+                              - paragraph: 국가·HS/HSK·제품 기준 KOTRA 해외인증 API 결과
+                            - generic: 조회 성공
+                          - paragraph: 확정 인증정보 1건 / 검토 필요 인증정보 0건
+                        - generic:
+                          - generic:
+                            - generic:
+                              - paragraph: 확정 인증정보 1건
+                              - list:
+                                - listitem:
+                                  - paragraph: 소형 승용차용 타이어필수
+                                  - generic:
+                                    - paragraph: "매칭 기준: 국가=중화인민공화국(The People&rsquo;s Republic of China) / HS=401110 / HSK=4011100000 / 제품명=타이어"
+                                    - paragraph: "필요서류: 1. 정식 신청서 (正式申请书) 2. 제품 기술 파라미터표 (产品技术参数表) 3. 트레드(패턴) 목록 (花纹清单) 4. 견인형 타이어, 오프로드 타이어, 특수 용도 타이어, 런플랫 타이어의 경우 해당 증빙 자료 (牵引型轮胎、专用越野轮胎、特殊用途轮胎、自体支撑型缺气保用轮胎需要提供相应的证明材料) 5. 공장 검사 조사표 (工厂检查调查表) 6. 생산&middot;검사 과정 관련 계약서(필요 시) (生产过程、检验过程分包协议（需要时）) 7. 인증 의뢰인, 생산자(제조자) 및 생산기업 등록 증빙 자료 (认证委托人、生产者（制造者）和生产企业的注册证明材料) 8. 인증 제품이 GB518, GB9743, GB9744 표준의 제품 안전 성능을 충족함을 입증하는 시험 성적서(필요 시) (认证产品满足 GB518，GB9743，GB9744 标准的产品安全性能的检测报告（需要时）) 9. 튜브 생산자(제조사) 또는 생산기업 목록 및 품질 증빙 서류 (内胎生产者（制造商）或生产企业清单及质量证明文件) &bull; 품질 증빙 서류는 GB/T 7036.1 및 GB/T 7036.2 요구 사항을 충족하는 유효 문서 (质量证明文件为符合 GB/T 7036.1 和 GB/T 7036.2 要求的有效文件) &bull; 비고 : 타이어 제품의 핵심 부품은 튜브이며, 튜브가 없는 타이어는 제외 （注：轮胎产品关键零部件为内胎，无内胎轮胎除外） 10. 생산 일관성 관리 계획 (生产一致性控制计划) 11. 기타 자료(예 : 품질경영시스템 인증서, 상표 소유 증명서 등) (其他资料（如：质量管理体系认证证明文件、所属商标的证明文件等）) 12. 인증 의뢰인&middot;생산자&middot;생산기업 간의 관련 계약서 또는 합의서, 위임장 및 원본 인증서 사본(필요 시) (认证委托人、生产者、生产企业之间签订的有关协议书或合同，授权书及原始证书复印件（需要时）) 13. 변경 신청의 경우, 해당 변경 항목의 증빙 자료 (对于变更申请，相关变更项目的证明文件)"
+                                    - paragraph: "절차: 인증 신청 &rarr;제품 형식 시험&rarr; 초기 공장 심사&rarr; 인증결과 평가 및 승인 &rarr; CCC 마크 신청&rarr; 인증 획득 후의 사후 관리감독"
+                                    - paragraph: "유효기간: 5년"
+                                    - paragraph: 예상 비용 정확한 정보 없음 / 예상 기간 90일
+                                  - link:
+                                    - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EC%86%8C%ED%98%95%20%EC%8A%B9%EC%9A%A9%EC%B0%A8%EC%9A%A9%20%ED%83%80%EC%9D%B4%EC%96%B4
+                                    - text: KOTRA
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - heading [level=3]: KOTRA 수입규제·무역구제
+                              - paragraph: DS00000128 API + 국별 대세계 수입규제 CSV 기준 결과
+                            - generic: 확인된 인증정보 없음
+                          - paragraph: 확정 0건 / 검토 후보 0건
+                        - generic:
+                          - generic:
+                            - paragraph: 중화인민공화국(The People&rsquo;s Republic of China) 내 한국산 해당 HS 기준 KOTRA 수입규제·무역구제 매칭 0건
+                            - paragraph: "API 상태: API/cache 및 CSV 백업 정상 조회, 매칭 0건"
+                            - paragraph: "확인 범위: KOTRA DS00000128 API/cache와 국별 대세계 수입규제 CSV를 함께 확인했습니다 (국가 중화인민공화국(The People&rsquo;s Republic of China), HS 401110, HSK 4011100000, 제품 타이어)."
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: 관세·FTA
+                          - paragraph: 관세, 협정 후보, 목적국 세부코드 확인 상태
+                      - generic: 확인 필요 1건
+                  - generic:
+                    - list:
+                      - listitem:
+                        - generic:
+                          - generic: 확인 필요
+                          - generic: HS6 기준
+                        - paragraph: 한-중 FTA / RCEP 협정 후보가 있으나 실제 적용 여부는 목적국 세부코드와 원산지 기준 확인이 필요합니다.
+                        - generic:
+                          - generic:
+                            - term: 협정 후보
+                            - definition: 한-중 FTA / RCEP
+                          - generic:
+                            - term: HS6
+                            - definition: "401110"
+                        - generic: 다음 확인목적국 8·10자리 품목코드와 원산지 증빙을 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                      - listitem:
+                        - generic:
+                          - generic: 추정
+                          - generic: HS6 기준
+                        - paragraph: 2023년 중화인민공화국(The People&rsquo;s Republic of China)의 HS 401110 관세율 범위를 확인했습니다.
+                        - generic:
+                          - generic:
+                            - term: MFN 단순평균
+                            - definition: 10%
+                          - generic:
+                            - term: MFN 최저
+                            - definition: 10%
+                          - generic:
+                            - term: MFN 최고
+                            - definition: 10%
+                          - generic:
+                            - term: 관세 기준
+                            - definition: 최혜국(MFN) 관세
+                          - generic:
+                            - term: HS 분류 기준
+                            - definition: HS 2017(H6)
+                        - generic: 다음 확인목적국 8·10자리 세부코드와 원산지결정기준을 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: 인증·규제·전략물자
+                          - paragraph: 인증 후보와 반드시 확인할 규제 요건
+                      - generic: 확인 필요 3건
+                  - generic:
+                    - list:
+                      - listitem:
+                        - generic:
+                          - generic: 후보 발견
+                          - generic: HS6 기준
+                        - paragraph: KOTRA 해외인증 후보 1건을 확인했습니다.
+                        - generic:
+                          - generic:
+                            - term: 조회 결과
+                            - definition: "1"
+                          - generic:
+                            - term: 인증 후보
+                            - definition: CCC 인증(China Compulsory Certification) · 401110 · 1. 중국품질인증센터 中国质量认证中心 (China Quality Certification Centre) 2. 베이징 중화 연합 인증 유한회사 北京中化联合认证有限公司 (BeiJing ZhongHua Combination Certification Co.,Ltd) 3. 중국자동차기술연구센터 화성 인증(천진) 유한회사 中汽研华诚认证（天津）有限公司 (CATARC Huacheng Certification (Tianjin) Co., Ltd.)
+                          - generic:
+                            - term: 조회 일치 기준
+                            - definition: 국가·HS·제품명 모두 일치
+                        - generic: 다음 확인현지 인증기관 또는 KOTRA 무역관에 제품 사양서를 제시하고 적용 여부를 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                      - listitem:
+                        - generic:
+                          - generic: 확인 필요
+                          - generic: HS6 기준
+                        - paragraph: 한국산 해당 HS 기준 수입규제 직접 일치 결과가 없습니다.
+                        - generic:
+                          - generic:
+                            - term: 추가 검토 후보
+                            - definition: "0"
+                          - generic:
+                            - term: 직접 일치
+                            - definition: "0"
+                        - generic: 다음 확인목적국 세부코드와 제품 용도를 기준으로 현지 수입자·관세사에게 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                      - listitem:
+                        - generic:
+                          - generic: 확인 필요
+                          - generic: HSK10 정확 일치
+                        - paragraph: 최신 KOSTI HSK 연계표에서 직접 일치 통제번호를 확인하지 못했습니다.
+                        - generic:
+                          - generic:
+                            - term: 조회 결과
+                            - definition: "0"
+                          - generic:
+                            - term: HSK10
+                            - definition: "4011100000"
+                          - generic:
+                            - term: dataset Row Count
+                            - definition: 2,161
+                        - generic: 다음 확인제품 사양서를 기준으로 Yestrade 자가판정 또는 전문판정을 진행하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                      - listitem:
+                        - generic:
+                          - generic: 확인 필요
+                          - generic: HSK10 정확 일치
+                        - paragraph: HSK10 기준 세관장확인대상 직접 일치 결과가 없습니다.
+                        - generic:
+                          - generic:
+                            - term: 조회 결과
+                            - definition: "0"
+                          - generic:
+                            - term: HSK10
+                            - definition: "4011100000"
+                          - generic:
+                            - term: 구분
+                            - definition: 수출
+                        - generic: 다음 확인제품 용도와 기술사양을 기준으로 관세사 또는 관계기관에 최종 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: 통관 준비
+                          - paragraph: 공통 기본서류와 거래별 추가서류
+                      - generic: 근거 1건
+                  - generic:
+                    - list:
+                      - listitem:
+                        - generic:
+                          - generic: 기본 안내
+                          - generic: 제품명 참고
+                        - paragraph: 수출에 공통으로 필요한 기본서류와 조건부 증빙 목록입니다.
+                        - generic:
+                          - generic:
+                            - term: 공통 기본서류
+                            - definition: 상업송장 / 포장명세서 / B/L 또는 AWB
+                          - generic:
+                            - term: 조건부 추가서류
+                            - definition: 원산지증명서 / 요건승인서 / 제품 인증서
+                        - generic: 다음 확인관세사와 계약·운송 조건을 기준으로 최종 서류 목록을 확정하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: 결제·예상 비용
+                          - paragraph: 대금회수 조건과 현재 산정 가능한 비용
+                      - generic: 근거 3건
+                  - generic:
+                    - list:
+                      - listitem:
+                        - generic:
+                          - generic: 국가 통계
+                          - generic: 국가 기준
+                        - paragraph: 중화인민공화국 거래의 결제 지연율은 13.8%, 평균 결제기간은 75.1일입니다. 평균 지연기간은 14.0일이며, 가장 많이 사용된 결제조건은 O/A(T/T 포함)(79.6%)입니다.
+                        - generic:
+                          - generic:
+                            - term: 결제 지연율
+                            - definition: 13.8%
+                          - generic:
+                            - term: 평균 결제기간
+                            - definition: 75.1일
+                          - generic:
+                            - term: 평균 지연기간
+                            - definition: 14일
+                          - generic:
+                            - term: 주요 결제조건
+                            - definition: O/A(T/T 포함)
+                          - generic:
+                            - term: 주요 결제조건 비중
+                            - definition: 79.6%
+                        - generic: 다음 확인선수금·신용장·무역보험 등 대금회수 조건을 검토하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                      - listitem:
+                        - generic:
+                          - generic: 환율 확인
+                          - generic: 국가 기준
+                        - paragraph: 20260720 기준 CNH 환율을 확인했습니다.
+                        - generic:
+                          - generic:
+                            - term: 매매기준율
+                            - definition: "219.26"
+                          - generic:
+                            - term: 통화
+                            - definition: CNH
+                          - generic:
+                            - term: 통화 1단위당 원화
+                            - definition: "219.26"
+                          - generic:
+                            - term: 환율 기준일
+                            - definition: "20260720"
+                          - generic:
+                            - term: 통화명
+                            - definition: 위안화
+                        - generic: 다음 확인견적 통화와 결제 예정일 기준으로 실제 적용환율을 다시 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                      - listitem:
+                        - generic:
+                          - generic: 추정
+                          - generic: 국가 기준
+                        - paragraph: 2026-06 중국 40ft FCL 평균 해상수출 운송비 참고값입니다.
+                        - generic:
+                          - generic:
+                            - term: 기준연도·월
+                            - definition: 2026-06
+                          - generic:
+                            - term: 권역별 평균 운송비
+                            - definition: 중국 683천원
+                          - generic:
+                            - term: 비용 단위
+                            - definition: 천원/2TEU
+                          - generic:
+                            - term: 운송 기준
+                            - definition: 40ft FCL 일반화물(GP)
+                        - generic: 다음 확인가격·수량·중량·부피·항구·Incoterms를 입력한 뒤 실제 견적을 비교하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: 시장 규모
+                          - paragraph: 목적국 수입시장과 한국산 점유율
+                      - generic: 근거 1건
+                  - generic:
+                    - list:
+                      - listitem:
+                        - generic:
+                          - generic: 시장 확인
+                          - generic: HS6 기준
+                        - paragraph: 2024년 중화인민공화국(The People&rsquo;s Republic of China)의 HS 401110 수입시장과 한국산 실적을 확인했습니다.
+                        - generic:
+                          - generic:
+                            - term: 목적국 전체 수입시장(USD)
+                            - definition: 407,070,433
+                          - generic:
+                            - term: 한국산 수입액(USD)
+                            - definition: 12,443,529
+                          - generic:
+                            - term: 한국산 점유율
+                            - definition: 3.06%
+                          - generic:
+                            - term: 기준연도·월
+                            - definition: "2024"
+                          - generic:
+                            - term: HS6
+                            - definition: "401110"
+                        - generic: 다음 확인경쟁국 구성과 연도별 추이는 UN Comtrade 공식 화면에서 추가 확인하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - heading [level=3]: 제재 확인
+                          - paragraph: 국가 참고정보와 구매자 검색 준비 상태
+                      - generic: 근거 1건
+                  - generic:
+                    - list:
+                      - listitem:
+                        - generic:
+                          - generic: 미실행
+                          - generic: 국가 기준
+                        - paragraph: 구매자 정보가 없어 기업·개인 제재검색을 실행하지 않았습니다.
+                        - generic:
+                          - generic:
+                            - term: 국가 코드
+                            - definition: CN
+                          - generic:
+                            - term: 구매자 정보 확보
+                            - definition: 아니오
+                        - generic: 다음 확인구매자명·주소를 확보한 뒤 OFAC·UN 제재목록을 검색하세요.
+                        - group:
+                          - generic: 출처·판단 한계
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - heading [level=3]: 다음 실행 단계
+                      - paragraph: 분석 근거에서 자동 생성되며 진행 상태는 프로젝트에 저장됩니다.
+                    - generic: 0/8 완료
+                - generic:
+                  - list:
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 1목적국 세부 품목코드 확인
+                            - paragraph: HS6만으로 목적국 관세율을 확정할 수 없습니다.
+                            - link:
+                              - /url: https://www.customs.go.kr/ftaportalkor/main.do
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 2FTA 원산지 기준 확인
+                            - paragraph: 협정 존재와 실제 특혜관세 충족 여부는 다릅니다.
+                            - link:
+                              - /url: https://www.customs.go.kr/ftaportalkor/main.do
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 3세관장확인 승인기관 문의
+                            - paragraph: 법령별 허가·승인·표시 요건을 확인해야 합니다.
+                            - link:
+                              - /url: https://www.data.go.kr/data/15101589/openapi.do
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 4전략물자 판정
+                            - paragraph: HSK 연계 결과는 최종판정이 아닙니다.
+                            - link:
+                              - /url: https://yestrade.go.kr/
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 5필수 통관서류 준비
+                            - paragraph: 기본서류와 품목별 조건부 증빙을 준비해야 합니다.
+                            - link:
+                              - /url: https://www.customs.go.kr/kcs/cm/cntnts/cntntsView.do?mi=8054&cntntsId=2731
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 6결제조건·무역보험 검토
+                            - paragraph: 대금회수 조건과 보험 가입 여부를 검토해야 합니다.
+                            - link:
+                              - /url: https://ksight.ksure.or.kr/analysis/risk-advisor/payment
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 7실제 도착원가 산정
+                            - paragraph: 가격·수량·중량·Incoterms가 필요합니다.
+                            - link:
+                              - /url: https://www.koreaexim.go.kr/ir/HPHKIR019M01
+                              - text: 공식 확인 링크
+                        - combobox
+                    - listitem:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - paragraph: 8구매자 제재검색
+                            - paragraph: 구매자명·주소 확보 후 제재목록을 검색해야 합니다.
+                            - link:
+                              - /url: https://ofac.treasury.gov/sanctions-programs-and-country-information
+                              - text: 공식 확인 링크
+                        - combobox
+        - complementary:
+          - generic:
+            - generic: 근거 패널
+            - button
+          - generic:
+            - generic:
+              - heading [level=3]: 출처
+              - generic:
+                - paragraph: 분석 기준 코드
+                - paragraph: "제품명: 타이어"
+                - paragraph: HS 401110 / HSK 4011100000
+                - paragraph: "적용 방식: 검색 결과 1순위 자동 반영 (95)"
+                - paragraph: "상태: 신뢰도 높음 / 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+              - list:
+                - listitem:
+                  - generic:
+                    - generic: 기타
+                    - generic: 최근 12개월 HS/HSK 기준 수출액 / 원문 링크 없음
+                    - paragraph: 최근 12개월 HS/HSK 기준 수출액 $11M
+                - listitem:
+                  - generic:
+                    - generic: KOTRA
+                    - link:
+                      - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+                      - generic: matched 1
+                - listitem:
+                  - generic:
+                    - generic: 기타
+                    - link:
+                      - /url: https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EA%B5%AD%EB%B3%84%20%EB%8C%80%EC%84%B8%EA%B3%84%20%EC%88%98%EC%9E%85%EA%B7%9C%EC%A0%9C%20%ED%98%84%ED%99%A9
+                      - generic: 젣 matched 0 (no query results)
+              - generic:
+                - paragraph: AI 상태
+                - generic: 부분 산출
+      - generic:
+        - generic:
+          - button: 후보군으로
+          - button:
+            - generic: 리포트로
+            - text: 안전성 검토로
+  - dialog [ref=f1e731]:
+    - generic [ref=f1e732]:
+      - heading "전체 분석 근거" [level=2] [ref=f1e733]
+      - paragraph [ref=f1e734]: 분야별 핵심 결론을 먼저 보고, 필요한 근거만 펼쳐서 확인하세요.
+    - generic [ref=f1e735]:
+      - generic [ref=f1e736]:
+        - group [ref=f1e737]:
+          - generic [ref=f1e743] [cursor=pointer]:
+            - paragraph [ref=f1e744]: 관세·FTA
+            - paragraph [ref=f1e745]: 2개 판단 근거
+        - group [ref=f1e748]:
+          - generic [ref=f1e754] [cursor=pointer]:
+            - paragraph [ref=f1e755]: 인증·규제·전략물자
+            - paragraph [ref=f1e756]: 4개 판단 근거
+        - group [ref=f1e759]:
+          - generic [ref=f1e767] [cursor=pointer]:
+            - paragraph [ref=f1e768]: 통관 준비
+            - paragraph [ref=f1e769]: 1개 판단 근거
+        - group [ref=f1e772]:
+          - generic [ref=f1e779] [cursor=pointer]:
+            - paragraph [ref=f1e780]: 결제·예상 비용
+            - paragraph [ref=f1e781]: 3개 판단 근거
+        - group [ref=f1e784]:
+          - generic [ref=f1e790] [cursor=pointer]:
+            - paragraph [ref=f1e791]: 시장 규모
+            - paragraph [ref=f1e792]: 1개 판단 근거
+        - group [ref=f1e795]:
+          - generic [ref=f1e803] [cursor=pointer]:
+            - paragraph [ref=f1e804]: 제재 확인
+            - paragraph [ref=f1e805]: 1개 판단 근거
+      - group [ref=f1e808]:
+        - generic [ref=f1e810] [cursor=pointer]:
+          - paragraph [ref=f1e811]: 데이터 수집 상태
+          - paragraph [ref=f1e812]: API별 성공·빈 결과·실패 여부를 확인합니다.
+        - generic [ref=f1e820]:
+          - generic [ref=f1e821]:
+            - generic [ref=f1e822]:
+              - generic [ref=f1e823]: KOTRA 해외인증
+              - generic [ref=f1e824]: 성공 · 1건
+            - paragraph [ref=f1e825]: 정상적으로 조회했습니다.
+          - generic [ref=f1e826]:
+            - generic [ref=f1e827]:
+              - generic [ref=f1e828]: KOTRA 수입규제
+              - generic [ref=f1e829]: 직접 일치 없음 · 0건
+            - paragraph [ref=f1e830]: 국가·HS·제품명 직접 일치 결과가 없습니다.
+          - generic [ref=f1e831]:
+            - generic [ref=f1e832]:
+              - generic [ref=f1e833]: K-SURE 국가위험
+              - generic [ref=f1e834]: 실패 · 0건
+            - paragraph [ref=f1e835]: HTTP 502
+          - generic [ref=f1e836]:
+            - generic [ref=f1e837]:
+              - generic [ref=f1e838]: K-SURE 업종위험
+              - generic [ref=f1e839]: 직접 일치 없음 · 0건
+            - paragraph [ref=f1e840]: 정상적으로 조회했습니다.
+          - generic [ref=f1e841]:
+            - generic [ref=f1e842]:
+              - generic [ref=f1e843]: K-SURE 결제위험
+              - generic [ref=f1e844]: 성공 · 1건
+            - paragraph [ref=f1e845]: 정상적으로 조회했습니다.
+          - generic [ref=f1e846]:
+            - generic [ref=f1e847]:
+              - generic [ref=f1e848]: KOTRA 국가정보
+              - generic [ref=f1e849]: 성공 · 1건
+            - paragraph [ref=f1e850]: 정상적으로 조회했습니다.
+          - generic [ref=f1e851]:
+            - generic [ref=f1e852]:
+              - generic [ref=f1e853]: 관세청 세관장확인
+              - generic [ref=f1e854]: 직접 일치 없음 · 0건
+            - paragraph [ref=f1e855]: 정상적으로 조회했습니다.
+          - generic [ref=f1e856]:
+            - generic [ref=f1e857]:
+              - generic [ref=f1e858]: UN Comtrade
+              - generic [ref=f1e859]: 성공 · 2건
+            - paragraph [ref=f1e860]: 2024년 통계 조회
+          - generic [ref=f1e861]:
+            - generic [ref=f1e862]:
+              - generic [ref=f1e863]: WITS 관세
+              - generic [ref=f1e864]: 성공 · 1건
+            - paragraph [ref=f1e865]: HS6 관세 범위를 확인했습니다.
+          - generic [ref=f1e866]:
+            - generic [ref=f1e867]:
+              - generic [ref=f1e868]: 한국수출입은행 환율
+              - generic [ref=f1e869]: 성공 · 1건
+            - paragraph [ref=f1e870]: 20260720 영업일 환율
+          - generic [ref=f1e871]:
+            - generic [ref=f1e872]:
+              - generic [ref=f1e873]: KOSTI HSK 연계표
+              - generic [ref=f1e874]: 직접 일치 없음 · 0건
+            - paragraph [ref=f1e875]: HSK10 직접 일치 결과가 없습니다.
+          - generic [ref=f1e876]:
+            - generic [ref=f1e877]:
+              - generic [ref=f1e878]: 관세청 해상수출 운송비
+              - generic [ref=f1e879]: 성공 · 1건
+            - paragraph [ref=f1e880]: 2026-06 권역별 운송비 확인
+    - button "Close" [ref=f1e815] [cursor=pointer]

@@ -2,6 +2,8 @@ import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { matchesRegionFilter, toApiRegionParam } from "./region.ts";
 import { normalizeMainProduct } from "./main-product.ts";
+import { resolveKicoxApiKeys } from "./key.ts";
+import { fetchKicoxWithRetry, kicoxHttpErrorMessage } from "./retry.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -11,8 +13,11 @@ Deno.serve(async (req) => {
     const input = normalizeInput(body);
     const logContext = await createApiLogContext(req, input.project_id);
 
-    const key = Deno.env.get("KICOX_API_KEY");
-    if (!key) {
+    const apiKeys = resolveKicoxApiKeys({
+      KICOX_API_KEY: Deno.env.get("KICOX_API_KEY") ?? undefined,
+      PUBLIC_DATA_API_KEY: Deno.env.get("PUBLIC_DATA_API_KEY") ?? undefined,
+    });
+    if (apiKeys.length === 0) {
       await writeKicoxApiLog(logContext, input, {
         status: "error",
         http_status: null,
@@ -28,7 +33,14 @@ Deno.serve(async (req) => {
       });
     }
 
-    const responses = await runRequests(input, key);
+    let responses = await runRequests(input, apiKeys[0]);
+    for (const fallbackKey of apiKeys.slice(1)) {
+      const onlyAuthorizationFailures = responses.length > 0 && responses.every((row) =>
+        !row.ok && (row.httpStatus === 401 || row.httpStatus === 403)
+      );
+      if (!onlyAuthorizationFailures) break;
+      responses = await runRequests(input, fallbackKey);
+    }
     const okResponses = responses.filter((row) => row.ok);
     const failedResponses = responses.filter((row) => !row.ok);
 
@@ -177,12 +189,12 @@ async function callKicoxEndpoint(
       if (v) url.searchParams.set(k, v);
     }
 
-    const res = await fetch(url.toString());
+    const { response: res } = await fetchKicoxWithRetry(url.toString());
     if (!res.ok) {
       return {
         ok: false,
         endpoint: path,
-        message: `HTTP ${res.status}`,
+        message: kicoxHttpErrorMessage(res.status),
         httpStatus: res.status,
         errorCode: `http_${res.status}`,
         items: [],

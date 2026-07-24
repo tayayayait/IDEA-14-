@@ -43,19 +43,49 @@ import {
 import {
   buildReportEvidenceHash,
   buildReportDraftFallback,
+  buildReportProgramEvidenceCatalog,
   normalizeReportDraft,
-  type CountryCautionAnalysis,
-  type CountryCautionSection,
+  type ReportGateInputs,
   type ReportDraft,
   type ReportEvidenceBundle,
 } from "@/lib/report-draft";
 import { extractCustomsExportEvidence, formatCustomsExportUsd } from "@/lib/customs-export-evidence";
 import {
   isStoredReportFresh,
+  isStoredReportUsable,
   normalizeStoredReport,
   type StoredReportSnapshot,
 } from "@/lib/report-persistence";
 import { buildPdfImagePlacements } from "@/lib/pdf-pagination";
+import {
+  parseDecisionActionRows,
+  parseDecisionFactRows,
+  type DecisionActionItem,
+  type DecisionFact,
+} from "@/lib/country-decision";
+import {
+  buildMarketEvidence,
+  buildTariffRangeEvidence,
+  buildLogisticsEvidence,
+  buildUsitcHtsEvidence,
+  type MarketEvidence,
+  type TariffRangeEvidence,
+  type LogisticsEvidence,
+  type UsitcHtsEvidence,
+} from "@/lib/country-decision-insights";
+import {
+  parseVerdictResponse,
+  type AiFinalVerdict,
+} from "@/lib/country-decision-verdict";
+import { loadLastSelectedCountry } from "@/lib/project-step";
+
+interface ReportDecisionFact extends DecisionFact {
+  countryCode: string;
+}
+
+interface ReportDecisionAction extends DecisionActionItem {
+  countryCode: string;
+}
 
 interface Bundle {
   project: { title: string; partial_score: boolean; updated_at: string; user_id: string } | null;
@@ -115,6 +145,13 @@ interface Bundle {
     response_count: number | null;
     error_code: string | null;
   }[];
+  decisionFacts: ReportDecisionFact[];
+  decisionActions: ReportDecisionAction[];
+  countryVerdicts: Array<{
+    countryCode: string;
+    verdict: AiFinalVerdict;
+    createdAt: string;
+  }>;
   ai_summary?: string;
   ai_actions?: string[];
   ai_report_draft?: ReportDraft;
@@ -122,6 +159,7 @@ interface Bundle {
 }
 
 interface ReportProduct {
+  id: string | null;
   name: string;
   hs_code: string | null;
   hsk_code: string | null;
@@ -131,6 +169,21 @@ interface ReportProduct {
   hs_review_required: boolean;
   hs_selected_candidate_key: string | null;
 }
+
+type ReportDecisionDbResult = {
+  data: unknown;
+  error: { message: string } | null;
+};
+
+type ReportDecisionDbQuery = PromiseLike<ReportDecisionDbResult> & {
+  select(columns?: string): ReportDecisionDbQuery;
+  eq(column: string, value: unknown): ReportDecisionDbQuery;
+  order(column: string, options?: { ascending?: boolean }): ReportDecisionDbQuery;
+};
+
+const reportDecisionDb = supabase as unknown as {
+  from(table: string): ReportDecisionDbQuery;
+};
 
 const DETAIL_REQUIRED_API_KEYS = [
   "kotra_overseas_certification",
@@ -158,7 +211,12 @@ type DetailEvidenceState = "available" | "unknown" | "not_run";
 const UNKNOWN_TEXT = "확실한 정보 없음";
 const DETAIL_INCOMPLETE_TEXT = "상세 분석 미완료";
 const DETAIL_NOT_RUN_TEXT = "상세 분석 미실행";
-
+const REPORT_NON_API_FACT_KEYS = new Set([
+  "tariff_fta:baseline",
+  "customs_documents:baseline",
+  "sanctions:entity_screening",
+  "strategic_goods:classification",
+]);
 export default function Step6Report() {
   useAuthGuard();
   const { invoke, retryInSec, isRetrying } = useApiCall();
@@ -169,7 +227,7 @@ export default function Step6Report() {
   const [loading, setLoading] = useState(true);
   const [genAi, setGenAi] = useState(false);
   const [downloading, setDownloading] = useState(false);
-
+  const [pdfEvidenceOpen, setPdfEvidenceOpen] = useState(false);
   const load = async () => {
     if (!id) return;
     setLoading(true);
@@ -184,17 +242,20 @@ export default function Step6Report() {
       { data: risks },
       { data: logs },
       { data: savedReport },
+      { data: decisionFactRows },
+      { data: decisionActionRows },
+      { data: countryVerdictRows },
     ] = await Promise.all([
       supabase.from("projects").select("title,partial_score,updated_at,user_id").eq("id", id).maybeSingle(),
       supabase.from("project_companies").select("company_name,industrial_complex,address").eq("project_id", id).maybeSingle(),
       supabase
         .from("project_products")
-        .select("name,hs_code,hsk_code,components,confirmed")
+        .select("id,name,hs_code,hsk_code,components,confirmed")
         .eq("project_id", id)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
-      supabase.from("project_countries").select("country_code,country_name,total_score,label,rationale").eq("project_id", id).order("rank", { ascending: true }).limit(3),
+      loadReportCountries(id, loadLastSelectedCountry(id)),
       supabase.from("project_safety_flags").select("flag_type,severity,summary,raw").eq("project_id", id),
       supabase.from("project_certifications").select("country_code,scheme,source_org,raw").eq("project_id", id),
       supabase.from("project_regulations").select("country_code,topic,summary,effective_date,source_org,raw").eq("project_id", id),
@@ -206,6 +267,20 @@ export default function Step6Report() {
         .select("draft,evidence_hash,ai_state,generated_at")
         .eq("project_id", id)
         .maybeSingle(),
+      reportDecisionDb
+        .from("country_decision_facts")
+        .select("*")
+        .eq("project_id", id)
+        .order("fetched_at", { ascending: false }),
+      reportDecisionDb
+        .from("country_action_items")
+        .select("*")
+        .eq("project_id", id)
+        .order("priority", { ascending: true }),
+      supabase
+        .from("country_verdicts")
+        .select("country_code, verdict, evidence_hash, created_at")
+        .eq("project_id", id),
     ]);
     const reportProduct = mapReportProduct(product);
     const topCountries = ((countries as Bundle["countries"]) ?? []).map((country) => ({
@@ -213,16 +288,26 @@ export default function Step6Report() {
       country_name: normalizeReportText(country.country_name) ?? UNKNOWN_TEXT,
       rationale: country.rationale
         ? {
-          ...country.rationale,
-          summary: cleanCountryReportSummary(
-            country.rationale.summary,
-            country.country_code,
-            country.country_name,
-          ) ?? undefined,
-        }
+            ...country.rationale,
+            summary: cleanCountryReportSummary(
+              country.rationale.summary,
+              country.country_code,
+              country.country_name,
+            ) ?? undefined,
+          }
         : country.rationale,
     }));
     const topCountryCodes = new Set(topCountries.map((country) => country.country_code));
+    const reportDecisionFacts = parseReportDecisionFacts(
+      decisionFactRows,
+      reportProduct?.id ?? null,
+      topCountryCodes,
+    );
+    const reportDecisionActions = parseReportDecisionActions(
+      decisionActionRows,
+      reportProduct?.id ?? null,
+      topCountryCodes,
+    );
     const currentCertRows = filterCurrentReportDetailRows(
       (certs as Bundle["certs"]) ?? [],
       reportProduct,
@@ -258,18 +343,23 @@ export default function Step6Report() {
         summary: normalizeReportText(risk.summary),
       })),
       logs: (logs as Bundle["logs"]) ?? [],
+      decisionFacts: reportDecisionFacts,
+      decisionActions: reportDecisionActions,
+      countryVerdicts: parseCountryVerdicts(countryVerdictRows),
       saved_report: normalizeStoredReport(savedReport),
     });
     setLoading(false);
   };
   useEffect(() => { load(); }, [id]);
-
   const generateAiSummary = async () => {
     if (!bundle || !id) return;
     setGenAi(true);
     const evidenceBundle = buildReportEvidenceBundle(bundle, detailCompletion);
     const evidenceHash = buildReportEvidenceHash(evidenceBundle);
     const fallbackDraft = buildReportDraftFallback(evidenceBundle);
+    const existingDraft = isStoredReportUsable(bundle.saved_report)
+      ? normalizeReportDraft(bundle.saved_report?.draft, evidenceBundle)
+      : null;
     const result = await invoke<
       Partial<ReportDraft> & {
         draft?: Partial<ReportDraft>;
@@ -281,14 +371,25 @@ export default function Step6Report() {
     >(
       "ai-report-summary",
       evidenceBundle,
-      { timeoutMs: 120000, retryOn429: false, retryOn500: true, retry500DelayMs: 800 },
+      { timeoutMs: 240000, retryOn429: false, retryOn500: true, retry500DelayMs: 800 },
     );
     if (!result.ok) {
-      const message = result.message ?? "AI 요약 생성에 실패했습니다.";
+      if (existingDraft && bundle.saved_report) {
+        setBundle({
+          ...bundle,
+          ai_summary: existingDraft.decision.headline,
+          ai_actions: existingDraft.actionPlan.filter((item) => item.horizon === "D+7").map((item) => item.action),
+          ai_report_draft: existingDraft,
+        });
+        toast.warning("리포트 재생성에 실패했지만 기존 리포트는 유지했습니다.");
+        setGenAi(false);
+        return;
+      }
+      const message = result.message ?? "AI 리포트 생성에 실패했습니다.";
       setBundle({
         ...bundle,
-        ai_summary: fallbackDraft.executiveSummary,
-        ai_actions: fallbackDraft.actionPlan7Days,
+        ai_summary: fallbackDraft.decision.headline,
+        ai_actions: fallbackDraft.actionPlan.filter((item) => item.horizon === "D+7").map((item) => item.action),
         ai_report_draft: fallbackDraft,
         saved_report: {
           draft: fallbackDraft,
@@ -298,7 +399,7 @@ export default function Step6Report() {
         },
       });
       await saveReportDraft(id, bundle.project?.user_id, fallbackDraft, evidenceHash, "local_fallback");
-      toast.warning(`${message} 규칙 기반 요약으로 대체했습니다.`);
+      toast.warning(`${message} 규칙 기반 임시 결과로 대체했습니다.`);
       setGenAi(false);
       return;
     }
@@ -306,8 +407,8 @@ export default function Step6Report() {
     const draft = normalizeReportDraft(result.data, evidenceBundle);
     setBundle({
       ...bundle,
-      ai_summary: draft.executiveSummary,
-      ai_actions: draft.actionPlan7Days,
+      ai_summary: draft.decision.headline,
+      ai_actions: draft.actionPlan.filter((item) => item.horizon === "D+7").map((item) => item.action),
       ai_report_draft: draft,
       saved_report: {
         draft,
@@ -318,9 +419,9 @@ export default function Step6Report() {
     });
     await saveReportDraft(id, bundle.project?.user_id, draft, evidenceHash, (result.data?.state as string | undefined) ?? "success");
     if ((result.data?.state as ApiState | undefined) === "partial_success") {
-      toast.warning(result.message ?? "AI 요약을 부분 결과로 생성했습니다.");
+      toast.warning(result.message ?? "AI 리포트를 조건부 판단으로 생성했습니다.");
     } else {
-      toast.success("AI 요약을 갱신했습니다.");
+      toast.success("AI 의사결정 리포트를 갱신했습니다.");
     }
     await supabase.from("projects").update({ status: "complete" }).eq("id", id);
     setGenAi(false);
@@ -329,11 +430,13 @@ export default function Step6Report() {
   const downloadPdf = async () => {
     if (!reportRef.current) return;
     setDownloading(true);
+    setPdfEvidenceOpen(true);
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
         import("html2canvas"),
         import("jspdf"),
       ]);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       const canvas = await html2canvas(reportRef.current, { scale: 2, backgroundColor: "#ffffff" });
       const img = canvas.toDataURL("image/png");
       const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
@@ -356,6 +459,7 @@ export default function Step6Report() {
       const message = error instanceof Error ? error.message : "PDF 생성 중 오류가 발생했습니다.";
       toast.error(`PDF 생성에 실패했습니다: ${message}`);
     } finally {
+      setPdfEvidenceOpen(false);
       setDownloading(false);
     }
   };
@@ -371,7 +475,7 @@ export default function Step6Report() {
   );
   const reportDraft = useMemo(() => {
     if (!bundle || !reportEvidenceBundle) return null;
-    if (isStoredReportFresh(bundle.saved_report ?? null, evidenceHash)) {
+    if (isStoredReportUsable(bundle.saved_report ?? null)) {
       return normalizeReportDraft(bundle.saved_report?.draft, reportEvidenceBundle);
     }
     const source = bundle.ai_report_draft ?? {
@@ -379,14 +483,14 @@ export default function Step6Report() {
       actions: bundle.ai_actions,
     };
     return normalizeReportDraft(source, reportEvidenceBundle);
-  }, [bundle, reportEvidenceBundle, evidenceHash]);
+  }, [bundle, reportEvidenceBundle]);
   const reportIsStale = Boolean(
     bundle?.saved_report &&
     evidenceHash &&
     !isStoredReportFresh(bundle.saved_report, evidenceHash),
   );
   const actionItems = useMemo(() => {
-    if (reportDraft) return reportDraft.actionPlan7Days.map((action) => sanitize(action));
+    if (reportDraft) return reportDraft.actionPlan.filter((item) => item.horizon === "D+7").map((item) => sanitize(item.action));
     if (!bundle) return [];
     return buildDefaultActionItems(bundle);
   }, [bundle, reportDraft]);
@@ -408,9 +512,13 @@ export default function Step6Report() {
     [bundle, detailCompletion, actionItems],
   );
   const aiSummaryText = useMemo(
-    () => reportDraft?.executiveSummary ?? buildAiSummaryText(bundle, detailCompletion),
+    () => reportDraft?.decision.headline ?? buildAiSummaryText(bundle, detailCompletion),
     [bundle, detailCompletion, reportDraft],
   );
+  const reportAiState = reportIsStale
+    ? "stale"
+    : bundle?.saved_report?.aiState ?? (bundle?.ai_report_draft ? "success" : "local_fallback");
+  const hasSavedReport = isStoredReportUsable(bundle?.saved_report ?? null);
 
   return (
     <AppShell
@@ -420,7 +528,7 @@ export default function Step6Report() {
           <Button variant="ghost" onClick={() => navigate(`/projects/${id}/safety`)}>이전</Button>
           <Button variant="outline" onClick={generateAiSummary} disabled={genAi || !bundle || downloading} className="min-h-11">
             {genAi ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-            {genAi ? "AI 요약 생성 중..." : "AI 요약 생성"}
+            {genAi ? "AI 리포트 생성 중..." : hasSavedReport ? "AI 리포트 재생성" : "AI 리포트 생성"}
           </Button>
           <Button onClick={downloadPdf} disabled={downloading || !bundle || genAi} className="min-h-11">
             {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
@@ -453,21 +561,22 @@ export default function Step6Report() {
         <Card>
           <CardContent className="p-0">
             <div className="block p-4 md:hidden">
-              <MobileReportView
-                bundle={bundle}
-                actionItems={actionItems}
-                executionActions={executionActions}
-                detailCompletion={detailCompletion}
-                reportIsStale={reportIsStale}
-                executiveBrief={executiveBrief}
-                aiSummaryText={aiSummaryText}
-                reportDraft={reportDraft}
-              />
+              {reportDraft && reportEvidenceBundle ? (
+                <DecisionReportContent
+                  bundle={bundle}
+                  draft={reportDraft}
+                  evidence={reportEvidenceBundle}
+                  aiState={reportAiState}
+                  reportIsStale={reportIsStale}
+                  expandEvidence={false}
+                  mobile
+                />
+              ) : null}
             </div>
             <div className="fixed left-[-10000px] top-0 md:static md:overflow-x-auto">
               <div
                 ref={reportRef}
-                className="mx-auto w-[190mm] min-w-[190mm] bg-white p-10 text-[12px] leading-relaxed text-[#161A22]"
+                className="mx-auto w-[190mm] min-w-[190mm] bg-white px-8 py-7 text-[12px] leading-relaxed text-[#161A22]"
                 style={{ minHeight: "270mm" }}
               >
                 <div className="flex items-end justify-between border-b border-[#0E6B6F] pb-3">
@@ -482,69 +591,17 @@ export default function Step6Report() {
                     )}
                   </div>
                 </div>
-                <DetailCompletionBanner detailCompletion={detailCompletion} />
-                <ReportFreshnessBanner reportIsStale={reportIsStale} />
-                <ReportAiConclusionPrint draft={reportDraft} summaryText={aiSummaryText} />
-                <ExecutiveSummaryPanel brief={executiveBrief} />
-
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                  <Block title="기업 정보">
-                    <p className="font-semibold">{bundle.company?.company_name ?? "-"}</p>
-                    <p className="text-[#5b6473]">{bundle.company?.industrial_complex ?? ""} {bundle.company?.address ?? ""}</p>
-                  </Block>
-                  <Block title="제품 정보">
-                    <p className="font-semibold">{bundle.product?.name ?? "-"}</p>
-                    <p className="font-mono text-[10px] text-[#5b6473]">
-                      HS {bundle.product?.hs_code ?? "-"} · HSK {bundle.product?.hsk_code ?? "-"}
-                    </p>
-                  </Block>
-                </div>
-                <div className="mt-3">
-                  <Block title="제품 분류 근거">
-                    <p className="font-mono text-[10px] text-[#5b6473]">
-                      HS {bundle.product?.hs_code ?? "-"} · HSK {bundle.product?.hsk_code ?? "-"}
-                    </p>
-                    <p className="mt-1 text-[11px]">
-                      선택 소스: {getSelectionSourceLabel(bundle.product?.hs_selection_source ?? null)}
-                      {bundle.product?.hs_selection_score !== null && bundle.product?.hs_selection_score !== undefined
-                        ? ` (${bundle.product.hs_selection_score}점)`
-                        : ""}
-                    </p>
-                    <p className="mt-1 text-[11px]">
-                      상태: {getSelectionStatusLabel(bundle.product?.hs_selection_status ?? null)} · {getSelectionStatusDetail(bundle.product?.hs_selection_status ?? null)}
-                    </p>
-                    {bundle.product?.hs_review_required ? (
-                      <p className="mt-1 text-[10px] text-[#a36b00]">
-                        분류 검토 필요: 복수 품목이 섞여 있을 수 있으므로 품목 분리 후 코드를 다시 확인하세요.
-                      </p>
-                    ) : null}
-                  </Block>
-                </div>
-
-                <ReportCountryCardsPrint bundle={bundle} draft={reportDraft} />
-
-                {reportDraft ? <ReportFeasibilityPrint draft={reportDraft} /> : null}
-
-                {reportDraft ? <ReportNewsImpactPrint draft={reportDraft} /> : null}
-                {reportDraft ? <ReportCertRegChecklistPrint draft={reportDraft} /> : null}
-
-                {reportDraft ? <ReportStrategyPrint draft={reportDraft} /> : null}
-                {reportDraft ? <ReportPreExportChecklistPrint draft={reportDraft} /> : null}
-
-                <TradeOfficeActionsAccordion actions={executionActions} print />
-
-
-                <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">국가별 유의사항</h3>
-                <CountryCautionCards draft={reportDraft} countries={bundle.countries} print />
-
-                {reportDraft ? <ReportActionPlanPrint draft={reportDraft} /> : (
-                  <ReportFallbackActionPlanPrint actionItems={actionItems} hasAiActions={Boolean(bundle.ai_actions?.length)} />
-                )}
-
-                <div className="mt-6 border-t border-[#e6e7ea] pt-2 text-[9px] text-[#5b6473]">
-                  {reportDraft?.finalCautions.length ? `${reportDraft.finalCautions.join(" ")} ` : ""}
-                  본 리포트는 공공데이터 조회 결과를 요약한 참고 자료입니다. 실제 계약 체결 전에는 최신 원문(인증기관, 규제기관, K-SURE 등)을 반드시 재확인하세요.
-                </div>
+                {reportDraft && reportEvidenceBundle ? (
+                  <DecisionReportContent
+                    bundle={bundle}
+                    draft={reportDraft}
+                    evidence={reportEvidenceBundle}
+                    aiState={reportAiState}
+                    reportIsStale={reportIsStale}
+                    expandEvidence={pdfEvidenceOpen}
+                    print
+                  />
+                ) : null}
               </div>
             </div>
           </CardContent>
@@ -556,13 +613,683 @@ export default function Step6Report() {
 
 function Block({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="rounded border border-[#e6e7ea] p-3">
+    <div className="h-full rounded-md border border-[#e6e7ea] bg-white p-2">
       <p className="text-[9px] uppercase tracking-wider text-[#5b6473]">{title}</p>
       <div className="mt-1 text-[12px]">{children}</div>
     </div>
   );
 }
 
+function PrintReportSection({
+  title,
+  subtitle,
+  aside,
+  tone = "default",
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  aside?: ReactNode;
+  tone?: "default" | "highlight" | "muted";
+  children: ReactNode;
+}) {
+  const toneClass = tone === "highlight"
+    ? "border-[#b7d9d8] bg-[#f2f9f8]"
+    : tone === "muted"
+      ? "border-[#dfe4ea] bg-[#f8fafc]"
+      : "border-[#dfe4ea] bg-white";
+
+  return (
+    <section className={`mt-3 break-inside-avoid rounded-md border p-3 ${toneClass}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="font-display text-[12px] font-semibold text-[#0E6B6F]">{title}</h3>
+          {subtitle ? <p className="mt-0.5 text-[9px] leading-relaxed text-[#64748b]">{subtitle}</p> : null}
+        </div>
+        {aside ? <div className="shrink-0">{aside}</div> : null}
+      </div>
+      <div className="mt-2">{children}</div>
+    </section>
+  );
+}
+
+type GateInputPanelProps =
+  | {
+    topic: "profitability";
+    values: ReportGateInputs["profitability"];
+    onChange: (patch: Partial<ReportGateInputs["profitability"]>) => void;
+    print: boolean;
+  }
+  | {
+    topic: "payment";
+    values: ReportGateInputs["payment"];
+    onChange: (patch: Partial<ReportGateInputs["payment"]>) => void;
+    print: boolean;
+  };
+
+function GateInputPanel(props: GateInputPanelProps) {
+  const hasValue = Object.values(props.values).some(Boolean);
+  const title = props.topic === "profitability" ? "수익성 계산 입력" : "결제조건 확인 입력";
+  if (props.print) {
+    return hasValue ? (
+      <div className="mt-2 rounded bg-slate-50 px-2 py-1 text-[9px] text-slate-600">
+        <span className="font-semibold">{title}</span> · {Object.entries(props.values).filter(([, value]) => value).map(([key, value]) => `${key}: ${value}`).join(" · ")}
+      </div>
+    ) : null;
+  }
+
+  return (
+    <details className="group mt-2 rounded border border-dashed border-[#b7d9d8] bg-[#f8fbfb]">
+      <summary className="flex cursor-pointer list-none items-center justify-between px-2 py-1.5 text-[9px] font-semibold text-[#0E6B6F] [&::-webkit-details-marker]:hidden">
+        <span>{title} <span className="font-normal text-[#64748b]">· 선택 입력</span></span>
+        <span className="font-normal text-[#64748b]">{hasValue ? "입력값 저장됨" : "무역정보를 몰라도 됨"}</span>
+      </summary>
+      <div className="grid gap-2 border-t border-[#d9e6e6] p-2 text-[9px]">
+        {props.topic === "profitability" ? (
+          <>
+            <p className="text-[9px] leading-relaxed text-[#64748b]">모르는 항목은 비워두세요. 입력값은 다음 AI 리포트 재생성 때 수익성 판정에 반영됩니다.</p>
+            <div className="grid grid-cols-2 gap-2">
+              <GateInputField label="예상 판매가격" value={props.values.salePrice} type="number" onChange={(value) => props.onChange({ salePrice: value })} />
+              <GateInputField label="통화" value={props.values.currency} placeholder="USD" onChange={(value) => props.onChange({ currency: value })} />
+              <GateInputField label="제품 1개당 원가" value={props.values.unitCost} type="number" onChange={(value) => props.onChange({ unitCost: value })} />
+              <GateInputField label="수출 수량" value={props.values.quantity} type="number" onChange={(value) => props.onChange({ quantity: value })} />
+              <GateSelectField label="거래조건" value={props.values.tradeTerm} options={[["", "잘 모르겠습니다"], ["FOB", "FOB · 한국 항구까지"], ["CIF", "CIF · 목적국 항구까지"], ["DDP", "DDP · 목적지까지"]]} onChange={(value) => props.onChange({ tradeTerm: value })} />
+              <GateInputField label="운임·보험료" value={props.values.freightInsurance} type="number" placeholder="모르면 비워두기" onChange={(value) => props.onChange({ freightInsurance: value })} />
+            </div>
+            <GateInputField label="목표 마진율(%)" value={props.values.targetMargin} type="number" onChange={(value) => props.onChange({ targetMargin: value })} />
+          </>
+        ) : (
+          <>
+            <p className="text-[9px] leading-relaxed text-[#64748b]">바이어를 아직 정하지 않았다면 미확인 상태로 두어도 됩니다. 국가 평균 위험과 실제 바이어 위험을 구분합니다.</p>
+            <GateInputField label="바이어명(또는 후보)" value={props.values.buyerName} onChange={(value) => props.onChange({ buyerName: value })} />
+            <div className="grid grid-cols-2 gap-2">
+              <GateSelectField label="결제방식" value={props.values.paymentMethod} options={[["", "잘 모르겠습니다"], ["선금", "선금"], ["LC", "신용장(LC)"], ["T/T", "T/T 송금"], ["O/A", "외상(O/A)"]]} onChange={(value) => props.onChange({ paymentMethod: value })} />
+              <GateInputField label="선금 비율(%)" value={props.values.advanceRate} type="number" onChange={(value) => props.onChange({ advanceRate: value })} />
+              <GateInputField label="외상기간(일)" value={props.values.paymentDays} type="number" onChange={(value) => props.onChange({ paymentDays: value })} />
+              <GateSelectField label="바이어 신용확인" value={props.values.creditVerified} options={[["", "미확인"], ["yes", "확인 완료"], ["no", "확인 불가"]]} onChange={(value) => props.onChange({ creditVerified: value })} />
+            </div>
+            <GateSelectField label="K-SURE 보험" value={props.values.insuranceStatus} options={[["", "미확인"], ["applied", "가입·신청"], ["none", "미가입"]]} onChange={(value) => props.onChange({ insuranceStatus: value })} />
+          </>
+        )}
+      </div>
+    </details>
+  );
+}
+
+function GateInputField({ label, value, type = "text", placeholder, onChange }: { label: string; value: string; type?: string; placeholder?: string; onChange: (value: string) => void }) {
+  return (
+    <label className="grid gap-1 text-[9px] text-[#475569]">
+      <span>{label}</span>
+      <input className="h-7 rounded border border-[#cbd5e1] bg-white px-2 text-[10px] text-[#1e293b] outline-none focus:border-[#0E6B6F]" type={type} value={value} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} />
+    </label>
+  );
+}
+
+function GateSelectField({ label, value, options, onChange }: { label: string; value: string; options: Array<[string, string]>; onChange: (value: string) => void }) {
+  return (
+    <label className="grid gap-1 text-[9px] text-[#475569]">
+      <span>{label}</span>
+      <select className="h-7 rounded border border-[#cbd5e1] bg-white px-1 text-[10px] text-[#1e293b] outline-none focus:border-[#0E6B6F]" value={value} onChange={(event) => onChange(event.target.value)}>
+        {options.map(([optionValue, optionLabel]) => <option key={optionValue} value={optionValue}>{optionLabel}</option>)}
+      </select>
+    </label>
+  );
+}
+
+function DecisionReportContent({
+  bundle,
+  draft,
+  evidence,
+  aiState,
+  reportIsStale,
+  expandEvidence = false,
+  print = false,
+  mobile = false,
+}: {
+  bundle: Bundle;
+  draft: ReportDraft;
+  evidence: ReportEvidenceBundle;
+  aiState: string;
+  reportIsStale: boolean;
+  expandEvidence?: boolean;
+  print?: boolean;
+  mobile?: boolean;
+}) {
+  const programEvidence = buildReportProgramEvidenceCatalog(evidence);
+  const officialCount = draft.officialResearch.sources.length;
+  const status = getReportAiStatus(aiState, programEvidence.length, officialCount);
+  const selectedCountry = draft.entryStrategy.countryName || bundle.countries[0]?.country_name || "-";
+
+  return (
+    <div className={mobile ? "space-y-3 text-sm" : ""} data-report-schema="decision-v2">
+      {reportIsStale ? (
+        <div className="mt-3 rounded-md border border-amber-300 bg-amber-50 p-3 text-[11px] text-amber-900">
+          저장된 리포트 이후 근거 데이터가 변경되었습니다. 최신 판단을 위해 AI 리포트를 다시 생성하세요.
+        </div>
+      ) : null}
+
+      <PrintReportSection title="1. 기본 정보" subtitle="선택 국가 한 곳과 현재 제품 분류를 기준으로 판단합니다.">
+        <div className={mobile ? "grid gap-2" : "grid grid-cols-2 gap-2"}>
+          <Block title="기업">
+            <p className="font-semibold">{bundle.company?.company_name ?? "-"}</p>
+            <p className="text-[#5b6473]">{[bundle.company?.industrial_complex, bundle.company?.address].filter(Boolean).join(" · ") || "-"}</p>
+          </Block>
+          <Block title="제품·분류">
+            <p className="font-semibold">{bundle.product?.name ?? "-"}</p>
+            <p className="font-mono text-[10px] text-[#5b6473]">HS {bundle.product?.hs_code ?? "-"} · HSK {bundle.product?.hsk_code ?? "-"}</p>
+          </Block>
+          <Block title="선택 국가">
+            <p className="font-semibold text-[#0E6B6F]">{selectedCountry}</p>
+          </Block>
+          <Block title="판단 기준일">
+            <p className="font-semibold">{format(new Date(bundle.project?.updated_at ?? Date.now()), "yyyy.MM.dd")}</p>
+            <p className="text-[10px] text-[#5b6473]">스키마 v{draft.schemaVersion}</p>
+          </Block>
+        </div>
+      </PrintReportSection>
+
+      <PrintReportSection
+        title="2. AI 최종판단"
+        subtitle="프로그램 데이터와 공식 웹 근거를 종합한 실행 판단입니다."
+        tone="highlight"
+        aside={<span className={`rounded-full px-2 py-1 text-[10px] font-semibold ${decisionTone(draft.decision.verdict)}`}>{formatDecisionVerdict(draft.decision.verdict)}</span>}
+      >
+        {/* Hero Metrics 3열 */}
+        <div className={mobile ? "grid gap-2" : "grid grid-cols-3 gap-2"}>
+          <ReportMetricCard
+            label="수출 판단"
+            value={formatDecisionVerdict(draft.decision.verdict)}
+            detail={decisionHintForVerdict(draft.decision.verdict)}
+            emphasis
+            verdict={draft.decision.verdict}
+          />
+          <ReportMetricCard
+            label="신뢰도"
+            value={formatDecisionConfidence(draft.decision.confidence)}
+            detail={(draft.decision as any).confidenceReason ?? "AI 판단 신뢰 수준"}
+          />
+          <ReportMetricCard
+            label="근거 현황"
+            value={`P ${programEvidence.length}건 · W ${officialCount}건`}
+            detail={draft.unresolvedItems.length > 0 ? `미확인 ${draft.unresolvedItems.length}건` : "모든 근거 확인 완료"}
+          />
+        </div>
+
+        {/* 헤드라인 + 사유 */}
+        <h4 className="mt-3 text-[16px] font-bold leading-snug text-[#123b3d]">{sanitize(draft.decision.headline)}</h4>
+        <p className="mt-2 border-l-2 border-[#0E6B6F] pl-3 text-[11px] leading-relaxed text-[#334155]">{sanitize(draft.decision.reason)}</p>
+
+        {/* 핵심 판단 근거 + 주요 위험 요소 2열 */}
+        <div className={mobile ? "mt-3 grid gap-2" : "mt-3 grid grid-cols-2 gap-2"}>
+          <ReportBasisSection reasons={draft.decisionReasons.filter((r) => r.type === "opportunity")} evidence={evidence} draft={draft} />
+          <ReportRiskSection reasons={draft.decisionReasons.filter((r) => r.type === "risk")} evidence={evidence} draft={draft} />
+        </div>
+
+        {/* 권장 실행 방향 */}
+        <ReportActionSection actions={draft.decision.immediateActions} />
+
+        {/* 국가 상세 데이터 요약 (Step 4 데이터) */}
+        <ReportCountryInsightsSummary bundle={bundle} mobile={mobile} />
+
+        {/* 의사결정 게이트 */}
+        {draft.decisionGates?.length > 0 ? <ReportGateDashboard gates={draft.decisionGates} mobile={mobile} /> : null}
+
+        {/* 참고 공식자료 */}
+        <ReportOfficialSources sources={draft.officialResearch?.sources || []} />
+
+        {/* AI 상태 */}
+        <div className={`mt-3 rounded-md border px-3 py-2 text-[10px] ${status.className}`}>
+          <p className="font-semibold">{status.label}</p>
+        </div>
+      </PrintReportSection>
+
+      <PrintReportSection title="3. AI 추천 진입전략" subtitle="여러 대안을 나열하지 않고 우선 실행할 진입 방식 하나를 제안합니다.">
+        <div className={mobile ? "grid gap-2" : "grid grid-cols-2 gap-2"}>
+          <StrategyField label="우선 고객" value={draft.entryStrategy.targetBuyer} />
+          <StrategyField label="우선 채널" value={draft.entryStrategy.primaryChannel} />
+          <StrategyField label="초기 제품" value={draft.entryStrategy.initialProducts} />
+          <StrategyField label="포지셔닝" value={draft.entryStrategy.positioning} />
+          <StrategyField label="거래조건" value={draft.entryStrategy.paymentTerms} />
+          <StrategyField label="파일럿 범위" value={draft.entryStrategy.pilotScope} />
+          <div className={mobile ? "" : "col-span-2"}><StrategyField label="확대 조건" value={draft.entryStrategy.expansionCondition} /></div>
+        </div>
+        <EvidenceRefList refs={draft.entryStrategy.evidenceRefs} />
+      </PrintReportSection>
+
+      <ReportEvidenceSection draft={draft} programEvidence={programEvidence} expandEvidence={expandEvidence} />
+
+      <p className="mt-3 border-t border-[#dfe4ea] pt-2 text-[9px] leading-relaxed text-[#64748b]">{sanitize(draft.disclaimer)}</p>
+    </div>
+  );
+}
+
+function ReportEvidenceSection({ draft, programEvidence, expandEvidence }: {
+  draft: ReportDraft;
+  programEvidence: ReturnType<typeof buildReportProgramEvidenceCatalog>;
+  expandEvidence: boolean;
+}) {
+  const content = (
+    <div className="grid gap-3">
+      <div>
+        <p className="text-[10px] font-semibold text-[#334155]">프로그램 API 근거 {programEvidence.length}건</p>
+        <div className="mt-1 grid gap-1">
+          {programEvidence.map((item) => (
+            <div key={item.evidenceId} className="grid grid-cols-[86px_1fr] gap-2 rounded border border-[#e2e8f0] p-2 text-[9px]">
+              <span className="font-mono font-semibold text-[#0E6B6F]">{item.evidenceId}</span>
+              <span><strong>{sanitize(item.label)}</strong> · {sanitize(item.value)} <span className="text-[#64748b]">({sanitize(item.sourceName)})</span></span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p className="text-[10px] font-semibold text-[#334155]">공식 웹 근거 {draft.officialResearch.sources.length}건</p>
+        {draft.officialResearch.sources.length ? draft.officialResearch.sources.map((source) => (
+          <div key={source.evidenceId} className="mt-1 rounded border border-[#e2e8f0] p-2 text-[9px]">
+            <span className="mr-2 font-mono font-semibold text-[#0E6B6F]">{source.evidenceId}</span>
+            <a className="font-semibold underline" href={toSafePublicHref(source.url) ?? undefined} target="_blank" rel="noreferrer">{sanitize(source.title)}</a>
+            <span className="ml-2 text-[#64748b]">{sanitize(source.organization)}</span>
+          </div>
+        )) : <p className="mt-1 text-[10px] text-[#64748b]">확인된 공식 웹 근거가 없습니다.</p>}
+      </div>
+      <div className="grid gap-2 md:grid-cols-2">
+        <EvidenceTextList title="미확인 항목" items={draft.unresolvedItems} />
+        <EvidenceTextList title="판단 가정" items={draft.assumptions} />
+      </div>
+    </div>
+  );
+  return (
+    <PrintReportSection title="4. 근거 보기" subtitle="판단에 사용한 API 값, 공식 출처, 미확인 항목을 확인할 수 있습니다." tone="muted">
+      {expandEvidence ? content : (
+        <Accordion type="single" collapsible>
+          <AccordionItem value="evidence" className="border-0">
+            <AccordionTrigger className="py-2 text-sm">근거 상세 펼치기</AccordionTrigger>
+            <AccordionContent>{content}</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
+    </PrintReportSection>
+  );
+}
+
+function parseCountryVerdicts(
+  rows: unknown,
+): Bundle["countryVerdicts"] {
+  if (!Array.isArray(rows)) return [];
+  return rows.flatMap((raw) => {
+    const row = decisionRow(raw);
+    const countryCode = decisionText(row.country_code);
+    if (!countryCode) return [];
+    const parsed = parseVerdictResponse(row.verdict);
+    if (!parsed) return [];
+    return [{ countryCode, verdict: parsed, createdAt: typeof row.created_at === "string" ? row.created_at : "" }];
+  });
+}
+
+function ReportMetricCard({ label, value, detail, emphasis, verdict }: {
+  label: string;
+  value: string;
+  detail: string;
+  emphasis?: boolean;
+  verdict?: string;
+}) {
+  const bgClass = emphasis && verdict
+    ? verdict === "proceed" ? "border-emerald-300 bg-emerald-50/80"
+      : verdict === "hold" ? "border-red-300 bg-red-50/80"
+        : "border-amber-300 bg-amber-50/80"
+    : "border-[#dfe4ea] bg-white";
+  return (
+    <div className={`rounded-md border p-2.5 ${bgClass}`}>
+      <p className="text-[9px] font-semibold uppercase tracking-wide text-[#64748b]">{label}</p>
+      <p className={`mt-1 text-[14px] font-bold ${emphasis ? "text-[#0E6B6F]" : "text-[#1e293b]"}`}>{value}</p>
+      <p className="mt-0.5 text-[9px] leading-snug text-[#64748b]">{detail}</p>
+    </div>
+  );
+}
+
+function ReportBasisSection({ reasons, evidence, draft }: {
+  reasons: ReportDraft["decisionReasons"];
+  evidence: ReportEvidenceBundle;
+  draft: ReportDraft;
+}) {
+  if (!reasons || reasons.length === 0) return null;
+  return (
+    <div className="rounded-md border border-emerald-200 bg-emerald-50/60 p-3">
+      <div className="flex items-center gap-1.5">
+        <span className="h-4 w-4 text-emerald-600">✓</span>
+        <p className="text-[10px] font-semibold text-[#065f46]">핵심 판단 근거</p>
+      </div>
+      <ul className="mt-2 space-y-2">
+        {reasons.map((reason, i) => (
+          <li key={`basis-${i}`} className="flex items-start gap-2 text-[11px] leading-relaxed">
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+            <div>
+              <span className="font-semibold">{sanitize(reason.title)}</span>
+              <span className="ml-1">{sanitize(reason.interpretation)}</span>
+              {reason.evidenceRefs?.length > 0 ? (
+                <span className="ml-1 text-[9px] text-[#64748b]">
+                  [{resolveReportSourceNames(reason.evidenceRefs, evidence, draft).join(", ")}]
+                </span>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ReportRiskSection({ reasons, evidence, draft }: {
+  reasons: ReportDraft["decisionReasons"];
+  evidence: ReportEvidenceBundle;
+  draft: ReportDraft;
+}) {
+  if (!reasons || reasons.length === 0) return null;
+  return (
+    <div className="rounded-md border border-amber-200 bg-amber-50/60 p-3">
+      <div className="flex items-center gap-1.5">
+        <span className="h-4 w-4 text-amber-600">⚠</span>
+        <p className="text-[10px] font-semibold text-[#78350f]">주요 위험 요소</p>
+      </div>
+      <ul className="mt-2 space-y-2">
+        {reasons.map((reason, i) => (
+          <li key={`risk-${i}`} className="flex items-start gap-2 text-[11px] leading-relaxed">
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
+            <div>
+              <span className="font-semibold">{sanitize(reason.title)}</span>
+              <span className="ml-1">{sanitize(reason.interpretation)}</span>
+              {reason.businessImpact ? (
+                <p className="mt-0.5 text-[10px] text-[#64748b]">→ {sanitize(reason.businessImpact)}</p>
+              ) : null}
+              {reason.evidenceRefs?.length > 0 ? (
+                <span className="ml-1 text-[9px] text-[#64748b]">
+                  [{resolveReportSourceNames(reason.evidenceRefs, evidence, draft).join(", ")}]
+                </span>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ReportActionSection({ actions }: { actions: ReportDraft["decision"]["immediateActions"] }) {
+  if (!actions || actions.length === 0) return null;
+  return (
+    <div className="mt-3 rounded-md border border-[#bfdbfe] bg-blue-50/60 p-3">
+      <div className="flex items-center gap-1.5">
+        <span className="h-4 w-4 text-blue-600">→</span>
+        <p className="text-[10px] font-semibold text-[#1e40af]">권장 실행 방향</p>
+      </div>
+      <ol className="mt-2 space-y-2">
+        {actions.map((item, i) => (
+          <li key={`action-${i}`} className="flex items-start gap-2 text-[11px] leading-relaxed">
+            <span className="mt-0.5 text-[10px] font-bold text-blue-500">{i + 1}.</span>
+            <div>
+              <span className="font-semibold">{sanitize(item.action)}</span>
+              {item.owner ? (
+                <span className="ml-1.5 inline-flex items-center rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-[#475569]">{sanitize(item.owner)}</span>
+              ) : null}
+              {i === 0 ? (
+                <span className="ml-1 inline-block rounded bg-red-100 px-1.5 py-0.5 text-[9px] font-medium text-red-800">우선</span>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function ReportOfficialSources({ sources }: { sources: ReportDraft["officialResearch"]["sources"] }) {
+  if (!sources || sources.length === 0) return null;
+  return (
+    <div className="mt-3 rounded-md border border-[#dfe4ea] bg-white p-3">
+      <p className="text-[9px] font-semibold text-[#334155]">참고 공식자료</p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {sources.map((source, i) => {
+          const url = toSafePublicHref(source.url ?? "");
+          return url ? (
+            <a
+              key={`official-${i}`}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-0.5 rounded border border-blue-200 bg-blue-50/50 px-2 py-1 text-[9px] text-blue-800 transition hover:bg-blue-100"
+              title={source.title ?? undefined}
+            >
+              ↗ {sanitize(source.organization ?? source.title ?? "공식자료")}
+            </a>
+          ) : (
+            <span key={`official-${i}`} className="inline-flex items-center rounded border border-[#e2e8f0] bg-[#f8fafc] px-2 py-1 text-[9px] text-[#64748b]">
+              {sanitize(source.organization ?? source.title ?? "공식자료")}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ReportCountryInsightsSummary({ bundle, mobile }: { bundle: Bundle; mobile: boolean }) {
+  const insights = useMemo(() => {
+    return bundle.countries.slice(0, 3).map((country) => {
+      const facts = bundle.decisionFacts.filter((f) => f.countryCode === country.country_code);
+      const market = buildMarketEvidence(facts);
+      const tariff = buildTariffRangeEvidence(facts);
+      const logistics = buildLogisticsEvidence(facts);
+      const verdict = bundle.countryVerdicts?.find((v) => v.countryCode === country.country_code) ?? null;
+      const paymentFact = facts.find((f) => f.category === "payment_risk" && f.factKey?.includes("ksure"));
+      const paymentValue = paymentFact?.value as Record<string, unknown> | undefined;
+      return { country, market, tariff, logistics, verdict, paymentValue };
+    });
+  }, [bundle]);
+
+  if (insights.every((i) => !i.market && !i.tariff && !i.logistics && !i.verdict)) return null;
+
+  return (
+    <div className="mt-3 space-y-2">
+      <p className="text-[10px] font-semibold text-[#0E6B6F]">국가 상세 데이터 요약</p>
+      {insights.map(({ country, market, tariff, logistics, verdict, paymentValue }) => (
+        <div key={`insight-${country.country_code}`} className="rounded-md border border-[#dfe4ea] bg-white p-3">
+          <p className="text-[11px] font-semibold text-[#1e293b]">{country.country_name} ({country.country_code})</p>
+          <div className={mobile ? "mt-2 grid gap-2" : "mt-2 grid grid-cols-3 gap-2"}>
+            {market ? (
+              <div className="rounded border border-[#e2e8f0] bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#0E6B6F]">시장 기회</p>
+                <p className="mt-1 text-[11px] font-bold text-[#1e293b]">수입 ${formatInsightUsd(market.importMarketUsd)}</p>
+                <p className="text-[9px] text-[#64748b]">한국산 {market.koreaSharePct.toFixed(1)}% · ${formatInsightUsd(market.importsFromKoreaUsd)}</p>
+                <p className="text-[8px] text-[#94a3b8]">{market.sourceName} · {market.referenceDate ?? "-"}</p>
+              </div>
+            ) : null}
+            {tariff ? (
+              <div className="rounded border border-[#e2e8f0] bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#0E6B6F]">관세 현황</p>
+                <p className="mt-1 text-[11px] font-bold text-[#1e293b]">
+                  일반 {tariff.averageRatePct.toFixed(1)}%
+                  {tariff.minRatePct === 0 ? " · 특혜 Free" : ""}
+                </p>
+                <p className="text-[9px] text-[#64748b]">범위 {tariff.minRatePct}%~{tariff.maxRatePct}%</p>
+                <p className="text-[8px] text-[#94a3b8]">{tariff.sourceName}</p>
+              </div>
+            ) : null}
+            {logistics ? (
+              <div className="rounded border border-[#e2e8f0] bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#0E6B6F]">물류 환경</p>
+                <p className="mt-1 text-[11px] font-bold text-[#1e293b]">LPI {logistics.overall?.toFixed(1) ?? "-"}/5</p>
+                <p className="text-[9px] text-[#64748b]">
+                  통관 {logistics.customs?.toFixed(1) ?? "-"}
+                  · 인프라 {logistics.infrastructure?.toFixed(1) ?? "-"}
+                  · 운송 {logistics.internationalShipments?.toFixed(1) ?? "-"}
+                </p>
+                <p className="text-[8px] text-[#94a3b8]">{logistics.sourceName} · {logistics.referenceDate ?? "-"}</p>
+              </div>
+            ) : null}
+          </div>
+          {paymentValue ? (() => {
+            const pm = paymentValue.payment as Record<string, unknown> | null | undefined;
+            const lateRate = pm?.late_payment_rate ?? paymentValue.late_payment_rate ?? paymentValue.latePaymentRate ?? paymentValue.lateRate;
+            const avgPeriod = pm?.average_payment_period ?? paymentValue.average_payment_period ?? paymentValue.avgPaymentPeriod ?? paymentValue.paymentPeriod;
+            return (
+              <div className="mt-2 rounded border border-[#e2e8f0] bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#0E6B6F]">결제 위험</p>
+                <p className="mt-1 text-[10px] text-[#334155]">
+                  국가신용등급 {String(paymentValue.countryGrade ?? paymentValue.grade ?? "-")}
+                  · 지연율 {lateRate != null ? String(lateRate) : "-"}%
+                  · 평균 결제기간 {avgPeriod != null ? String(avgPeriod) : "-"}일
+                </p>
+              </div>
+            );
+          })() : null}
+          {verdict ? (
+            <div className={`mt-2 rounded border p-2 ${
+              verdict.verdict.opinion === "적극 검토 권장" ? "border-emerald-200 bg-emerald-50/60"
+                : verdict.verdict.opinion === "진출 보류 권장" ? "border-red-200 bg-red-50/60"
+                  : "border-amber-200 bg-amber-50/60"
+            }`}>
+              <p className="text-[9px] font-semibold text-[#0E6B6F]">국가별 AI 판단 (Step 4)</p>
+              <p className="mt-1 text-[11px] font-bold text-[#1e293b]">{verdict.verdict.opinion} · 신뢰도 {verdict.verdict.confidence}</p>
+              <p className="mt-0.5 text-[10px] leading-relaxed text-[#475569]">{verdict.verdict.opinionDetail}</p>
+              <p className="mt-1 text-[8px] text-[#94a3b8]">생성 {verdict.createdAt ? new Date(verdict.createdAt).toLocaleDateString("ko-KR") : "-"} · Gemini</p>
+            </div>
+          ) : (
+            <div className="mt-2 rounded border border-dashed border-[#cbd5e1] bg-[#f8fafc] p-2">
+              <p className="text-[9px] text-[#94a3b8]">국가 상세분석에서 AI 판단을 먼저 생성하세요.</p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReportGateDashboard({ gates, mobile }: { gates: ReportDraft["decisionGates"]; mobile: boolean }) {
+  if (!gates || gates.length === 0) return null;
+  const gateIcons: Record<string, string> = {
+    certification: "🛡️",
+    regulation: "📋",
+    tariff: "💰",
+    profitability: "📊",
+    payment: "🏦",
+    safety: "⚠️",
+  };
+  const gateLabels: Record<string, string> = {
+    certification: "인증",
+    regulation: "규제",
+    tariff: "관세",
+    profitability: "수익성",
+    payment: "결제",
+    safety: "안전",
+  };
+  const blockedGates = gates.filter((g) => g.status === "blocked");
+  return (
+    <div className="mt-3 rounded-md border border-[#dfe4ea] bg-[#f8fafc] p-3">
+      <p className="text-[10px] font-semibold text-[#0E6B6F]">의사결정 게이트</p>
+      <div className={mobile ? "mt-2 grid grid-cols-2 gap-1.5" : "mt-2 grid grid-cols-3 gap-1.5"}>
+        {gates.map((gate) => {
+          const topic = (gate as any).gate || gate.topic;
+          const icon = gateIcons[topic] ?? "📌";
+          const label = gateLabels[topic] ?? topic;
+          const statusClass = gate.status === "clear"
+            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+            : gate.status === "blocked"
+              ? "border-red-300 bg-red-50 text-red-800"
+              : "border-amber-200 bg-amber-50 text-amber-800";
+          const statusLabel = gate.status === "clear" ? "통과"
+            : gate.status === "blocked" ? "차단"
+              : "확인 필요";
+          return (
+            <details key={topic} className={`rounded border p-2 ${statusClass}`}>
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-1 text-[10px] font-semibold [&::-webkit-details-marker]:hidden">
+                <span>{icon} {label}</span>
+                <span className="rounded-full bg-white/60 px-1.5 py-0.5 text-[8px]">{statusLabel}</span>
+              </summary>
+              <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5 text-[9px]">
+                {gate.decision ? <p>{sanitize(gate.decision)}</p> : null}
+                {gate.requiredAction ? <p className="text-[#475569]">필요 조치: {sanitize(gate.requiredAction)}</p> : null}
+                {gate.owner ? <p className="text-[#64748b]">담당: {sanitize(gate.owner)} · 기한: {sanitize(gate.due ?? "미정")}</p> : null}
+                {gate.stopCondition ? <p className="text-red-700">중단 조건: {sanitize(gate.stopCondition)}</p> : null}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+      {blockedGates.length > 0 ? (
+        <p className="mt-2 text-[10px] font-semibold text-red-700">
+          ⚠ "{gateLabels[(blockedGates[0] as any).gate || blockedGates[0].topic] ?? ((blockedGates[0] as any).gate || blockedGates[0].topic)}" 게이트가 차단 상태입니다. 해소 후 수출 추진이 가능합니다.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function decisionHintForVerdict(verdict: string): string {
+  switch (verdict) {
+    case "proceed": return "주요 요건 충족, 추진 가능";
+    case "conditional": return "일부 조건 확인 후 추진 가능";
+    case "hold": return "차단 요인 해소 후 재검토 필요";
+    default: return "판단 대기";
+  }
+}
+
+function resolveReportSourceNames(
+  refs: string[],
+  evidence: ReportEvidenceBundle,
+  draft: ReportDraft,
+): string[] {
+  const names: string[] = [];
+  for (const ref of refs) {
+    if (ref.startsWith("W-")) {
+      const source = draft.officialResearch?.sources?.find((s) => s.evidenceId === ref);
+      if (source?.organization) { names.push(source.organization); continue; }
+      if (source?.title) { names.push(source.title); continue; }
+    }
+    if (ref.startsWith("P-")) {
+      const item = evidence.decisionFacts?.find((f) => f.factKey === ref);
+      if (item?.sourceName) { names.push(item.sourceName); continue; }
+      const catalogItem = buildReportProgramEvidenceCatalog(evidence).find((e) => e.evidenceId === ref);
+      if (catalogItem?.sourceName) { names.push(catalogItem.sourceName); continue; }
+    }
+    names.push(ref);
+  }
+  return [...new Set(names)];
+}
+
+function formatInsightUsd(value: number): string {
+  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  return value.toLocaleString("ko-KR");
+}
+
+function StrategyField({ label, value }: { label: string; value: string }) {
+  return <div className="h-full rounded-md border border-[#e2e8f0] bg-white p-2.5"><p className="text-[9px] font-semibold text-[#64748b]">{label}</p><p className="mt-1 text-[11px] leading-relaxed">{sanitize(value)}</p></div>;
+}
+
+function EvidenceTextList({ title, items }: { title: string; items: string[] }) {
+  return <div className="rounded border border-[#e2e8f0] p-2"><p className="text-[10px] font-semibold">{title}</p><ul className="mt-1 space-y-1 text-[9px] text-[#475569]">{items.map((item, index) => <li key={`${title}-${index}`}>• {sanitize(item)}</li>)}</ul></div>;
+}
+
+function EvidenceRefList({ refs }: { refs: string[] }) {
+  if (!refs.length) return null;
+  return <div className="mt-1.5 flex flex-wrap gap-1">{refs.map((ref) => <span key={ref} className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[8px] text-slate-600">{ref}</span>)}</div>;
+}
+
+function getReportAiStatus(aiState: string, programCount: number, officialCount: number) {
+  if (aiState === "success") return { label: `Gemini AI 판단 완료 · 프로그램 근거 ${programCount}건 · 공식 웹 근거 ${officialCount}건`, className: "border-emerald-200 bg-emerald-50 text-emerald-800" };
+  if (aiState === "partial_success") return { label: `일부 근거 미확인 · 조건부 판단 · 프로그램 근거 ${programCount}건 · 공식 웹 근거 ${officialCount}건`, className: "border-amber-200 bg-amber-50 text-amber-800" };
+  if (aiState === "stale") return { label: "저장 리포트 근거 변경 · 재생성 필요", className: "border-amber-200 bg-amber-50 text-amber-800" };
+  return { label: "규칙 기반 임시 결과 · Gemini 판단 미완료", className: "border-slate-200 bg-slate-50 text-slate-700" };
+}
+
+function formatDecisionVerdict(value: ReportDraft["decision"]["verdict"]): string {
+  return value === "proceed" ? "추진" : value === "hold" ? "보류" : "조건부 추진";
+}
+function formatDecisionConfidence(value: ReportDraft["decision"]["confidence"]): string {
+  return value === "high" ? "높음" : value === "low" ? "낮음" : "보통";
+}
+function decisionTone(value: ReportDraft["decision"]["verdict"]): string {
+  return value === "proceed" ? "bg-emerald-100 text-emerald-800" : value === "hold" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800";
+}
 async function saveReportDraft(
   projectId: string,
   userId: string | undefined,
@@ -586,11 +1313,20 @@ async function saveReportDraft(
   }
 }
 
-function DetailCompletionBanner({ detailCompletion }: { detailCompletion: DetailCompletionSummary }) {
+function DetailCompletionBanner({
+  detailCompletion,
+  mobile = false,
+}: {
+  detailCompletion: DetailCompletionSummary;
+  mobile?: boolean;
+}) {
   if (!detailCompletion.incomplete) return null;
 
   return (
-    <section className="mt-3 rounded border border-[#f1c453] bg-[#fff8e1] px-3 py-2 text-[11px] text-[#8b5e00]">
+    <section className={mobile
+      ? "rounded-md border border-[#f1c453] bg-[#fff8e1] p-3 text-xs text-[#8b5e00]"
+      : "mt-3 break-inside-avoid rounded-md border border-[#f1c453] bg-[#fff8e1] p-3 text-[10px] text-[#8b5e00]"
+    }>
       <p className="font-semibold">상세 분석 미완료</p>
       <p className="mt-1">{detailCompletion.reason}</p>
       {detailCompletion.unresolvedItems.length > 0 ? (
@@ -601,11 +1337,14 @@ function DetailCompletionBanner({ detailCompletion }: { detailCompletion: Detail
   );
 }
 
-function ReportFreshnessBanner({ reportIsStale }: { reportIsStale: boolean }) {
+function ReportFreshnessBanner({ reportIsStale, mobile = false }: { reportIsStale: boolean; mobile?: boolean }) {
   if (!reportIsStale) return null;
 
   return (
-    <section className="mt-3 rounded border border-[#f1c453] bg-[#fff8e1] px-3 py-2 text-[11px] text-[#8b5e00]">
+    <section className={mobile
+      ? "rounded-md border border-[#f1c453] bg-[#fff8e1] p-3 text-xs text-[#8b5e00]"
+      : "mt-3 break-inside-avoid rounded-md border border-[#f1c453] bg-[#fff8e1] p-3 text-[10px] text-[#8b5e00]"
+    }>
       <p className="font-semibold">AI 리포트 재생성 필요</p>
       <p className="mt-1">저장된 AI 리포트 이후 후보국·인증·규제·리스크 근거가 변경되었습니다. 최신 근거 기준으로 AI 요약을 다시 생성하세요.</p>
     </section>
@@ -625,7 +1364,7 @@ function CountryCautionCards({
 }) {
   if (countries.length === 0) {
     return (
-      <p className={print ? "mt-2 rounded bg-[#f4f4f4] p-2 text-[10px] text-[#5b6473]" : "mt-2 rounded-md border border-border bg-white p-3 text-xs text-muted-foreground"}>
+      <p className={print ? "rounded bg-[#f4f4f4] p-2 text-[10px] text-[#5b6473]" : "rounded-md border border-border bg-white p-3 text-xs text-muted-foreground"}>
         데이터가 없습니다.
       </p>
     );
@@ -633,7 +1372,7 @@ function CountryCautionCards({
 
   const generated = draft?.countryCautionAnalysisStatus === "generated";
   return (
-    <div className={print ? "mt-2 space-y-2" : "mt-2 space-y-3"}>
+    <div className={print ? "space-y-2" : "space-y-3"}>
       {countries.map((country) => {
         const analysis = generated ? findCountryCautionAnalysis(draft, country) : null;
         return (
@@ -885,7 +1624,10 @@ function normalizeCountryCautionName(value: string | null | undefined): string {
 
 function ExecutiveSummaryPanel({ brief, mobile = false }: { brief: ExecutiveBrief; mobile?: boolean }) {
   return (
-    <section className="mt-3 rounded border border-[#dfe4ea] bg-[#f8fafc] p-3">
+    <section className={mobile
+      ? "rounded-md border border-border bg-white p-4"
+      : "mt-3 break-inside-avoid rounded-md border border-[#dfe4ea] bg-[#f8fafc] p-3"
+    }>
       <p className="text-[10px] font-semibold tracking-wide text-[#0E6B6F]">심사 핵심 요약</p>
       <div className={mobile ? "mt-2 grid gap-2" : "mt-2 grid grid-cols-3 gap-2"}>
         <SummaryCell title="Top 3" items={brief.top3} />
@@ -909,21 +1651,160 @@ function SummaryCell({ title, items }: { title: string; items: string[] }) {
   );
 }
 
+async function loadReportCountries(projectId: string, selectedCountryCode: string | null) {
+  const baseQuery = () => supabase
+    .from("project_countries")
+    .select("country_code,country_name,total_score,label,rationale")
+    .eq("project_id", projectId)
+    .order("rank", { ascending: true });
+
+  if (selectedCountryCode) {
+    const selectedResult = await baseQuery().eq("country_code", selectedCountryCode).limit(1);
+    if ((selectedResult.data?.length ?? 0) > 0) return selectedResult;
+  }
+  return baseQuery().limit(1);
+}
+
+function ReportDecisionOverview({ bundle, print = false }: { bundle: Bundle; print?: boolean }) {
+  const activeFacts = bundle.decisionFacts.filter((fact) => (
+    !fact.isStale && !REPORT_NON_API_FACT_KEYS.has(fact.factKey ?? "")
+  ));
+  const incompleteActions = [...bundle.decisionActions]
+    .filter((action) => action.status !== "done")
+    .sort((a, b) => a.priority - b.priority);
+  const commonChecks = uniqueDecisionFacts(activeFacts.filter((fact) => (
+    fact.category === "customs_requirement" ||
+    fact.category === "customs_documents" ||
+    fact.category === "strategic_goods" ||
+    fact.category === "sanctions"
+  )));
+  const sectionClass = print
+    ? "mt-3 break-inside-avoid rounded-md border border-[#dfe4ea] bg-[#f8fafc] p-3"
+    : "rounded-md border border-border bg-white p-4";
+  const panelClass = print
+    ? "rounded border border-[#e6e7ea] bg-white p-2"
+    : "rounded-md border border-border bg-muted/20 p-3";
+
+  return (
+    <section className={sectionClass}>
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <p className={print ? "text-[10px] font-semibold tracking-wide text-[#0E6B6F]" : "text-xs font-semibold text-brand"}>실데이터 의사결정 보드</p>
+          <h3 className={print ? "mt-0.5 text-[12px] font-semibold" : "mt-1 text-sm font-semibold"}>선택 국가 판단 근거</h3>
+        </div>
+        <p className={print ? "text-[9px] text-[#64748b]" : "text-[11px] text-muted-foreground"}>상세 근거가 있는 국가만 시장·관세 수치를 표시합니다.</p>
+      </div>
+
+      <div className={print ? "mt-2 space-y-1.5" : "mt-3 space-y-2"}>
+        {bundle.countries.map((country, index) => {
+          const score = Math.max(0, Math.min(100, country.total_score ?? 0));
+          return (
+            <div key={`decision-score-${country.country_code}`} className="grid grid-cols-[82px_1fr_34px] items-center gap-2">
+              <p className={print ? "truncate text-[9px] font-medium" : "truncate text-xs font-medium"}>{index + 1}. {country.country_name}</p>
+              <div className="h-2 overflow-hidden rounded-full bg-slate-200" role="img" aria-label={`${country.country_name} 추천 점수 ${score}점`}>
+                <div className="h-full rounded-full bg-[#0E6B6F]" style={{ width: `${score}%` }} />
+              </div>
+              <p className={print ? "text-right text-[9px] font-semibold" : "text-right text-xs font-semibold"}>{country.total_score ?? "-"}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={print ? "mt-3 space-y-2" : "mt-4 grid gap-2"}>
+        {bundle.countries.map((country) => {
+          const facts = activeFacts.filter((fact) => fact.countryCode === country.country_code);
+          const market = buildMarketEvidence(facts);
+          const tariff = buildTariffRangeEvidence(facts);
+          const pendingCount = incompleteActions.filter((action) => action.countryCode === country.country_code).length;
+          return (
+            <div
+              key={`decision-country-${country.country_code}`}
+              className={print ? `${panelClass} grid grid-cols-[210px_1fr] items-stretch gap-3` : panelClass}
+            >
+              <div className={print ? "flex items-start justify-between gap-2 border-r border-[#e6e7ea] pr-3" : "flex items-start justify-between gap-2"}>
+                <div>
+                  <p className={print ? "text-[10px] font-semibold" : "text-xs font-semibold"}>{country.country_name}</p>
+                  <p className={print ? "text-[8px] text-[#64748b]" : "text-[10px] text-muted-foreground"}>{country.country_code} · {LABEL_KO[country.label]}</p>
+                </div>
+                <span className={print ? "text-[8px] text-[#0E6B6F]" : "text-[10px] font-medium text-brand"}>{facts.length ? `근거 ${facts.length}건` : "상세 미실행"}</span>
+              </div>
+              <div className={print ? "grid grid-cols-3 items-center gap-2 text-[9px]" : "mt-2 grid grid-cols-3 gap-2 text-[11px]"}>
+                <p><span className="text-muted-foreground">시장</span> {market ? `${formatDecisionUsd(market.importMarketUsd)} · 한국산 ${market.koreaSharePct}%` : "수치 미확인"}</p>
+                <p><span className="text-muted-foreground">관세</span> {tariff ? `평균 ${tariff.averageRatePct}% (${tariff.minRatePct}~${tariff.maxRatePct}%)` : "세율 미확정"}</p>
+                <p><span className="text-muted-foreground">다음 행동</span> {pendingCount}건</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={print ? "mt-3 grid grid-cols-2 gap-2" : "mt-4 grid gap-3 md:grid-cols-2"}>
+        <div className={panelClass}>
+          <p className={print ? "text-[9px] font-semibold text-[#334155]" : "text-xs font-semibold"}>한국 수출 전 공통점검</p>
+          <ul className={print ? "mt-1 space-y-0.5 text-[9px] text-[#475569]" : "mt-2 space-y-1 text-xs text-muted-foreground"}>
+            {commonChecks.slice(0, 4).map((fact) => <li key={`common-${fact.factKey ?? fact.id}`}>• {sanitize(fact.summary)}</li>)}
+            {bundle.flags.slice(0, Math.max(0, 4 - commonChecks.length)).map((flag, index) => (
+              <li key={`safety-${flag.flag_type}-${index}`}>• {formatFlagTypeLabel(flag.flag_type)}: {sanitize(flag.summary ?? UNKNOWN_TEXT)}</li>
+            ))}
+            {commonChecks.length === 0 && bundle.flags.length === 0 ? <li>• 공통점검 근거 미수집</li> : null}
+          </ul>
+        </div>
+        <div className={panelClass}>
+          <div className="flex items-center justify-between gap-2">
+            <p className={print ? "text-[9px] font-semibold text-[#334155]" : "text-xs font-semibold"}>미완료 실행 항목</p>
+            <span className={print ? "text-[8px] text-[#64748b]" : "text-[10px] text-muted-foreground"}>{incompleteActions.length}건</span>
+          </div>
+          <ol className={print ? "mt-1 space-y-0.5 text-[9px] text-[#475569]" : "mt-2 space-y-1 text-xs text-muted-foreground"}>
+            {incompleteActions.slice(0, 5).map((action) => (
+              <li key={`report-action-${action.countryCode}-${action.actionKey}`}>
+                {countryNameForCode(bundle, action.countryCode)} · {sanitize(action.title)}
+              </li>
+            ))}
+            {incompleteActions.length > 5 ? (
+              <li className="font-medium text-[#0E6B6F]">외 {incompleteActions.length - 5}건은 국가 상세 체크리스트에서 확인</li>
+            ) : null}
+            {incompleteActions.length === 0 ? <li>저장된 미완료 항목이 없습니다.</li> : null}
+          </ol>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function uniqueDecisionFacts(facts: ReportDecisionFact[]): ReportDecisionFact[] {
+  const seen = new Set<string>();
+  return facts.filter((fact) => {
+    const key = fact.factKey ?? `${fact.category}:${fact.summary}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function countryNameForCode(bundle: Bundle, countryCode: string): string {
+  return bundle.countries.find((country) => country.country_code === countryCode)?.country_name ?? countryCode;
+}
+
+function formatDecisionUsd(value: number): string {
+  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}B`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}M`;
+  return `$${value.toLocaleString("ko-KR", { maximumFractionDigits: 0 })}`;
+}
+
 function ReportAiConclusionPrint({ draft, summaryText }: { draft: ReportDraft | null; summaryText: string }) {
   return (
-    <section className="mt-4 rounded-md border border-[#0E6B6F] bg-[#eef8f7] p-4">
-      <p className="text-[10px] font-semibold tracking-wide text-[#0E6B6F]">AI 종합 결론</p>
-      <p className="mt-2 text-[12px] font-semibold leading-relaxed text-[#102a2d]">
+    <PrintReportSection title="AI 종합 결론" tone="highlight">
+      <p className="text-[12px] font-semibold leading-relaxed text-[#102a2d]">
         {sanitize(draft?.executiveSummary ?? summaryText)}
       </p>
       {draft ? (
-        <div className="mt-3 grid grid-cols-3 gap-2 text-[10px]">
+        <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
           <ConclusionMetric title="우선 판단" value={draft.topCountryReason} />
           <ConclusionMetric title="수출 가능성" value={draft.exportFeasibility} />
           <ConclusionMetric title="다음 조치" value={draft.actionPlan7Days[0] ?? UNKNOWN_TEXT} />
         </div>
       ) : null}
-    </section>
+    </PrintReportSection>
   );
 }
 
@@ -934,6 +1815,92 @@ function ConclusionMetric({ title, value }: { title: string; value: string }) {
       <p className="mt-0.5 line-clamp-3 text-[9px] leading-snug text-[#334155]">{sanitize(value)}</p>
     </div>
   );
+}
+
+function ReportAiDecisionPanel({ draft, print = false }: { draft: ReportDraft; print?: boolean }) {
+  const decision = draft.aiDecision;
+  const research = draft.webResearch;
+  const sectionClass = print
+    ? "mt-3 break-inside-avoid rounded-md border border-[#c9dedf] bg-white p-3"
+    : "rounded-md border border-brand/30 bg-white p-4";
+  const textClass = print ? "text-[10px] leading-relaxed text-[#334155]" : "text-xs leading-relaxed text-muted-foreground";
+
+  return (
+    <section className={sectionClass}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className={print ? "text-[12px] font-semibold text-[#0E6B6F]" : "text-sm font-semibold text-brand"}>AI 종합판단</h3>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-[#0E6B6F] px-2 py-0.5 text-[10px] font-semibold text-white">{formatAiVerdict(decision.verdict)}</span>
+          <span className={print ? "text-[9px] text-[#64748b]" : "text-[11px] text-muted-foreground"}>판단 신뢰도 {formatAiConfidence(decision.confidence)}</span>
+        </div>
+      </div>
+      <p className={`mt-2 ${textClass}`}>{sanitize(decision.rationale)}</p>
+
+      <div className={print ? "mt-3 grid grid-cols-3 gap-2" : "mt-3 grid gap-2 sm:grid-cols-3"}>
+        <DecisionList title="기회" items={decision.opportunities} print={print} />
+        <DecisionList title="차단 요인" items={decision.blockers} print={print} />
+        <DecisionList title="중단 조건" items={decision.stopConditions} print={print} />
+      </div>
+
+      <div className={print ? "mt-3 rounded bg-[#eef8f7] p-2" : "mt-3 rounded-md bg-brand/5 p-3"}>
+        <p className={print ? "text-[9px] font-semibold text-[#0E6B6F]" : "text-xs font-semibold text-brand"}>권장 진행 방향</p>
+        <p className={`mt-1 ${textClass}`}>{sanitize(decision.recommendedDirection)}</p>
+      </div>
+
+      <div className="mt-3 border-t border-border pt-2">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className={print ? "text-[10px] font-semibold" : "text-xs font-semibold"}>인터넷 검색 근거</p>
+            <p className={print ? "text-[8px] text-[#64748b]" : "text-[10px] text-muted-foreground"}>검색 근거는 공공데이터와 구분하여 표시합니다.</p>
+          </div>
+          <span className={print ? "text-[8px] text-[#64748b]" : "text-[10px] text-muted-foreground"}>{research.sources.length}개 출처</span>
+        </div>
+        <p className={`mt-2 ${textClass}`}>{sanitize(research.summary)}</p>
+        {research.keyFindings.length > 0 ? (
+          <ul className={`mt-2 space-y-1 ${textClass}`}>
+            {research.keyFindings.slice(0, 5).map((finding, index) => <li key={`web-finding-${index}`}>• {sanitize(finding)}</li>)}
+          </ul>
+        ) : null}
+        {research.sources.length > 0 ? (
+          <ol className={`mt-2 space-y-1 ${textClass}`}>
+            {research.sources.slice(0, 8).map((source, index) => (
+              <li key={`web-source-${source.url}-${index}`}>
+                <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-brand underline underline-offset-2">
+                  {index + 1}. {sanitize(source.title)}
+                </a>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className={`mt-2 ${textClass}`}>검색 출처가 생성되지 않았습니다. AI 리포트를 다시 생성해 주세요.</p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function DecisionList({ title, items, print }: { title: string; items: string[]; print: boolean }) {
+  return (
+    <div className={print ? "rounded border border-[#e6e7ea] p-2" : "rounded-md border border-border p-3"}>
+      <p className={print ? "text-[9px] font-semibold" : "text-xs font-semibold"}>{title}</p>
+      <ul className={print ? "mt-1 space-y-0.5 text-[9px] text-[#475569]" : "mt-2 space-y-1 text-xs text-muted-foreground"}>
+        {items.slice(0, 4).map((item, index) => <li key={`${title}-${index}`}>• {sanitize(item)}</li>)}
+        {items.length === 0 ? <li>• 확인된 항목 없음</li> : null}
+      </ul>
+    </div>
+  );
+}
+
+function formatAiVerdict(value: ReportDraft["aiDecision"]["verdict"]): string {
+  if (value === "proceed") return "추진 검토";
+  if (value === "hold") return "보류";
+  return "조건부 추진";
+}
+
+function formatAiConfidence(value: ReportDraft["aiDecision"]["confidence"]): string {
+  if (value === "high") return "높음";
+  if (value === "low") return "낮음";
+  return "보통";
 }
 
 function ReportCountryCardsPrint({ bundle, draft }: { bundle: Bundle; draft: ReportDraft | null }) {
@@ -970,24 +1937,27 @@ function ReportCountryCardsPrint({ bundle, draft }: { bundle: Bundle; draft: Rep
 
 function ReportFeasibilityPrint({ draft }: { draft: ReportDraft }) {
   return (
-    <>
-      <h3 className="mt-5 font-display text-sm font-semibold text-[#0E6B6F]">수출 가능성 종합 판정</h3>
-      <div className="mt-2 rounded-md border border-[#0E6B6F] bg-[#f0fafa] p-3">
-        <p className="text-[11px] leading-relaxed">{sanitize(draft.exportFeasibility)}</p>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {draft.countryStrategies.slice(0, 3).map((strategy, idx) => (
-            <div key={`feasibility-${strategy.countryCode}`} className="rounded-md border border-[#dfe4ea] bg-white p-2 text-center">
-              <p className="text-[9px] text-[#5b6473]">Top {idx + 1}</p>
+    <PrintReportSection title="수출 가능성 종합 판정" tone="highlight">
+      <p className="text-[11px] leading-relaxed">{sanitize(draft.exportFeasibility)}</p>
+      <div className="mt-2 space-y-2">
+        {draft.countryStrategies.slice(0, 3).map((strategy, idx) => (
+          <div key={`feasibility-${strategy.countryCode}`} className="grid grid-cols-[128px_1fr] items-stretch gap-3 rounded-md border border-[#dfe4ea] bg-white p-2">
+            <div className="flex flex-col justify-center border-r border-[#e6e7ea] pr-3 text-center">
+              <p className="text-[9px] text-[#5b6473]">선택 국가 {idx + 1}</p>
               <p className="mt-0.5 text-[11px] font-semibold">{strategy.countryName}</p>
               <p className="mt-0.5 font-mono text-[13px] font-bold tabular-nums text-[#334155]">
                 {String((strategy as { totalScore?: number | string | null }).totalScore ?? "—")}
               </p>
               <div className="mt-1"><FeasibilityBadgePrint grade={strategy.feasibilityGrade} /></div>
             </div>
-          ))}
-        </div>
+            <div className="flex flex-col justify-center">
+              <p className="text-[9px] font-semibold text-[#0E6B6F]">판단 요약</p>
+              <p className="mt-1 text-[10px] leading-relaxed text-[#334155]">{sanitize(strategy.oneLineDecision)}</p>
+            </div>
+          </div>
+        ))}
       </div>
-    </>
+    </PrintReportSection>
   );
 }
 
@@ -996,15 +1966,12 @@ function ReportNewsImpactPrint({ draft }: { draft: ReportDraft }) {
     (s) => s.newsImpactAnalysis && parseNewsImpactAnalysis(s.newsImpactAnalysis).state !== "no_evidence",
   );
   return (
-    <>
-      <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">뉴스·이슈 수출전략 영향</h3>
-      <div className="mt-2">
-        <NewsImpactAccordion strategies={draft.countryStrategies.slice(0, 3)} print />
-        {!hasAnyNews ? (
-          <p className="mt-1.5 text-[9px] text-[#8b5e00]">안내: 대상국 직접 뉴스가 부족합니다. 관련 뉴스 모니터링을 권고합니다.</p>
-        ) : null}
-      </div>
-    </>
+    <PrintReportSection title="뉴스·이슈 수출전략 영향">
+      <NewsImpactAccordion strategies={draft.countryStrategies.slice(0, 3)} print />
+      {!hasAnyNews ? (
+        <p className="mt-2 text-[9px] text-[#8b5e00]">안내: 대상국 직접 뉴스가 부족합니다. 관련 뉴스 모니터링을 권고합니다.</p>
+      ) : null}
+    </PrintReportSection>
   );
 }
 
@@ -1074,11 +2041,11 @@ function TradeOfficeActionsAccordion({
   const officeCount = actions.reduce((sum, action) => sum + action.tradeOffices.length, 0);
 
   return (
-    <Accordion type="multiple" className={print ? "mt-4" : ""}>
+    <Accordion type="multiple" className={print ? "mt-3 break-inside-avoid" : ""}>
       <AccordionItem
         value="trade-office-actions"
         className={print
-          ? "rounded-md border border-[#e6e7ea] bg-white px-2 shadow-none"
+          ? "rounded-md border border-[#dfe4ea] bg-white px-3 shadow-none"
           : "rounded-md border border-border bg-white px-4 shadow-sm"
         }
       >
@@ -1219,13 +2186,12 @@ function formatNewsImpactState(state: ReturnType<typeof parseNewsImpactAnalysis>
 
 function ReportCertRegChecklistPrint({ draft }: { draft: ReportDraft }) {
   return (
-    <>
-      <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">인증·규제 체크리스트</h3>
-      <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
+    <PrintReportSection title="인증·규제 체크리스트">
+      <div className="space-y-2 text-[10px]">
         {draft.countryStrategies.slice(0, 3).map((strategy) => (
-          <div key={`cert-reg-${strategy.countryCode}`} className="rounded-md border border-[#e6e7ea] bg-white p-2">
+          <div key={`cert-reg-${strategy.countryCode}`} className="rounded-md border border-[#e6e7ea] bg-white p-3">
             <p className="font-semibold text-[#334155]">{strategy.countryName} ({strategy.countryCode})</p>
-            <ul className="mt-1 space-y-1 text-[#5b6473]">
+            <ul className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-[#5b6473]">
               {strategy.certRegChecklist.slice(0, 5).map((item, index) => (
                 <li key={index} className="flex items-start gap-1">
                   <span className="mt-0.5 text-[#0E6B6F]">☐</span>
@@ -1236,36 +2202,45 @@ function ReportCertRegChecklistPrint({ draft }: { draft: ReportDraft }) {
           </div>
         ))}
       </div>
-    </>
+    </PrintReportSection>
   );
 }
 
 function ReportStrategyPrint({ draft }: { draft: ReportDraft }) {
   return (
-    <>
-      <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">국가별 진입전략</h3>
-      <div className="mt-2 grid grid-cols-3 gap-2">
+    <PrintReportSection title="선택 국가 진입전략">
+      <div className="space-y-2">
         {draft.countryStrategies.slice(0, 3).map((strategy) => (
-          <div key={`strategy-${strategy.countryCode}`} className="rounded-md border border-[#e6e7ea] p-2">
+          <div key={`strategy-${strategy.countryCode}`} className="rounded-md border border-[#e6e7ea] bg-white p-3">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-semibold">{strategy.countryName} ({strategy.countryCode})</p>
               <FeasibilityBadgePrint grade={strategy.feasibilityGrade} />
             </div>
-            <p className="mt-1 rounded bg-[#eef8f7] px-2 py-1 text-[9px] font-semibold text-[#0E4F53]">
+            <p className="mt-2 rounded-md bg-[#eef8f7] px-2 py-1.5 text-[9px] font-semibold leading-relaxed text-[#0E4F53]">
               {sanitize(strategy.oneLineDecision)}
             </p>
-            <p className="mt-1.5 text-[9px] font-semibold text-[#0E6B6F]">시장 기회</p>
-            <p className="mt-0.5 text-[9px] text-[#334155]">{sanitize(strategy.marketOpportunity)}</p>
-            <p className="mt-1.5 text-[9px] font-semibold text-[#475569]">진입 전략</p>
-            <p className="mt-0.5 text-[10px] text-[#334155]">{sanitize(strategy.entryStrategy)}</p>
-            <p className="mt-1.5 text-[9px] font-semibold text-[#475569]">인증·규제 체크리스트</p>
-            <ul className="mt-0.5 list-inside list-disc space-y-0.5 text-[9px] text-[#5b6473]">
-              {strategy.certRegChecklist.slice(0, 4).map((item, index) => <li key={index}>{sanitize(item)}</li>)}
-            </ul>
-            <p className="mt-1.5 text-[9px] font-semibold text-[#475569]">결제 리스크</p>
-            <p className="mt-0.5 text-[9px] text-[#5b6473]">{sanitize(strategy.paymentRiskAssessment)}</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <div className="rounded-md bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#0E6B6F]">시장 기회</p>
+                <p className="mt-1 text-[9px] leading-relaxed text-[#334155]">{sanitize(strategy.marketOpportunity)}</p>
+              </div>
+              <div className="rounded-md bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#475569]">진입 전략</p>
+                <p className="mt-1 text-[9px] leading-relaxed text-[#334155]">{sanitize(strategy.entryStrategy)}</p>
+              </div>
+              <div className="rounded-md bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#475569]">인증·규제 체크리스트</p>
+                <ul className="mt-1 list-inside list-disc space-y-0.5 text-[9px] text-[#5b6473]">
+                  {strategy.certRegChecklist.slice(0, 4).map((item, index) => <li key={index}>{sanitize(item)}</li>)}
+                </ul>
+              </div>
+              <div className="rounded-md bg-[#f8fafc] p-2">
+                <p className="text-[9px] font-semibold text-[#475569]">결제 리스크</p>
+                <p className="mt-1 text-[9px] leading-relaxed text-[#5b6473]">{sanitize(strategy.paymentRiskAssessment)}</p>
+              </div>
+            </div>
             {strategy.evidenceRefs.length > 0 ? (
-              <p className="mt-1 text-[9px] text-[#0E6B6F]">
+              <p className="mt-2 text-[9px] text-[#0E6B6F]">
                 근거: {strategy.evidenceRefs.slice(0, 2).map((item) => sanitize(item)).join(", ")}
               </p>
             ) : null}
@@ -1278,7 +2253,7 @@ function ReportStrategyPrint({ draft }: { draft: ReportDraft }) {
           </div>
         ))}
       </div>
-    </>
+    </PrintReportSection>
   );
 }
 
@@ -1339,30 +2314,28 @@ function renderKotraEntryStrategyEvidence(
 
 function ReportPreExportChecklistPrint({ draft }: { draft: ReportDraft }) {
   return (
-    <>
-      <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">수출 전 필수 확인 사항</h3>
-      <ul className="mt-2 grid grid-cols-2 gap-1 text-[10px]">
+    <PrintReportSection title="수출 전 필수 확인 사항">
+      <ul className="grid grid-cols-2 gap-2 text-[10px]">
         {draft.preExportChecklist.slice(0, 10).map((item, index) => (
-          <li key={index} className="flex items-start gap-1 rounded border border-[#e6e7ea] px-2 py-1">
+          <li key={index} className="flex items-start gap-1 rounded-md border border-[#e6e7ea] px-2 py-1.5">
             <span className="mt-0.5 text-[#0E6B6F]">☐</span>
             <span>{sanitize(item)}</span>
           </li>
         ))}
       </ul>
-    </>
+    </PrintReportSection>
   );
 }
 
 function ReportActionPlanPrint({ draft }: { draft: ReportDraft }) {
   return (
-    <>
-      <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">실행 로드맵</h3>
-      <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
+    <PrintReportSection title="실행 로드맵">
+      <div className="grid grid-cols-3 gap-2 text-[10px]">
         <ActionPlanColumn title="D+7" items={draft.actionPlan7Days} />
         <ActionPlanColumn title="D+30" items={draft.actionPlan30Days} />
         <ActionPlanColumn title="D+90" items={draft.actionPlan90Days} />
       </div>
-    </>
+    </PrintReportSection>
   );
 }
 
@@ -1374,21 +2347,20 @@ function ReportFallbackActionPlanPrint({
   hasAiActions: boolean;
 }) {
   return (
-    <>
-      <h3 className="mt-4 font-display text-sm font-semibold text-[#0E6B6F]">실행 로드맵</h3>
+    <PrintReportSection title="실행 로드맵">
       {!hasAiActions ? (
-        <p className="mt-1 text-[10px] text-[#5b6473]">AI 요약이 없어서 기본 권고안을 표시합니다.</p>
+        <p className="text-[10px] text-[#5b6473]">AI 요약이 없어서 기본 권고안을 표시합니다.</p>
       ) : null}
-      <ol className="mt-2 list-inside list-decimal space-y-1 text-[11px]">
+      <ol className={`${hasAiActions ? "" : "mt-2"} list-inside list-decimal space-y-1 text-[11px]`}>
         {actionItems.map((action, index) => <li key={index}>{sanitize(action)}</li>)}
       </ol>
-    </>
+    </PrintReportSection>
   );
 }
 
 function ActionPlanColumn({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded border border-[#e6e7ea] p-2">
+    <div className="h-full rounded-md border border-[#e6e7ea] bg-white p-2">
       <p className="text-[10px] font-semibold text-[#334155]">{title}</p>
       <ol className="mt-1 list-inside list-decimal space-y-0.5 text-[#5b6473]">
         {items.slice(0, 4).map((item, index) => <li key={index}>{sanitize(item)}</li>)}
@@ -1429,12 +2401,14 @@ function MobileReportView({
           발행일 {format(new Date(bundle.project?.updated_at ?? Date.now()), "yyyy.MM.dd")}
         </p>
       </section>
-      <DetailCompletionBanner detailCompletion={detailCompletion} />
-      <ReportFreshnessBanner reportIsStale={reportIsStale} />
+      <DetailCompletionBanner detailCompletion={detailCompletion} mobile />
+      <ReportFreshnessBanner reportIsStale={reportIsStale} mobile />
       <MobileAiConclusionBlock draft={reportDraft} summaryText={aiSummaryText} />
+      {reportDraft ? <ReportAiDecisionPanel draft={reportDraft} /> : null}
       <ExecutiveSummaryPanel brief={executiveBrief} mobile />
+      <ReportDecisionOverview bundle={bundle} />
 
-      <section className="grid gap-3">
+      <>
         <MobileInfoBlock title="기업 정보">
           <p className="font-medium">{bundle.company?.company_name ?? "-"}</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -1461,20 +2435,20 @@ function MobileReportView({
             상태: {getSelectionStatusLabel(bundle.product?.hs_selection_status ?? null)} · {getSelectionStatusDetail(bundle.product?.hs_selection_status ?? null)}
           </p>
         </MobileInfoBlock>
-      </section>
-
-      <MobileCountryCards bundle={bundle} draft={reportDraft} />
+      </>
 
       {reportDraft ? (
         <>
           <MobileInfoBlock title="수출 가능성 종합 판정">
             <p className="text-xs leading-relaxed">{sanitize(reportDraft.exportFeasibility)}</p>
-            <div className="mt-2 grid grid-cols-3 gap-2">
+            <div className="mt-3 space-y-2">
               {reportDraft.countryStrategies.slice(0, 3).map((strategy, idx) => (
-                <div key={`mobile-feas-${strategy.countryCode}`} className="rounded-md border border-border bg-muted/30 p-2 text-center">
-                  <p className="text-[10px] text-muted-foreground">Top {idx + 1}</p>
-                  <p className="mt-0.5 text-xs font-semibold">{strategy.countryName}</p>
-                  <div className="mt-1"><FeasibilityBadgePrint grade={strategy.feasibilityGrade} /></div>
+                <div key={`mobile-feas-${strategy.countryCode}`} className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/30 p-3">
+                  <div>
+                    <p className="text-[10px] text-muted-foreground">선택 국가 {idx + 1}</p>
+                    <p className="mt-0.5 text-xs font-semibold">{strategy.countryName}</p>
+                  </div>
+                  <FeasibilityBadgePrint grade={strategy.feasibilityGrade} />
                 </div>
               ))}
             </div>
@@ -1499,10 +2473,9 @@ function MobileReportView({
 
       <TradeOfficeActionsAccordion actions={executionActions} />
 
-      <section>
-        <h3 className="font-semibold">국가별 유의사항</h3>
+      <MobileInfoBlock title="선택 국가 유의사항">
         <CountryCautionCards draft={reportDraft} countries={bundle.countries} mobile />
-      </section>
+      </MobileInfoBlock>
 
       {reportDraft ? (
         <MobileActionPlanBlock draft={reportDraft} />
@@ -1677,6 +2650,7 @@ function MobileActionList({ title, items }: { title: string; items: string[] }) 
 
 function mapReportProduct(raw: unknown): ReportProduct | null {
   const parsed = buildProductAnalysisCode(raw);
+  const row = decisionRow(raw);
   const hasValue =
     Boolean(parsed.name) ||
     Boolean(parsed.hsCode) ||
@@ -1687,6 +2661,7 @@ function mapReportProduct(raw: unknown): ReportProduct | null {
     parsed.selectedCandidateKey !== null;
   if (!hasValue) return null;
   return {
+    id: decisionText(row.id) || null,
     name: normalizeReportText(parsed.name) || "-",
     hs_code: parsed.hsCode || null,
     hsk_code: parsed.hskCode || null,
@@ -1696,6 +2671,48 @@ function mapReportProduct(raw: unknown): ReportProduct | null {
     hs_review_required: parsed.reviewRequired,
     hs_selected_candidate_key: parsed.selectedCandidateKey,
   };
+}
+
+function parseReportDecisionFacts(
+  rows: unknown,
+  productId: string | null,
+  countryCodes: Set<string>,
+): ReportDecisionFact[] {
+  if (!Array.isArray(rows)) return [];
+  return rows.flatMap((raw) => {
+    const row = decisionRow(raw);
+    const countryCode = decisionText(row.country_code);
+    const rowProductId = decisionText(row.product_id);
+    if (!countryCode || (productId && rowProductId !== productId)) return [];
+    if (countryCodes.size > 0 && !countryCodes.has(countryCode)) return [];
+    return parseDecisionFactRows([raw]).map((fact) => ({ ...fact, countryCode }));
+  });
+}
+
+function parseReportDecisionActions(
+  rows: unknown,
+  productId: string | null,
+  countryCodes: Set<string>,
+): ReportDecisionAction[] {
+  if (!Array.isArray(rows)) return [];
+  return rows.flatMap((raw) => {
+    const row = decisionRow(raw);
+    const countryCode = decisionText(row.country_code);
+    const rowProductId = decisionText(row.product_id);
+    if (!countryCode || (productId && rowProductId !== productId)) return [];
+    if (countryCodes.size > 0 && !countryCodes.has(countryCode)) return [];
+    return parseDecisionActionRows([raw]).map((action) => ({ ...action, countryCode }));
+  });
+}
+
+function decisionRow(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+}
+
+function decisionText(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function filterCurrentReportDetailRows<
@@ -1780,6 +2797,29 @@ function buildReportEvidenceBundle(
       summary: normalizeReportText(risk.summary ?? risk.level),
       sourceOrg: normalizeReportText(risk.source_org),
       raw: risk.raw ?? null,
+    })),
+    decisionFacts: bundle.decisionFacts
+      .filter((fact) => !fact.isStale && !REPORT_NON_API_FACT_KEYS.has(fact.factKey ?? ""))
+      .map((fact) => ({
+        countryCode: fact.countryCode,
+        factKey: fact.factKey ?? null,
+        category: fact.category,
+        status: fact.status,
+        severity: fact.severity,
+        summary: normalizeReportText(fact.summary) ?? UNKNOWN_TEXT,
+        value: fact.value,
+        sourceName: fact.sourceName,
+        referenceDate: fact.referenceDate,
+        caveat: normalizeReportText(fact.caveat),
+        nextAction: normalizeReportText(fact.nextAction),
+      })),
+    decisionActions: bundle.decisionActions.map((action) => ({
+      countryCode: action.countryCode,
+      actionKey: action.actionKey,
+      title: normalizeReportText(action.title) ?? UNKNOWN_TEXT,
+      reason: normalizeReportText(action.reason) ?? UNKNOWN_TEXT,
+      status: action.status,
+      priority: action.priority,
     })),
     safetyFlags: [],
     apiLogs: bundle.logs.map((log) => ({

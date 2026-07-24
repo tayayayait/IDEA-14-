@@ -171,4 +171,51 @@ describe("country-detail edge bundle", () => {
     expect(industryRiskBlock).not.toContain("const maxPages = 10;");
   });
 
+  it("retries KOTRA national information once for 429 and 5xx responses", () => {
+    const source = readFileSync(
+      join(process.cwd(), "supabase/functions/country-detail/index.ts"),
+      "utf8",
+    );
+    const nationalInfoBlock = source.match(
+      /async function fetchKotraNationalInfo[\s\S]*?type ExternalFetchResult/,
+    )?.[0] ?? "";
+    const retryBlock = source.match(
+      /async function fetchExternalWithRetry[\s\S]*?async function fetchExternal\(/,
+    )?.[0] ?? "";
+
+    expect(nationalInfoBlock).toContain("fetchExternalWithRetry(url.toString(), {}, 1)");
+    expect(retryBlock).toContain("response.status === 429 || response.status >= 500");
+    expect(retryBlock).toContain("attempt >= maxRetries");
+  });
+
+
+  it("does not store generic non-API guidance as decision evidence", () => {
+    const detailSource = readFileSync(
+      join(process.cwd(), "supabase/functions/country-detail/index.ts"),
+      "utf8",
+    );
+    const providerSource = readFileSync(
+      join(process.cwd(), "supabase/functions/_shared/country-decision-providers.ts"),
+      "utf8",
+    );
+
+    expect(providerSource).not.toContain('factKey: "customs_documents:baseline"');
+    expect(providerSource).not.toContain('factKey: "tariff_fta:baseline"');
+    expect(providerSource).not.toContain('factKey: "sanctions:entity_screening"');
+    expect(providerSource).not.toContain('factKey: "strategic_goods:classification"');
+    expect(detailSource).toContain("legacyNonApiFactKeys");
+    expect(detailSource).toContain(".in(\"fact_key\", legacyNonApiFactKeys)");
+    expect(detailSource).toContain("obsoleteActionKeys");
+  });
+
+  it("creates a Korean K-SURE payment summary", () => {
+    const source = readFileSync(
+      join(process.cwd(), "supabase/functions/country-detail/index.ts"),
+      "utf8",
+    );
+
+    expect(source).toContain("결제 지연율");
+    expect(source).toContain("평균 결제기간");
+    expect(source).not.toContain('"Scope: country-specific"');
+  });
 });

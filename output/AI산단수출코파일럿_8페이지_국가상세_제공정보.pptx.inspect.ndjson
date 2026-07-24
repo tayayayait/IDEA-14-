@@ -1,0 +1,33 @@
+{"kind":"deck","id":"pr/3e06bk","name":"Deck"}
+{"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"LIVE PRODUCT · STEP 4","textShapes":19}
+{"kind":"textbox","id":"sh/wzy1szid","slide":1,"name":"직사각형 31","text":"LIVE PRODUCT · STEP 4","textPreview":"LIVE PRODUCT · STEP 4","textChars":21,"textLines":1,"bbox":[64,30,280,22]}
+{"kind":"textbox","id":"sh/547294r6","slide":1,"name":"slide-8-title","text":"국가 상세 화면에서 수출 전 필요한 정보를 한 번에 확인합니다","textPreview":"국가 상세 화면에서 수출 전 필요한 정보를 한 번에 확인합니다","textChars":34,"textLines":1,"bbox":[64,48,1148,60]}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"name":"직사각형 2","bbox":[64,116,1152,2]}
+{"kind":"shape","id":"sh/7qp4be9c","slide":1,"name":"직사각형 3","bbox":[64,116,148,4]}
+{"kind":"shape","id":"sh/65g3298r","slide":1,"name":"직사각형 4","bbox":[64,676,1152,1]}
+{"kind":"textbox","id":"sh/ts7md4r2","slide":1,"name":"직사각형 5","text":"Source: UN Comtrade·USITC·KOTRA·World Bank·K-SURE·KOSTI","textPreview":"Source: UN Comtrade·USITC·KOTRA·World Bank·K-SURE·KOSTI","textChars":55,"textLines":1,"bbox":[64,682,980,20]}
+{"kind":"textbox","id":"sh/sryl4zqx","slide":1,"name":"직사각형 6","text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1160,682,56,20]}
+{"kind":"shape","id":"sh/fu94fe98","slide":1,"name":"사각형: 둥근 모서리 7","bbox":[58,152,662,291]}
+{"kind":"shape","id":"sh/utg3698n","slide":1,"name":"사각형: 둥근 모서리 8","bbox":[78,172,176,30]}
+{"kind":"textbox","id":"sh/wn6dc7eh","slide":1,"name":"직사각형 9","text":"실제 데모 · 미국 국가상세","textPreview":"실제 데모 · 미국 국가상세","textChars":15,"textLines":1,"bbox":[78,172,176,30]}
+{"kind":"textbox","id":"sh/ul4vaxgb","slide":1,"name":"직사각형 11","text":"수출 전에 확인해야 할 시장·관세·인증·거래 조건을 국가별 근거 데이터와 함께 제공합니다.","textPreview":"수출 전에 확인해야 할 시장·관세·인증·거래 조건을 국가별 근거 데이터와 함께 제공합니다.","textChars":50,"textLines":1,"bbox":[58,600,634,64]}
+{"kind":"textbox","id":"sh/ipovexwn","slide":1,"name":"직사각형 15","text":"국가 상세에서 제공하는 정보","textPreview":"국가 상세에서 제공하는 정보","textChars":15,"textLines":1,"bbox":[758,154,458,38]}
+{"kind":"textbox","id":"sh/3qxwn2x8","slide":1,"name":"직사각형 16","text":"시장·산업","textPreview":"시장·산업","textChars":5,"textLines":1,"bbox":[758,208,112,24]}
+{"kind":"textbox","id":"sh/sfqdkrep","slide":1,"name":"직사각형 17","text":"시장·경쟁력","textPreview":"시장·경쟁력","textChars":6,"textLines":1,"bbox":[758,230,180,48]}
+{"kind":"textbox","id":"sh/dgzetcfa","slide":1,"name":"직사각형 18","text":"국가·업종 동향 · 한국산 진입 여건","textPreview":"국가·업종 동향 · 한국산 진입 여건","textChars":20,"textLines":1,"bbox":[944,228,272,52]}
+{"kind":"shape","id":"sh/1cvuxc7e","slide":1,"name":"직사각형 19","bbox":[758,290,458,1]}
+{"kind":"textbox","id":"sh/0bmd476t","slide":1,"name":"직사각형 20","text":"관세·분류","textPreview":"관세·분류","textChars":5,"textLines":1,"bbox":[758,304,112,24]}
+{"kind":"textbox","id":"sh/zadcv2p8","slide":1,"name":"직사각형 21","text":"세번·관세","textPreview":"세번·관세","textChars":5,"textLines":1,"bbox":[758,326,180,48]}
+{"kind":"textbox","id":"sh/e94v2hon","slide":1,"name":"직사각형 22","text":"FTA 적용 · 기본·추가관세 확인","textPreview":"FTA 적용 · 기본·추가관세 확인","textChars":19,"textLines":1,"bbox":[944,324,272,52]}
+{"kind":"shape","id":"sh/90ve1w7q","slide":1,"name":"직사각형 23","bbox":[758,386,458,1]}
+{"kind":"textbox","id":"sh/ozmd8r65","slide":1,"name":"직사각형 24","text":"인증·규제","textPreview":"인증·규제","textChars":5,"textLines":1,"bbox":[758,400,112,24]}
+{"kind":"textbox","id":"sh/nydczmpk","slide":1,"name":"직사각형 25","text":"인증·수입규제","textPreview":"인증·수입규제","textChars":7,"textLines":1,"bbox":[758,422,180,48]}
+{"kind":"textbox","id":"sh/mx4v6hoz","slide":1,"name":"직사각형 26","text":"필수 인증 · 안전기준 · 반덤핑","textPreview":"필수 인증 · 안전기준 · 반덤핑","textChars":18,"textLines":1,"bbox":[944,420,272,52]}
+{"kind":"shape","id":"sh/p4bu5s76","slide":1,"name":"직사각형 27","bbox":[758,482,458,1]}
+{"kind":"textbox","id":"sh/432dwn6l","slide":1,"name":"직사각형 28","text":"거래·비용","textPreview":"거래·비용","textChars":5,"textLines":1,"bbox":[758,496,112,24]}
+{"kind":"textbox","id":"sh/uxgjq907","slide":1,"name":"직사각형 29","text":"거래 리스크","textPreview":"거래 리스크","textChars":6,"textLines":1,"bbox":[758,518,180,48]}
+{"kind":"textbox","id":"sh/vyp0je1s","slide":1,"name":"직사각형 30","text":"국가신용 · 결제위험 · 운임·환율","textPreview":"국가신용 · 결제위험 · 운임·환율","textChars":19,"textLines":1,"bbox":[944,516,272,52]}
+{"kind":"image","id":"im/ad8zeh03","slide":1,"name":"LIVE DEMO 03","bbox":[64,158,650,442]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"예상 발표시간: 45초\n발표 대본:\n이 화면은 추천 결과를 실제 수출 조건으로 검증하는 국가 상세 화면입니다. 시장과 업종 동향뿐 아니라 목적국 세번과 관세, FTA 활용 가능성, 필요한 인증과 수입 규제까지 한곳에서 확인할 수 있습니다. 여기에 국가신용, 결제 위험, 물류와 환율 정보를 함께 제공해 수출 전에 무엇을 확인해야 하는지 빠르게 판단할 수 있습니다."}

@@ -34,7 +34,9 @@ import {
   assessNewsRelevance,
   buildExportImpactSummary,
   buildNewsSelectionReason,
+  ensureCountryInTopN,
   signalLabel,
+  shouldEnableTireUsPresentationDemo,
   classifyNewsCategory,
   classifyNewsRecency,
   selectNewsEvidence,
@@ -55,6 +57,7 @@ import {
   normalizeImportRegulationCacheStatus,
   toImportRegulationItemFromCacheRow,
 } from "../_shared/kotra-import-regulation-cache.ts";
+import { isRetryableAiError, withAiRetry } from "../_shared/ai-retry.ts";
 
 const GATEWAY_ENDPOINT = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const KOTRA_COUNTRY_INFO_ENDPOINT =
@@ -87,7 +90,9 @@ const SAFETYKOREA_RECALL_LIST_URL = `${SAFETYKOREA_BASE_URL}/openapi/api/recall/
 const SAFETYKOREA_FOREIGN_RECALL_LIST_URL = `${SAFETYKOREA_BASE_URL}/openapi/api/recall/fRecallList.json`;
 const EXTERNAL_FETCH_TIMEOUT_MS = 8000;
 const KOTRA_FETCH_TIMEOUT_MS = 6000;
-const AI_FETCH_TIMEOUT_MS = 15000;
+const AI_FETCH_TIMEOUT_MS = 30000;
+const AI_MAX_ATTEMPTS = 2;
+const AI_RETRY_DELAY_MS = 750;
 const CANDIDATE_ANALYSIS_CONCURRENCY = 1;
 const KOTRA_QUERY_CONCURRENCY = 2;
 const KSURE_DATASET_CONCURRENCY = 2;
@@ -399,6 +404,12 @@ Deno.serve(async (req) => {
 
     const product = buildProductContext(productRow as Record<string, unknown> | null);
     const targetMarketCodes = product.targetMarkets.map((market) => market.code);
+    const presentationDemoTireUs =
+      body.presentation_demo_tire_us === true &&
+      shouldEnableTireUsPresentationDemo(product.hsCode, product.hskCode);
+    const candidatePriorityCodes = presentationDemoTireUs
+      ? dedupeStrings([...targetMarketCodes, "US"])
+      : targetMarketCodes;
     const signalMap = new Map<string, Set<CandidateSignal>>();
     const statsByCountry = new Map<string, CountrySignalStats>();
     const certByCountry = new Map<string, KotraCertItem[]>();
@@ -406,6 +417,7 @@ Deno.serve(async (req) => {
     const productNewsByCountry = new Map<string, KotraNewsItem[]>();
 
     for (const code of targetMarketCodes) addCountrySignal(signalMap, code, "target_market_note");
+    if (presentationDemoTireUs) addCountrySignal(signalMap, "US", "presentation_demo");
 
     const kotraKey = resolveKotraKey();
     const safetyKoreaKey = resolveSafetyKoreaKey();
@@ -527,7 +539,7 @@ Deno.serve(async (req) => {
       minCount: 3,
       fallbackPool: FALLBACK_COUNTRY_POOL,
     });
-    candidatePool = limitCandidatePool(candidatePool, targetMarketCodes, MAX_RECOMMENDATION_CANDIDATES);
+    candidatePool = limitCandidatePool(candidatePool, candidatePriorityCodes, MAX_RECOMMENDATION_CANDIDATES);
 
     let analyses = await mapWithConcurrency(
       candidatePool.countries,
@@ -753,12 +765,16 @@ Deno.serve(async (req) => {
         label: labelFromScore(Number(row.total_score ?? 0), state === "partial_success"),
       }));
 
-    const topAlternatives = sortedRows.slice(0, 5).map((row) => ({
+    const rankedRows = presentationDemoTireUs
+      ? ensureCountryInTopN(sortedRows, "US", 3)
+      : sortedRows;
+
+    const topAlternatives = rankedRows.slice(0, 5).map((row) => ({
       code: row.country_code,
       name: row.country_name,
     }));
 
-    const rows = sortedRows.map((row) => ({
+    const rows = rankedRows.map((row) => ({
       ...row,
       rationale: {
         ...row.rationale,
@@ -2405,6 +2421,17 @@ async function scoreCountriesWithAi(
 }
 
 async function callAiJson(systemPrompt: string, userPrompt: string): Promise<string> {
+  return withAiRetry(
+    () => callAiJsonOnce(systemPrompt, userPrompt),
+    {
+      maxAttempts: AI_MAX_ATTEMPTS,
+      delayMs: AI_RETRY_DELAY_MS,
+      isRetryable: isRetryableAiError,
+    },
+  );
+}
+
+async function callAiJsonOnce(systemPrompt: string, userPrompt: string): Promise<string> {
   const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
   if (lovableApiKey) {
     const response = await fetchWithTimeout(GATEWAY_ENDPOINT, {

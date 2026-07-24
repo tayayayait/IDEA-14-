@@ -20,14 +20,17 @@ export const normalizeStoredReport = (value: unknown): StoredReportSnapshot | nu
   };
 };
 
+export const isStoredReportUsable = (storedReport: StoredReportSnapshot | null): boolean => {
+  if (!storedReport) return false;
+  if (storedReport.aiState !== "success" && storedReport.aiState !== "partial_success" && storedReport.aiState !== "local_fallback") return false;
+  return Boolean(storedReport.draft && typeof storedReport.draft === "object");
+};
+
 export const isStoredReportFresh = (
   storedReport: StoredReportSnapshot | null,
   currentEvidenceHash: string,
 ): boolean => {
-  if (!storedReport) return false;
+  if (!isStoredReportUsable(storedReport)) return false;
   if (!currentEvidenceHash || storedReport.evidenceHash !== currentEvidenceHash) return false;
-  if (storedReport.aiState !== "success" && storedReport.aiState !== "partial_success" && storedReport.aiState !== "local_fallback") {
-    return false;
-  }
-  return Boolean(storedReport.draft && typeof storedReport.draft === "object");
+  return true;
 };

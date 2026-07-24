@@ -1,0 +1,126 @@
+- generic [ref=f5e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f5e4]:
+    - banner [ref=f5e5]:
+      - link "홈" [ref=f5e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f5e12]: 산단수출 코파일럿
+      - generic [ref=f5e13]:
+        - link "프로젝트" [ref=f5e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f5e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f5e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f5e18] [cursor=pointer]
+    - generic [ref=f5e20]:
+      - complementary [ref=f5e21]:
+        - paragraph [ref=f5e22]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f5e23]:
+          - link "1단계 기업·공장 검색" [ref=f5e24] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/company
+            - generic [ref=f5e25]: "1"
+            - generic [ref=f5e26]:
+              - generic [ref=f5e27]: 기업·공장 검색
+              - generic [ref=f5e28]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f5e29] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/product
+            - generic [ref=f5e33]:
+              - generic [ref=f5e34]: 제품·HS 코드
+              - generic [ref=f5e35]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f5e36] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries
+            - generic [ref=f5e40]:
+              - generic [ref=f5e41]: 후보국 추천 Top 3
+              - generic [ref=f5e42]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f5e43] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries/CN
+            - generic [ref=f5e44]: "4"
+            - generic [ref=f5e45]:
+              - generic [ref=f5e46]: 국가 상세
+              - generic [ref=f5e47]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f5e48] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/report
+            - generic [ref=f5e49]: "5"
+            - generic [ref=f5e50]:
+              - generic [ref=f5e51]: 리포트
+              - generic [ref=f5e52]: 요구사항 8
+      - main [ref=f5e53]:
+        - generic [ref=f5e54]:
+          - generic [ref=f5e55]:
+            - paragraph [ref=f5e56]: 기획 요구사항 매핑
+            - paragraph [ref=f5e57]: 요구사항 1
+            - paragraph [ref=f5e58]: 기업·공장 기본 정보 수집
+          - generic [ref=f5e59]:
+            - heading "1. 기업·공장 검색" [level=1] [ref=f5e60]
+            - paragraph [ref=f5e61]: 산업단지 입주기업을 검색하거나 직접 입력합니다.
+          - generic [ref=f5e62]:
+            - generic [ref=f5e63]:
+              - heading "KICOX 검색" [level=3] [ref=f5e64]
+              - paragraph [ref=f5e65]: 검색 조건 1개 이상, 텍스트 조건은 2자 이상 입력해야 조회됩니다.
+            - generic [ref=f5e66]:
+              - generic [ref=f5e67]:
+                - 'textbox "회사명 (예: ○○산업)" [ref=f5e68]'
+                - 'textbox "산단명 (예: 반월시화)" [ref=f5e69]'
+                - 'textbox "공장관리번호 (예: 115452009184637)" [ref=f5e70]'
+                - 'textbox "생산품 키워드 (예: 모터, 센서)" [ref=f5e71]': 변압기
+                - generic [ref=f5e72]:
+                  - text: 지역
+                  - combobox "지역 선택" [ref=f5e73] [cursor=pointer]
+                - generic [ref=f5e76]:
+                  - button "검색 중..." [disabled]
+                  - button "조건 초기화" [ref=f5e78] [cursor=pointer]
+              - generic [ref=f5e79]:
+                - paragraph [ref=f5e80]: 선택 요약
+                - generic [ref=f5e81]:
+                  - paragraph [ref=f5e82]: "회사명: 넥센타이어(주)"
+                  - paragraph [ref=f5e83]: "산단: 양산일반산업단지"
+                  - paragraph [ref=f5e84]: "공장관리번호: 110111001421900"
+                  - paragraph [ref=f5e85]: "지역: 경상남도"
+                  - paragraph [ref=f5e86]: "생산품: 타이어"
+          - generic [ref=f5e87]:
+            - generic [ref=f5e88]:
+              - heading "기업 정보" [level=3] [ref=f5e89]
+              - paragraph [ref=f5e94]: 검색 결과를 채우거나 직접 입력해 주세요.
+            - generic [ref=f5e95]:
+              - generic [ref=f5e96]:
+                - generic [ref=f5e97]: 회사명*
+                - textbox [ref=f5e98]: 넥센타이어(주)
+              - generic [ref=f5e99]:
+                - text: 산단명
+                - textbox [ref=f5e100]: 양산일반산업단지
+              - generic [ref=f5e101]:
+                - text: 공장관리번호
+                - textbox [ref=f5e102]: "110111001421900"
+              - generic [ref=f5e103]:
+                - text: 주소
+                - textbox [ref=f5e104]: 경상남도 양산시 충렬로 355 (유산동, 넥센타이어)
+              - generic [ref=f5e105]:
+                - text: 지역
+                - textbox [ref=f5e106]: 경상남도
+              - generic [ref=f5e107]:
+                - text: 업종 코드
+                - textbox [ref=f5e108]: "22110"
+              - generic [ref=f5e109]:
+                - text: 주요 생산품
+                - textbox [ref=f5e110]: 타이어
+              - generic [ref=f5e111]:
+                - text: 종업원 수
+                - spinbutton [ref=f5e112]: "4149"
+      - complementary [ref=f5e113]:
+        - generic [ref=f5e114]:
+          - generic [ref=f5e115]: 근거 패널
+          - button "근거 패널 접기" [ref=f5e116] [cursor=pointer]
+        - generic [ref=f5e118]:
+          - heading "근거 · 출처" [level=3] [ref=f5e119]
+          - paragraph [ref=f5e120]: 기업 정보는 한국산업단지공단 입주기업 OpenAPI(KICOX)에서 조회합니다. 검색 결과가 없으면 직접 입력해 진행할 수 있으며, 입력값에는 ‘사용자 입력’ 배지가 붙습니다.
+          - generic [ref=f5e121]:
+            - paragraph [ref=f5e122]: 조회 상태
+            - generic [ref=f5e123]:
+              - generic [ref=f5e124]: 조회 중
+              - generic "출처 KICOX" [ref=f5e125]: KICOX
+    - generic [ref=f5e127]:
+      - button "취소" [ref=f5e128] [cursor=pointer]
+      - button "저장 후 다음 단계" [ref=f5e129] [cursor=pointer]

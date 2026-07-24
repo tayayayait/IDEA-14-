@@ -1,0 +1,659 @@
+- generic [ref=f3e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f3e4]:
+    - banner [ref=f3e5]:
+      - link "홈" [ref=f3e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f3e12]: 산단수출 코파일럿
+      - generic [ref=f3e13]:
+        - link "프로젝트" [ref=f3e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f3e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f3e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f3e18] [cursor=pointer]
+    - generic [ref=f3e20]:
+      - complementary [ref=f3e21]:
+        - paragraph [ref=f3e22]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f3e23]:
+          - link "1단계 기업·공장 검색" [ref=f3e24] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/company
+            - generic [ref=f3e28]:
+              - generic [ref=f3e29]: 기업·공장 검색
+              - generic [ref=f3e30]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f3e31] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/product
+            - generic [ref=f3e35]:
+              - generic [ref=f3e36]: 제품·HS 코드
+              - generic [ref=f3e37]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f3e38] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/countries
+            - generic [ref=f3e42]:
+              - generic [ref=f3e43]: 후보국 추천 Top 3
+              - generic [ref=f3e44]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f3e45] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/countries/US
+            - generic [ref=f3e46]: "4"
+            - generic [ref=f3e47]:
+              - generic [ref=f3e48]: 국가 상세
+              - generic [ref=f3e49]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f3e50] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/report
+            - generic [ref=f3e54]:
+              - generic [ref=f3e55]: 리포트
+              - generic [ref=f3e56]: 요구사항 8
+      - main [ref=f3e57]:
+        - generic [ref=f3e58]:
+          - generic [ref=f3e59]:
+            - paragraph [ref=f3e60]: 기획 요구사항 매핑
+            - paragraph [ref=f3e61]: 요구사항 4~7
+            - paragraph [ref=f3e62]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=f3e63]:
+            - generic [ref=f3e64]:
+              - generic [ref=f3e65]:
+                - generic [ref=f3e66]:
+                  - generic [ref=f3e67]:
+                    - generic [ref=f3e68]:
+                      - paragraph [ref=f3e69]: US
+                      - heading "미합중국(The United States of America)" [level=1] [ref=f3e70]
+                    - generic [ref=f3e71]:
+                      - generic [ref=f3e72]:
+                        - text: 제품
+                        - strong [ref=f3e73]: 타이어
+                      - generic [ref=f3e74]:
+                        - text: HS6
+                        - strong [ref=f3e75]: "401110"
+                      - generic [ref=f3e76]:
+                        - text: HSK10
+                        - strong [ref=f3e77]: "4011100000"
+                    - paragraph [ref=f3e78]: 분석은 HSK10 정확 일치 → HS6 → 제품명 순으로 적용됩니다. 제품 설명과 품목코드가 다르면 결과도 달라질 수 있습니다.
+                    - paragraph [ref=f3e79]:
+                      - text: 최종 갱신 2026. 7. 24. 오전 1:43
+                      - generic [ref=f3e80]: · 1개 공급자 실패, 마지막 정상 데이터 유지
+                  - generic [ref=f3e81]:
+                    - button "데이터 갱신" [ref=f3e82] [cursor=pointer]
+                    - button "상세 분석" [ref=f3e83] [cursor=pointer]
+                - generic [ref=f3e84]:
+                  - generic [ref=f3e85]:
+                    - paragraph [ref=f3e86]: 수출 적합도
+                    - paragraph [ref=f3e87]: 조건부 검토
+                    - paragraph [ref=f3e88]: 일부 요건을 확인한 뒤 수출 여부를 결정해야 합니다.
+                  - generic [ref=f3e89]:
+                    - paragraph [ref=f3e90]: 시장 기회 점수
+                    - paragraph [ref=f3e91]: 100/100
+                    - paragraph [ref=f3e92]: 시장 규모·성장성 기준이며 규제 위험은 포함하지 않습니다.
+                  - generic [ref=f3e93]:
+                    - paragraph [ref=f3e94]: 근거 충족도
+                    - paragraph [ref=f3e95]: 57%
+                    - paragraph [ref=f3e96]: 확인 6건 · 참고 1건 · 추가 확인 3건
+              - generic [ref=f3e98]:
+                - generic [ref=f3e99]:
+                  - generic [ref=f3e100]:
+                    - paragraph [ref=f3e101]: 수출 진입장벽 요약
+                    - paragraph [ref=f3e102]: 후보 선정 근거와 주의 신호를 빠르게 확인합니다.
+                  - generic [ref=f3e103]: 후보 1위
+                - generic [ref=f3e104]:
+                  - generic [ref=f3e105]:
+                    - paragraph [ref=f3e106]: 포함 이유
+                    - paragraph [ref=f3e107]: 발표용 우선 후보; 인증 데이터 존재; HS 6자리 일치; 제품 키워드 일치; HS 4자리 접두 일치; 수입 규제 데이터 존재; 시장 뉴스 일치
+                  - generic [ref=f3e108]:
+                    - paragraph [ref=f3e109]: 긍정 요인
+                    - paragraph [ref=f3e110]: 미국은 세계 최대 규모의 자동차 시장을 보유하고 있어 교체용 타이어 수요가 매우 높으며 친환경 및 고성능 제품에 대한 소비자의 관심이 큽니다. 한국산 타이어의 품질 신뢰도가 높고 유통 네트워크가 잘 구축되어 있어 시장 점유율 확대가 용이한 환경입니다.
+                  - generic [ref=f3e111]:
+                    - paragraph [ref=f3e112]: 주의 요인
+                    - paragraph [ref=f3e113]: 미국 내 자국 산업 보호를 위한 반덤핑 관세 부과 가능성이 상존하며 연방 자동차 안전 기준인 DOT 인증을 반드시 획득해야 하므로 엄격한 품질 관리와 법적 대응이 요구됩니다.
+                  - generic [ref=f3e114]:
+                    - paragraph [ref=f3e115]: 대안시장
+                    - paragraph [ref=f3e116]: 베트남 사회주의 공화국(Socialist Republic of Vietnam)(VN), 중화인민공화국(The People&rsquo;s Republic of China)(CN), 브라질 연방 공화국(The Federal Republic of Brazil)(BR)
+                  - paragraph [ref=f3e117]: "후보 편입 근거: 발표용 우선 후보, 인증 데이터 존재, HS 6자리 일치, 제품 키워드 일치, HS 4자리 접두 일치, 수입 규제 데이터 존재, 시장 뉴스 일치"
+            - generic [ref=f3e118]:
+              - generic [ref=f3e119]:
+                - generic [ref=f3e121]:
+                  - generic [ref=f3e126]:
+                    - heading "시장 기회" [level=3] [ref=f3e127]
+                    - paragraph [ref=f3e128]: 목적국 수입시장과 한국산 점유율
+                  - generic [ref=f3e129]: 근거 1건
+                - generic [ref=f3e130]:
+                  - generic [ref=f3e131]:
+                    - generic [ref=f3e132]:
+                      - generic [ref=f3e133]:
+                        - paragraph [ref=f3e134]: 2025 전체 수입
+                        - paragraph [ref=f3e135]: $10.51B
+                      - generic [ref=f3e136]:
+                        - paragraph [ref=f3e137]: 한국산 수입
+                        - paragraph [ref=f3e138]: $585.4M
+                    - generic [ref=f3e139]:
+                      - generic [ref=f3e140]: 한국산 점유율
+                      - strong [ref=f3e141]: 5.57%
+                    - img "한국산 점유율 5.57%" [ref=f3e142]
+                    - paragraph [ref=f3e146]: UN Comtrade · 자료 기준 2025 · 단일 연도 통계로 성장 추세는 표시하지 않습니다.
+                  - list [ref=f3e147]:
+                    - listitem [ref=f3e148]:
+                      - generic [ref=f3e149]:
+                        - generic [ref=f3e150]: 시장 확인
+                        - generic [ref=f3e151]: HS6 기준
+                      - paragraph [ref=f3e152]: 2025년 미합중국(The United States of America)의 HS 401110 수입시장과 한국산 실적을 확인했습니다.
+                      - generic [ref=f3e153]:
+                        - generic [ref=f3e154]:
+                          - term [ref=f3e155]: 목적국 전체 수입시장(USD)
+                          - definition [ref=f3e156]: 10,512,197,922
+                        - generic [ref=f3e157]:
+                          - term [ref=f3e158]: 한국산 수입액(USD)
+                          - definition [ref=f3e159]: 585,350,022
+                        - generic [ref=f3e160]:
+                          - term [ref=f3e161]: 한국산 점유율
+                          - definition [ref=f3e162]: 5.57%
+                        - generic [ref=f3e163]:
+                          - term [ref=f3e164]: 기준연도·월
+                          - definition [ref=f3e165]: "2025"
+                      - generic [ref=f3e166]: 다음 확인경쟁국 구성과 연도별 추이는 UN Comtrade 원문에서 추가 확인하세요.
+                      - group [ref=f3e167]:
+                        - generic "출처·판단 한계" [ref=f3e168] [cursor=pointer]
+              - generic [ref=f3e172]:
+                - generic [ref=f3e174]:
+                  - generic [ref=f3e179]:
+                    - heading "시장 진입 조건" [level=3] [ref=f3e180]
+                    - paragraph [ref=f3e181]: 관세·인증·수입규제와 목적국 세번 확인
+                  - generic [ref=f3e182]: 확인 필요 1건
+                - generic [ref=f3e183]:
+                  - generic [ref=f3e185]:
+                    - generic [ref=f3e186]:
+                      - generic [ref=f3e187]:
+                        - paragraph [ref=f3e188]: 미국 HTS 후보
+                        - paragraph [ref=f3e189]: 미국 공식 관세표 기준 · 최종 세번은 제품 사양 확인 필요
+                      - generic [ref=f3e190]: 최종 확인
+                    - paragraph [ref=f3e191]: HS6 하위 분류 10건
+                    - generic [ref=f3e192]:
+                      - generic [ref=f3e193]:
+                        - generic [ref=f3e194]:
+                          - generic [ref=f3e195]:
+                            - generic [ref=f3e196]: 4011.10.10.10
+                            - generic [ref=f3e197]: 10자리 최종 후보
+                          - generic [ref=f3e198]: 일반세율 4%
+                        - paragraph [ref=f3e199]: 림 직경 33.02cm(13인치) 이하
+                        - generic [ref=f3e200]:
+                          - generic [ref=f3e201]: 한국산 특혜 Free
+                          - generic [ref=f3e202]: 기타 10%
+                      - generic [ref=f3e203]:
+                        - generic [ref=f3e204]:
+                          - generic [ref=f3e205]:
+                            - generic [ref=f3e206]: 4011.10.10.20
+                            - generic [ref=f3e207]: 10자리 최종 후보
+                          - generic [ref=f3e208]: 일반세율 4%
+                        - paragraph [ref=f3e209]: 림 직경 33.02cm(13인치) 초과 ~ 35.56cm(14인치) 이하
+                        - generic [ref=f3e210]:
+                          - generic [ref=f3e211]: 한국산 특혜 Free
+                          - generic [ref=f3e212]: 기타 10%
+                      - generic [ref=f3e213]:
+                        - generic [ref=f3e214]:
+                          - generic [ref=f3e215]:
+                            - generic [ref=f3e216]: 4011.10.10.30
+                            - generic [ref=f3e217]: 10자리 최종 후보
+                          - generic [ref=f3e218]: 일반세율 4%
+                        - paragraph [ref=f3e219]: 림 직경 35.56cm(14인치) 초과 ~ 38.10cm(15인치) 이하
+                        - generic [ref=f3e220]:
+                          - generic [ref=f3e221]: 한국산 특혜 Free
+                          - generic [ref=f3e222]: 기타 10%
+                      - generic [ref=f3e223]:
+                        - generic [ref=f3e224]:
+                          - generic [ref=f3e225]:
+                            - generic [ref=f3e226]: 4011.10.10.40
+                            - generic [ref=f3e227]: 10자리 최종 후보
+                          - generic [ref=f3e228]: 일반세율 4%
+                        - paragraph [ref=f3e229]: 림 직경 38.10cm(15인치) 초과 ~ 40.64cm(16인치) 이하
+                        - generic [ref=f3e230]:
+                          - generic [ref=f3e231]: 한국산 특혜 Free
+                          - generic [ref=f3e232]: 기타 10%
+                    - button "전체 후보 보기 (6)" [ref=f3e233] [cursor=pointer]
+                    - generic [ref=f3e234]:
+                      - paragraph [ref=f3e235]: 추가 관세
+                      - paragraph [ref=f3e236]: 9903.40.05 25% · 9903.40.10 25%
+                    - paragraph [ref=f3e237]: "확인할 정보: 타이어 구조(방사형/기타)와 림 직경을 확정해야 미국 HTS 10자리를 결정할 수 있습니다."
+                    - paragraph [ref=f3e238]: "자료: 미국 국제무역위원회(USITC) · 기준 2026"
+                  - list [ref=f3e239]:
+                    - listitem [ref=f3e240]:
+                      - generic [ref=f3e241]:
+                        - generic [ref=f3e242]: 확인 필요
+                        - generic [ref=f3e243]: HS6 기준
+                      - paragraph [ref=f3e244]: 미국 USITC HTS에서 10개의 세번 후보와 추가 관세 조치를 확인했습니다.
+                      - generic [ref=f3e245]:
+                        - generic [ref=f3e246]:
+                          - term [ref=f3e247]: 통제번호 후보
+                          - definition [ref=f3e248]: 4011.10 / 4011.10.10 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.10 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.20 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.30 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.40 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.50 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.60 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.10.70 · 4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10% / 4011.10.50.00 · 3.4% · Free (A*,AU,BH,CL,CO,D,E,IL,JO,KR,MA,OM,P,PA,PE,S,SG) · 10%
+                        - generic [ref=f3e249]:
+                          - term [ref=f3e250]: HS6
+                          - definition [ref=f3e251]: "401110"
+                      - generic [ref=f3e252]: 다음 확인타이어 구조와 림 직경을 입력한 뒤 USITC 원문에서 미국 10자리 세번과 추가 관세를 확정하세요.
+                      - group [ref=f3e253]:
+                        - generic "전체 결과·출처 보기" [ref=f3e254] [cursor=pointer]
+              - generic [ref=f3e258]:
+                - generic [ref=f3e260]:
+                  - generic [ref=f3e268]:
+                    - heading "거래·물류·비용 위험" [level=3] [ref=f3e269]
+                    - paragraph [ref=f3e270]: 결제위험·물류환경·비용 참고값
+                  - generic [ref=f3e271]: 근거 4건
+                - generic [ref=f3e272]:
+                  - generic [ref=f3e273]:
+                    - generic [ref=f3e274]:
+                      - generic [ref=f3e275]:
+                        - paragraph [ref=f3e276]: 물류환경 LPI
+                        - paragraph [ref=f3e277]: 국가 단위 물류환경 참고지표
+                      - generic [ref=f3e278]:
+                        - generic [ref=f3e279]: 우수
+                        - generic [ref=f3e280]: 3.8 / 5
+                    - img "World Bank 물류성과지수 세부 지표" [ref=f3e281]:
+                      - generic [ref=f3e282]:
+                        - generic [ref=f3e283]: 물류 종합
+                        - generic [ref=f3e286]:
+                          - generic [ref=f3e287]: 우수
+                          - generic [ref=f3e288]: "3.8"
+                      - generic [ref=f3e289]:
+                        - generic [ref=f3e290]: 통관 효율
+                        - generic [ref=f3e293]:
+                          - generic [ref=f3e294]: 우수
+                          - generic [ref=f3e295]: "3.7"
+                      - generic [ref=f3e296]:
+                        - generic [ref=f3e297]: 물류 인프라
+                        - generic [ref=f3e300]:
+                          - generic [ref=f3e301]: 우수
+                          - generic [ref=f3e302]: "3.9"
+                      - generic [ref=f3e303]:
+                        - generic [ref=f3e304]: 국제 운송
+                        - generic [ref=f3e307]:
+                          - generic [ref=f3e308]: 양호
+                          - generic [ref=f3e309]: "3.4"
+                    - paragraph [ref=f3e311]: "📋 판단 가이드: 물류 인프라가 잘 갖추어져 통관·운송이 원활합니다."
+                    - paragraph [ref=f3e312]: World Bank Logistics Performance Index · 최신 발행 기준 2022 (2~3년 주기 발행) · 실제 운송사 견적과 함께 확인
+                    - group [ref=f3e313]:
+                      - generic "점수 기준 안내" [ref=f3e314] [cursor=pointer]
+                  - list [ref=f3e315]:
+                    - listitem [ref=f3e316]:
+                      - generic [ref=f3e317]:
+                        - generic [ref=f3e318]: 국가 통계
+                        - generic [ref=f3e319]: 국가 기준
+                      - paragraph [ref=f3e320]: 해당 국가의 결제 지연율은 18.9%, 평균 결제기간은 70.4일입니다. 평균 지연기간은 17.2일이며, 가장 많이 사용된 결제조건은 O/A(T/T 포함)(85.7%)입니다.
+                      - generic [ref=f3e321]:
+                        - generic [ref=f3e322]:
+                          - term [ref=f3e323]: 국가신용등급
+                          - definition [ref=f3e324]: "1"
+                        - generic [ref=f3e325]:
+                          - term [ref=f3e326]: 결제 지연율
+                          - definition [ref=f3e327]: 18.9%
+                        - generic [ref=f3e328]:
+                          - term [ref=f3e329]: 평균 결제기간
+                          - definition [ref=f3e330]: 70.4일
+                        - generic [ref=f3e331]:
+                          - term [ref=f3e332]: 평균 지연기간
+                          - definition [ref=f3e333]: 17.2일
+                      - generic [ref=f3e334]: 다음 확인선수금·신용장·무역보험 등 대금회수 조건을 검토하세요.
+                      - group [ref=f3e335]:
+                        - generic "출처·판단 한계" [ref=f3e336] [cursor=pointer]
+                    - listitem [ref=f3e340]:
+                      - generic [ref=f3e341]:
+                        - generic [ref=f3e342]: 추정
+                        - generic [ref=f3e343]: 국가 기준
+                      - paragraph [ref=f3e344]: 2026-06 미국서부·미국동부 40ft FCL 평균 해상수출 운송비 참고값입니다.
+                      - generic [ref=f3e345]:
+                        - generic [ref=f3e346]:
+                          - term [ref=f3e347]: 기준연도·월
+                          - definition [ref=f3e348]: 2026-06
+                        - generic [ref=f3e349]:
+                          - term [ref=f3e350]: 권역별 평균 운송비
+                          - definition [ref=f3e351]: 미국서부 7,866천원 / 미국동부 7,118천원
+                        - generic [ref=f3e352]:
+                          - term [ref=f3e353]: 비용 단위
+                          - definition [ref=f3e354]: 천원/2TEU
+                        - generic [ref=f3e355]:
+                          - term [ref=f3e356]: 운송 기준
+                          - definition [ref=f3e357]: 40ft FCL 일반화물(GP)
+                      - generic [ref=f3e358]: 다음 확인가격·수량·중량·부피·항구·Incoterms를 입력한 뒤 실제 견적을 비교하세요.
+                      - group [ref=f3e359]:
+                        - generic "출처·판단 한계" [ref=f3e360] [cursor=pointer]
+                    - listitem [ref=f3e364]:
+                      - generic [ref=f3e365]:
+                        - generic [ref=f3e366]: 환율 확인
+                        - generic [ref=f3e367]: 국가 기준
+                      - paragraph [ref=f3e368]: 2022년 World Bank 물류성과지수 3.8/5를 확인했습니다.
+                      - generic [ref=f3e369]:
+                        - generic [ref=f3e370]:
+                          - term [ref=f3e371]: 물류 종합점수
+                          - definition [ref=f3e372]: "3.8"
+                        - generic [ref=f3e373]:
+                          - term [ref=f3e374]: 통관 효율
+                          - definition [ref=f3e375]: "3.7"
+                        - generic [ref=f3e376]:
+                          - term [ref=f3e377]: 물류 인프라
+                          - definition [ref=f3e378]: "3.9"
+                        - generic [ref=f3e379]:
+                          - term [ref=f3e380]: 국제 운송
+                          - definition [ref=f3e381]: "3.4"
+                      - generic [ref=f3e382]: 다음 확인실제 출하 전 운송사 견적과 현지 통관사의 예상 소요기간을 함께 확인하세요.
+                      - group [ref=f3e383]:
+                        - generic "출처·판단 한계" [ref=f3e384] [cursor=pointer]
+                    - listitem [ref=f3e388]:
+                      - generic [ref=f3e389]:
+                        - generic [ref=f3e390]: 환율 확인
+                        - generic [ref=f3e391]: 국가 기준
+                      - paragraph [ref=f3e392]: 20260723 기준 USD 환율을 확인했습니다.
+                      - generic [ref=f3e393]:
+                        - generic [ref=f3e394]:
+                          - term [ref=f3e395]: 매매기준율
+                          - definition [ref=f3e396]: 1,480.9
+                        - generic [ref=f3e397]:
+                          - term [ref=f3e398]: 통화
+                          - definition [ref=f3e399]: USD
+                        - generic [ref=f3e400]:
+                          - term [ref=f3e401]: 통화 1단위당 원화
+                          - definition [ref=f3e402]: 1,480.9
+                        - generic [ref=f3e403]:
+                          - term [ref=f3e404]: 환율 기준일
+                          - definition [ref=f3e405]: "20260723"
+                      - generic [ref=f3e406]: 다음 확인견적 통화와 결제 예정일 기준으로 실제 적용환율을 다시 확인하세요.
+                      - group [ref=f3e407]:
+                        - generic "출처·판단 한계" [ref=f3e408] [cursor=pointer]
+              - generic [ref=f3e412]:
+                - generic [ref=f3e414]:
+                  - generic [ref=f3e419]:
+                    - heading "출발 전 공통점검" [level=3] [ref=f3e420]
+                    - paragraph [ref=f3e421]: 국가와 무관하게 수출 전에 확인할 국내 요건
+                  - generic [ref=f3e422]: 확인 필요 2건
+                - list [ref=f3e424]:
+                  - listitem [ref=f3e425]:
+                    - generic [ref=f3e426]:
+                      - generic [ref=f3e427]: 확인 필요
+                      - generic [ref=f3e428]: HSK10 정확 일치
+                    - paragraph [ref=f3e429]: 최신 KOSTI HSK 연계표에서 직접 일치 통제번호를 확인하지 못했습니다.
+                    - generic [ref=f3e430]:
+                      - generic [ref=f3e431]:
+                        - term [ref=f3e432]: 조회 결과
+                        - definition [ref=f3e433]: "0"
+                      - generic [ref=f3e434]:
+                        - term [ref=f3e435]: HSK10
+                        - definition [ref=f3e436]: "4011100000"
+                      - generic [ref=f3e437]:
+                        - term [ref=f3e438]: 연계표 전체 행
+                        - definition [ref=f3e439]: 2,161
+                    - generic [ref=f3e440]: 다음 확인제품 사양서를 기준으로 Yestrade 자가판정 또는 전문판정을 진행하세요.
+                    - group [ref=f3e441]:
+                      - generic "출처·판단 한계" [ref=f3e442] [cursor=pointer]
+                  - listitem [ref=f3e446]:
+                    - generic [ref=f3e447]:
+                      - generic [ref=f3e448]: 확인 필요
+                      - generic [ref=f3e449]: HSK10 정확 일치
+                    - paragraph [ref=f3e450]: HSK10 기준 세관장확인대상 직접 일치 결과가 없습니다.
+                    - generic [ref=f3e451]:
+                      - generic [ref=f3e452]:
+                        - term [ref=f3e453]: 조회 결과
+                        - definition [ref=f3e454]: "0"
+                      - generic [ref=f3e455]:
+                        - term [ref=f3e456]: HSK10
+                        - definition [ref=f3e457]: "4011100000"
+                      - generic [ref=f3e458]:
+                        - term [ref=f3e459]: 구분
+                        - definition [ref=f3e460]: 수출
+                    - generic [ref=f3e461]: 다음 확인제품 용도와 기술사양을 기준으로 관세사 또는 관계기관에 최종 확인하세요.
+                    - group [ref=f3e462]:
+                      - generic "출처·판단 한계" [ref=f3e463] [cursor=pointer]
+          - generic [ref=f3e467]:
+            - generic [ref=f3e469]:
+              - generic [ref=f3e470]:
+                - heading "KOTRA 인증·규제 원문 근거" [level=3] [ref=f3e471]
+                - paragraph [ref=f3e472]: 국가·HS·제품 기준으로 조회한 KOTRA 원문 결과를 확인합니다.
+              - generic [ref=f3e473]:
+                - generic [ref=f3e474]: 인증 직접 일치 1건
+                - generic [ref=f3e475]: 규제 직접 일치 1건 · 검토 3건
+            - generic [ref=f3e477]:
+              - generic [ref=f3e478]:
+                - generic [ref=f3e479]:
+                  - generic [ref=f3e480]:
+                    - generic [ref=f3e481]:
+                      - heading "KOTRA 해외인증·규격" [level=3] [ref=f3e482]
+                      - paragraph [ref=f3e483]: 국가·HS/HSK·제품 기준 KOTRA 해외인증 API 결과
+                    - generic [ref=f3e484]: 조회 성공
+                  - paragraph [ref=f3e485]: 직접 일치 1건 / 추가 검토 0건
+                - generic [ref=f3e488]:
+                  - paragraph [ref=f3e489]: 직접 일치 인증정보 1건
+                  - list [ref=f3e490]:
+                    - listitem [ref=f3e491]:
+                      - paragraph [ref=f3e492]: 고무타이어 및 타이어튜브
+                      - generic [ref=f3e493]:
+                        - paragraph [ref=f3e494]: "매칭 기준: 국가=미합중국(The United States of America) / HS=401110 / HSK=4011100000 / 제품명=타이어"
+                        - paragraph [ref=f3e495]: "필요서류: FMVSS(연방 자동차 안전 표준) 준수 신청서"
+                        - paragraph [ref=f3e496]: "절차: 연방 자동차 안전 표준에 따라 차량 안전 규정 준수 사무국(OVSC)과 계약을 맺은 시험실에서 내구성 테스트, 고속 성능 테스트, 강도 테스트 등에 관한 실험 실시"
+                        - paragraph [ref=f3e497]: "유효기간: 별도의 유효기간은 없음. 다만 인증 후 사후관리로서 차량 안전 규정 준수 사무국(OVSC)은 제조자가 갖춰야 할 품질관리 프로그램의 형태에 대해서는 규정하지 않지만 제조자는 자체적으로 품질관리 프로그램을 운영하여야 한다. OVSC에 의해 샘플이 수거되어 연방 자동차 안전 표준(FMVSS)의 요구사항을 충족하는지 시험을 받게 됨"
+                        - paragraph [ref=f3e498]: 예상 비용 정확한 정보 없음 / 예상 기간 정확한 정보 없음일
+                      - link "KOTRA" [ref=f3e499] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030&sSearchVal=%EA%B3%A0%EB%AC%B4%ED%83%80%EC%9D%B4%EC%96%B4%20%EB%B0%8F%20%ED%83%80%EC%9D%B4%EC%96%B4%ED%8A%9C%EB%B8%8C
+              - generic [ref=f3e504]:
+                - generic [ref=f3e505]:
+                  - generic [ref=f3e506]:
+                    - generic [ref=f3e507]:
+                      - heading "KOTRA 수입규제·무역구제" [level=3] [ref=f3e508]
+                      - paragraph [ref=f3e509]: DS00000128 API + 국별 대세계 수입규제 CSV 기준 결과
+                    - generic [ref=f3e510]: 조회 성공
+                  - paragraph [ref=f3e511]: 직접 일치 1건 / 검토 후보 3건
+                - generic [ref=f3e513]:
+                  - generic [ref=f3e514]:
+                    - paragraph [ref=f3e515]: 직접 일치 1건
+                    - list [ref=f3e516]:
+                      - listitem [ref=f3e517]:
+                        - paragraph [ref=f3e518]: 401110 / 반덤핑(규제중)
+                        - paragraph [ref=f3e519]: "시행일: 2021-07-19"
+                        - paragraph [ref=f3e520]: "품목: 타이어(Passenger Vehicle and Light Truck Tires) | 젣: 반덤핑(규제중) | 대상국가: 한국, 대만, 태국 | 지정 본부: 북미지역본부 | HS: 401110"
+                        - paragraph [ref=f3e521]: "매칭 기준: 1순위 국가+HS/HSK 정확 일치 / 제품 토큰 타이어"
+                        - paragraph [ref=f3e522]: "출처 유형: 캐시"
+                        - generic [ref=f3e523]:
+                          - button "상세 보기" [ref=f3e524] [cursor=pointer]
+                          - link "KOTRA 원문 PDF" [ref=f3e525] [cursor=pointer]:
+                            - /url: https://dream.kotra.or.kr/ajaxa/frNation/nationIemPdfDown.do?pageNo=&pagePerCnt=10&SITE_NO=2&MENU_ID=3700&CONTENTS_NO=1&pTmplateCont=P0407&pNttSn=&pGbn=&pUntyId=&pUnNatCd=&chkNatSn=842&pRegnCd=04&pNatCd=842&iemChk=411
+                          - link "KOTRA 검색 화면" [ref=f3e530] [cursor=pointer]:
+                            - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700&pRegnCd=04&pNatCd=842
+                  - generic [ref=f3e532]:
+                    - paragraph [ref=f3e533]: 검토 후보 3건
+                    - button "후보 보기" [ref=f3e534] [cursor=pointer]
+          - generic [ref=f3e535]:
+            - generic [ref=f3e537]:
+              - heading "AI 최종 판단" [level=3] [ref=f3e542]
+              - generic [ref=f3e543]:
+                - generic "프로그램 수집 데이터와 인터넷 공식 자료 검색 결과가 상호 보완적으로 작용하여 시장 기회, 핵심 리스크(반덤핑 관세, 인증), 규제 요건 등에 대한 구체적이고 신뢰도 높은 정보를 확보했습니다. 특히 반덤핑 관세율과 인증 요건에 대한 상세한 정보가 판단의 근거가 되었습니다." [ref=f3e544]: 신뢰도 높음
+                - button "AI 판단 재생성" [ref=f3e548] [cursor=pointer]
+            - generic [ref=f3e549]:
+              - generic [ref=f3e550]:
+                - paragraph [ref=f3e551]: 조건부 진출 가능
+                - paragraph [ref=f3e552]: 미국 타이어 시장은 높은 수요와 한국산 제품에 대한 긍정적 인식을 바탕으로 큰 기회를 제공합니다. 그러나 한국산 승용차 및 경트럭 타이어에 대한 반덤핑 관세가 부과 중이며, DOT 인증 및 연방 안전 표준 준수 등 엄격한 규제 요건이 존재하여 철저한 사전 준비와 리스크 관리가 필수적입니다. 이러한 조건들을 충족한다면 성공적인 시장 진출이 가능할 것으로 판단됩니다.
+              - generic [ref=f3e553]:
+                - generic [ref=f3e554]:
+                  - paragraph [ref=f3e559]: 핵심 판단 근거
+                  - list [ref=f3e560]:
+                    - listitem [ref=f3e561]:
+                      - generic [ref=f3e563]:
+                        - text: 미국은 세계 최대 자동차 시장으로, 교체용 타이어 수요가 매우 높으며 한국산 타이어의 품질 신뢰도가 높아 시장 진출 잠재력이 큽니다.
+                        - link "[추천 이유, 미국 타이어(HS Code 401110) 수출 연구 보고서]" [ref=f3e564] [cursor=pointer]:
+                          - /url: N/A
+                    - listitem [ref=f3e569]:
+                      - generic [ref=f3e571]:
+                        - text: 한미 FTA에 따라 일반 관세는 무관세 혜택을 받을 수 있어 가격 경쟁력 확보에 유리한 측면이 있습니다.
+                        - link "[미국 타이어(HS Code 401110) 수출 연구 보고서, tariff_fta]" [ref=f3e572] [cursor=pointer]:
+                          - /url: N/A
+                    - listitem [ref=f3e577]:
+                      - generic [ref=f3e579]:
+                        - text: 미국의 물류성과지수(LPI)가 3.8/5로 양호하여 전반적인 물류 환경은 효율적인 편입니다.
+                        - link "[cost (World Bank 물류성과지수)]" [ref=f3e580] [cursor=pointer]:
+                          - /url: N/A
+                - generic [ref=f3e585]:
+                  - paragraph [ref=f3e589]: 주요 위험 요소
+                  - list [ref=f3e590]:
+                    - listitem [ref=f3e591]:
+                      - generic [ref=f3e593]:
+                        - text: 한국산 승용차 및 경트럭 타이어에 대한 반덤핑 관세가 부과 중이며, 현재 5년 주기 일몰 재심이 진행되고 있어 관세 부담이 지속될 위험이 높습니다.
+                        - paragraph [ref=f3e594]: → 수출 전 반드시 미국 관세사 및 법률 전문가와 협력하여 정확한 반덤핑 관세율을 확인하고, 이를 반영한 수출 가격 전략을 수립해야 합니다. 일몰 재심 결과에 대한 지속적인 모니터링이 필요합니다.
+                        - link "[미국 타이어(HS Code 401110) 수출 연구 보고서]" [ref=f3e595] [cursor=pointer]:
+                          - /url: N/A
+                    - listitem [ref=f3e600]:
+                      - generic [ref=f3e602]:
+                        - text: 미국 공공 도로에서 사용되는 모든 타이어는 DOT 인증 및 NHTSA의 연방 자동차 안전 표준(FMVSS No. 109, 119, 139)을 충족해야 하며, 특정 라벨링 요구사항을 준수하지 못할 경우 통관 및 판매가 불가능합니다.
+                        - paragraph [ref=f3e603]: → 제품 개발 단계부터 DOT 인증 및 FMVSS 기준을 충족하도록 설계하고, 라벨링 요구사항(DOT 코드, UTQG 등)을 철저히 준수해야 합니다. KOTRA 해외인증 지원사업 등을 활용하여 사전 검토를 진행하십시오.
+                        - link "[certification, import_regulation, 미국 타이어(HS Code 401110) 수출 연구 보고서]" [ref=f3e604] [cursor=pointer]:
+                          - /url: N/A
+                    - listitem [ref=f3e609]:
+                      - generic [ref=f3e611]:
+                        - text: 미국 HTS 10자리 세번 분류가 복잡하며, 25%의 Section 232 관세 적용 여부가 불분명하여 추가 관세 부담이 발생할 수 있습니다.
+                        - paragraph [ref=f3e612]: → 제품의 구조와 림 직경 등 상세 사양을 바탕으로 미국 현지 관세사와 협력하여 정확한 HTS 10자리 세번을 확정하고, Section 232 관세 적용 여부를 명확히 확인해야 합니다. 한미 FTA 혜택과 반덤핑 관세의 상호 작용에 대한 전문가 자문이 필요합니다.
+                        - link "[tariff_fta, 미국 타이어(HS Code 401110) 수출 연구 보고서]" [ref=f3e613] [cursor=pointer]:
+                          - /url: N/A
+                    - listitem [ref=f3e618]:
+                      - generic [ref=f3e620]:
+                        - text: 미국의 결제 지연율이 18.9%로 비교적 높고 평균 결제 기간이 70.4일로 길어 대금 회수 지연 위험이 있습니다.
+                        - paragraph [ref=f3e621]: → 수출 계약 시 선수금, 신용장(L/C) 등 안전한 결제 조건을 적극적으로 활용하고, 한국무역보험공사의 무역보험 가입을 검토하여 대금 회수 위험을 최소화해야 합니다.
+                        - link "[payment_risk]" [ref=f3e622] [cursor=pointer]:
+                          - /url: N/A
+              - generic [ref=f3e627]:
+                - paragraph [ref=f3e631]: 권장 실행 방향
+                - list [ref=f3e632]:
+                  - listitem [ref=f3e633]:
+                    - generic [ref=f3e634]: "1."
+                    - generic [ref=f3e635]:
+                      - text: 제품의 상세 사양(구조, 림 직경 등)을 바탕으로 미국 현지 관세사와 협력하여 정확한 HTS 10자리 세번을 확정하고, 일반 관세, 반덤핑 관세, Section 232 관세 등 모든 적용 관세율을 명확히 확인하십시오.
+                      - paragraph [ref=f3e636]: 정확한 관세율 파악은 수출 가격 결정 및 수익성 분석의 핵심이며, 불확실한 관세는 예상치 못한 비용 증가로 이어질 수 있습니다.
+                      - generic [ref=f3e637]: 우선
+                  - listitem [ref=f3e638]:
+                    - generic [ref=f3e639]: "2."
+                    - generic [ref=f3e640]:
+                      - text: 미국 교통부(DOT) 인증 및 고속도로교통안전국(NHTSA)의 연방 자동차 안전 표준(FMVSS) 준수 여부를 철저히 확인하고, 필수 라벨링 요구사항(DOT 코드, UTQG 등)을 충족하도록 제품 및 생산 공정을 관리하십시오.
+                      - paragraph [ref=f3e641]: DOT 인증 및 FMVSS 준수는 미국 시장 진출을 위한 필수 요건이며, 미준수 시 통관 거부 및 판매 불가로 이어집니다.
+                      - generic [ref=f3e642]: 우선
+                  - listitem [ref=f3e643]:
+                    - generic [ref=f3e644]: "3."
+                    - generic [ref=f3e645]:
+                      - text: 반덤핑 관세 일몰 재심 진행 상황을 지속적으로 모니터링하고, 필요시 법률 전문가와 상담하여 대응 전략을 수립하십시오.
+                      - paragraph [ref=f3e646]: 일몰 재심 결과에 따라 관세율 변동 가능성이 있으며, 이는 수출 수익성에 직접적인 영향을 미칩니다.
+                  - listitem [ref=f3e647]:
+                    - generic [ref=f3e648]: "4."
+                    - generic [ref=f3e649]:
+                      - text: 수출 대금 회수 위험을 줄이기 위해 선수금, 신용장(L/C) 등의 결제 조건을 적극 검토하고, 한국무역보험공사의 무역보험 가입을 고려하십시오.
+                      - paragraph [ref=f3e650]: 미국의 결제 지연율과 평균 결제 기간을 고려할 때, 안전한 대금 회수 장치 마련이 중요합니다.
+                  - listitem [ref=f3e651]:
+                    - generic [ref=f3e652]: "5."
+                    - generic [ref=f3e653]:
+                      - text: 제품 사양서를 기준으로 Yestrade 자가판정 또는 전문판정을 통해 전략물자 해당 여부를 최종 확인하십시오.
+                      - paragraph [ref=f3e654]: 전략물자로 분류될 경우 수출 허가 등 추가적인 절차가 필요하며, 미준수 시 법적 제재를 받을 수 있습니다.
+              - generic [ref=f3e655]:
+                - paragraph [ref=f3e660]: 참고 공식자료
+                - generic [ref=f3e661]:
+                  - link "미국 상무부 (U.S. Department of Commerce)" [ref=f3e662] [cursor=pointer]:
+                    - /url: https://www.commerce.gov/
+                  - link "미국 국제무역위원회 (U.S. International Trade Commission, USITC)" [ref=f3e667] [cursor=pointer]:
+                    - /url: https://www.usitc.gov/
+                  - link "미국 교통부 (U.S. Department of Transportation, DOT)" [ref=f3e672] [cursor=pointer]:
+                    - /url: https://www.transportation.gov/
+                  - link "미국 고속도로교통안전국 (National Highway Traffic Safety Administration, NHTSA)" [ref=f3e677] [cursor=pointer]:
+                    - /url: https://www.nhtsa.gov/
+                  - link "KOTRA (대한무역투자진흥공사)" [ref=f3e682] [cursor=pointer]:
+                    - /url: https://www.kotra.or.kr/
+                  - link "World Bank (세계은행)" [ref=f3e687] [cursor=pointer]:
+                    - /url: https://www.worldbank.org/
+                  - link "Yestrade (전략물자관리원)" [ref=f3e692] [cursor=pointer]:
+                    - /url: https://www.yestrade.go.kr/
+              - paragraph [ref=f3e700]: 본 판단은 KOTRA·K-SURE·KICOX 등 공공데이터와 인터넷 공식자료를 Gemini가 종합 분석하여 생성한 참고 의견입니다. 최종 수출 의사결정은 전문가 자문과 관계기관의 공식 확인을 거쳐야 합니다. · 생성 2026. 7. 23.
+      - complementary [ref=f3e701]:
+        - generic [ref=f3e702]:
+          - generic [ref=f3e703]: 근거 패널
+          - button "근거 패널 접기" [ref=f3e704] [cursor=pointer]
+        - generic [ref=f3e706]:
+          - heading "출처" [level=3] [ref=f3e707]
+          - generic [ref=f3e708]:
+            - paragraph [ref=f3e709]: 분석 기준 코드
+            - paragraph [ref=f3e710]: "제품명: 타이어"
+            - paragraph [ref=f3e711]: HS 401110 / HSK 4011100000
+            - paragraph [ref=f3e712]: "적용 방식: 검색 결과 1순위 자동 반영 (95)"
+            - paragraph [ref=f3e713]: "상태: 신뢰도 높음 / 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+          - list [ref=f3e714]:
+            - listitem [ref=f3e715]:
+              - generic [ref=f3e716]:
+                - generic "출처 KOTRA" [ref=f3e717]: KOTRA
+                - paragraph [ref=f3e718]: 점수 반영
+                - link "민들레로 타이어를? 美, 자동차 소재 혁신에 주목" [ref=f3e719] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=201242
+                - paragraph [ref=f3e725]: 민들레 추출 고무로 타이어를 만들고 파인애플 잎사귀로 차량 시트를 만드는 시대가 도래했다. 기후변화에 따른 탄소 감축이 화두인 시대, 자동차 업계의 탄소 감축을 위한 소재 혁신은 계속되고 있다. 자동차 업계의 생태계 전환은 내연기관에서 전기차 시대로의 전환뿐만이 아닌 차량 동력에서 소재까지 아우르는 변화로 확장되고 있다.
+            - listitem [ref=f3e726]:
+              - generic [ref=f3e727]:
+                - generic "출처 KOTRA" [ref=f3e728]: KOTRA
+                - paragraph [ref=f3e729]: 시장 배경
+                - link "미국, 캘리포니아주도 연방정부도 수소 투자엔 '신중 모드'" [ref=f3e730] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242584
+                - paragraph [ref=f3e736]: 최근 미국 캘리포니아주와 연방정부는 전력망용 대규모 수소 투자에 신중론을 펼치며 천연가스 기반 인프라 안정성에 무게를 두는 추세를 보이고 있다. 미국 시장을 검토하는 한국 기업은 지역별 자금 조달 여건과 세액공제 일정을 점검하는 한편 시장별 인프라 성숙도에 맞춘 투트랙 전략을 취할 필요가 있다.
+            - listitem [ref=f3e737]:
+              - generic [ref=f3e738]:
+                - generic "출처 KOTRA" [ref=f3e739]: KOTRA
+                - paragraph [ref=f3e740]: 시장 배경
+                - link "[기고] 미국 법인 없이 수출하는 한국 기업, 미국 세관은 무엇을 요구하나" [ref=f3e741] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242753
+                - paragraph [ref=f3e747]: 2026년 6월 3일 미국 트럼프 행정부의 관세집행강화 행정명령으로 강화되는 수입자 규제를 살펴보고, 한국 수출기업이 준비해야 할 사항을 알아본다.
+            - listitem [ref=f3e748]:
+              - generic [ref=f3e749]:
+                - generic "출처 KOTRA" [ref=f3e750]: KOTRA
+                - paragraph [ref=f3e751]: 시장 배경
+                - link "AI 로봇이 이끄는 미국 제조업의 스마트공장 전환" [ref=f3e752] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242817
+                - paragraph [ref=f3e758]: 미국 제조업은 인력 부족과 생산성 향상 필요성에 대응해 AI 로봇 기반 스마트공장 전환을 확대하고 있다. 활용 분야도 품질검사, 위험설비 점검, 조립, 유지보수 등으로 넓어지고 있으나, 중소기업을 중심으로 투자비와 전문인력 부족, 기존 설비와의 연계 문제가 남아 있다. 향후 경쟁력은 로봇 도입 자체보다 데이터 연계와 공정 통합 역량에 달릴 전망이다.
+            - listitem [ref=f3e759]:
+              - generic [ref=f3e760]:
+                - generic "출처 KOTRA" [ref=f3e761]: KOTRA
+                - paragraph [ref=f3e762]: 시장 배경
+                - link "美 뉴욕∙뉴저지 항만청 450억 달러 투자, 교통 인프라 지형 바꾼다" [ref=f3e763] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242672
+                - paragraph [ref=f3e769]: 뉴욕·뉴저지 항만청은 2026~2035년 450억 달러 규모의 자본계획을 통해 공항, 철도, 버스터미널, 교량 등 핵심 인프라를 AI·디지털·친환경 중심으로 현대화한다. JFK·뉴왁공항과 PATH, 미드타운 버스터미널 등을 개선해 물류 경쟁력을 높이고, 5만 개 이상의 일자리 창출과 지역경제 활성화를 기대한다. 국내 기업에는 스마트 교통·보안·친환경 인프라 분야의 북미 진출 기회가 확대될 전망이다.
+            - listitem [ref=f3e770]:
+              - generic [ref=f3e771]:
+                - generic "출처 KOTRA" [ref=f3e772]: KOTRA
+                - paragraph [ref=f3e773]: 시장 배경
+                - link "미국 교육환경의 변화와 디지털 학습 활용 방식 재편" [ref=f3e774] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242470
+                - paragraph [ref=f3e780]: 미국 로스앤젤레스 통합교육구(LAUSD)가 팬데믹 이후 급증한 학생들의 스크린 사용 문제에 대응하기 위해 초등 저학년을 중심으로 교내 스크린타임을 제한하는 정책을 도입했다. 이번 조치는 미국 교육정책이 디지털 확산 중심에서 학습 효과와 발달 균형을 중시하는 방향으로 전환되고 있음을 보여주며, 에듀테크 산업에도 새로운 변화 요인으로 작용할 전망이다.
+            - listitem [ref=f3e781]:
+              - generic [ref=f3e782]:
+                - generic "출처 KOTRA" [ref=f3e783]: KOTRA
+                - paragraph [ref=f3e784]: 시장 배경
+                - link "중미 최대 타이어 및 자동차부품 박람회 'Latin Tire & Autoparts Expo 2025'" [ref=f3e785] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=232102
+                - paragraph [ref=f3e791]: 7월 9일부터 11일까지 3일간 개최된 중미 최대 타이어 및 자동차 부품 전시회 Latin Tire & Autoparts Expo 2025는 42개국 650개사가 참가하였다. 올해 전시회는 윤활유 기업의 성장이 주목할만 했다. KOTRA 파나마무역관은 수출상담관을 설치하여 13개 국내기업 제품을 홍보하고 대리 상담을 진행하였다.
+            - listitem [ref=f3e792]:
+              - generic [ref=f3e793]:
+                - generic "출처 KOTRA" [ref=f3e794]: KOTRA
+                - paragraph [ref=f3e795]: 시장 배경
+                - link "2025년 이탈리아 자동차 부품 산업 정보" [ref=f3e796] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=229622
+                - paragraph [ref=f3e802]: 이탈리아 자동차부품산업은 북부 지역을 중심으로 유럽 주요국과 긴밀한 공급망을 형성하고 있다. 전기차 및 고부가 부품 수요에 대응하며 기술 중심 중소기업 중심의 산업구조가 고도화되고 있으며, 내연기관 차량 기반의 AS 부품 수요도 지속돼 산업 전반의 안정성을 뒷받침하고 있다. 이에 이탈리아 자동차부품산업의 특성을 확인하고 한국 기업의 진출 방안을 모색해 보고자 한다.
+            - listitem [ref=f3e803]:
+              - generic [ref=f3e804]:
+                - generic "출처 KOTRA" [ref=f3e805]: KOTRA
+                - paragraph [ref=f3e806]: 시장 배경
+                - link "베트남 타이어 산업의 미래는?" [ref=f3e807] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=222156
+                - paragraph [ref=f3e813]: 베트남의 타이어는 주로 자동차용, 오토바이용, 트럭 및 버스 타이어용으로 나뉜다. 오토바이는 베트남의 일상적인 교통수단으로서 꾸준히 높은 수요를 보이고 있으며, 중산층이 확대됨에 따라 개인 소유 자동차에 대한 수요 또한 증가하고 있다.
+            - listitem [ref=f3e814]:
+              - generic [ref=f3e815]:
+                - generic "출처 KOTRA" [ref=f3e816]: KOTRA
+                - link "matched 1" [ref=f3e817] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+            - listitem [ref=f3e823]:
+              - generic [ref=f3e824]:
+                - generic "출처 KOTRA" [ref=f3e825]: KOTRA
+                - link "젣 matched 4" [ref=f3e826] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+            - listitem [ref=f3e832]:
+              - generic [ref=f3e833]:
+                - generic "출처 기타" [ref=f3e834]: 기타
+                - generic [ref=f3e835]: 최근 12개월 HS/HSK 기준 수출액 / 원문 링크 없음
+                - paragraph [ref=f3e836]: 최근 12개월 HS/HSK 기준 수출액 $406.7M
+          - generic [ref=f3e837]:
+            - paragraph [ref=f3e838]: AI 상태
+            - generic [ref=f3e839]: 대기
+    - generic [ref=f3e841]:
+      - button "후보군으로" [ref=f3e842] [cursor=pointer]
+      - button "리포트로 안전성 검토로" [ref=f3e843] [cursor=pointer]:
+        - generic [ref=f3e844]: 리포트로
+        - text: 안전성 검토로

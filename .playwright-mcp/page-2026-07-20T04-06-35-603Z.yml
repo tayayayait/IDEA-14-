@@ -1,0 +1,124 @@
+- generic [ref=f39e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f39e212]:
+    - banner [ref=f39e213]:
+      - link "홈" [ref=f39e215] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f39e220]: 산단수출 코파일럿
+      - generic [ref=f39e221]:
+        - link "프로젝트" [ref=f39e222] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f39e223] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f39e224] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f39e226] [cursor=pointer]
+    - generic [ref=f39e228]:
+      - complementary [ref=f39e229]:
+        - paragraph [ref=f39e230]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f39e231]:
+          - link "1단계 기업·공장 검색" [ref=f39e232] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/company
+            - generic [ref=f39e233]: "1"
+            - generic [ref=f39e234]:
+              - generic [ref=f39e235]: 기업·공장 검색
+              - generic [ref=f39e236]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f39e237] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/product
+            - generic [ref=f39e238]: "2"
+            - generic [ref=f39e239]:
+              - generic [ref=f39e240]: 제품·HS 코드
+              - generic [ref=f39e241]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f39e242] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/countries
+            - generic [ref=f39e243]: "3"
+            - generic [ref=f39e244]:
+              - generic [ref=f39e245]: 후보국 추천 Top 3
+              - generic [ref=f39e246]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f39e247] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/countries
+            - generic [ref=f39e248]: "4"
+            - generic [ref=f39e249]:
+              - generic [ref=f39e250]: 국가 상세
+              - generic [ref=f39e251]: 요구사항 4~7
+              - generic [ref=f39e252]: 국가 선택 필요
+          - link "5단계 리포트" [ref=f39e253] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/report
+            - generic [ref=f39e254]: "5"
+            - generic [ref=f39e255]:
+              - generic [ref=f39e256]: 리포트
+              - generic [ref=f39e257]: 요구사항 8
+      - main [ref=f39e258]:
+        - generic [ref=f39e259]:
+          - generic [ref=f39e260]:
+            - paragraph [ref=f39e261]: 기획 요구사항 매핑
+            - paragraph [ref=f39e262]: 요구사항 1
+            - paragraph [ref=f39e263]: 기업·공장 기본 정보 수집
+          - generic [ref=f39e264]:
+            - heading "1. 기업·공장 검색" [level=1] [ref=f39e265]
+            - paragraph [ref=f39e266]: 산업단지 입주기업을 검색하거나 직접 입력합니다.
+          - generic [ref=f39e267]:
+            - generic [ref=f39e268]:
+              - heading "KICOX 검색" [level=3] [ref=f39e269]
+              - paragraph [ref=f39e270]: 검색 조건 1개 이상, 텍스트 조건은 2자 이상 입력해야 조회됩니다.
+            - generic [ref=f39e271]:
+              - generic [ref=f39e272]:
+                - 'textbox "회사명 (예: ○○산업)" [ref=f39e273]'
+                - 'textbox "산단명 (예: 반월시화)" [ref=f39e274]'
+                - 'textbox "공장관리번호 (예: 115452009184637)" [ref=f39e275]'
+                - 'textbox "생산품 키워드 (예: 모터, 센서)" [ref=f39e276]'
+                - generic [ref=f39e277]:
+                  - text: 지역
+                  - combobox "지역 선택" [ref=f39e278] [cursor=pointer]
+                - generic [ref=f39e281]:
+                  - button "검색 실행" [ref=f39e282] [cursor=pointer]
+                  - button "조건 초기화" [ref=f39e283] [cursor=pointer]
+              - generic [ref=f39e284]:
+                - paragraph [ref=f39e285]: 선택 요약
+                - paragraph [ref=f39e286]: 아직 선택/입력된 기업 정보가 없습니다.
+          - generic [ref=f39e287]:
+            - generic [ref=f39e288]:
+              - heading "기업 정보" [level=3] [ref=f39e289]
+              - paragraph [ref=f39e294]: 검색 결과를 채우거나 직접 입력해 주세요.
+            - generic [ref=f39e295]:
+              - generic [ref=f39e296]:
+                - generic [ref=f39e297]: 회사명*
+                - textbox [ref=f39e298]
+              - generic [ref=f39e299]:
+                - text: 산단명
+                - textbox [ref=f39e300]
+              - generic [ref=f39e301]:
+                - text: 공장관리번호
+                - textbox [ref=f39e302]
+              - generic [ref=f39e303]:
+                - text: 주소
+                - textbox [ref=f39e304]
+              - generic [ref=f39e305]:
+                - text: 지역
+                - textbox [ref=f39e306]
+              - generic [ref=f39e307]:
+                - text: 업종 코드
+                - textbox [ref=f39e308]
+              - generic [ref=f39e309]:
+                - text: 주요 생산품
+                - textbox [ref=f39e310]
+              - generic [ref=f39e311]:
+                - text: 종업원 수
+                - spinbutton [ref=f39e312]
+      - complementary [ref=f39e313]:
+        - generic [ref=f39e314]:
+          - generic [ref=f39e315]: 근거 패널
+          - button "근거 패널 접기" [ref=f39e316] [cursor=pointer]
+        - generic [ref=f39e318]:
+          - heading "근거 · 출처" [level=3] [ref=f39e319]
+          - paragraph [ref=f39e320]: 기업 정보는 한국산업단지공단 입주기업 OpenAPI(KICOX)에서 조회합니다. 검색 결과가 없으면 직접 입력해 진행할 수 있으며, 입력값에는 ‘사용자 입력’ 배지가 붙습니다.
+          - generic [ref=f39e321]:
+            - paragraph [ref=f39e322]: 조회 상태
+            - generic [ref=f39e323]:
+              - generic [ref=f39e324]: 대기
+              - generic "사용자 입력" [ref=f39e325]
+    - generic [ref=f39e327]:
+      - button "취소" [ref=f39e328] [cursor=pointer]
+      - button "저장 후 다음 단계" [disabled]

@@ -1,0 +1,114 @@
+- generic [ref=f50e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f50e130]:
+    - banner [ref=f50e131]:
+      - link "홈" [ref=f50e133] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f50e138]: 산단수출 코파일럿
+      - generic [ref=f50e139]:
+        - link "프로젝트" [ref=f50e140] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f50e141] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f50e142] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f50e144] [cursor=pointer]
+    - generic [ref=f50e146]:
+      - complementary [ref=f50e147]:
+        - paragraph [ref=f50e148]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f50e149]:
+          - link "1단계 기업·공장 검색" [ref=f50e150] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/company
+            - generic [ref=f50e154]:
+              - generic [ref=f50e155]: 기업·공장 검색
+              - generic [ref=f50e156]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f50e157] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/product
+            - generic [ref=f50e158]: "2"
+            - generic [ref=f50e159]:
+              - generic [ref=f50e160]: 제품·HS 코드
+              - generic [ref=f50e161]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f50e162] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/countries
+            - generic [ref=f50e163]: "3"
+            - generic [ref=f50e164]:
+              - generic [ref=f50e165]: 후보국 추천 Top 3
+              - generic [ref=f50e166]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f50e167] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/countries/US
+            - generic [ref=f50e168]: "4"
+            - generic [ref=f50e169]:
+              - generic [ref=f50e170]: 국가 상세
+              - generic [ref=f50e171]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f50e172] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/report
+            - generic [ref=f50e173]: "5"
+            - generic [ref=f50e174]:
+              - generic [ref=f50e175]: 리포트
+              - generic [ref=f50e176]: 요구사항 8
+      - main [ref=f50e177]:
+        - generic [ref=f50e178]:
+          - generic [ref=f50e179]:
+            - paragraph [ref=f50e180]: 기획 요구사항 매핑
+            - paragraph [ref=f50e181]: 요구사항 2
+            - paragraph [ref=f50e182]: 제품/HS·HSK 코드 확정
+          - generic [ref=f50e183]:
+            - heading "2. 제품·HS 코드" [level=1] [ref=f50e184]
+            - paragraph [ref=f50e185]: 제품 정보를 입력하면 관세청 공식 코드표에서 HS/HSK 후보를 검색합니다. 확정 토글로 분석에 사용할 코드를 선택하세요.
+          - generic [ref=f50e186]:
+            - generic [ref=f50e187]:
+              - heading "제품 정보" [level=3] [ref=f50e188]
+              - paragraph [ref=f50e189]: 핵심 부품·소재·용도를 함께 적으면 정확도가 높아집니다.
+            - generic [ref=f50e190]:
+              - generic [ref=f50e191]:
+                - generic [ref=f50e192]: 제품명 *
+                - textbox "예) 전기차용 BLDC 모터" [ref=f50e193]
+                - paragraph [ref=f50e194]: 제품명을 1개 품목으로 입력하면 HS·HSK 후보 정확도가 높아집니다.
+              - generic [ref=f50e195]:
+                - text: 모델명
+                - textbox "예) BLDC-MTR-3000" [ref=f50e196]
+              - generic [ref=f50e197]:
+                - text: 목표 시장 메모
+                - textbox "예) 동남아 OEM 공급, 1차 베트남·인도네시아 우선" [ref=f50e198]
+              - generic [ref=f50e199]:
+                - generic [ref=f50e200]:
+                  - generic [ref=f50e201]: 제품 설명 *
+                  - button "AI 설명 초안 작성" [disabled]
+                - textbox "용도, 정격 출력, 소재, 인증, 응용 분야 등 (20~1000자)" [ref=f50e202]
+                - paragraph [ref=f50e203]: 0/1000자
+              - generic [ref=f50e204]:
+                - text: 주요 부품/소재
+                - generic [ref=f50e205]:
+                  - textbox "태그 입력" [ref=f50e206]:
+                    - /placeholder: 부품/소재 입력 후 Enter (최대 20개)
+                  - paragraph [ref=f50e207]: 0/20개, 태그당 최대 30자
+              - button "공식 데이터 기반 후보 검색" [ref=f50e208] [cursor=pointer]
+          - generic [ref=f50e209]:
+            - heading "확정 코드" [level=3] [ref=f50e211]
+            - generic [ref=f50e212]:
+              - generic [ref=f50e213]:
+                - text: HS
+                - textbox "예) 850140" [ref=f50e214]
+                - paragraph [ref=f50e215]: 숫자 6~10자리
+              - generic [ref=f50e216]:
+                - text: HSK
+                - textbox "예) 8501401010" [ref=f50e217]
+                - paragraph [ref=f50e218]: 숫자 6~10자리
+              - generic [ref=f50e219] [cursor=pointer]:
+                - checkbox "분석에 이 코드를 사용한다 (확정)" [ref=f50e220]
+                - generic [ref=f50e221]: 분석에 이 코드를 사용한다 (확정)
+      - complementary [ref=f50e222]:
+        - generic [ref=f50e223]:
+          - generic [ref=f50e224]: 근거 패널
+          - button "근거 패널 접기" [ref=f50e225] [cursor=pointer]
+        - generic [ref=f50e227]:
+          - heading "근거 · 출처" [level=3] [ref=f50e228]
+          - paragraph [ref=f50e229]: HS·HSK 후보는 관세청 공식 코드 데이터(HS부호/표준품명)에서 검색한 결과를 기준으로 정렬해 제시합니다. AI는 후보 재정렬과 요약 근거 보조에만 사용됩니다.
+          - generic [ref=f50e230]:
+            - paragraph [ref=f50e231]: HS 후보 검색 상태
+            - generic [ref=f50e232]: 대기
+    - generic [ref=f50e234]:
+      - button "이전" [ref=f50e235] [cursor=pointer]
+      - button "확인 필요 상태로 진행" [disabled]

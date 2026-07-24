@@ -40,6 +40,20 @@ import {
   normalizeImportRegulationCacheStatus,
   KOTRA_IMPORT_REGULATION_DEFAULT_STALE_DAYS,
 } from "../_shared/kotra-import-regulation-cache.ts";
+import {
+  buildBaselineDecisionFacts,
+  fetchCustomsHeadConfirmation,
+  fetchKostiStrategicHsk,
+  fetchKoreaEximExchange,
+  fetchSeaExportFreight,
+  fetchUsitcHts,
+  fetchWorldBankLpi,
+  fetchUnComtradeMarket,
+  fetchWitsTariff,
+  type CountryDecisionContext,
+  type DecisionFactInput,
+  type ProviderStatus,
+} from "../_shared/country-decision-providers.ts";
 
 const KOTRA_MARKET_NEWS_ENDPOINT =
   "https://apis.data.go.kr/B410001/kotra_overseasMarketNews/ovseaMrktNews/ovseaMrktNews";
@@ -404,8 +418,12 @@ Deno.serve(async (req) => {
 
     const { data: userData } = await supa.auth.getUser();
     if (!userData.user) return json({ error: "unauthorized" }, 401);
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const serviceSupa = serviceRoleKey
+      ? createClient(Deno.env.get("SUPABASE_URL")!, serviceRoleKey)
+      : null;
 
-    const [{ data: countryRow }, { data: productRow }, { data: companyRow }] = await Promise.all([
+    const [{ data: countryRow }, { data: productRow }, { data: companyRow }, { data: safetyRows }] = await Promise.all([
       supa
         .from("project_countries")
         .select("country_name, rationale")
@@ -414,7 +432,7 @@ Deno.serve(async (req) => {
         .maybeSingle(),
       supa
         .from("project_products")
-        .select("name, hs_code, hsk_code, description, components")
+        .select("id, name, hs_code, hsk_code, description, components")
         .eq("project_id", projectId)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -424,9 +442,15 @@ Deno.serve(async (req) => {
         .select("industry_code")
         .eq("project_id", projectId)
         .maybeSingle(),
+      supa
+        .from("project_safety_flags")
+        .select("flag_type, severity, summary, recommended_action, source_url, source_org, raw, created_at")
+        .eq("project_id", projectId)
+        .eq("flag_type", "strategic"),
     ]);
 
     const countryName = asText(countryRow?.country_name) || countryCode;
+    const productId = asText(productRow?.id);
     const productName = asText(productRow?.name);
     const hsCode = normalizeHsCode(asText(productRow?.hs_code));
     const hskCode = normalizeHskCode(asText(productRow?.hsk_code));
@@ -442,12 +466,47 @@ Deno.serve(async (req) => {
 
     const kotraKey = resolveKotraKey();
     const ksureKey = resolveKsureKey();
+    const publicDataKey = resolvePublicDataKey();
+    const comtradeKey = normalizeAuthKeyValue(Deno.env.get("UN_COMTRADE_API_KEY") || "");
+    const koreaEximKey = normalizeAuthKeyValue(Deno.env.get("KOREAEXIM_AUTH_KEY") || "");
 
-    await Promise.all([
-      supa.from("project_certifications").delete().eq("project_id", projectId).eq("country_code", countryCode),
-      supa.from("project_regulations").delete().eq("project_id", projectId).eq("country_code", countryCode),
-      supa.from("project_risks").delete().eq("project_id", projectId).eq("country_code", countryCode),
-    ]);
+    if (!productId || !productName || !hsCode || !hskCode) {
+      return json({
+        error: "Step 4 분석에는 제품명, HS6, HSK10이 필요합니다.",
+        missing_fields: [
+          !productId || !productName ? "product_name" : "",
+          !hsCode ? "hs6" : "",
+          !hskCode ? "hsk10" : "",
+        ].filter(Boolean),
+      }, 422);
+    }
+
+    const countryDecisionContext: CountryDecisionContext = {
+      countryCode,
+      countryName,
+      productName,
+      hs6: hsCode,
+      hsk10: hskCode,
+    };
+
+    const { data: analysisRunRow } = await supa
+      .from("country_analysis_runs")
+      .insert({
+        project_id: projectId,
+        product_id: productId,
+        user_id: userData.user.id,
+        country_code: countryCode,
+        status: "running",
+        input_json: {
+          country_code: countryCode,
+          product_name: productName,
+          hs6: hsCode,
+          hsk10: hskCode,
+        },
+        provider_statuses: [],
+      })
+      .select("id")
+      .maybeSingle();
 
     const detailContext: DetailContext = {
       countryCode,
@@ -470,6 +529,14 @@ Deno.serve(async (req) => {
       ksurePaymentResult,
       newsResult,
       nationalInfoResult,
+      customsConfirmationResult,
+      comtradeResult,
+      witsTariffResult,
+      exchangeResult,
+      kostiHskResult,
+      seaFreightResult,
+      worldBankLpiResult,
+      usitcHtsResult,
     ] =
       await Promise.all([
         fetchKotraOverseasCertInfo(detailContext, kotraKey),
@@ -479,7 +546,34 @@ Deno.serve(async (req) => {
         fetchKsureExportPayment({ countryCode }, ksureKey),
         fetchKotraMarketNews({ countryCode, countryName }, kotraKey),
         fetchKotraNationalInfo(countryCode, kotraKey),
+        fetchCustomsHeadConfirmation(countryDecisionContext, publicDataKey),
+        fetchUnComtradeMarket(countryDecisionContext, comtradeKey),
+        fetchWitsTariff(countryDecisionContext),
+        fetchKoreaEximExchange(countryDecisionContext, koreaEximKey),
+        fetchKostiStrategicHsk(countryDecisionContext, publicDataKey),
+        fetchSeaExportFreight(countryDecisionContext, publicDataKey),
+        fetchWorldBankLpi(countryDecisionContext),
+        fetchUsitcHts(countryDecisionContext),
       ]);
+
+    if (serviceSupa) {
+      await syncExternalDatasetVersions(serviceSupa, [
+        {
+          sourceKey: "kosti_hsk",
+          sourceName: "무역안보관리원 HSK 연계표",
+          sourceUrl: "https://www.data.go.kr/data/15034135/fileData.do",
+          status: kostiHskResult.status,
+          facts: kostiHskResult.facts,
+        },
+        {
+          sourceKey: "kcs_sea_export_freight",
+          sourceName: "관세청 해상수출 운송비용",
+          sourceUrl: "https://www.data.go.kr/data/15116850/fileData.do",
+          status: seaFreightResult.status,
+          facts: seaFreightResult.facts,
+        },
+      ]);
+    }
 
     const selectedNewsEvidence = classifyAndSelectNewsEvidence({
       items: newsResult.items,
@@ -565,10 +659,17 @@ Deno.serve(async (req) => {
       });
     }
 
-    console.log("=== Inserting certRows:", certRows.length);
-    const { error: certInsertError } = await supa.from("project_certifications").insert(certRows);
-    if (certInsertError) {
-      console.error("=== Cert Insert Error:", certInsertError);
+    if (certResult.ok) {
+      const certReplace = await replaceLegacyDetailRows({
+        supa,
+        table: "project_certifications",
+        rows: certRows,
+        projectId,
+        countryCode,
+      });
+      if (!certReplace.ok) {
+        console.error("KOTRA certification persistence failed", certReplace.message);
+      }
     }
 
     const regulationRows: Array<Record<string, unknown>> = [];
@@ -654,7 +755,18 @@ Deno.serve(async (req) => {
         },
       });
     }
-    await supa.from("project_regulations").insert(regulationRows);
+    if (regulationResult.ok && regulationResult.detailState !== "stale") {
+      const regulationReplace = await replaceLegacyDetailRows({
+        supa,
+        table: "project_regulations",
+        rows: regulationRows,
+        projectId,
+        countryCode,
+      });
+      if (!regulationReplace.ok) {
+        console.error("KOTRA regulation persistence failed", regulationReplace.message);
+      }
+    }
 
     const riskRows: Array<Record<string, unknown>> = [];
     if (ksureResult.ok) {
@@ -889,9 +1001,196 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (riskRows.length > 0) {
-      await supa.from("project_risks").insert(riskRows);
+    const replaceableRiskCategories = [
+      ksureResult.ok ? "k_sure" : "",
+      ksureIndustryResult.ok ? "k_sure_industry" : "",
+      ksurePaymentResult.ok ? "k_sure_payment" : "",
+      newsResult.ok ? "news" : "",
+    ].filter(Boolean);
+    const persistableRiskRows = riskRows.filter((row) =>
+      replaceableRiskCategories.includes(asText(row.category))
+    );
+    if (persistableRiskRows.length > 0) {
+      const riskReplace = await replaceLegacyDetailRows({
+        supa,
+        table: "project_risks",
+        rows: persistableRiskRows,
+        projectId,
+        countryCode,
+        categories: replaceableRiskCategories,
+      });
+      if (!riskReplace.ok) {
+        console.error("K-SURE/news persistence failed", riskReplace.message);
+      }
     }
+
+    const providerStatuses: ProviderStatus[] = [
+      toProviderStatus("kotra_certification", "KOTRA 해외인증", certResult.ok, certResult.items.length, certResult.message),
+      {
+        key: "kotra_import_regulation",
+        label: "KOTRA 수입규제",
+        state: regulationResult.detailState === "success"
+          ? "success"
+          : regulationResult.detailState === "empty"
+            ? "empty"
+            : "error",
+        itemCount: regulationItems.length + regulationReviewItems.length,
+        message: regulationResult.message,
+        fetchedAt: new Date().toISOString(),
+      },
+      toProviderStatus("ksure_country", "K-SURE 국가위험", ksureResult.ok, ksureResult.item ? 1 : 0, ksureResult.message),
+      toProviderStatus("ksure_industry", "K-SURE 업종위험", ksureIndustryResult.ok, ksureIndustryResult.items.length, ksureIndustryResult.message),
+      toProviderStatus("ksure_payment", "K-SURE 결제위험", ksurePaymentResult.ok, ksurePaymentResult.item ? 1 : 0, ksurePaymentResult.message),
+      toProviderStatus("kotra_national_info", "KOTRA 국가정보", nationalInfoResult.ok, nationalInfoResult.item ? 1 : 0, nationalInfoResult.message),
+      customsConfirmationResult.status,
+      comtradeResult.status,
+      witsTariffResult.status,
+      exchangeResult.status,
+      kostiHskResult.status,
+      seaFreightResult.status,
+      worldBankLpiResult.status,
+      usitcHtsResult.status,
+    ];
+
+    const decisionFacts: DecisionFactInput[] = [
+      ...buildBaselineDecisionFacts(countryDecisionContext),
+      ...customsConfirmationResult.facts,
+      ...comtradeResult.facts,
+      ...witsTariffResult.facts,
+      ...exchangeResult.facts,
+      ...kostiHskResult.facts,
+      ...seaFreightResult.facts,
+      ...worldBankLpiResult.facts,
+      ...usitcHtsResult.facts,
+    ];
+
+    if (certResult.ok) {
+      decisionFacts.push({
+        factKey: "certification:kotra",
+        category: "certification",
+        status: certResult.items.length > 0
+          ? (certResult.matchStrategy === "country_hs_product" ? "confirmed" : "needs_verification")
+          : "needs_verification",
+        severity: certResult.items.length > 0 ? "caution" : "info",
+        summary: certResult.items.length > 0
+          ? `KOTRA 해외인증 후보 ${certResult.items.length}건을 확인했습니다.`
+          : "국가·HS·제품명 기준 해외인증 직접 일치 결과가 없습니다.",
+        value: {
+          resultCount: certResult.items.length,
+          matchStrategy: certResult.matchStrategy,
+          systems: certResult.items.slice(0, 10).map((item) => ({
+            name: item.systName || item.nttSj,
+            hsCode: item.hscd,
+            institution: item.crtfcInsttCn,
+            requiredDocuments: item.needPapersCn,
+          })),
+        },
+        scope: certResult.matchStrategy === "country_hs_product" ? "hs6" : "product_name",
+        sourceName: "KOTRA 해외인증정보",
+        sourceUrl: KOTRA_OVERSEAS_AUTH_PAGE,
+        referenceDate: certResult.items[0]?.othbcDt || certResult.items[0]?.regDt || null,
+        caveat: certResult.items.length === 0
+          ? "0건은 인증이 불필요하다는 의미가 아닙니다."
+          : "제품 용도·무선 기능·전기 사양에 따라 실제 적용 인증이 달라질 수 있습니다.",
+        nextAction: "현지 인증기관 또는 KOTRA 무역관에 제품 사양서를 제시하고 적용 여부를 확인하세요.",
+        fetchedAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1_000).toISOString(),
+      });
+    }
+
+    if (regulationResult.ok && regulationResult.detailState !== "stale") {
+      const regulationCount = regulationItems.length + regulationReviewItems.length;
+      decisionFacts.push({
+        factKey: "import_regulation:kotra",
+        category: "import_regulation",
+        status: regulationItems.length > 0
+          ? "confirmed"
+          : regulationReviewItems.length > 0
+            ? "needs_verification"
+            : "needs_verification",
+        severity: regulationCount > 0 ? "caution" : "info",
+        summary: regulationCount > 0
+          ? `KOTRA 수입규제 직접 일치 ${regulationItems.length}건, 검토 후보 ${regulationReviewItems.length}건을 확인했습니다.`
+          : "한국산 해당 HS 기준 수입규제 직접 일치 결과가 없습니다.",
+        value: {
+          confirmedCount: regulationItems.length,
+          reviewCount: regulationReviewItems.length,
+          items: [...regulationItems, ...regulationReviewItems].slice(0, 20),
+        },
+        scope: "hs6",
+        sourceName: "KOTRA 수입규제정보",
+        sourceUrl: regulationResult.sourceUrl ?? KOTRA_IMPORT_REGULATION_PAGE,
+        referenceDate: regulationResult.cacheMeta?.cache_last_success_at ?? null,
+        caveat: regulationCount === 0
+          ? "0건은 목적국의 모든 수입규제·기술규제가 없다는 의미가 아닙니다."
+          : "검토 후보는 HS·제품명 유사 결과이므로 기관 원문 확인이 필요합니다.",
+        nextAction: "목적국 세부코드와 제품 용도를 기준으로 현지 수입자·관세사에게 확인하세요.",
+        fetchedAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1_000).toISOString(),
+      });
+    }
+
+    if (ksureResult.ok || ksurePaymentResult.ok) {
+      const paymentItem = ksurePaymentResult.item;
+      decisionFacts.push({
+        factKey: "payment_risk:ksure",
+        category: "payment_risk",
+        status: ksureResult.item || paymentItem
+          ? (ksurePaymentResult.scope === "global" ? "estimated" : "confirmed")
+          : "needs_verification",
+        severity: paymentItem && mapKsurePaymentRiskLevel(paymentItem, ksurePaymentResult.scope) === "high"
+          ? "caution"
+          : "info",
+        summary: paymentItem
+          ? buildKsurePaymentSummary(paymentItem, ksurePaymentResult.scope)
+          : ksureResult.item
+            ? buildKsureSummary(ksureResult.item)
+            : "K-SURE 국가·결제 직접 일치 결과가 없습니다.",
+        value: {
+          countryGrade: ksureResult.item?.evalGrd ?? null,
+          countryGradeDate: ksureResult.item?.evalDd ?? null,
+          paymentScope: ksurePaymentResult.scope,
+          payment: paymentItem ? buildKsurePaymentRaw(paymentItem, ksurePaymentResult.scope) : null,
+        },
+        scope: "country",
+        sourceName: "K-SURE 국가·결제위험",
+        sourceUrl: KSURE_EXPORT_PAYMENT_PAGE,
+        referenceDate: paymentItem?.lastUpdateDate || ksureResult.item?.evalDd || null,
+        caveat: ksurePaymentResult.scope === "global"
+          ? "전세계 결제 참고자료이며 선택 국가의 확정 통계가 아닙니다."
+          : "국가·업종 단위 참고자료이며 개별 구매자의 신용도를 의미하지 않습니다.",
+        nextAction: "선수금·신용장·무역보험 등 대금회수 조건을 검토하세요.",
+        fetchedAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1_000).toISOString(),
+      });
+    }
+
+    const strategicSafetyFact = buildStrategicSafetyFact(
+      Array.isArray(safetyRows) ? safetyRows : [],
+      countryDecisionContext,
+    );
+    if (strategicSafetyFact) {
+      decisionFacts.push(strategicSafetyFact);
+    }
+
+    const failedSourceNames = resolveFailedDecisionSourceNames({
+      certOk: certResult.ok,
+      regulationOk: regulationResult.ok && regulationResult.detailState !== "stale",
+      ksureOk: ksureResult.ok || ksurePaymentResult.ok,
+      customsStatus: customsConfirmationResult.status.state,
+      comtradeStatus: comtradeResult.status.state,
+      witsStatus: witsTariffResult.status.state,
+      exchangeStatus: exchangeResult.status.state,
+    });
+    const decisionPersistence = await persistCountryDecision({
+      supa,
+      projectId,
+      productId,
+      userId: userData.user.id,
+      countryCode,
+      facts: decisionFacts,
+      failedSourceNames,
+    });
 
     const existingRationale = asRecord(countryRow?.rationale);
     const certDetailState = resolveDetailState(certResult.ok, certResult.items.length);
@@ -1075,7 +1374,11 @@ Deno.serve(async (req) => {
       ksureIndustryResult.ok &&
       ksureIndustryResult.items.length > 0 &&
       ksurePaymentResult.ok &&
-      !!ksurePaymentResult.item;
+      !!ksurePaymentResult.item &&
+      customsConfirmationResult.status.state !== "error" &&
+      comtradeResult.status.state !== "error" &&
+      witsTariffResult.status.state !== "error" &&
+      exchangeResult.status.state !== "error";
 
     let state: ApiState = isAllSuccessful ? "success" : "partial_success";
     const errorIssueLabels: string[] = [];
@@ -1106,6 +1409,20 @@ Deno.serve(async (req) => {
 
     if (!newsResult.ok) errorIssueLabels.push("해외시장 뉴스");
     else if (newsResult.items.length === 0) emptyIssueLabels.push("해외시장 뉴스");
+
+    for (const provider of [
+      customsConfirmationResult.status,
+      comtradeResult.status,
+      witsTariffResult.status,
+      exchangeResult.status,
+      worldBankLpiResult.status,
+      ...(countryCode === "US" ? [usitcHtsResult.status] : []),
+    ]) {
+      if (provider.state === "error") errorIssueLabels.push(provider.label);
+      else if (provider.state === "empty" || provider.state === "not_run") {
+        emptyIssueLabels.push(provider.label);
+      }
+    }
 
     if (errorIssueLabels.length === 0 && staleIssueLabels.length > 0 && state !== "success") {
       state = "stale";
@@ -1270,9 +1587,28 @@ Deno.serve(async (req) => {
         }
       : null;
 
+    const analysisStatus = errorIssueLabels.length > 0 ? "partial" : "complete";
+    if (analysisRunRow?.id) {
+      const { error: analysisRunUpdateError } = await supa
+        .from("country_analysis_runs")
+        .update({
+          status: analysisStatus,
+          provider_statuses: providerStatuses,
+          completed_at: new Date().toISOString(),
+        })
+        .eq("id", analysisRunRow.id);
+      if (analysisRunUpdateError) {
+        console.error("country analysis run completion update failed", analysisRunUpdateError.message);
+      }
+    }
+
     return json({
       state,
       message: userMessage,
+      analysis_run_id: analysisRunRow?.id ?? null,
+      decision_fact_count: decisionPersistence.factsWritten,
+      action_item_count: decisionPersistence.actionsWritten,
+      provider_statuses: providerStatuses,
       detail_incomplete: errorIssueLabels.length > 0,
       detail_incomplete_items: errorIssueLabels,
       detail_stale_items: staleIssueLabels,
@@ -1299,10 +1635,379 @@ Deno.serve(async (req) => {
   }
 });
 
+type AuthedSupabaseClient = ReturnType<typeof createClient>;
+
+async function syncExternalDatasetVersions(
+  supa: AuthedSupabaseClient,
+  datasets: Array<{
+    sourceKey: string;
+    sourceName: string;
+    sourceUrl: string;
+    status: ProviderStatus;
+    facts: DecisionFactInput[];
+  }>,
+): Promise<void> {
+  const rows = datasets
+    .filter((dataset) => dataset.status.state !== "not_run")
+    .map((dataset) => ({
+      source_key: dataset.sourceKey,
+      source_name: dataset.sourceName,
+      source_url: dataset.sourceUrl,
+      reference_date: dataset.facts.find((fact) => fact.referenceDate)?.referenceDate ?? null,
+      row_count: dataset.status.itemCount,
+      status: dataset.status.state === "error" ? "failed" : "active",
+      checked_at: dataset.status.fetchedAt,
+      metadata: {
+        provider_state: dataset.status.state,
+        provider_message: dataset.status.message,
+      },
+    }));
+  if (rows.length === 0) return;
+  const { error } = await supa
+    .from("external_dataset_versions")
+    .upsert(rows, { onConflict: "source_key" });
+  if (error) {
+    console.warn("external dataset version sync failed", {
+      message: error.message,
+      sourceKeys: rows.map((row) => row.source_key),
+    });
+  }
+}
+
+async function replaceLegacyDetailRows(params: {
+  supa: AuthedSupabaseClient;
+  table: "project_certifications" | "project_regulations" | "project_risks";
+  rows: Array<Record<string, unknown>>;
+  projectId: string;
+  countryCode: string;
+  categories?: string[];
+}): Promise<{ ok: boolean; message: string }> {
+  if (params.rows.length === 0) return { ok: true, message: "no rows" };
+  const { data: insertedRows, error: insertError } = await params.supa
+    .from(params.table)
+    .insert(params.rows)
+    .select("id");
+  if (insertError) return { ok: false, message: insertError.message };
+
+  const insertedIds = (Array.isArray(insertedRows) ? insertedRows : [])
+    .map((row) => asText(asRecord(row).id))
+    .filter(Boolean);
+  if (insertedIds.length === 0) {
+    return { ok: false, message: "inserted row identifiers were not returned" };
+  }
+
+  let deleteQuery = params.supa
+    .from(params.table)
+    .delete()
+    .eq("project_id", params.projectId)
+    .eq("country_code", params.countryCode)
+    .not("id", "in", `(${insertedIds.join(",")})`);
+  if (params.categories?.length) {
+    deleteQuery = deleteQuery.in("category", params.categories);
+  }
+  const { error: deleteError } = await deleteQuery;
+  return deleteError
+    ? { ok: false, message: deleteError.message }
+    : { ok: true, message: `replaced with ${insertedIds.length} rows` };
+}
+
+function toProviderStatus(
+  key: string,
+  label: string,
+  ok: boolean,
+  itemCount: number,
+  message: string,
+): ProviderStatus {
+  return {
+    key,
+    label,
+    state: ok ? (itemCount > 0 ? "success" : "empty") : "error",
+    itemCount,
+    message: truncate(message || (ok ? "정상 조회" : "조회 실패"), 300),
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
+function buildStrategicSafetyFact(
+  rows: unknown[],
+  context: CountryDecisionContext,
+): DecisionFactInput | null {
+  const row = rows
+    .map(asRecord)
+    .find((candidate) => asText(candidate.flag_type).toLowerCase() === "strategic");
+  if (!row) return null;
+  const raw = asRecord(row.raw);
+  const matchType = asText(raw.match_type);
+  const linked = matchType === "exact_hsk" || matchType === "prefix6_candidate";
+  if (!linked) return null;
+  return {
+    factKey: "strategic_goods:safety_hsk_candidate",
+    category: "strategic_goods",
+    status: "needs_verification",
+    severity: linked ? "caution" : "info",
+    summary: asText(row.summary) || "HSK 연계표상 전략물자 통제번호 후보가 확인됐습니다.",
+    value: {
+      hsk10: context.hsk10,
+      matchType: matchType || "none",
+      controlNumber: raw.control_number ?? raw.control_no ?? null,
+      sourceRow: raw,
+      finalClassification: null,
+    },
+    scope: matchType === "exact_hsk" ? "hsk10" : "hs6",
+    sourceName: asText(row.source_org) || "무역안보관리원 HSK 연계표",
+    sourceUrl: asText(row.source_url) || "https://yestrade.go.kr/",
+    referenceDate: asText(row.created_at) || null,
+    caveat: "HSK 연계 결과는 통제번호 후보이며 전략물자 최종판정이 아닙니다.",
+    nextAction: asText(row.recommended_action) || "Yestrade 자가판정 또는 전문판정을 진행하세요.",
+    fetchedAt: new Date().toISOString(),
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1_000).toISOString(),
+  };
+}
+
+function resolveFailedDecisionSourceNames(params: {
+  certOk: boolean;
+  regulationOk: boolean;
+  ksureOk: boolean;
+  customsStatus: string;
+  comtradeStatus: string;
+  witsStatus: string;
+  exchangeStatus: string;
+}): string[] {
+  return [
+    !params.certOk ? "KOTRA 해외인증정보" : "",
+    !params.regulationOk ? "KOTRA 수입규제정보" : "",
+    !params.ksureOk ? "K-SURE 국가·결제위험" : "",
+    params.customsStatus === "error" ? "관세청 세관장확인대상물품" : "",
+    params.comtradeStatus === "error" ? "UN Comtrade" : "",
+    params.witsStatus === "error" ? "World Bank WITS / UNCTAD TRAINS" : "",
+    params.exchangeStatus === "error" ? "한국수출입은행 현재환율 API" : "",
+  ].filter(Boolean);
+}
+
+async function persistCountryDecision(params: {
+  supa: AuthedSupabaseClient;
+  projectId: string;
+  productId: string;
+  userId: string;
+  countryCode: string;
+  facts: DecisionFactInput[];
+  failedSourceNames: string[];
+}): Promise<{ factsWritten: number; actionsWritten: number; message: string }> {
+  const legacyNonApiFactKeys = [
+    "tariff_fta:baseline",
+    "customs_documents:baseline",
+    "sanctions:entity_screening",
+    "strategic_goods:classification",
+  ];
+  const { error: legacyFactDeleteError } = await params.supa
+    .from("country_decision_facts")
+    .delete()
+    .eq("project_id", params.projectId)
+    .eq("product_id", params.productId)
+    .eq("country_code", params.countryCode)
+    .in("fact_key", legacyNonApiFactKeys);
+  if (legacyFactDeleteError) {
+    console.error("country decision legacy non-API fact cleanup failed", legacyFactDeleteError.message);
+  }
+
+  if (params.failedSourceNames.length > 0) {
+    await params.supa
+      .from("country_decision_facts")
+      .update({ is_stale: true })
+      .eq("project_id", params.projectId)
+      .eq("product_id", params.productId)
+      .eq("country_code", params.countryCode)
+      .in("source_name", params.failedSourceNames);
+  }
+
+  const factRows = params.facts.map((fact) => ({
+    project_id: params.projectId,
+    product_id: params.productId,
+    user_id: params.userId,
+    country_code: params.countryCode,
+    fact_key: fact.factKey,
+    category: fact.category,
+    status: fact.status,
+    severity: fact.severity,
+    summary: fact.summary,
+    value_json: fact.value,
+    scope_level: fact.scope,
+    source_name: fact.sourceName,
+    source_url: fact.sourceUrl,
+    reference_date: fact.referenceDate,
+    caveat: fact.caveat,
+    next_action: fact.nextAction,
+    fetched_at: fact.fetchedAt,
+    expires_at: fact.expiresAt,
+    is_stale: false,
+  }));
+  const factKeysBySource = new Map<string, Set<string>>();
+  for (const fact of params.facts) {
+    const currentKeys = factKeysBySource.get(fact.sourceName) ?? new Set<string>();
+    currentKeys.add(fact.factKey);
+    factKeysBySource.set(fact.sourceName, currentKeys);
+  }
+  for (const [sourceName, currentKeys] of factKeysBySource.entries()) {
+    if (params.failedSourceNames.includes(sourceName)) continue;
+    const { data: storedFacts, error: storedFactError } = await params.supa
+      .from("country_decision_facts")
+      .select("id,fact_key")
+      .eq("project_id", params.projectId)
+      .eq("product_id", params.productId)
+      .eq("country_code", params.countryCode)
+      .eq("source_name", sourceName);
+    if (storedFactError) {
+      console.error("country decision stale fact lookup failed", storedFactError.message);
+      continue;
+    }
+    const obsoleteIds = (Array.isArray(storedFacts) ? storedFacts : [])
+      .filter((row) => !currentKeys.has(asText(row.fact_key)))
+      .map((row) => asText(row.id))
+      .filter(Boolean);
+    if (obsoleteIds.length > 0) {
+      const { error: obsoleteDeleteError } = await params.supa
+        .from("country_decision_facts")
+        .delete()
+        .in("id", obsoleteIds);
+      if (obsoleteDeleteError) {
+        console.error("country decision obsolete fact cleanup failed", obsoleteDeleteError.message);
+      }
+    }
+  }
+  if (factRows.length > 0) {
+    const { error: factError } = await params.supa
+      .from("country_decision_facts")
+      .upsert(factRows, { onConflict: "project_id,product_id,country_code,fact_key" });
+    if (factError) {
+      console.error("country decision fact persistence failed", factError.message);
+      return { factsWritten: 0, actionsWritten: 0, message: factError.message };
+    }
+  }
+
+  const { data: existingActions, error: existingActionsError } = await params.supa
+    .from("country_action_items")
+    .select("action_key, status")
+    .eq("project_id", params.projectId)
+    .eq("product_id", params.productId)
+    .eq("country_code", params.countryCode);
+  if (existingActionsError) {
+    console.error("country decision existing action lookup failed", existingActionsError.message);
+  }
+  const existingStatus = new Map(
+    (Array.isArray(existingActions) ? existingActions : []).map((row) => [
+      asText(row.action_key),
+      asText(row.status) || "todo",
+    ]),
+  );
+  const actions = buildDecisionActionRows(params.facts).map((action) => ({
+    project_id: params.projectId,
+    product_id: params.productId,
+    user_id: params.userId,
+    country_code: params.countryCode,
+    action_key: action.actionKey,
+    title: action.title,
+    reason: action.reason,
+    status: existingStatus.get(action.actionKey) || "todo",
+    priority: action.priority,
+    source_url: action.sourceUrl,
+    fact_key: action.factKey,
+  }));
+  const desiredActionKeys = new Set(actions.map((action) => action.action_key));
+  const obsoleteActionKeys = [...existingStatus.keys()].filter(
+    (actionKey) => !desiredActionKeys.has(actionKey),
+  );
+  if (obsoleteActionKeys.length > 0) {
+    const { error: obsoleteActionDeleteError } = await params.supa
+      .from("country_action_items")
+      .delete()
+      .eq("project_id", params.projectId)
+      .eq("product_id", params.productId)
+      .eq("country_code", params.countryCode)
+      .in("action_key", obsoleteActionKeys);
+    if (obsoleteActionDeleteError) {
+      console.error("country decision obsolete action cleanup failed", obsoleteActionDeleteError.message);
+    }
+  }
+  if (actions.length > 0) {
+    const { error: actionError } = await params.supa
+      .from("country_action_items")
+      .upsert(actions, { onConflict: "project_id,product_id,country_code,action_key" });
+    if (actionError) {
+      console.error("country decision action persistence failed", actionError.message);
+      return { factsWritten: factRows.length, actionsWritten: 0, message: actionError.message };
+    }
+  }
+  return {
+    factsWritten: factRows.length,
+    actionsWritten: actions.length,
+    message: "country decision persisted",
+  };
+}
+
+function buildDecisionActionRows(facts: DecisionFactInput[]): Array<{
+  actionKey: string;
+  title: string;
+  reason: string;
+  priority: number;
+  sourceUrl: string | null;
+  factKey: string | null;
+}> {
+  const tariffFact = facts.find((fact) =>
+    fact.factKey.startsWith("tariff_fta:wits_")
+  );
+  const customsFact = facts.find((fact) =>
+    fact.category === "customs_requirement" && fact.status === "confirmed"
+  );
+  const strategicFact = facts.find((fact) =>
+    fact.category === "strategic_goods" &&
+    !fact.factKey.endsWith("no_direct_match")
+  );
+  const paymentFact = facts.find((fact) => fact.factKey === "payment_risk:ksure");
+  const action = (
+    actionKey: string,
+    title: string,
+    reason: string,
+    priority: number,
+    fact: DecisionFactInput,
+  ) => {
+    return {
+      actionKey,
+      title,
+      reason,
+      priority,
+      sourceUrl: fact.sourceUrl ?? null,
+      factKey: fact.factKey,
+    };
+  };
+  return [
+    tariffFact
+      ? action("confirm_destination_tariff_code", "목적국 세부 품목코드 확인", "HS6 관세 범위가 확인되어 목적국 8·10자리 세부코드를 확정해야 합니다.", 1, tariffFact)
+      : null,
+    customsFact
+      ? action("contact_customs_requirement_agency", "세관장확인 승인기관 문의", "조회된 법령별 허가·승인·표시 요건과 제출 시점을 확인해야 합니다.", 2, customsFact)
+      : null,
+    strategicFact
+      ? action("classify_strategic_goods", "전략물자 판정", "HSK 통제번호 후보가 발견되어 자가판정 또는 전문판정이 필요합니다.", 3, strategicFact)
+      : null,
+    paymentFact
+      ? action("review_payment_and_insurance", "결제조건·무역보험 검토", "조회된 국가·결제 위험에 맞는 대금회수 조건과 보험 가입 여부를 검토해야 합니다.", 4, paymentFact)
+      : null,
+  ].filter((item): item is NonNullable<typeof item> => item !== null);
+}
+
 function resolveKotraKey(): string {
   return normalizeAuthKeyValue(
     Deno.env.get("KOTRA_API_KEY") ||
     Deno.env.get("PUBLIC_DATA_API_KEY") ||
+    Deno.env.get("KICOX_API_KEY") ||
+    "",
+  );
+}
+
+function resolvePublicDataKey(): string {
+  return normalizeAuthKeyValue(
+    Deno.env.get("PUBLIC_DATA_API_KEY") ||
+    Deno.env.get("KOTRA_API_KEY") ||
     Deno.env.get("KICOX_API_KEY") ||
     "",
   );
@@ -2873,20 +3578,23 @@ function buildKsurePaymentSummary(item: KsureExportPaymentItem, scope: "country"
   const avgPayment = getLatestSeriesPoint(item.averagePaymentPeriod);
   const avgLatePeriod = getLatestSeriesPoint(item.averagelatePaymentPeriod);
   const topTerm = getTopPaymentTermByYear(item.paymentTerms, lateRate?.YEAR || avgPayment?.YEAR || "");
+  const scopeLabel = scope === "country"
+    ? "해당 국가"
+    : scope === "global"
+    ? "전체 국가 참고 통계"
+    : "조회 범위 미확인 통계";
 
-  const parts = [
-    scope === "country"
-      ? "Scope: country-specific"
-      : scope === "global"
-      ? "Scope: global reference (low confidence)"
-      : "Scope: unknown",
-    `Late rate: ${formatRate(lateRate?.VALUE ?? null)}`,
-    `Avg payment period: ${formatDays(avgPayment?.VALUE ?? null)}`,
-    `Avg late period: ${formatDays(avgLatePeriod?.VALUE ?? null)}`,
-    topTerm ? `Top term: ${topTerm.name || topTerm.code} (${formatRate(topTerm.value)})` : "",
-  ].filter(Boolean);
+  const sentences = [
+    scopeLabel + "의 결제 지연율은 " + formatRate(lateRate?.VALUE ?? null) +
+      ", 평균 결제기간은 " + formatDays(avgPayment?.VALUE ?? null) + "입니다.",
+    "평균 지연기간은 " + formatDays(avgLatePeriod?.VALUE ?? null) +
+      (topTerm
+        ? "이며, 가장 많이 사용된 결제조건은 " + (topTerm.name || topTerm.code) +
+          "(" + formatRate(topTerm.value) + ")입니다."
+        : "입니다."),
+  ];
 
-  return truncate(parts.join(" | "), 500);
+  return truncate(sentences.join(" "), 500);
 }
 
 function buildKsurePaymentUnavailableMessage(countryName: string, countryCode: string, apiMessage: string): string {
@@ -2927,7 +3635,7 @@ function formatRate(value: number | null): string {
 
 function formatDays(value: number | null): string {
   if (value == null || !Number.isFinite(value)) return "N/A";
-  return `${value.toFixed(1)}d`;
+  return `${value.toFixed(1)}일`;
 }
 
 function filterCertificationByCountry(
@@ -4063,7 +4771,7 @@ async function fetchKotraNationalInfo(
   url.searchParams.set("type", "json");
   url.searchParams.set("isoWd2CntCd", countryCode);
 
-  const external = await fetchExternal(url.toString());
+  const external = await fetchExternalWithRetry(url.toString(), {}, 1);
   if (!external.ok) {
     return { ok: false, status: null, message: external.message, item: null };
   }
@@ -4101,6 +4809,23 @@ async function fetchKotraNationalInfo(
 type ExternalFetchResult =
   | { ok: true; response: Response }
   | { ok: false; message: string };
+
+async function fetchExternalWithRetry(
+  url: string,
+  init: RequestInit = {},
+  maxRetries = 1,
+): Promise<ExternalFetchResult> {
+  let attempt = 0;
+  while (true) {
+    const result = await fetchExternal(url, init);
+    if (!result.ok) return result;
+    const { response } = result;
+    const retryable = response.status === 429 || response.status >= 500;
+    if (!retryable || attempt >= maxRetries) return result;
+    attempt += 1;
+    await new Promise((resolve) => setTimeout(resolve, 250 * attempt));
+  }
+}
 
 async function fetchExternal(url: string, init: RequestInit = {}): Promise<ExternalFetchResult> {
   const controller = new AbortController();

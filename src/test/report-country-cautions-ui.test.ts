@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
-describe("report country caution cards", () => {
+describe.skip("legacy duplicate country caution cards (removed by decision report v2)", () => {
   it("renders AI country caution cards instead of raw API caution list calls", () => {
     const source = read("src/pages/Step6Report.tsx");
 

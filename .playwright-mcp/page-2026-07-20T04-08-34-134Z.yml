@@ -1,0 +1,161 @@
+- generic [ref=f39e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f39e888]:
+    - banner [ref=f39e889]:
+      - link "홈" [ref=f39e891] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f39e896]: 산단수출 코파일럿
+      - generic [ref=f39e897]:
+        - link "프로젝트" [ref=f39e898] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f39e899] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f39e900] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f39e902] [cursor=pointer]
+    - generic [ref=f39e904]:
+      - complementary [ref=f39e905]:
+        - paragraph [ref=f39e906]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f39e907]:
+          - link "1단계 기업·공장 검색" [ref=f39e908] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/company
+            - generic [ref=f39e909]: "1"
+            - generic [ref=f39e910]:
+              - generic [ref=f39e911]: 기업·공장 검색
+              - generic [ref=f39e912]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f39e913] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/product
+            - generic [ref=f39e917]:
+              - generic [ref=f39e918]: 제품·HS 코드
+              - generic [ref=f39e919]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f39e920] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/countries
+            - generic [ref=f39e924]:
+              - generic [ref=f39e925]: 후보국 추천 Top 3
+              - generic [ref=f39e926]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f39e927] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/countries/US
+            - generic [ref=f39e928]: "4"
+            - generic [ref=f39e929]:
+              - generic [ref=f39e930]: 국가 상세
+              - generic [ref=f39e931]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f39e932] [cursor=pointer]:
+            - /url: /projects/c8b85e12-4a85-4f60-801f-19289f68860f/report
+            - generic [ref=f39e933]: "5"
+            - generic [ref=f39e934]:
+              - generic [ref=f39e935]: 리포트
+              - generic [ref=f39e936]: 요구사항 8
+      - main [ref=f39e937]:
+        - generic [ref=f39e938]:
+          - generic [ref=f39e939]:
+            - paragraph [ref=f39e940]: 기획 요구사항 매핑
+            - paragraph [ref=f39e941]: 요구사항 4~7
+            - paragraph [ref=f39e942]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=f39e943]:
+            - generic [ref=f39e944]:
+              - generic [ref=f39e945]:
+                - generic [ref=f39e946]:
+                  - generic [ref=f39e947]:
+                    - generic [ref=f39e948]:
+                      - paragraph [ref=f39e949]: US
+                      - heading "미합중국(The United States of America)" [level=1] [ref=f39e950]
+                    - generic [ref=f39e951]:
+                      - generic [ref=f39e952]:
+                        - text: 제품
+                        - strong [ref=f39e953]: 카페인을 제거하지 않은 볶은 원두커피
+                      - generic [ref=f39e954]:
+                        - text: HS6
+                        - strong [ref=f39e955]: "090121"
+                      - generic [ref=f39e956]:
+                        - text: HSK10
+                        - strong [ref=f39e957]: "0901210000"
+                    - paragraph [ref=f39e958]: 분석은 HSK10 정확 일치 → HS6 → 제품명 순으로 적용됩니다. 제품 설명과 품목코드가 다르면 결과도 달라질 수 있습니다.
+                    - paragraph [ref=f39e959]: 최종 갱신 미실행
+                  - generic [ref=f39e960]:
+                    - button "데이터 갱신" [ref=f39e961] [cursor=pointer]
+                    - button "상세 분석" [ref=f39e962] [cursor=pointer]
+                - generic [ref=f39e963]:
+                  - generic [ref=f39e964]:
+                    - paragraph [ref=f39e965]: 수출 적합도
+                    - paragraph [ref=f39e966]: 분석 필요
+                    - paragraph [ref=f39e967]: 데이터 갱신으로 근거를 수집하세요.
+                  - generic [ref=f39e968]:
+                    - paragraph [ref=f39e969]: 시장 기회 점수
+                    - paragraph [ref=f39e970]: 87/100
+                    - paragraph [ref=f39e971]: 시장 규모·성장성 기준이며 규제 위험은 포함하지 않습니다.
+                  - generic [ref=f39e972]:
+                    - paragraph [ref=f39e973]: 근거 충족도
+                    - paragraph [ref=f39e974]: 0%
+                    - paragraph [ref=f39e975]: 확인 0건 · 참고 0건 · 추가 확인 0건
+              - generic [ref=f39e976]:
+                - heading "한눈에 보는 핵심 판단" [level=2] [ref=f39e981]
+                - generic [ref=f39e982]: 아직 수집된 판단 근거가 없습니다. 데이터 갱신 후 확인된 사실과 미확정 사항을 구분해 표시합니다.
+            - generic [ref=f39e983]:
+              - generic [ref=f39e984]:
+                - generic [ref=f39e991]:
+                  - heading "관세·FTA" [level=3] [ref=f39e992]
+                  - paragraph [ref=f39e993]: 관세, 협정 후보, 목적국 세부코드 확인 상태
+                - generic [ref=f39e994]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f39e996]:
+                - generic [ref=f39e1003]:
+                  - heading "인증·규제·전략물자" [level=3] [ref=f39e1004]
+                  - paragraph [ref=f39e1005]: 인증 후보와 반드시 확인할 규제 요건
+                - generic [ref=f39e1006]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f39e1008]:
+                - generic [ref=f39e1017]:
+                  - heading "통관 준비" [level=3] [ref=f39e1018]
+                  - paragraph [ref=f39e1019]: 공통 기본서류와 거래별 추가서류
+                - generic [ref=f39e1020]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f39e1022]:
+                - generic [ref=f39e1030]:
+                  - heading "결제·예상 비용" [level=3] [ref=f39e1031]
+                  - paragraph [ref=f39e1032]: 대금회수 조건과 현재 산정 가능한 비용
+                - generic [ref=f39e1033]: 가격·수량·중량·Incoterms가 없어 총 도착원가는 산출할 수 없습니다.
+              - generic [ref=f39e1035]:
+                - generic [ref=f39e1042]:
+                  - heading "시장 규모" [level=3] [ref=f39e1043]
+                  - paragraph [ref=f39e1044]: 목적국 수입시장과 한국산 점유율
+                - generic [ref=f39e1045]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f39e1047]:
+                - generic [ref=f39e1056]:
+                  - heading "제재 확인" [level=3] [ref=f39e1057]
+                  - paragraph [ref=f39e1058]: 국가 참고정보와 구매자 검색 준비 상태
+                - generic [ref=f39e1059]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+            - generic [ref=f39e1061]:
+              - generic [ref=f39e1063]:
+                - generic [ref=f39e1064]:
+                  - heading "다음 실행 단계" [level=3] [ref=f39e1065]
+                  - paragraph [ref=f39e1066]: 분석 근거에서 자동 생성되며 진행 상태는 프로젝트에 저장됩니다.
+                - generic [ref=f39e1067]: 0/0 완료
+              - generic [ref=f39e1068]: 분석 실행 후 관세·원산지·승인·통관·결제·비용·제재 체크리스트가 생성됩니다.
+          - group [ref=f39e1070]:
+            - generic "기관별 상세 근거·기존 분석 펼쳐보기" [ref=f39e1071] [cursor=pointer]
+      - complementary [ref=f39e1072]:
+        - generic [ref=f39e1073]:
+          - generic [ref=f39e1074]: 근거 패널
+          - button "근거 패널 접기" [ref=f39e1075] [cursor=pointer]
+        - generic [ref=f39e1077]:
+          - heading "출처" [level=3] [ref=f39e1078]
+          - generic [ref=f39e1079]:
+            - paragraph [ref=f39e1080]: 분석 기준 코드
+            - paragraph [ref=f39e1081]: "제품명: 카페인을 제거하지 않은 볶은 원두커피"
+            - paragraph [ref=f39e1082]: HS 090121 / HSK 0901210000
+            - paragraph [ref=f39e1083]: "적용 방식: 사용자 수동 선택"
+            - paragraph [ref=f39e1084]: "상태: 평가 정보 없음 / 후보 점수 정보 없음"
+            - paragraph [ref=f39e1085]: 후속 단계 참고용 코드이므로 최종 확정 전 추가 검증이 필요합니다.
+          - list [ref=f39e1086]:
+            - listitem [ref=f39e1087]:
+              - generic [ref=f39e1088]:
+                - generic "출처 기타" [ref=f39e1089]: 기타
+                - generic [ref=f39e1090]: 최근 12개월 HS/HSK 기준 수출액 / 원문 링크 없음
+                - paragraph [ref=f39e1091]: 최근 12개월 HS/HSK 기준 수출액 $243.8K
+          - generic [ref=f39e1092]:
+            - paragraph [ref=f39e1093]: AI 상태
+            - generic [ref=f39e1094]: 대기
+    - generic [ref=f39e1096]:
+      - button "후보군으로" [ref=f39e1097] [cursor=pointer]
+      - button "리포트로 안전성 검토로" [ref=f39e1098] [cursor=pointer]:
+        - generic [ref=f39e1099]: 리포트로
+        - text: 안전성 검토로

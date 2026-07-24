@@ -1,0 +1,126 @@
+- generic [ref=f70e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f70e4]:
+    - banner [ref=f70e5]:
+      - link "홈" [ref=f70e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f70e12]: 산단수출 코파일럿
+      - generic [ref=f70e13]:
+        - link "프로젝트" [ref=f70e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f70e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f70e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f70e18] [cursor=pointer]
+    - generic [ref=f70e20]:
+      - complementary [ref=f70e21]:
+        - paragraph [ref=f70e22]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f70e23]:
+          - link "1단계 기업·공장 검색" [ref=f70e24] [cursor=pointer]:
+            - /url: /projects/8b647e12-0fc6-4d44-979e-5bab450411d3/company
+            - generic [ref=f70e25]: "1"
+            - generic [ref=f70e26]:
+              - generic [ref=f70e27]: 기업·공장 검색
+              - generic [ref=f70e28]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f70e29] [cursor=pointer]:
+            - /url: /projects/8b647e12-0fc6-4d44-979e-5bab450411d3/product
+            - generic [ref=f70e33]:
+              - generic [ref=f70e34]: 제품·HS 코드
+              - generic [ref=f70e35]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f70e36] [cursor=pointer]:
+            - /url: /projects/8b647e12-0fc6-4d44-979e-5bab450411d3/countries
+            - generic [ref=f70e40]:
+              - generic [ref=f70e41]: 후보국 추천 Top 3
+              - generic [ref=f70e42]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f70e43] [cursor=pointer]:
+            - /url: /projects/8b647e12-0fc6-4d44-979e-5bab450411d3/countries/US
+            - generic [ref=f70e44]: "4"
+            - generic [ref=f70e45]:
+              - generic [ref=f70e46]: 국가 상세
+              - generic [ref=f70e47]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f70e48] [cursor=pointer]:
+            - /url: /projects/8b647e12-0fc6-4d44-979e-5bab450411d3/report
+            - generic [ref=f70e49]: "5"
+            - generic [ref=f70e50]:
+              - generic [ref=f70e51]: 리포트
+              - generic [ref=f70e52]: 요구사항 8
+      - main [ref=f70e53]:
+        - generic [ref=f70e54]:
+          - generic [ref=f70e55]:
+            - paragraph [ref=f70e56]: 기획 요구사항 매핑
+            - paragraph [ref=f70e57]: 요구사항 1
+            - paragraph [ref=f70e58]: 기업·공장 기본 정보 수집
+          - generic [ref=f70e59]:
+            - heading "1. 기업·공장 검색" [level=1] [ref=f70e60]
+            - paragraph [ref=f70e61]: 산업단지 입주기업을 검색하거나 직접 입력합니다.
+          - generic [ref=f70e62]:
+            - generic [ref=f70e63]:
+              - heading "KICOX 검색" [level=3] [ref=f70e64]
+              - paragraph [ref=f70e65]: 검색 조건 1개 이상, 텍스트 조건은 2자 이상 입력해야 조회됩니다.
+            - generic [ref=f70e66]:
+              - generic [ref=f70e67]:
+                - 'textbox "회사명 (예: ○○산업)" [ref=f70e68]'
+                - 'textbox "산단명 (예: 반월시화)" [ref=f70e69]'
+                - 'textbox "공장관리번호 (예: 115452009184637)" [ref=f70e70]'
+                - 'textbox "생산품 키워드 (예: 모터, 센서)" [ref=f70e71]': 타이어
+                - generic [ref=f70e72]:
+                  - text: 지역
+                  - combobox "지역 선택" [ref=f70e73] [cursor=pointer]
+                - generic [ref=f70e76]:
+                  - button "검색 중..." [disabled]
+                  - button "조건 초기화" [ref=f70e78] [cursor=pointer]
+              - generic [ref=f70e79]:
+                - paragraph [ref=f70e80]: 선택 요약
+                - generic [ref=f70e81]:
+                  - paragraph [ref=f70e82]: "회사명: 삼성전자(주)"
+                  - paragraph [ref=f70e83]: "산단: 구미국가산업단지"
+                  - paragraph [ref=f70e84]: "공장관리번호: 130111000624605"
+                  - paragraph [ref=f70e85]: "지역: 경상북도"
+                  - paragraph [ref=f70e86]: "생산품: 전자식자동교환기, 반도체관련기기"
+          - generic [ref=f70e87]:
+            - generic [ref=f70e88]:
+              - heading "기업 정보" [level=3] [ref=f70e89]
+              - paragraph [ref=f70e94]: 검색 결과를 채우거나 직접 입력해 주세요.
+            - generic [ref=f70e95]:
+              - generic [ref=f70e96]:
+                - generic [ref=f70e97]: 회사명*
+                - textbox [ref=f70e98]: 삼성전자(주)
+              - generic [ref=f70e99]:
+                - text: 산단명
+                - textbox [ref=f70e100]: 구미국가산업단지
+              - generic [ref=f70e101]:
+                - text: 공장관리번호
+                - textbox [ref=f70e102]: "130111000624605"
+              - generic [ref=f70e103]:
+                - text: 주소
+                - textbox [ref=f70e104]: 경상북도 구미시 1공단로 244 (공단동)
+              - generic [ref=f70e105]:
+                - text: 지역
+                - textbox [ref=f70e106]: 경상북도
+              - generic [ref=f70e107]:
+                - text: 업종 코드
+                - textbox [ref=f70e108]: "26323"
+              - generic [ref=f70e109]:
+                - text: 주요 생산품
+                - textbox [ref=f70e110]: 전자식자동교환기, 반도체관련기기
+              - generic [ref=f70e111]:
+                - text: 종업원 수
+                - spinbutton [ref=f70e112]: "114"
+      - complementary [ref=f70e113]:
+        - generic [ref=f70e114]:
+          - generic [ref=f70e115]: 근거 패널
+          - button "근거 패널 접기" [ref=f70e116] [cursor=pointer]
+        - generic [ref=f70e118]:
+          - heading "근거 · 출처" [level=3] [ref=f70e119]
+          - paragraph [ref=f70e120]: 기업 정보는 한국산업단지공단 입주기업 OpenAPI(KICOX)에서 조회합니다. 검색 결과가 없으면 직접 입력해 진행할 수 있으며, 입력값에는 ‘사용자 입력’ 배지가 붙습니다.
+          - generic [ref=f70e121]:
+            - paragraph [ref=f70e122]: 조회 상태
+            - generic [ref=f70e123]:
+              - generic [ref=f70e124]: 조회 중
+              - generic "출처 KICOX" [ref=f70e125]: KICOX
+    - generic [ref=f70e127]:
+      - button "취소" [ref=f70e128] [cursor=pointer]
+      - button "저장 후 다음 단계" [ref=f70e129] [cursor=pointer]

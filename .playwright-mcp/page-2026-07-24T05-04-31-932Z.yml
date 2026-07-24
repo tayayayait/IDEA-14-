@@ -1,0 +1,312 @@
+- generic [ref=f2e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f2e4]:
+    - banner [ref=f2e5]:
+      - link "홈" [ref=f2e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f2e12]: 산단수출 코파일럿
+      - generic [ref=f2e13]:
+        - link "프로젝트" [ref=f2e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f2e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f2e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f2e18] [cursor=pointer]
+    - generic [ref=f2e20]:
+      - complementary [ref=f2e21]:
+        - paragraph [ref=f2e22]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f2e23]:
+          - link "1단계 기업·공장 검색" [ref=f2e24] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/company
+            - generic [ref=f2e28]:
+              - generic [ref=f2e29]: 기업·공장 검색
+              - generic [ref=f2e30]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f2e31] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/product
+            - generic [ref=f2e35]:
+              - generic [ref=f2e36]: 제품·HS 코드
+              - generic [ref=f2e37]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f2e38] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/countries
+            - generic [ref=f2e39]: "3"
+            - generic [ref=f2e40]:
+              - generic [ref=f2e41]: 후보국 추천 Top 3
+              - generic [ref=f2e42]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f2e43] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/countries
+            - generic [ref=f2e47]:
+              - generic [ref=f2e48]: 국가 상세
+              - generic [ref=f2e49]: 요구사항 4~7
+              - generic [ref=f2e50]: 국가 선택 필요
+          - link "5단계 리포트" [ref=f2e51] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/report
+            - generic [ref=f2e55]:
+              - generic [ref=f2e56]: 리포트
+              - generic [ref=f2e57]: 요구사항 8
+      - main [ref=f2e58]:
+        - generic [ref=f2e59]:
+          - generic [ref=f2e60]:
+            - paragraph [ref=f2e61]: 기획 요구사항 매핑
+            - paragraph [ref=f2e62]: 요구사항 3
+            - paragraph [ref=f2e63]: 후보국 추천 및 근거 점수화
+          - generic [ref=f2e64]:
+            - generic [ref=f2e65]:
+              - heading "3. 후보국 추천 상위 3개국" [level=1] [ref=f2e66]
+              - paragraph [ref=f2e67]: 후보국을 먼저 추출하고 후보군 내에서만 점수와 순위를 계산합니다.
+            - button "추천 실행" [ref=f2e68] [cursor=pointer]
+          - generic [ref=f2e69]:
+            - button "1순위 미합중국(The United States of America) 상세 보기" [ref=f2e70] [cursor=pointer]:
+              - generic [ref=f2e71]:
+                - generic [ref=f2e72]: 순위 1
+                - status "위험도 우선검토" [ref=f2e80]: 우선검토
+              - paragraph [ref=f2e82]: 미합중국(The United States of America)
+              - paragraph [ref=f2e83]: US
+              - paragraph [ref=f2e84]: 최근 12개월 HS/HSK 수출액 조회 중
+              - paragraph [ref=f2e85]: "근거: 미국은 세계 최대 규모의 자동차 시장을 보유하고 있어 교체용 타이어 수요가 매우 높으며 친환경 및 고성능 제품에 대한 소비자의 관심이 큽니다. 한국산 타이어의 품질 신뢰도가 높고 유통 네트워크가 잘 구축되어 있어 시장 점유율 확대가 용이한 환경입니다."
+              - paragraph [ref=f2e86]: "낮은 점수 사유: 미국 내 자국 산업 보호를 위한 반덤핑 관세 부과 가능성이 상존하며 연방 자동차 안전 기준인 DOT 인증을 반드시 획득해야 하므로 엄격한 품질 관리와 법적 대응이 요구됩니다."
+              - paragraph [ref=f2e87]: 상세 보기
+            - button "2순위 베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=f2e88] [cursor=pointer]:
+              - generic [ref=f2e89]:
+                - generic [ref=f2e90]: 순위 2
+                - status "위험도 검토권장" [ref=f2e98]: 검토권장
+              - paragraph [ref=f2e100]: 베트남 사회주의 공화국(Socialist Republic of Vietnam)
+              - paragraph [ref=f2e101]: VN
+              - paragraph [ref=f2e102]: 최근 12개월 HS/HSK 수출액 조회 중
+              - paragraph [ref=f2e103]: "근거: 베트남은 경제 성장과 함께 자동차 등록 대수가 급증하고 있어 타이어 시장의 성장 잠재력이 매우 높으며 제조업 활성화에 따른 상용차 타이어 수요도 견조합니다. 한국 기업에 대한 우호적인 인식과 한-베트남 FTA를 통한 관세 혜택도 큰 장점입니다."
+              - paragraph [ref=f2e104]: "낮은 점수 사유: 현지 및 중국산 저가 타이어와의 가격 경쟁이 매우 치열하며 열악한 도로 환경에 적합한 내구성 강화 제품 개발을 위한 별도의 현지화 전략이 필요할 수 있습니다."
+              - paragraph [ref=f2e105]: 상세 보기
+            - button "3순위 브라질 연방 공화국(The Federal Republic of Brazil) 상세 보기" [ref=f2e106] [cursor=pointer]:
+              - generic [ref=f2e107]:
+                - generic [ref=f2e108]: 순위 3
+                - status "위험도 검토권장" [ref=f2e116]: 검토권장
+              - paragraph [ref=f2e118]: 브라질 연방 공화국(The Federal Republic of Brazil)
+              - paragraph [ref=f2e119]: BR
+              - paragraph [ref=f2e120]: 최근 12개월 HS/HSK 수출액 조회 중
+              - paragraph [ref=f2e121]: "근거: 브라질은 남미 최대의 자동차 생산국으로서 교체용 타이어 시장이 활성화되어 있으며 최근 디지털 기술과 순환경제를 결합한 프리미엄 타이어에 대한 수요가 발생하고 있습니다. 광산 및 농업 분야의 특수 타이어 수요도 지속적으로 발생합니다."
+              - paragraph [ref=f2e122]: "낮은 점수 사유: 브라질 특유의 복잡한 조세 제도와 높은 수입 관세가 가격 경쟁력 확보에 걸림돌이 되며 브라질 표준기구인 INMETRO 인증 취득 과정이 엄격하여 초기 진출 시 상당한 비용과 시간이 소요됩니다."
+              - paragraph [ref=f2e123]: 상세 보기
+          - generic [ref=f2e124]:
+            - generic [ref=f2e125]:
+              - heading "후보국 세계 지도" [level=3] [ref=f2e126]
+              - paragraph [ref=f2e127]: 추천된 전체 후보국의 점수 분포 및 수출 실적(있는 경우)을 확인합니다.
+            - generic [ref=f2e129]:
+              - generic [ref=f2e130]:
+                - generic [ref=f2e131]: "점수 범례:"
+                - generic [ref=f2e132]: 70+ 추천
+                - generic [ref=f2e134]: 50-69 고려
+                - generic [ref=f2e136]: 30-49 보통
+                - generic [ref=f2e138]: ~29 낮음
+                - generic [ref=f2e140]: 데이터 없음
+              - img [ref=f2e142]:
+                - generic [ref=f2e145]:
+                  - generic [ref=f2e324]: 🥇
+                  - generic [ref=f2e325]: 🥈
+                  - generic [ref=f2e326]: 🥉
+              - generic [ref=f2e327]:
+                - button "🥇 미합중국(The United States of America) 100점" [ref=f2e328] [cursor=pointer]:
+                  - generic [ref=f2e329]: 🥇
+                  - generic [ref=f2e330]: 미합중국(The United States of America)
+                  - generic [ref=f2e331]: 100점
+                - button "🥈 베트남 사회주의 공화국(Socialist Republic of Vietnam) 100점" [ref=f2e332] [cursor=pointer]:
+                  - generic [ref=f2e333]: 🥈
+                  - generic [ref=f2e334]: 베트남 사회주의 공화국(Socialist Republic of Vietnam)
+                  - generic [ref=f2e335]: 100점
+                - button "🥉 브라질 연방 공화국(The Federal Republic of Brazil) 100점" [ref=f2e336] [cursor=pointer]:
+                  - generic [ref=f2e337]: 🥉
+                  - generic [ref=f2e338]: 브라질 연방 공화국(The Federal Republic of Brazil)
+                  - generic [ref=f2e339]: 100점
+              - generic [ref=f2e340]:
+                - generic [ref=f2e341]: 미합중국(The United States of America) 최근 12개월 HS/HSK 수출액 조회 중
+                - generic [ref=f2e342]: 베트남 사회주의 공화국(Socialist Republic of Vietnam) 최근 12개월 HS/HSK 수출액 조회 중
+                - generic [ref=f2e343]: 브라질 연방 공화국(The Federal Republic of Brazil) 최근 12개월 HS/HSK 수출액 조회 중
+          - generic [ref=f2e344]:
+            - generic [ref=f2e345]:
+              - heading "입력 시장 평가" [level=3] [ref=f2e346]
+              - paragraph [ref=f2e347]: 메모와 비교한 목표시장 편입 신호이며, 순위를 강제하지 않습니다.
+            - paragraph [ref=f2e349]: 메모에서 목표시장을 찾지 못했습니다.
+          - generic [ref=f2e350]:
+            - generic [ref=f2e351]:
+              - heading "뉴스 근거(상위 3개국)" [level=3] [ref=f2e352]
+              - paragraph [ref=f2e353]: 제품 직접 뉴스, 산업 동향, 거시경제/수출환경 뉴스를 구분합니다.
+            - generic [ref=f2e354]:
+              - generic [ref=f2e355]:
+                - paragraph [ref=f2e356]: "선택 국가: 미합중국(The United States of America)"
+                - combobox "국가 선택" [ref=f2e357] [cursor=pointer]:
+                  - generic: 1순위 - 미합중국(The United States of America)
+                - button "상위 3개국 뉴스 근거 생성" [ref=f2e360] [cursor=pointer]
+              - generic [ref=f2e361]:
+                - generic [ref=f2e362]:
+                  - heading "* 선택 국가 직접 뉴스" [level=4] [ref=f2e363]:
+                    - generic [ref=f2e364]: "*"
+                    - text: 선택 국가 직접 뉴스
+                  - generic [ref=f2e366]:
+                    - generic [ref=f2e367]:
+                      - paragraph [ref=f2e368]: 민들레로 타이어를? 美, 자동차 소재 혁신에 주목
+                      - link "원문 열기" [ref=f2e369] [cursor=pointer]:
+                        - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=201242
+                    - generic [ref=f2e370]:
+                      - generic [ref=f2e371]: 보조 근거
+                      - generic [ref=f2e372]: 보조 근거(5년 이내) | token:타이어,타이어는,통해 | 분류:선택 국가 직접 뉴스 | country:source_metadata
+                      - generic [ref=f2e373]: 2023-03-27
+                    - paragraph [ref=f2e374]: 민들레 추출 고무로 타이어를 만들고 파인애플 잎사귀로 차량 시트를 만드는 시대가 도래했다. 기후변화에 따른 탄소 감축이 화두인 시대, 자동차 업계의 탄소 감축을 위한 소재 혁신은 계속되고 있다. 자동차 업계의 생태계 전환은 내연기관에서 전기차 시대로의 전환뿐만이 아닌 차량 동력에서 소재까지 아우르는 변화로 확장되고 있다.
+                - generic [ref=f2e375]:
+                  - heading "* 선택국 수출환경 뉴스" [level=4] [ref=f2e376]:
+                    - generic [ref=f2e377]: "*"
+                    - text: 선택국 수출환경 뉴스
+                  - generic [ref=f2e378]:
+                    - generic [ref=f2e379]:
+                      - generic [ref=f2e380]:
+                        - paragraph [ref=f2e381]: 미국, 캘리포니아주도 연방정부도 수소 투자엔 '신중 모드'
+                        - link "원문 열기" [ref=f2e382] [cursor=pointer]:
+                          - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242584
+                      - paragraph [ref=f2e383]: "수출환경 키워드: 달러, 유로"
+                      - generic [ref=f2e384]:
+                        - generic [ref=f2e385]: 최근
+                        - generic [ref=f2e386]: 최근 1년 이내 | token:주로 | 수출환경 키워드:달러, 유로 | 분류:거시경제/수출환경 뉴스 | country:source_metadata
+                        - generic [ref=f2e387]: 2026-07-13
+                      - paragraph [ref=f2e388]: 최근 미국 캘리포니아주와 연방정부는 전력망용 대규모 수소 투자에 신중론을 펼치며 천연가스 기반 인프라 안정성에 무게를 두는 추세를 보이고 있다. 미국 시장을 검토하는 한국 기업은 지역별 자금 조달 여건과 세액공제 일정을 점검하는 한편 시장별 인프라 성숙도에 맞춘 투트랙 전략을 취할 필요가 있다.
+                    - generic [ref=f2e389]:
+                      - generic [ref=f2e390]:
+                        - paragraph [ref=f2e391]: "[기고] 미국 법인 없이 수출하는 한국 기업, 미국 세관은 무엇을 요구하나"
+                        - link "원문 열기" [ref=f2e392] [cursor=pointer]:
+                          - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242753
+                      - paragraph [ref=f2e393]: "수출환경 키워드: 관세, 통관"
+                      - paragraph [ref=f2e394]: "[수출 영향] 관세 변동은 타이어의 원가, 납기, 결제 조건에 영향을 줄 수 있습니다."
+                      - generic [ref=f2e395]:
+                        - generic [ref=f2e396]: 최근
+                        - generic [ref=f2e397]: 최근 1년 이내 | token:통해 | 수출환경 키워드:관세, 통관 | 분류:거시경제/수출환경 뉴스 | country:source_metadata
+                        - generic [ref=f2e398]: 2026-07-10
+                      - paragraph [ref=f2e399]: 2026년 6월 3일 미국 트럼프 행정부의 관세집행강화 행정명령으로 강화되는 수입자 규제를 살펴보고, 한국 수출기업이 준비해야 할 사항을 알아본다.
+                - generic [ref=f2e400]:
+                  - heading "* 선택국 산업 배경뉴스" [level=4] [ref=f2e401]:
+                    - generic [ref=f2e402]: "*"
+                    - text: 선택국 산업 배경뉴스
+                  - generic [ref=f2e403]:
+                    - generic [ref=f2e404]:
+                      - generic [ref=f2e405]:
+                        - paragraph [ref=f2e406]: AI 로봇이 이끄는 미국 제조업의 스마트공장 전환
+                        - link "원문 열기" [ref=f2e407] [cursor=pointer]:
+                          - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242817
+                      - generic [ref=f2e408]:
+                        - generic [ref=f2e409]: 최근
+                        - generic [ref=f2e410]: 최근 1년 이내 | token:통해,품질,포함한다 | 분류:산업 동향 | country:source_metadata
+                        - generic [ref=f2e411]: 2026-07-20
+                      - paragraph [ref=f2e412]: 미국 제조업은 인력 부족과 생산성 향상 필요성에 대응해 AI 로봇 기반 스마트공장 전환을 확대하고 있다. 활용 분야도 품질검사, 위험설비 점검, 조립, 유지보수 등으로 넓어지고 있으나, 중소기업을 중심으로 투자비와 전문인력 부족, 기존 설비와의 연계 문제가 남아 있다. 향후 경쟁력은 로봇 도입 자체보다 데이터 연계와 공정 통합 역량에 달릴 전망이다.
+                    - generic [ref=f2e413]:
+                      - generic [ref=f2e414]:
+                        - paragraph [ref=f2e415]: 美 뉴욕∙뉴저지 항만청 450억 달러 투자, 교통 인프라 지형 바꾼다
+                        - link "원문 열기" [ref=f2e416] [cursor=pointer]:
+                          - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242672
+                      - generic [ref=f2e417]:
+                        - generic [ref=f2e418]: 최근
+                        - generic [ref=f2e419]: 최근 1년 이내 | token:통해 | 분류:산업 동향 | country:source_metadata
+                        - generic [ref=f2e420]: 2026-07-08
+                      - paragraph [ref=f2e421]: 뉴욕·뉴저지 항만청은 2026~2035년 450억 달러 규모의 자본계획을 통해 공항, 철도, 버스터미널, 교량 등 핵심 인프라를 AI·디지털·친환경 중심으로 현대화한다. JFK·뉴왁공항과 PATH, 미드타운 버스터미널 등을 개선해 물류 경쟁력을 높이고, 5만 개 이상의 일자리 창출과 지역경제 활성화를 기대한다. 국내 기업에는 스마트 교통·보안·친환경 인프라 분야의 북미 진출 기회가 확대될 전망이다.
+                    - generic [ref=f2e422]:
+                      - generic [ref=f2e423]:
+                        - paragraph [ref=f2e424]: 미국 교육환경의 변화와 디지털 학습 활용 방식 재편
+                        - link "원문 열기" [ref=f2e425] [cursor=pointer]:
+                          - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=242470
+                      - generic [ref=f2e426]:
+                        - generic [ref=f2e427]: 최근
+                        - generic [ref=f2e428]: 최근 1년 이내 | token:통해 | 분류:산업 동향 | country:source_metadata
+                        - generic [ref=f2e429]: 2026-06-30
+                      - paragraph [ref=f2e430]: 미국 로스앤젤레스 통합교육구(LAUSD)가 팬데믹 이후 급증한 학생들의 스크린 사용 문제에 대응하기 위해 초등 저학년을 중심으로 교내 스크린타임을 제한하는 정책을 도입했다. 이번 조치는 미국 교육정책이 디지털 확산 중심에서 학습 효과와 발달 균형을 중시하는 방향으로 전환되고 있음을 보여주며, 에듀테크 산업에도 새로운 변화 요인으로 작용할 전망이다.
+                    - generic [ref=f2e431]:
+                      - generic [ref=f2e432]:
+                        - paragraph [ref=f2e433]: 중미 최대 타이어 및 자동차부품 박람회 'Latin Tire & Autoparts Expo 2025'
+                        - link "원문 열기" [ref=f2e434] [cursor=pointer]:
+                          - /url: https://dream.kotra.or.kr/user/extra/kotranews/bbs/linkView/jsp/Page.do?dataIdx=232102
+                      - generic [ref=f2e435]:
+                        - generic [ref=f2e436]: 최근
+                        - generic [ref=f2e437]: 최근 1년 이내 | token:타이어,주로 | 분류:산업 동향 | country:source_metadata_mismatch
+                        - generic [ref=f2e438]: 2025-07-23
+                      - paragraph [ref=f2e439]: 7월 9일부터 11일까지 3일간 개최된 중미 최대 타이어 및 자동차 부품 전시회 Latin Tire & Autoparts Expo 2025는 42개국 650개사가 참가하였다. 올해 전시회는 윤활유 기업의 성장이 주목할만 했다. KOTRA 파나마무역관은 수출상담관을 설치하여 13개 국내기업 제품을 홍보하고 대리 상담을 진행하였다.
+          - generic [ref=f2e440]:
+            - generic [ref=f2e441]:
+              - heading "전체 후보국 점수" [level=3] [ref=f2e442]
+              - paragraph [ref=f2e443]: 점수화된 모든 국가의 비교표입니다.
+            - table "국가 순위표" [ref=f2e445]:
+              - rowgroup [ref=f2e446]:
+                - row [ref=f2e447]:
+                  - columnheader "국가" [ref=f2e448]
+                  - columnheader "시장성" [ref=f2e449]
+                  - columnheader "인증" [ref=f2e450]
+                  - columnheader "규제" [ref=f2e451]
+                  - columnheader "결제" [ref=f2e452]
+                  - columnheader "안전성" [ref=f2e453]
+                  - columnheader "총점" [ref=f2e454]
+                  - columnheader "등급" [ref=f2e455]
+                  - columnheader "상세" [ref=f2e456]
+              - rowgroup [ref=f2e457]:
+                - row [ref=f2e458]:
+                  - cell "미합중국(The United States of America) US" [ref=f2e459]
+                  - cell "30" [ref=f2e460]
+                  - cell "18" [ref=f2e461]
+                  - cell "17" [ref=f2e462]
+                  - cell "19" [ref=f2e463]
+                  - cell "4" [ref=f2e464]
+                  - cell "100" [ref=f2e465]
+                  - cell [ref=f2e466]:
+                    - status "위험도 우선검토" [ref=f2e467]: 우선검토
+                  - cell [ref=f2e469]:
+                    - button "미합중국(The United States of America) 상세 보기" [ref=f2e470] [cursor=pointer]: 열기
+                - row [ref=f2e471]:
+                  - cell "베트남 사회주의 공화국(Socialist Republic of Vietnam) VN" [ref=f2e472]
+                  - cell "30" [ref=f2e473]
+                  - cell "15" [ref=f2e474]
+                  - cell "16" [ref=f2e475]
+                  - cell "15" [ref=f2e476]
+                  - cell "4" [ref=f2e477]
+                  - cell "100" [ref=f2e478]
+                  - cell [ref=f2e479]:
+                    - status "위험도 검토권장" [ref=f2e480]: 검토권장
+                  - cell [ref=f2e482]:
+                    - button "베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=f2e483] [cursor=pointer]: 열기
+                - row [ref=f2e484]:
+                  - cell "브라질 연방 공화국(The Federal Republic of Brazil) BR" [ref=f2e485]
+                  - cell "30" [ref=f2e486]
+                  - cell "13" [ref=f2e487]
+                  - cell "14" [ref=f2e488]
+                  - cell "14" [ref=f2e489]
+                  - cell "4" [ref=f2e490]
+                  - cell "100" [ref=f2e491]
+                  - cell [ref=f2e492]:
+                    - status "위험도 검토권장" [ref=f2e493]: 검토권장
+                  - cell [ref=f2e495]:
+                    - button "브라질 연방 공화국(The Federal Republic of Brazil) 상세 보기" [ref=f2e496] [cursor=pointer]: 열기
+                - row [ref=f2e497]:
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) CN" [ref=f2e498]
+                  - cell "30" [ref=f2e499]
+                  - cell "14" [ref=f2e500]
+                  - cell "12" [ref=f2e501]
+                  - cell "16" [ref=f2e502]
+                  - cell "4" [ref=f2e503]
+                  - cell "100" [ref=f2e504]
+                  - cell [ref=f2e505]:
+                    - status "위험도 검토권장" [ref=f2e506]: 검토권장
+                  - cell [ref=f2e508]:
+                    - button "중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=f2e509] [cursor=pointer]: 열기
+      - complementary [ref=f2e510]:
+        - generic [ref=f2e511]:
+          - generic [ref=f2e512]: 근거 패널
+          - button "근거 패널 접기" [ref=f2e513] [cursor=pointer]
+        - generic [ref=f2e515]:
+          - heading "근거 상태" [level=3] [ref=f2e516]
+          - paragraph [ref=f2e517]: 후보군으로 편입한 국가만 점수화해 순위를 계산합니다.
+          - generic [ref=f2e518]:
+            - paragraph [ref=f2e519]: 기준 코드
+            - paragraph [ref=f2e520]: HS 401110 · HSK 4011100000
+            - paragraph [ref=f2e521]: "적용 방식: 검색 결과 1순위 자동 반영 (95점)"
+            - paragraph [ref=f2e522]: "상태: 신뢰도 높음 · 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+          - generic [ref=f2e523]:
+            - paragraph [ref=f2e524]: 현재 상태
+            - generic [ref=f2e525]: 대기
+    - generic [ref=f2e527]:
+      - button "이전" [ref=f2e528] [cursor=pointer]
+      - button "리포트로 안전 점검" [ref=f2e529] [cursor=pointer]:
+        - generic [ref=f2e530]: 리포트로
+        - text: 안전 점검

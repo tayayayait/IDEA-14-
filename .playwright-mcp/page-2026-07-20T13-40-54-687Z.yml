@@ -1,0 +1,232 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e461]:
+        - button "Close toast" [ref=e462] [cursor=pointer]
+        - generic [ref=e469]: 분석 완료(48초 소요, 상태=success).
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "홈" [ref=e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=e12]: 산단수출 코파일럿
+      - generic [ref=e13]:
+        - link "프로젝트" [ref=e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=e18] [cursor=pointer]
+    - generic [ref=e20]:
+      - complementary [ref=e21]:
+        - paragraph [ref=e22]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=e23]:
+          - link "1단계 기업·공장 검색" [ref=e24] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/company
+            - generic [ref=e28]:
+              - generic [ref=e29]: 기업·공장 검색
+              - generic [ref=e30]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=e31] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/product
+            - generic [ref=e35]:
+              - generic [ref=e36]: 제품·HS 코드
+              - generic [ref=e37]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=e38] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries
+            - generic [ref=e39]: "3"
+            - generic [ref=e40]:
+              - generic [ref=e41]: 후보국 추천 Top 3
+              - generic [ref=e42]: 요구사항 3
+          - link "4단계 국가 상세" [ref=e43] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries/CN
+            - generic [ref=e44]: "4"
+            - generic [ref=e45]:
+              - generic [ref=e46]: 국가 상세
+              - generic [ref=e47]: 요구사항 4~7
+          - link "5단계 리포트" [ref=e48] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/report
+            - generic [ref=e49]: "5"
+            - generic [ref=e50]:
+              - generic [ref=e51]: 리포트
+              - generic [ref=e52]: 요구사항 8
+      - main [ref=e53]:
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - paragraph [ref=e56]: 기획 요구사항 매핑
+            - paragraph [ref=e57]: 요구사항 3
+            - paragraph [ref=e58]: 후보국 추천 및 근거 점수화
+          - generic [ref=e59]:
+            - generic [ref=e60]:
+              - heading "3. 후보국 추천 상위 3개국" [level=1] [ref=e61]
+              - paragraph [ref=e62]: 후보국을 먼저 추출하고 후보군 내에서만 점수와 순위를 계산합니다.
+            - button "추천 실행" [ref=e63] [cursor=pointer]
+          - generic [ref=e64]:
+            - button "1순위 미합중국(The United States of America) 상세 보기" [ref=e471] [cursor=pointer]:
+              - generic [ref=e472]:
+                - generic [ref=e473]: 순위 1
+                - generic [ref=e480]:
+                  - generic [ref=e481]: 발표용 우선 후보
+                  - status "위험도 우선검토" [ref=e482]: 우선검토
+              - paragraph [ref=e484]: 미합중국(The United States of America)
+              - paragraph [ref=e485]: US
+              - paragraph [ref=e486]: 최근 12개월 HS/HSK 수출액 조회 중
+              - paragraph [ref=e487]: "근거: 미국은 세계 최대의 자동차 시장 중 하나로 교체용 타이어 수요가 꾸준하며, 특히 전기차 보급 확대로 인해 고성능 타이어에 대한 요구가 높습니다. 넥센타이어의 기술력을 바탕으로 현지 완성차 업체에 대한 신차용 타이어 공급 확대 가능성도 매우 긍정적입니다."
+              - paragraph [ref=e488]: "낮은 점수 사유: 현지 타이어 시장은 글로벌 브랜드 간의 경쟁이 매우 치열하며, 미국 교통부의 DOT 인증 규정 준수 및 환경 관련 규제가 점차 강화되고 있습니다. 또한 최근 무역 정책의 불확실성이 수입 단가와 물류 비용에 영향을 줄 수 있어 면밀한 대비가 필요합니다."
+              - paragraph [ref=e489]: 상세 보기
+            - button "2순위 베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e83] [cursor=pointer]:
+              - generic [ref=e84]:
+                - generic [ref=e85]: 순위 2
+                - status "위험도 검토권장" [ref=e93]: 검토권장
+              - paragraph [ref=e95]: 베트남 사회주의 공화국(Socialist Republic of Vietnam)
+              - paragraph [ref=e96]: VN
+              - paragraph [ref=e97]: 최근 12개월 HS/HSK 수출액 조회 중
+              - paragraph [ref=e98]: "근거: 베트남은 급격한 경제 성장과 도시화로 인해 자동차 보유 대수가 빠르게 증가하고 있으며, 이에 따라 타이어 교체 및 신규 수요가 급증하는 추세입니다. 한국 제품에 대한 우호적인 인식과 현지 제조업 활성화 정책은 시장 진입에 유리한 환경을 조성하고 있습니다."
+              - paragraph [ref=e99]: "낮은 점수 사유: 베트남 내 자국 타이어 산업 육성을 위한 경쟁이 심화되고 있으며, 저가형 제품과의 가격 경쟁력을 확보하는 것이 시장 점유율 확대의 핵심 과제입니다. 또한 복잡한 유통 구조와 품질 인증 절차에 대한 확실한 정보가 부족할 경우 진입에 어려움이 있을 수 있습니다."
+              - paragraph [ref=e100]: 상세 보기
+            - button "3순위 중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e490] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e67]: 순위 3
+                - status "위험도 검토권장" [ref=e75]: 검토권장
+              - paragraph [ref=e77]: 중화인민공화국(The People&rsquo;s Republic of China)
+              - paragraph [ref=e78]: CN
+              - paragraph [ref=e79]: 최근 12개월 HS/HSK 수출액 조회 중
+              - paragraph [ref=e80]: "근거: 중국은 세계 최대의 자동차 생산 및 소비국으로 프리미엄 타이어부터 전기차 전용 타이어까지 광범위한 수요층이 형성되어 있습니다. 신질생산력 강조에 따른 기술 혁신이 진행 중이며, 고품질 타이어에 대한 소비자 선호도가 높아 한국산 제품의 시장 경쟁력이 충분합니다."
+              - paragraph [ref=e81]: "낮은 점수 사유: 중국 강제 인증인 CCC 인증 획득이 필수적이며 매우 엄격한 규제와 100건 이상의 수입 규정이 존재하여 진입 장벽이 상당히 높은 편입니다. 현지 로컬 브랜드의 급성장과 가격 공세, 그리고 복잡한 통관 절차 및 수입 규제 변화에 대한 지속적인 모니터링이 필요합니다."
+              - paragraph [ref=e82]: 상세 보기
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - heading "후보국 세계 지도" [level=3] [ref=e121]
+              - paragraph [ref=e122]: 추천된 전체 후보국의 점수 분포 및 수출 실적(있는 경우)을 확인합니다.
+            - generic [ref=e124]:
+              - generic [ref=e125]:
+                - generic [ref=e126]: "점수 범례:"
+                - generic [ref=e127]: 70+ 추천
+                - generic [ref=e129]: 50-69 고려
+                - generic [ref=e131]: 30-49 보통
+                - generic [ref=e133]: ~29 낮음
+                - generic [ref=e135]: 데이터 없음
+              - img [ref=e137]:
+                - generic [ref=e140]:
+                  - generic [ref=e493]: 🥇
+                  - generic [ref=e320]: 🥈
+                  - generic [ref=e319]: 🥉
+              - generic [ref=e322]:
+                - button "🥇 미합중국(The United States of America) 84점" [ref=e494] [cursor=pointer]:
+                  - generic [ref=e495]: 🥇
+                  - generic [ref=e496]: 미합중국(The United States of America)
+                  - generic [ref=e497]: 84점
+                - button "🥈 베트남 사회주의 공화국(Socialist Republic of Vietnam) 78점" [ref=e498] [cursor=pointer]:
+                  - generic [ref=e328]: 🥈
+                  - generic [ref=e329]: 베트남 사회주의 공화국(Socialist Republic of Vietnam)
+                  - generic [ref=e330]: 78점
+                - button "🥉 중화인민공화국(The People&rsquo;s Republic of China) 74점" [ref=e499] [cursor=pointer]:
+                  - generic [ref=e324]: 🥉
+                  - generic [ref=e325]: 중화인민공화국(The People&rsquo;s Republic of China)
+                  - generic [ref=e326]: 74점
+              - generic [ref=e335]:
+                - generic [ref=e500]: 미합중국(The United States of America) 최근 12개월 HS/HSK 수출액 조회 중
+                - generic [ref=e337]: 베트남 사회주의 공화국(Socialist Republic of Vietnam) 최근 12개월 HS/HSK 수출액 조회 중
+                - generic [ref=e336]: 중화인민공화국(The People&rsquo;s Republic of China) 최근 12개월 HS/HSK 수출액 조회 중
+          - generic [ref=e339]:
+            - generic [ref=e340]:
+              - heading "입력 시장 평가" [level=3] [ref=e341]
+              - paragraph [ref=e342]: 메모와 비교한 목표시장 편입 신호이며, 순위를 강제하지 않습니다.
+            - paragraph [ref=e344]: 메모에서 목표시장을 찾지 못했습니다.
+          - generic [ref=e345]:
+            - generic [ref=e346]:
+              - heading "뉴스 근거(상위 3개국)" [level=3] [ref=e347]
+              - paragraph [ref=e348]: 제품 직접 뉴스, 산업 동향, 거시경제/수출환경 뉴스를 구분합니다.
+            - generic [ref=e349]:
+              - generic [ref=e350]:
+                - paragraph [ref=e351]: "선택 국가: 미합중국(The United States of America)"
+                - combobox "국가 선택" [ref=e352] [cursor=pointer]:
+                  - generic: 1순위 - 미합중국(The United States of America)
+                - button "상위 3개국 뉴스 근거 생성" [ref=e355] [cursor=pointer]
+              - paragraph [ref=e356]: 선택한 국가에 분류된 뉴스 근거가 없습니다.
+          - generic [ref=e357]:
+            - generic [ref=e358]:
+              - heading "전체 후보국 점수" [level=3] [ref=e359]
+              - paragraph [ref=e360]: 점수화된 모든 국가의 비교표입니다.
+            - table "국가 순위표" [ref=e362]:
+              - rowgroup [ref=e363]:
+                - row [ref=e364]:
+                  - columnheader "국가" [ref=e365]
+                  - columnheader "시장성" [ref=e366]
+                  - columnheader "인증" [ref=e367]
+                  - columnheader "규제" [ref=e368]
+                  - columnheader "결제" [ref=e369]
+                  - columnheader "안전성" [ref=e370]
+                  - columnheader "총점" [ref=e371]
+                  - columnheader "등급" [ref=e372]
+                  - columnheader "상세" [ref=e373]
+              - rowgroup [ref=e374]:
+                - row [ref=e501]:
+                  - cell "미합중국(The United States of America) US" [ref=e502]
+                  - cell "29" [ref=e503]
+                  - cell "18" [ref=e504]
+                  - cell "15" [ref=e505]
+                  - cell "18" [ref=e506]
+                  - cell "4" [ref=e507]
+                  - cell "84" [ref=e508]
+                  - cell [ref=e509]:
+                    - status "위험도 우선검토" [ref=e510]: 우선검토
+                  - cell [ref=e512]:
+                    - button "미합중국(The United States of America) 상세 보기" [ref=e513] [cursor=pointer]: 열기
+                - row [ref=e514]:
+                  - cell "베트남 사회주의 공화국(Socialist Republic of Vietnam) VN" [ref=e389]
+                  - cell "28" [ref=e515]
+                  - cell "15" [ref=e516]
+                  - cell "17" [ref=e517]
+                  - cell "14" [ref=e518]
+                  - cell "4" [ref=e394]
+                  - cell "78" [ref=e519]
+                  - cell [ref=e396]:
+                    - status "위험도 검토권장" [ref=e397]: 검토권장
+                  - cell [ref=e399]:
+                    - button "베트남 사회주의 공화국(Socialist Republic of Vietnam) 상세 보기" [ref=e400] [cursor=pointer]: 열기
+                - row [ref=e520]:
+                  - cell "중화인민공화국(The People&rsquo;s Republic of China) CN" [ref=e376]
+                  - cell "29" [ref=e521]
+                  - cell "14" [ref=e522]
+                  - cell "12" [ref=e523]
+                  - cell "15" [ref=e524]
+                  - cell "4" [ref=e381]
+                  - cell "74" [ref=e525]
+                  - cell [ref=e383]:
+                    - status "위험도 검토권장" [ref=e384]: 검토권장
+                  - cell [ref=e386]:
+                    - button "중화인민공화국(The People&rsquo;s Republic of China) 상세 보기" [ref=e387] [cursor=pointer]: 열기
+                - row [ref=e526]:
+                  - cell "브라질 연방 공화국(The Federal Republic of Brazil) BR" [ref=e415]
+                  - cell "25" [ref=e527]
+                  - cell "14" [ref=e528]
+                  - cell "15" [ref=e418]
+                  - cell "12" [ref=e419]
+                  - cell "4" [ref=e420]
+                  - cell "70" [ref=e529]
+                  - cell [ref=e422]:
+                    - status "위험도 검토권장" [ref=e423]: 검토권장
+                  - cell [ref=e425]:
+                    - button "브라질 연방 공화국(The Federal Republic of Brazil) 상세 보기" [ref=e426] [cursor=pointer]: 열기
+      - complementary [ref=e427]:
+        - generic [ref=e428]:
+          - generic [ref=e429]: 근거 패널
+          - button "근거 패널 접기" [ref=e430] [cursor=pointer]
+        - generic [ref=e432]:
+          - heading "근거 상태" [level=3] [ref=e433]
+          - paragraph [ref=e434]: 후보군으로 편입한 국가만 점수화해 순위를 계산합니다.
+          - generic [ref=e435]:
+            - paragraph [ref=e436]: 기준 코드
+            - paragraph [ref=e437]: HS 401110 · HSK 4011100000
+            - paragraph [ref=e438]: "적용 방식: 검색 결과 1순위 자동 반영 (95점)"
+            - paragraph [ref=e439]: "상태: 신뢰도 높음 · 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+          - generic [ref=e440]:
+            - paragraph [ref=e441]: 현재 상태
+            - generic [ref=e442]: 정상
+    - generic [ref=e444]:
+      - button "이전" [ref=e445] [cursor=pointer]
+      - button "리포트로 안전 점검" [ref=e446] [cursor=pointer]:
+        - generic [ref=e447]: 리포트로
+        - text: 안전 점검

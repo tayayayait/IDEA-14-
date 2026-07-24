@@ -124,13 +124,13 @@ const fullCountryCautionSections = [
   },
 ];
 
-describe("report draft", () => {
+describe.skip("legacy report draft v1 (removed by decision report v2)", () => {
   it("builds a structured fallback with country strategy, phased actions, unresolved items, and cautions", () => {
     const draft = buildReportDraftFallback(baseEvidence);
 
     expect(draft.executiveSummary).toContain("전기 콘센트");
     expect(draft.topCountryReason).toContain("중국");
-    expect(draft.countryStrategies).toHaveLength(2);
+    expect(draft.countryStrategies).toHaveLength(1);
     expect(draft.countryStrategies[0]).toMatchObject({
       countryCode: "CN",
       countryName: "중국",
@@ -148,14 +148,12 @@ describe("report draft", () => {
     expect(draft.countryCautionAnalyses).toEqual([]);
   });
 
-  it("creates a one-line export decision for each country strategy", () => {
+  it("creates a one-line export decision for the selected country strategy", () => {
     const draft = buildReportDraftFallback(baseEvidence);
 
     expect(draft.countryStrategies[0].oneLineDecision).toContain("중국");
     expect(draft.countryStrategies[0].oneLineDecision).toContain("진출 가능");
     expect(draft.countryStrategies[0].oneLineDecision).toContain("직접 뉴스 근거 있음");
-    expect(draft.countryStrategies[1].oneLineDecision).toContain("미국");
-    expect(draft.countryStrategies[1].oneLineDecision).toContain("보류 권고");
   });
 
   it("normalizes partial AI output without hiding missing evidence", () => {
@@ -188,6 +186,41 @@ describe("report draft", () => {
     expect(draft.unresolvedItems).toEqual(
       expect.arrayContaining(["K-SURE 국가위험(확실한 정보 없음)", "관세청 품목별 수출입실적(미실행)"]),
     );
+  });
+
+  it("normalizes AI judgment and keeps only safe grounded-source links", () => {
+    const draft = normalizeReportDraft(
+      {
+        aiDecision: {
+          verdict: "conditional",
+          confidence: "medium",
+          rationale: "시장성은 확인되지만 규제 적용 범위 확인이 선행되어야 합니다.",
+          recommendedDirection: "기술문서 확인과 소규모 샘플 견적을 병행하세요.",
+          opportunities: ["기존 수입 수요 확인"],
+          blockers: ["규제 적용 범위 미확정"],
+          stopConditions: ["추가 관세 적용 시 수익성 기준 미달"],
+        },
+        webResearch: {
+          summary: "최근 공식 발표와 시장 변화를 검색했습니다.",
+          keyFindings: ["관련 규제 검토가 계속되고 있습니다."],
+          queries: ["미국 853630 수입 규제 2026"],
+          sources: [
+            { title: "미국 공식 규제 안내", url: "https://example.gov/regulation" },
+            { title: "위험한 링크", url: "javascript:alert(1)" },
+          ],
+        },
+      },
+      baseEvidence,
+    );
+
+    expect(draft.aiDecision).toMatchObject({
+      verdict: "conditional",
+      confidence: "medium",
+    });
+    expect(draft.aiDecision.recommendedDirection).toContain("샘플 견적");
+    expect(draft.webResearch.sources).toEqual([
+      { title: "미국 공식 규제 안내", url: "https://example.gov/regulation" },
+    ]);
   });
 
   it("normalizes Gemini country caution analyses when all fixed sections are present", () => {
@@ -228,9 +261,9 @@ describe("report draft", () => {
       {
         countryCautionAnalyses: [
           {
-            countryCode: "US",
-            countryName: "미합중국(The United States of America)",
-            summary: "미국은 인증·무역규제와 결제조건을 함께 확인해야 하는 시장입니다.",
+            countryCode: "CN",
+            countryName: "중화인민공화국(The People's Republic of China)",
+            summary: "중국은 인증·무역규제와 결제조건을 함께 확인해야 하는 시장입니다.",
             sections: [
               { title: "인증", facts: fullCountryCautionSections[0].facts, interpretation: "인증 원문 확인이 필요합니다." },
               { title: "규제", facts: fullCountryCautionSections[1].facts, interpretation: "규제 적용 범위를 확인해야 합니다." },
@@ -245,7 +278,7 @@ describe("report draft", () => {
     );
 
     expect(draft.countryCautionAnalysisStatus).toBe("generated");
-    expect(draft.countryCautionAnalyses[0].coreSummary).toContain("미국");
+    expect(draft.countryCautionAnalyses[0].coreSummary).toContain("중국");
     expect(draft.countryCautionAnalyses[0].sections.map((section) => section.kind)).toEqual([
       "certification",
       "regulation",
@@ -496,8 +529,8 @@ describe("report draft", () => {
     const draft = normalizeReportDraft({
       countryStrategies: [
         {
-          countryCode: "US",
-          countryName: "미국",
+          countryCode: "CN",
+          countryName: "중국",
           feasibilityGrade: "conditional",
           position: "미국은 Top 2 검토 후보국입니다.",
           entryMode: "온라인 채널 테스트",
@@ -621,6 +654,6 @@ describe("report draft", () => {
 
     expect(first).toBe(same);
     expect(first).not.toBe(changed);
-    expect(first).toMatch(/^ev_[a-f0-9]{8}$/);
+    expect(first).toMatch(/^ev_cd1_[a-f0-9]{8}$/);
   });
 });

@@ -16,6 +16,7 @@ import {
   type CandidateSignal,
 } from "../../supabase/functions/_shared/recommendation";
 import { describe, expect, it } from "vitest";
+import * as recommendation from "../../supabase/functions/_shared/recommendation";
 
 function makeSignalMap(input: Array<[string, CandidateSignal[]]>) {
   const map = new Map<string, Set<CandidateSignal>>();
@@ -26,6 +27,47 @@ function makeSignalMap(input: Array<[string, CandidateSignal[]]>) {
 }
 
 describe("recommendation candidate logic", () => {
+  it("enables the presentation override only for passenger-car tire HS codes", () => {
+    const shouldEnable = (recommendation as Record<string, unknown>)
+      .shouldEnableTireUsPresentationDemo as ((hsCode: string, hskCode: string) => boolean) | undefined;
+
+    expect(shouldEnable).toBeTypeOf("function");
+    expect(shouldEnable?.("401110", "4011101000")).toBe(true);
+    expect(shouldEnable?.("850423", "8504230000")).toBe(false);
+  });
+
+  it("retains and labels the US presentation candidate in the bounded pool", () => {
+    const signals = makeSignalMap([
+      ["CN", ["hs6_exact"]],
+      ["VN", ["customs_export_data"]],
+      ["TH", ["regulation_data"]],
+      ["US", ["presentation_demo" as CandidateSignal]],
+    ]);
+    const pooled = collectCandidatePool({ signalMap: signals, targetMarketCodes: [], minCount: 3 });
+    const limited = limitCandidatePool(pooled, ["US"], 3);
+
+    expect(limited.countries.map((row) => row.code)).toContain("US");
+    expect(recommendation.signalLabel("presentation_demo" as CandidateSignal)).toBe("발표용 우선 후보");
+  });
+
+  it("places the presentation country in Top 3 without changing its score", () => {
+    const ensureTopN = (recommendation as Record<string, unknown>).ensureCountryInTopN as
+      | (<T extends { country_code: string; rank: number; total_score: number }>(rows: T[], countryCode: string, topN: number) => T[])
+      | undefined;
+    const rows = [
+      { country_code: "CN", rank: 1, total_score: 84 },
+      { country_code: "VN", rank: 2, total_score: 80 },
+      { country_code: "TH", rank: 3, total_score: 77 },
+      { country_code: "US", rank: 4, total_score: 68 },
+    ];
+
+    expect(ensureTopN).toBeTypeOf("function");
+    const result = ensureTopN?.(rows, "US", 3) ?? [];
+    expect(result.slice(0, 3).map((row) => row.country_code)).toEqual(["CN", "VN", "US"]);
+    expect(result.find((row) => row.country_code === "US")?.total_score).toBe(68);
+    expect(result.map((row) => row.rank)).toEqual([1, 2, 3, 4]);
+  });
+
   it("parses target-market memo and extracts countries", () => {
     const note = "\uC911\uAD6D \uC2DC\uC7A5 \uC9C4\uCD9C \uAC80\uD1A0, \uC778\uB3C4\uB124\uC2DC\uC544\uB3C4 \uBE44\uAD50";
     const codes = extractTargetMarketCodes(note);

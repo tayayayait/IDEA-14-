@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isStoredReportFresh, normalizeStoredReport } from "@/lib/report-persistence";
+import { isStoredReportFresh, isStoredReportUsable, normalizeStoredReport } from "@/lib/report-persistence";
 
 describe("report persistence", () => {
   it("treats a stored successful report as fresh only when the evidence hash matches", () => {
@@ -18,5 +18,16 @@ describe("report persistence", () => {
     expect(isStoredReportFresh(null, "ev_12345678")).toBe(false);
     expect(isStoredReportFresh(normalizeStoredReport({ evidence_hash: "ev_12345678", ai_state: "error" }), "ev_12345678")).toBe(false);
     expect(isStoredReportFresh(normalizeStoredReport({ draft: null, evidence_hash: "ev_12345678", ai_state: "success" }), "ev_12345678")).toBe(false);
+  });
+
+  it("keeps a valid stored draft usable when new evidence makes it stale", () => {
+    const row = normalizeStoredReport({
+      draft: { decision: { headline: "저장된 리포트" } },
+      evidence_hash: "ev_old",
+      ai_state: "success",
+    });
+
+    expect(isStoredReportUsable(row)).toBe(true);
+    expect(isStoredReportFresh(row, "ev_new")).toBe(false);
   });
 });

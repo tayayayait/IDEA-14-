@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
-describe("report trade office accordion ui", () => {
+describe.skip("legacy separate trade-office accordion (removed by decision report v2)", () => {
   it("renders trade office execution details as a collapsed accordion", () => {
     const source = read("src/pages/Step6Report.tsx");
 

@@ -17,6 +17,7 @@ import {
   canonicalizeTargetMarkets,
   COUNTRY_NAME_BY_CODE,
   isWeakProductRelevanceToken,
+  shouldEnableTireUsPresentationDemo,
 } from "../../supabase/functions/_shared/recommendation";
 import {
   buildProductAnalysisCode,
@@ -291,7 +292,14 @@ export default function Step3Countries() {
       message?: string;
       ai_used?: boolean;
       fallback_used?: boolean;
-    }>("recommend-countries", { project_id: id, require_ai: true }, { timeoutMs: RECOMMEND_COUNTRIES_TIMEOUT_MS, retryOn500: false });
+    }>("recommend-countries", {
+      project_id: id,
+      require_ai: true,
+      presentation_demo_tire_us: shouldEnableTireUsPresentationDemo(
+        analysisCode.hsCode,
+        analysisCode.hskCode,
+      ),
+    }, { timeoutMs: RECOMMEND_COUNTRIES_TIMEOUT_MS, retryOn500: false });
 
     if (!result.ok) {
       const nextState = normalizeExecutionState(result.state, "error");
@@ -508,7 +516,9 @@ export default function Step3Countries() {
                     <Trophy className={index === 0 ? "h-4 w-4 text-accent" : "h-4 w-4"} />
                     순위 {index + 1}
                   </span>
-                  <RiskBadge label={row.label} size="sm" />
+                  <span className="flex items-center gap-2">
+                    <RiskBadge label={row.label} size="sm" />
+                  </span>
                 </div>
 
                 <p className="font-display text-lg font-semibold">{row.country_name}</p>
@@ -531,7 +541,7 @@ export default function Step3Countries() {
                 ) : null}
                 {row.rationale?.low_recommendation_reason ? (
                   <p className="mt-1 text-xs text-risk-reviewable">
-                    낮은 점수 사유: {row.rationale.low_recommendation_reason}
+                    조심해야 할 점: {row.rationale.low_recommendation_reason}
                   </p>
                 ) : null}
                 <p className="mt-3 text-xs text-brand" aria-hidden="true">상세 보기</p>
@@ -596,7 +606,7 @@ export default function Step3Countries() {
                         <p className="mt-1 text-xs text-muted-foreground">근거: {insight.recommendationReason}</p>
                         {insight.lowRecommendationReason ? (
                           <p className="mt-1 text-xs text-risk-reviewable">
-                            낮은 점수 사유: {insight.lowRecommendationReason}
+                            조심해야 할 점: {insight.lowRecommendationReason}
                           </p>
                         ) : null}
                         {insight.alternatives.length > 0 ? (

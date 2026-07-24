@@ -20,7 +20,7 @@ import { Loader2, Sparkles, ArrowLeft, ExternalLink } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import type { RiskLabel } from "@/lib/scoring";
 import { sanitize, sanitizeNullable } from "@/lib/scoring";
-import { toPublicSourceUrl, buildKotraCertDetailUrl, buildKotraRegDetailUrl } from "@/lib/source-url";
+import { toPublicSourceUrl, buildKotraCertDetailUrl, buildKotraRegDetailUrl, buildKotraRegPdfUrl } from "@/lib/source-url";
 import {
   buildProductAnalysisCode,
   getSelectionSourceLabel,
@@ -53,6 +53,15 @@ import {
 import { normalizeExecutionState, toApiChipState, type ExecutionState } from "@/lib/execution-state";
 import { useRunningProgress } from "@/hooks/useRunningProgress";
 import { normalizeReportText } from "@/lib/report-text";
+import {
+  CountryDecisionDashboard,
+  type CountryDecisionProviderStatus,
+} from "@/components/CountryDecisionDashboard";
+import { AiFinalVerdictCard } from "@/components/AiFinalVerdictCard";
+import {
+  parseDecisionFactRows,
+  type DecisionFact,
+} from "@/lib/country-decision";
 import {
   buildNationalInfoPresentation,
   cleanNationalInfoText,
@@ -137,6 +146,23 @@ type DetailSourceModel<T> = {
   sectionState: "not_run" | "ready" | "empty" | "error" | "stale";
 };
 
+type DecisionDbResult = {
+  data: unknown;
+  error: { message: string } | null;
+};
+
+type DecisionDbQuery = PromiseLike<DecisionDbResult> & {
+  select(columns?: string): DecisionDbQuery;
+  eq(column: string, value: unknown): DecisionDbQuery;
+  order(column: string, options?: { ascending?: boolean }): DecisionDbQuery;
+  limit(count: number): DecisionDbQuery;
+  maybeSingle(): DecisionDbQuery;
+};
+
+const decisionDb = supabase as unknown as {
+  from(table: string): DecisionDbQuery;
+};
+
 const KOTRA_CERT_NO_DIRECT_INFO_MESSAGE =
   "KOTRA 해외인증정보 API에서 현재 입력한 국가·HS Code·제품명 기준으로 직접 관련된 해외인증 정보가 확인되지 않았습니다.\n다만 인증 필요 여부는 제품의 세부 사양, 용도, 구성품, 현지 수입자 요건에 따라 달라질 수 있으므로 최종 수출 전 현지 인증기관 또는 KOTRA 무역관 확인이 필요합니다.";
 
@@ -154,8 +180,13 @@ export default function Step4CountryDetail() {
   const [analysisCode, setAnalysisCode] = useState(() => buildProductAnalysisCode(null));
   const [analysisProductName, setAnalysisProductName] = useState("");
   const [currentDetailContext, setCurrentDetailContext] = useState<CurrentDetailContext>({});
+  const [selectedCert, setSelectedCert] = useState<CertRow | null>(null);
   const [selectedReg, setSelectedReg] = useState<RegRow | null>(null);
+  const [showRegReviewCandidates, setShowRegReviewCandidates] = useState(false);
   const [nationalInfo, setNationalInfo] = useState<Record<string, unknown> | null>(null);
+  const [decisionFacts, setDecisionFacts] = useState<DecisionFact[]>([]);
+  const [decisionProviders, setDecisionProviders] = useState<CountryDecisionProviderStatus[]>([]);
+  const [decisionLastUpdated, setDecisionLastUpdated] = useState<string | null>(null);
   const aiRunning = aiState === "running";
   const aiElapsedSec = useRunningProgress(aiRunning);
   const aiDelayed = aiRunning && aiElapsedSec >= 45;
@@ -165,7 +196,15 @@ export default function Step4CountryDetail() {
   const load = async () => {
     if (!id || !cc || authLoading || !session) return;
 
-    const [{ data: c }, { data: ce }, { data: re }, { data: ri }, { data: productData }] = await Promise.all([
+    const [
+      { data: c },
+      { data: ce },
+      { data: re },
+      { data: ri },
+      { data: productData },
+      { data: factData },
+      { data: analysisRunData },
+    ] = await Promise.all([
       supabase.from("project_countries").select("*").eq("project_id", id).eq("country_code", cc).maybeSingle(),
       supabase.from("project_certifications").select("*").eq("project_id", id).eq("country_code", cc),
       supabase.from("project_regulations").select("*").eq("project_id", id).eq("country_code", cc),
@@ -174,6 +213,20 @@ export default function Step4CountryDetail() {
         .from("project_products")
         .select("name,hs_code,hsk_code,components,confirmed")
         .eq("project_id", id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      decisionDb
+        .from("country_decision_facts")
+        .select("*")
+        .eq("project_id", id)
+        .eq("country_code", cc)
+        .order("fetched_at", { ascending: false }),
+      decisionDb
+        .from("country_analysis_runs")
+        .select("provider_statuses,completed_at,created_at")
+        .eq("project_id", id)
+        .eq("country_code", cc)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
@@ -187,6 +240,8 @@ export default function Step4CountryDetail() {
     const currentProductName = sanitizeNullable(productData?.name ?? null) ?? "";
     const currentHsCode = sanitizeNullable(productData?.hs_code ?? null) ?? "";
     const currentHskCode = sanitizeNullable(productData?.hsk_code ?? null) ?? "";
+    const parsedDecisionFacts = parseDecisionFactRows(factData);
+    const latestRun = toRecord(analysisRunData);
 
     setCountry(sanitizedCountry);
     setCerts(certRows);
@@ -200,11 +255,19 @@ export default function Step4CountryDetail() {
       hsCode: currentHsCode,
       hskCode: currentHskCode,
     });
+    setDecisionFacts(parsedDecisionFacts);
+    setDecisionProviders(parseDecisionProviderStatuses(latestRun.provider_statuses));
+    setDecisionLastUpdated(
+      sanitizeNullable(latestRun.completed_at) ??
+      parsedDecisionFacts[0]?.fetchedAt ??
+      sanitizeNullable(latestRun.created_at),
+    );
 
     return {
       certCount: certRows.length,
       regCount: regRows.length,
       riskCount: riskRows.filter((row) => isKsureCategory(row.category)).length,
+      decisionFactCount: parsedDecisionFacts.length,
     };
   };
 
@@ -218,6 +281,10 @@ export default function Step4CountryDetail() {
     saveLastSelectedCountry(id, cc);
   }, [id, cc]);
 
+  useEffect(() => {
+    setShowRegReviewCandidates(false);
+  }, [id, cc]);
+
   const runDetail = async () => {
     if (!id || !cc) return;
     if (authLoading || !session) {
@@ -226,16 +293,22 @@ export default function Step4CountryDetail() {
       return;
     }
     setAiState("running");
-    const result = await invoke<{ state?: string; message?: string }>(
+    const result = await invoke<{ state?: string; message?: string; provider_statuses?: unknown }>(
       "country-detail",
       {
         project_id: id,
         country_code: cc,
+        force_refresh: true,
       },
       { timeoutMs: 45000 },
     );
     const loaded = await load();
-    const hasLoadedDetailRows = Boolean(loaded && (loaded.certCount > 0 || loaded.regCount > 0 || loaded.riskCount > 0));
+    const hasLoadedDetailRows = Boolean(loaded && (
+      loaded.certCount > 0 ||
+      loaded.regCount > 0 ||
+      loaded.riskCount > 0 ||
+      loaded.decisionFactCount > 0
+    ));
     const nextAiState = resolveCountryDetailApiState({
       ok: result.ok,
       resultState: result.state,
@@ -269,7 +342,15 @@ export default function Step4CountryDetail() {
 
   const certMatchedCount = extractSourceMatchedCount(country?.rationale?.sources, "cert_data");
   const regulationMatchedCount = extractSourceMatchedCount(country?.rationale?.sources, "regulation_data");
-  const detailExecuted = certs.length > 0 || regs.length > 0 || risks.length > 0 || !!nationalInfo;
+  const alternativeMarkets = formatMarkets(country?.rationale?.alternative_markets);
+  const hasTopDecisionContent = Boolean(
+    country?.rationale?.inclusion_reason ||
+    country?.rationale?.recommendation_reason ||
+    country?.rationale?.low_recommendation_reason ||
+    alternativeMarkets.length > 0 ||
+    country?.rationale?.candidate_signals?.length,
+  );
+  const detailExecuted = decisionFacts.length > 0 || certs.length > 0 || regs.length > 0 || risks.length > 0 || !!nationalInfo;
   const visibleSources = filterVisibleSources(country?.rationale?.sources);
   const currentCertRows = filterRowsByCurrentDetailContext(certs, currentDetailContext, "certification");
   const currentRegRows = filterRowsByCurrentDetailContext(regs, currentDetailContext, "regulation")
@@ -331,39 +412,107 @@ export default function Step4CountryDetail() {
     successfulRowCount: regConfirmedRows.length,
   });
 
-  const renderCertRow = (row: CertRow) => (
-    <li key={row.id} className="rounded-md border border-border p-3">
-      <p className="font-medium">
-        {certValue(row, "applicable_items", row.scheme ?? "정확한 정보 없음")}
-        {row.required ? <span className="ml-2 text-xs text-risk-high">필수</span> : null}
-      </p>
-      <div className="mt-1 space-y-1 text-xs text-muted-foreground">
-        <p>매칭 기준: {certValue(row, "match_basis", "정확한 정보 없음")}</p>
-        {isCertReviewRequired(row) ? <p>검토 상태: 기관 확인 필요</p> : null}
-        <p>필요서류: {certValue(row, "required_docs", "정확한 정보 없음")}</p>
-        <p className="line-clamp-3">절차: {certValue(row, "procedure", "정확한 정보 없음")}</p>
-        <p>유효기간: {certValue(row, "validity_period", "정확한 정보 없음")}</p>
-        <p>
-          예상 비용 {row.est_cost_krw ? `${row.est_cost_krw.toLocaleString()} KRW` : "정확한 정보 없음"} / 예상
-          기간 {row.est_lead_days ?? "정확한 정보 없음"}일
+  const renderCertRow = (row: CertRow) => {
+    const productName = certValue(row, "applicable_items", certValue(row, "subject", "정확한 정보 없음"));
+    const title = sanitizeNullable(row.scheme) ?? certValue(row, "subject", productName);
+    const countryLabel = certValue(row, "country", country?.country_name ?? "");
+    const hsCode = certValue(row, "hs_code", "");
+    const certificationGroup = certValue(row, "certification_group", "");
+    const certificationType = certValue(row, "certification_type", "");
+    const requiredDocs = certValue(row, "required_docs", "정확한 정보 없음");
+    const basis = firstCertificationValue(row, ["test_standard", "basis_regulation"], "정확한 정보 없음");
+    const validity = formatCertificationValidity(row);
+    const costAndPeriod = formatCertificationCostAndPeriod(row);
+    const publishedAt = certValue(row, "published_at", "");
+    const summary = buildCertificationSummary(row);
+    const hasAiSummary = Boolean(readDetailRawText(row.raw ?? null, "ai_summary"));
+    const sourceUrl = row.source_org === "KOTRA" ? buildKotraCertDetailUrl(row.raw) : row.source_url;
+
+    return (
+      <li key={row.id} className="rounded-md border border-border p-3 sm:p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-medium text-foreground">{title}</p>
+            {productName && productName !== title ? (
+              <p className="mt-0.5 text-xs text-muted-foreground">{productName}</p>
+            ) : null}
+          </div>
+          {row.required || certificationGroup ? (
+            <span className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700">
+              {certificationGroup || "필수"}
+            </span>
+          ) : null}
+        </div>
+
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {countryLabel ? <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">{countryLabel}</span> : null}
+          {hsCode ? <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">HS {hsCode}</span> : null}
+          {certificationType ? <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">{certificationType}</span> : null}
+          {isCertReviewRequired(row) ? (
+            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] text-amber-700">기관 확인 필요</span>
+          ) : null}
+        </div>
+
+        <div className="mt-3 border-l-2 border-brand/70 pl-3">
+          <p className="text-xs font-medium text-foreground">{hasAiSummary ? "AI 핵심 정리" : "핵심 정리"}</p>
+          <p className="mt-1 break-words text-xs leading-relaxed text-muted-foreground">{summary}</p>
+        </div>
+
+        <dl className="mt-3 grid grid-cols-1 gap-x-4 gap-y-2 border-t border-border pt-3 text-xs sm:grid-cols-2">
+          <div className="min-w-0">
+            <dt className="text-muted-foreground">필요 서류</dt>
+            <dd className="mt-0.5 break-words text-foreground">{requiredDocs}</dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="text-muted-foreground">근거 기준</dt>
+            <dd className="mt-0.5 break-words text-foreground">{basis}</dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="text-muted-foreground">비용·기간</dt>
+            <dd className="mt-0.5 break-words text-foreground">{costAndPeriod}</dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="text-muted-foreground">유효기간</dt>
+            <dd className="mt-0.5 break-words text-foreground">{validity}</dd>
+          </div>
+        </dl>
+
+        <p className="mt-3 text-[11px] text-muted-foreground">
+          KOTRA 최종 업데이트 {publishedAt || "확인 필요"} · {hasAiSummary ? "AI 요약은 참고용" : "API 원문 기반 정리"}
         </p>
-      </div>
-      {row.source_url ? (
-        <a
-          href={row.source_org === "KOTRA" ? buildKotraCertDetailUrl(row.raw) : row.source_url}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-1 inline-flex items-center gap-1 text-xs text-brand hover:underline"
-        >
-          <ExternalLink className="h-3 w-3" />
-          {row.source_org || "출처"}
-        </a>
-      ) : null}
-    </li>
-  );
+
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+          <Button type="button" size="sm" variant="outline" onClick={() => setSelectedCert(row)}>
+            상세 보기
+          </Button>
+          {sourceUrl ? (
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-brand hover:underline"
+            >
+              <ExternalLink className="h-3 w-3" />
+              KOTRA 원문 확인
+            </a>
+          ) : null}
+        </div>
+
+        <details className="mt-3 border-t border-border pt-3 text-xs">
+          <summary className="cursor-pointer font-medium text-foreground">KOTRA API 원문 펼치기</summary>
+          <div className="mt-2 space-y-2 whitespace-pre-wrap text-muted-foreground">
+            <p><span className="font-medium text-foreground">제도 내용</span><br />{certValue(row, "raw_system_desc", "정확한 정보 없음")}</p>
+            <p><span className="font-medium text-foreground">인증 절차</span><br />{certValue(row, "procedure", "정확한 정보 없음")}</p>
+            <p><span className="font-medium text-foreground">유효기간</span><br />{certValue(row, "validity_period", "정확한 정보 없음")}</p>
+          </div>
+        </details>
+      </li>
+    );
+  };
 
   const renderRegRow = (row: RegRow) => {
     const sourceUrl = resolveRegSourceUrl(row, cc ?? country?.country_code ?? null);
+    const sourcePdfUrl = resolveRegPdfSourceUrl(row, cc ?? country?.country_code ?? null);
     const sourceLabel = resolveRegSourceLabel(row);
     const backupSource = isRegBackupSource(row);
     const matchConfidence = readDetailRawText(row.raw ?? null, "match_confidence").toLowerCase();
@@ -411,10 +560,32 @@ export default function Step4CountryDetail() {
           <Button type="button" size="sm" variant="outline" onClick={() => setSelectedReg(row)}>
             상세 보기
           </Button>
-          {sourceUrl ? (
+          {sourcePdfUrl ? (
+            <a
+              href={sourcePdfUrl}
+              target="_blank"
+              rel="noreferrer"
+              title="KOTRA 공식 수입규제 원문 PDF 다운로드"
+              className="inline-flex items-center gap-1 text-xs text-brand hover:underline"
+            >
+              <ExternalLink className="h-3 w-3" />
+              KOTRA 원문 PDF
+            </a>
+          ) : sourceUrl ? (
             <a href={sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-brand hover:underline">
               <ExternalLink className="h-3 w-3" />
               {sourceLabel}
+            </a>
+          ) : null}
+          {sourcePdfUrl && sourceUrl ? (
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              title="KOTRA 국가별 수입규제 검색 화면입니다. 페이지에서 검색 버튼을 눌러야 결과가 표시됩니다."
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-brand hover:underline"
+            >
+              KOTRA 검색 화면
             </a>
           ) : null}
         </div>
@@ -433,19 +604,19 @@ export default function Step4CountryDetail() {
     const { title, description, source, emptyMessage, contextMismatch = false, notRunMessage } = params;
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="p-3 sm:p-4">
           <div className="flex items-start justify-between gap-3">
             <div>
               <CardTitle className="text-base">{title}</CardTitle>
-              <CardDescription className="mt-1">{description}</CardDescription>
+              <CardDescription className="mt-0.5">{description}</CardDescription>
             </div>
             <SourceStatusPill source={source} />
           </div>
-          <p className="text-xs text-muted-foreground">
-            확정 인증정보 {source.confirmedRows.length}건 / 검토 필요 인증정보 {source.reviewRows.length}건
+          <p className="mt-1 text-xs text-muted-foreground">
+            직접 일치 {source.confirmedRows.length}건 / 추가 검토 {source.reviewRows.length}건
           </p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0">
           {source.sectionState === "not_run" ? (
             <Empty msg={notRunMessage ?? "상세 분석 미실행 상태입니다. 대상국 분석 실행을 눌러주세요."} />
           ) : contextMismatch ? (
@@ -453,9 +624,9 @@ export default function Step4CountryDetail() {
           ) : source.sectionState !== "ready" ? (
             <SourceZeroResultNotice source={source} emptyMessage={emptyMessage} />
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <p className="mb-2 text-sm font-medium">확정 인증정보 {source.confirmedRows.length}건</p>
+                <p className="mb-2 text-sm font-medium">직접 일치 인증정보 {source.confirmedRows.length}건</p>
                 {source.confirmedRows.length > 0 ? (
                   <ul className="space-y-3">{source.confirmedRows.map(renderCertRow)}</ul>
                 ) : (
@@ -465,7 +636,7 @@ export default function Step4CountryDetail() {
               {source.reviewRows.length > 0 ? (
                 <div>
                   <p className="mb-2 text-sm font-medium text-risk-reviewable">
-                    검토 필요 인증정보 {source.reviewRows.length}건
+                    추가 검토 인증정보 {source.reviewRows.length}건
                   </p>
                   <ul className="space-y-3">{source.reviewRows.map(renderCertRow)}</ul>
                 </div>
@@ -488,19 +659,19 @@ export default function Step4CountryDetail() {
     const { title, description, source, emptyMessage, contextMismatch = false, notRunMessage } = params;
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="p-3 sm:p-4">
           <div className="flex items-start justify-between gap-3">
             <div>
               <CardTitle className="text-base">{title}</CardTitle>
-              <CardDescription className="mt-1">{description}</CardDescription>
+              <CardDescription className="mt-0.5">{description}</CardDescription>
             </div>
             <SourceStatusPill source={source} />
           </div>
-          <p className="text-xs text-muted-foreground">
-            확정 {source.confirmedRows.length}건 / 검토 후보 {source.reviewRows.length}건
+          <p className="mt-1 text-xs text-muted-foreground">
+            직접 일치 {source.confirmedRows.length}건 / 검토 후보 {source.reviewRows.length}건
           </p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3 pt-0 sm:p-4 sm:pt-0">
           {source.sectionState === "not_run" ? (
             <Empty msg={notRunMessage ?? "상세 분석 미실행 상태입니다. 대상국 분석 실행을 눌러주세요."} />
           ) : contextMismatch ? (
@@ -508,9 +679,9 @@ export default function Step4CountryDetail() {
           ) : source.sectionState !== "ready" ? (
             <SourceZeroResultNotice source={source} emptyMessage={emptyMessage} />
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <p className="mb-2 text-sm font-medium">확정 {source.confirmedRows.length}건</p>
+                <p className="mb-2 text-sm font-medium">직접 일치 {source.confirmedRows.length}건</p>
                 {source.confirmedRows.length > 0 ? (
                   <ul className="space-y-3">{source.confirmedRows.map(renderRegRow)}</ul>
                 ) : (
@@ -519,10 +690,26 @@ export default function Step4CountryDetail() {
               </div>
               {source.reviewRows.length > 0 ? (
                 <div>
-                  <p className="mb-2 text-sm font-medium text-risk-reviewable">
-                    검토 후보 {source.reviewRows.length}건
-                  </p>
-                  <ul className="space-y-3">{source.reviewRows.map(renderRegRow)}</ul>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <p className="text-sm font-medium text-risk-reviewable">
+                      검토 후보 {source.reviewRows.length}건
+                    </p>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      aria-expanded={showRegReviewCandidates}
+                      aria-controls="country-detail-reg-review-candidates"
+                      onClick={() => setShowRegReviewCandidates((current) => !current)}
+                    >
+                      {showRegReviewCandidates ? "후보 숨기기" : "후보 보기"}
+                    </Button>
+                  </div>
+                  {showRegReviewCandidates ? (
+                    <ul id="country-detail-reg-review-candidates" className="space-y-3">
+                      {source.reviewRows.map(renderRegRow)}
+                    </ul>
+                  ) : null}
                 </div>
               ) : null}
             </div>
@@ -640,249 +827,147 @@ export default function Step4CountryDetail() {
         </div>
       ) : (
         <>
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-mono text-muted-foreground">{country.country_code}</p>
-              <h1 className="font-display text-2xl font-semibold">{country.country_name}</h1>
-              <div className="mt-2 flex flex-wrap items-center gap-3">
-                <OverallVerdictBadge score={country.total_score} />
-                <span className="text-sm text-muted-foreground">점수: {country.total_score ?? "-"}/100</span>
-                <RiskBadge label={country.label} />
-              </div>
-              {detailExecuted ? (
-                <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-                  <p>핵심 리스크: {resolveKeyRisks(kotraRegSource, kotraCertSource)}</p>
-                  <p>다음 확인사항: {resolveNextCheckItems(kotraRegSource, kotraCertSource)}</p>
-                </div>
-              ) : null}
-            </div>
-            <Button onClick={runDetail} disabled={authLoading || !session || aiRunning} className="min-h-11">
-              {aiRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-              {aiRunning ? "상세 데이터 조회 중..." : "상세 분석 실행"}
-            </Button>
-          </div>
-
-          <Card className="mb-4">
-            <CardHeader>
-              <CardTitle className="text-base">수출 진입장벽 요약</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">판정</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <OverallVerdictBadge score={country.total_score} />
-                    <span className="font-medium">{country.total_score ?? "-"}/100</span>
-                    {country.rank ? <span className="text-muted-foreground">Rank {country.rank}</span> : null}
+          <CountryDecisionDashboard
+            countryCode={country.country_code}
+            countryName={country.country_name}
+            productName={analysisProductName}
+            hs6={analysisCode.hsCode ?? ""}
+            hsk10={analysisCode.hskCode ?? ""}
+            opportunityScore={country.total_score}
+            facts={decisionFacts}
+            providers={decisionProviders}
+            lastUpdated={decisionLastUpdated}
+            refreshing={aiRunning}
+            onRefresh={runDetail}
+            topDecisionContent={hasTopDecisionContent ? (
+              <div className="rounded-lg border border-border bg-background/70 p-3 sm:p-4">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-semibold">수출 진입장벽 요약</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">후보 선정 근거와 주의 신호를 빠르게 확인합니다.</p>
                   </div>
+                  {country.rank ? (
+                    <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                      후보 {country.rank}위
+                    </span>
+                  ) : null}
                 </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">포함 여부</p>
-                  <p className="mt-1 font-medium">
-                    {country.rationale?.target_market_matched ? "목표시장으로 감지됨" : "기본 후보군 포함"}
-                  </p>
+                <div className="mt-2 grid gap-3 border-t border-border/70 pt-2 text-sm sm:grid-cols-2">
+                    {country.rationale?.inclusion_reason ? (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground">포함 이유</p>
+                        <p className="mt-0.5">{country.rationale.inclusion_reason}</p>
+                      </div>
+                    ) : null}
+                    {country.rationale?.recommendation_reason ? (
+                      <div>
+                        <p className="text-xs font-semibold text-emerald-700">긍정 요인</p>
+                        <p className="mt-0.5">{country.rationale.recommendation_reason}</p>
+                      </div>
+                    ) : null}
+                    {country.rationale?.low_recommendation_reason ? (
+                      <div>
+                        <p className="text-xs font-semibold text-risk-reviewable">주의 요인</p>
+                        <p className="mt-0.5 text-risk-reviewable">{country.rationale.low_recommendation_reason}</p>
+                      </div>
+                    ) : null}
+                    {alternativeMarkets.length > 0 ? (
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground">대안시장</p>
+                        <p className="mt-0.5">{alternativeMarkets.join(", ")}</p>
+                      </div>
+                    ) : null}
+                    {country.rationale?.candidate_signals?.length ? (
+                      <p className="text-xs text-muted-foreground sm:col-span-2">
+                        후보 편입 근거: {country.rationale.candidate_signals.join(", ")}
+                      </p>
+                    ) : null}
                 </div>
               </div>
-              {country.rationale?.inclusion_reason ? (
+            ) : undefined}
+          />
+
+          <Card className="mt-6 overflow-hidden">
+            <CardHeader className="border-b border-border bg-muted/20 p-3 sm:p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground">포함 이유</p>
-                  <p className="mt-0.5">{country.rationale.inclusion_reason}</p>
+                  <CardTitle className="text-base">KOTRA 인증·규제 원문 근거</CardTitle>
+                  <CardDescription className="mt-0.5">
+                    국가·HS·제품 기준으로 조회한 KOTRA 원문 결과를 확인합니다.
+                  </CardDescription>
                 </div>
-              ) : null}
-              {country.rationale?.recommendation_reason ? (
-                <div>
-                  <p className="text-xs font-semibold text-emerald-700">긍정 요인</p>
-                  <p className="mt-0.5">{country.rationale.recommendation_reason}</p>
+                <div className="flex flex-wrap gap-1.5 text-xs text-muted-foreground">
+                  <span className="rounded-full bg-background px-2 py-0.5 shadow-sm">
+                    인증 직접 일치 {kotraCertSource.confirmedRows.length}건
+                  </span>
+                  <span className="rounded-full bg-background px-2 py-0.5 shadow-sm">
+                    규제 직접 일치 {kotraRegSource.confirmedRows.length}건 · 검토 {kotraRegSource.reviewRows.length}건
+                  </span>
                 </div>
-              ) : null}
-              {country.rationale?.low_recommendation_reason ? (
-                <div>
-                  <p className="text-xs font-semibold text-risk-reviewable">주의 요인</p>
-                  <p className="mt-0.5 text-risk-reviewable">{country.rationale.low_recommendation_reason}</p>
-                </div>
-              ) : null}
-              {formatMarkets(country.rationale?.alternative_markets).length > 0 ? (
-                <div>
-                  <p className="text-xs font-semibold text-muted-foreground">대안시장</p>
-                  <p className="mt-0.5">{formatMarkets(country.rationale?.alternative_markets).join(", ")}</p>
-                </div>
-              ) : null}
-              {country.rationale?.candidate_signals?.length ? (
-                <p className="text-xs text-muted-foreground">후보 편입 근거: {country.rationale.candidate_signals.join(", ")}</p>
-              ) : null}
+              </div>
+            </CardHeader>
+            <CardContent className="p-3 sm:p-4">
+              <div className="grid gap-3 md:grid-cols-2">
+                {renderCertSourceCard({
+                  title: "KOTRA 해외인증·규격",
+                  description: "국가·HS/HSK·제품 기준 KOTRA 해외인증 API 결과",
+                  source: kotraCertSource,
+                  emptyMessage: KOTRA_CERT_NO_DIRECT_INFO_MESSAGE,
+                  contextMismatch: certCurrentContextMismatch,
+                  notRunMessage: certMatchedCount > 0
+                    ? `추천 단계에서 인증 ${certMatchedCount}건이 감지되었습니다. 상세 분석을 실행하면 출처별 카드를 동기화합니다.`
+                    : undefined,
+                })}
+                {renderRegSourceCard({
+                  title: "KOTRA 수입규제·무역구제",
+                  description: "DS00000128 API + 국별 대세계 수입규제 CSV 기준 결과",
+                  source: kotraRegSource,
+                  emptyMessage: `${country?.country_name ?? "선택국가"} 내 한국산 해당 HS 기준 KOTRA 수입규제·무역구제 매칭 0건`,
+                  contextMismatch: regCurrentContextMismatch,
+                  notRunMessage: regulationMatchedCount > 0
+                    ? `추천 단계에서 규제 ${regulationMatchedCount}건이 감지되었습니다. 상세 분석을 실행하면 출처별 카드를 동기화합니다.`
+                    : undefined,
+                })}
+              </div>
             </CardContent>
           </Card>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            {renderCertSourceCard({
-              title: "KOTRA 해외인증·규격",
-              description: "국가·HS/HSK·제품 기준 KOTRA 해외인증 API 결과",
-              source: kotraCertSource,
-              emptyMessage: KOTRA_CERT_NO_DIRECT_INFO_MESSAGE,
-              contextMismatch: certCurrentContextMismatch,
-              notRunMessage: certMatchedCount > 0
-                ? `추천 단계에서 인증 ${certMatchedCount}건이 감지되었습니다. 상세 분석을 실행하면 출처별 카드에 동기화됩니다.`
-                : undefined,
-            })}
+          <AiFinalVerdictCard
+            projectId={id!}
+            facts={decisionFacts}
+            countryCode={country.country_code}
+            countryName={country.country_name}
+            productName={analysisProductName}
+            hs6={analysisCode.hsCode ?? ""}
+            opportunityScore={country.total_score}
+            rationale={country.rationale}
+            detailExecuted={detailExecuted}
+          />
 
-            {renderRegSourceCard({
-              title: "KOTRA 수입규제·무역구제",
-              description: "DS00000128 API + 국별 대세계 수입규제 CSV 기준 결과",
-              source: kotraRegSource,
-              emptyMessage: `${country?.country_name ?? "선택국가"} 내 한국산 해당 HS 기준 KOTRA 수입규제·무역구제 매칭 0건`,
-              contextMismatch: regCurrentContextMismatch,
-              notRunMessage: regulationMatchedCount > 0
-                ? `추천 단계에서 규제 ${regulationMatchedCount}건이 감지되었습니다. 상세 분석을 실행하면 출처별 카드에 동기화됩니다.`
-                : undefined,
-            })}
-
-            <NationalInfoCard
-              nationalInfo={nationalInfo}
-              detailExecuted={detailExecuted}
-              productContext={currentDetailContext}
-            />
-
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle className="text-base">결제·국가 리스크(K-SURE)</CardTitle>
-                <CardDescription>
-                  국가위험 {groupedRisks.countryRisk ? 1 : 0}건, 입력 업종 기준 위험지수{" "}
-                  {groupedRisks.industryRisks.length}건, 수출결제 {groupedRisks.paymentRisk ? "1건" : "0건"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {riskSectionState === "not_run" ? (
-                  <Empty msg="상세 분석 미실행 상태입니다. 대상국 분석 실행을 눌러주세요." />
-                ) : riskSectionState === "error" ? (
-                  <Empty msg="K-SURE 조회 중 API 오류가 발생했습니다. 기관 확인이 필요합니다." />
-                ) : riskSectionState === "stale" ? (
-                  <Empty msg="K-SURE 데이터가 미동기화/오래됨 상태입니다. 원문 확인 후 재실행하세요." />
-                ) : riskSectionState === "empty" ? (
-                  <Empty msg="조회 결과 없음" />
-                ) : (
-                  <>
-                    <div className="grid gap-3 md:grid-cols-3">
-                      <div className="rounded-md border border-border p-3">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">국가 위험 등급</p>
-                        {groupedRisks.countryRisk ? (
-                          <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-                            <p className="text-sm font-medium text-foreground">
-                              {toRiskLevelLabel(groupedRisks.countryRisk.level)}
-                            </p>
-                            <p>국가명: {riskValue(groupedRisks.countryRisk, "country_name", "정확한 정보 없음")}</p>
-                            <p>평가 등급: {riskValue(groupedRisks.countryRisk, "eval_grade", "정확한 정보 없음")}</p>
-                            <p>평가일: {riskValue(groupedRisks.countryRisk, "eval_date", "정확한 정보 없음")}</p>
-                            {groupedRisks.countryRisk.source_url ? (
-                              <a
-                                href={groupedRisks.countryRisk.source_url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-brand hover:underline"
-                              >
-                                <ExternalLink className="h-3 w-3" />
-                                K-SURE 출처
-                              </a>
-                            ) : null}
-                          </div>
-                        ) : (
-                          <p className="mt-2 text-xs text-muted-foreground">정확한 정보 없음</p>
-                        )}
-                      </div>
-
-                      <div className="rounded-md border border-border p-3">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">업종 위험 지수(입력 업종 기준)</p>
-                        {groupedRisks.industryRisks.length > 0 ? (
-                          <ul className="mt-2 space-y-2">
-                            {groupedRisks.industryRisks.map((row) => (
-                              <li key={row.id} className="text-xs text-muted-foreground">
-                                <p className="text-sm font-medium text-foreground">{toRiskLevelLabel(row.level)}</p>
-                                <p>업종명: {riskValue(row, "biz_type_name", "정확한 정보 없음")}</p>
-                                <p>위험 지수: {riskValue(row, "risk_index", "정확한 정보 없음")}</p>
-                                {row.source_url ? (
-                                  <a
-                                    href={row.source_url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="inline-flex items-center gap-1 text-brand hover:underline"
-                                  >
-                                    <ExternalLink className="h-3 w-3" />
-                                    K-SURE 출처
-                                  </a>
-                                ) : null}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : industryMatchFailureMessage ? (
-                          <p className="mt-2 text-xs text-risk-reviewable">{industryMatchFailureMessage}</p>
-                        ) : (
-                          <p className="mt-2 text-xs text-muted-foreground">정확한 정보 없음</p>
-                        )}
-                      </div>
-
-                      <div className="rounded-md border border-border p-3">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">수출결제 현황</p>
-                        {groupedRisks.paymentRisk ? (
-                          <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-                            <p className="text-sm font-medium text-foreground">
-                              {toRiskLevelLabel(groupedRisks.paymentRisk.level)}
-                            </p>
-                            {isGlobalPaymentScope(groupedRisks.paymentRisk) ? (
-                              <p className="text-risk-reviewable">전세계 참고자료 (국가 단위 아님)</p>
-                            ) : null}
-                            <p>
-                              평균 결제기간:{" "}
-                              {formatDaysValue(groupedRisks.paymentRisk.raw?.average_payment_period)}
-                            </p>
-                            <p>
-                              연체율:{" "}
-                              {formatPercentValue(groupedRisks.paymentRisk.raw?.late_payment_rate)}
-                            </p>
-                            <p>
-                              주요 결제조건:{" "}
-                              {riskValue(groupedRisks.paymentRisk, "top_payment_term_name", "정확한 정보 없음")}
-                              {formatShareValue(groupedRisks.paymentRisk.raw?.top_payment_term_share)}
-                            </p>
-                            {groupedRisks.paymentRisk.source_url ? (
-                              <a
-                                href={groupedRisks.paymentRisk.source_url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-brand hover:underline"
-                              >
-                                <ExternalLink className="h-3 w-3" />
-                                K-SURE 출처
-                              </a>
-                            ) : null}
-                          </div>
-                        ) : paymentUnavailableMessage ? (
-                          <div className="mt-2 space-y-1 text-xs text-risk-reviewable">
-                            <p>{paymentUnavailableMessage}</p>
-                            {paymentUnavailableSourceUrl ? (
-                              <a
-                                href={paymentUnavailableSourceUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-brand hover:underline"
-                              >
-                                <ExternalLink className="h-3 w-3" />
-                                K-SURE 출처
-                              </a>
-                            ) : null}
-                          </div>
-                        ) : (
-                          <p className="mt-2 text-xs text-muted-foreground">정확한 정보 없음</p>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      K-SURE 데이터는 국가·업종 단위 참고자료입니다.
-                    </p>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-
-          </div>
+          <Dialog open={Boolean(selectedCert)} onOpenChange={(open) => !open && setSelectedCert(null)}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>{selectedCert?.scheme || "인증 상세 정보"}</DialogTitle>
+                <DialogDescription>
+                  KOTRA 해외인증 API가 제공한 원문 필드를 항목별로 확인합니다.
+                </DialogDescription>
+              </DialogHeader>
+              {selectedCert ? (
+                <div className="max-h-[70vh] space-y-2 overflow-y-auto pr-2 text-sm">
+                  <RegDetailRow label="적용 대상" value={certValue(selectedCert, "applicable_items", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="필요 서류" value={certValue(selectedCert, "required_docs", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="인증 절차" value={certValue(selectedCert, "procedure", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="근거 규정" value={certValue(selectedCert, "basis_regulation", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="시험 기준" value={certValue(selectedCert, "test_standard", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="시험기관" value={certValue(selectedCert, "test_institute", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="인증기관" value={certValue(selectedCert, "certification_institute", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="비용·기간" value={formatCertificationCostAndPeriod(selectedCert)} multiline />
+                  <RegDetailRow label="유효기간" value={certValue(selectedCert, "validity_period", "정확한 정보 없음")} multiline />
+                  <RegDetailRow label="매칭 기준" value={certValue(selectedCert, "match_basis", "정확한 정보 없음")} multiline />
+                </div>
+              ) : null}
+            </DialogContent>
+          </Dialog>
 
           <Dialog open={Boolean(selectedReg)} onOpenChange={(open) => !open && setSelectedReg(null)}>
             <DialogContent className="max-w-2xl">
@@ -912,6 +997,38 @@ export default function Step4CountryDetail() {
       )}
     </AppShell>
   );
+}
+
+function parseDecisionProviderStatuses(value: unknown): CountryDecisionProviderStatus[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    const row = toRecord(item);
+    const state = sanitizeNullable(row.state);
+    const key = sanitizeNullable(row.key);
+    const label = sanitizeNullable(row.label);
+    if (
+      !key ||
+      !label ||
+      (state !== "success" && state !== "empty" && state !== "error" && state !== "not_run")
+    ) {
+      return [];
+    }
+    const itemCount = Number(row.itemCount);
+    return [{
+      key,
+      label,
+      state,
+      itemCount: Number.isFinite(itemCount) ? Math.max(0, Math.floor(itemCount)) : 0,
+      message: sanitizeNullable(row.message) ?? "상태 메시지 없음",
+      fetchedAt: sanitizeNullable(row.fetchedAt) ?? new Date(0).toISOString(),
+    }];
+  });
+}
+
+function toRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
 function resolveStep4RunningMessage(elapsedSec: number): string {
@@ -1110,8 +1227,66 @@ function RegDetailRow({ label, value, multiline = false }: { label: string; valu
 
 function certValue(row: CertRow, key: string, fallback: string): string {
   const value = row.raw?.[key];
-  if (value == null || value === "") return sanitize(fallback);
-  return sanitize(String(value));
+  if (value == null || value === "") return decodeCertificationText(fallback);
+  return decodeCertificationText(String(value));
+}
+
+function decodeCertificationText(value: string): string {
+  return normalizeReportText(value.replace(/&sect;/gi, "§")) ?? "";
+}
+
+function firstCertificationValue(row: CertRow, keys: string[], fallback: string): string {
+  for (const key of keys) {
+    const value = readDetailRawText(row.raw ?? null, key);
+    if (value) return decodeCertificationText(value);
+  }
+  return decodeCertificationText(fallback);
+}
+
+function buildCertificationSummary(row: CertRow): string {
+  const aiSummary = readDetailRawText(row.raw ?? null, "ai_summary");
+  if (aiSummary) return decodeCertificationText(aiSummary);
+
+  const parts = [
+    firstCertificationSentence(readDetailRawText(row.raw ?? null, "raw_system_desc")),
+    firstCertificationSentence(readDetailRawText(row.raw ?? null, "procedure")),
+  ].filter(Boolean);
+  const uniqueParts = parts.filter((part, index) => parts.indexOf(part) === index);
+  if (uniqueParts.length > 0) return decodeCertificationText(uniqueParts.join(" "));
+
+  return `${sanitizeNullable(row.scheme) ?? "해외인증"}의 적용 여부와 세부 절차를 KOTRA 원문에서 확인해야 합니다.`;
+}
+
+function firstCertificationSentence(value: string): string {
+  const normalized = decodeCertificationText(value);
+  if (!normalized) return "";
+  const [sentence] = normalized.split(/(?<=[.!?])\s+|\s*\n\s*/);
+  return sentence?.trim() ?? normalized;
+}
+
+function formatCertificationValidity(row: CertRow): string {
+  const validity = certValue(row, "validity_period", "정확한 정보 없음");
+  if (/별도.*유효기간.*없/.test(validity)) {
+    const followUp = /(사후관리|품질관리|샘플)/.test(validity) ? " · 인증 후 사후관리 필요" : "";
+    return `별도 유효기간 없음${followUp}`;
+  }
+  return firstCertificationSentence(validity) || validity;
+}
+
+function formatCertificationCostAndPeriod(row: CertRow): string {
+  const rawCost = readDetailRawText(row.raw ?? null, "cost_text");
+  const cost = (rawCost ? decodeCertificationText(rawCost) : "") ||
+    (row.est_cost_krw ? `${row.est_cost_krw.toLocaleString()} KRW` : "");
+  const period = firstCertificationValue(
+    row,
+    ["certification_required_period", "test_required_period"],
+    row.est_lead_days ? `${row.est_lead_days}일` : "",
+  );
+  if (cost && period) {
+    if (cost === period) return cost;
+    return `${cost} / ${period}`;
+  }
+  return cost || period || "시험·인증기관 문의";
 }
 
 function regValue(row: RegRow, key: string, fallback: string): string {
@@ -1133,6 +1308,11 @@ function resolveRegSourceUrl(row: RegRow, countryCodeIso2: string | null): strin
     return buildKotraRegDetailUrl(row.raw, { countryCodeIso2 });
   }
   return sanitizeNullable(row.source_url);
+}
+
+function resolveRegPdfSourceUrl(row: RegRow, countryCodeIso2: string | null): string | null {
+  if (isRegBackupSource(row) || row.source_org !== "KOTRA") return null;
+  return buildKotraRegPdfUrl(row.raw, { countryCodeIso2 });
 }
 
 function resolveRegSourceLabel(row: RegRow): string {
@@ -1852,7 +2032,7 @@ function NationalInfoCard({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {topImports.map((item: any, i: number) => (
+                  {topImports.map((item: Record<string, unknown>, i: number) => (
                     <tr key={i} className="hover:bg-muted/10">
                       <td className="px-3 py-2">{item.rk || "-"}</td>
                       <td className="px-3 py-2">{item.stdrYy || "-"}</td>

@@ -1,0 +1,283 @@
+- generic [ref=f4e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f4e4]:
+    - banner [ref=f4e5]:
+      - link "홈" [ref=f4e7] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f4e12]: 산단수출 코파일럿
+      - generic [ref=f4e13]:
+        - link "프로젝트" [ref=f4e14] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f4e15] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f4e16] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f4e18] [cursor=pointer]
+    - generic [ref=f4e20]:
+      - complementary [ref=f4e21]:
+        - paragraph [ref=f4e22]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f4e23]:
+          - link "1단계 기업·공장 검색" [ref=f4e24] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/company
+            - generic [ref=f4e28]:
+              - generic [ref=f4e29]: 기업·공장 검색
+              - generic [ref=f4e30]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f4e31] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/product
+            - generic [ref=f4e35]:
+              - generic [ref=f4e36]: 제품·HS 코드
+              - generic [ref=f4e37]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f4e38] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/countries
+            - generic [ref=f4e42]:
+              - generic [ref=f4e43]: 후보국 추천 Top 3
+              - generic [ref=f4e44]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f4e45] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/countries/US
+            - generic [ref=f4e49]:
+              - generic [ref=f4e50]: 국가 상세
+              - generic [ref=f4e51]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f4e52] [cursor=pointer]:
+            - /url: /projects/0f1315ff-4e06-4140-bad1-b154bc03ed93/report
+            - generic [ref=f4e53]: "5"
+            - generic [ref=f4e54]:
+              - generic [ref=f4e55]: 리포트
+              - generic [ref=f4e56]: 요구사항 8
+      - main [ref=f4e57]:
+        - generic [ref=f4e58]:
+          - generic [ref=f4e59]:
+            - paragraph [ref=f4e60]: 기획 요구사항 매핑
+            - paragraph [ref=f4e61]: 요구사항 8
+            - paragraph [ref=f4e62]: 최종 리포트 및 PDF 생성
+          - generic [ref=f4e63]:
+            - heading "6. 수출전략 리포트" [level=1] [ref=f4e64]
+            - paragraph [ref=f4e65]: AI가 수집된 데이터를 종합 분석해 수출 가능성, 리스크, 실행 전략을 정리한 의사결정용 리포트입니다.
+            - generic [ref=f4e66]:
+              - generic [ref=f4e67]: KICOX 상태
+              - generic [ref=f4e68]: 정상
+              - generic [ref=f4e69]: SafetyKorea 상태
+              - generic [ref=f4e70]: 대기
+          - generic [ref=f4e74]:
+            - generic [ref=f4e75]:
+              - generic [ref=f4e76]:
+                - paragraph [ref=f4e77]: AI 수출전략 의사결정 리포트
+                - heading "새 분석 2026. 7. 21." [level=2] [ref=f4e78]
+              - paragraph [ref=f4e80]: 발행일 2026.07.24
+            - generic [ref=f4e81]:
+              - generic [ref=f4e82]: 저장된 리포트 이후 근거 데이터가 변경되었습니다. 최신 판단을 위해 AI 리포트를 다시 생성하세요.
+              - generic [ref=f4e83]:
+                - generic [ref=f4e85]:
+                  - heading "1. 기본 정보" [level=3] [ref=f4e86]
+                  - paragraph [ref=f4e87]: 선택 국가 한 곳과 현재 제품 분류를 기준으로 판단합니다.
+                - generic [ref=f4e89]:
+                  - generic [ref=f4e90]:
+                    - paragraph [ref=f4e91]: 기업
+                    - generic [ref=f4e92]:
+                      - paragraph [ref=f4e93]: 넥센타이어(주)
+                      - paragraph [ref=f4e94]: 양산일반산업단지 · 경상남도 양산시 충렬로 355 (유산동, 넥센타이어)
+                  - generic [ref=f4e95]:
+                    - paragraph [ref=f4e96]: 제품·분류
+                    - generic [ref=f4e97]:
+                      - paragraph [ref=f4e98]: 타이어
+                      - paragraph [ref=f4e99]: HS 401110 · HSK 4011100000
+                  - generic [ref=f4e100]:
+                    - paragraph [ref=f4e101]: 선택 국가
+                    - paragraph [ref=f4e103]: 미합중국(The United States of America)
+                  - generic [ref=f4e104]:
+                    - paragraph [ref=f4e105]: 판단 기준일
+                    - generic [ref=f4e106]:
+                      - paragraph [ref=f4e107]: 2026.07.24
+                      - paragraph [ref=f4e108]: 스키마 v2
+              - generic [ref=f4e109]:
+                - generic [ref=f4e110]:
+                  - generic [ref=f4e111]:
+                    - heading "2. AI 최종판단" [level=3] [ref=f4e112]
+                    - paragraph [ref=f4e113]: 프로그램 데이터와 공식 웹 근거를 종합한 실행 판단입니다.
+                  - generic [ref=f4e114]: 조건부 추진
+                - generic [ref=f4e115]:
+                  - generic [ref=f4e116]:
+                    - generic [ref=f4e117]:
+                      - paragraph [ref=f4e118]: 수출 판단
+                      - paragraph [ref=f4e119]: 조건부 추진
+                      - paragraph [ref=f4e120]: 일부 조건 확인 후 추진 가능
+                    - generic [ref=f4e121]:
+                      - paragraph [ref=f4e122]: 신뢰도
+                      - paragraph [ref=f4e123]: 낮음
+                      - paragraph [ref=f4e124]: AI 판단 신뢰 수준
+                    - generic [ref=f4e125]:
+                      - paragraph [ref=f4e126]: 근거 현황
+                      - paragraph [ref=f4e127]: P 124건 · W 10건
+                      - paragraph [ref=f4e128]: 미확인 6건
+                  - heading "미국 타이어 시장 진출은 한미 FTA 무관세 혜택에도 불구하고 14.72%의 반덤핑 관세와 DOT 강제 인증 요건으로 인해 철저한 수익성 검토가 전제되어야 합니다." [level=4] [ref=f4e129]
+                  - paragraph [ref=f4e130]: 미국은 세계 최대의 자동차 시장으로 교체용 타이어 수요가 높고 한미 FTA에 따른 기본 무관세(0%) 혜택을 받을 수 있는 유망 시장입니다. 그러나 한국산 승용차 및 경트럭용 타이어에 대해 14.72%의 반덤핑 관세가 부과되고 있으며, 미국 교통부(DOT)의 엄격한 자체 인증 및 FMVSS 안전 기준을 충족해야 합니다. 또한 현지 결제 관행상 O/A 비중이 85.7%로 높아 대금 회수 위험이 존재하므로, 반덤핑 관세를 반영한 최종 마진 확보와 무역보험 가입이 확인될 때까지 조건부로 진행해야 합니다.
+                  - generic [ref=f4e131]:
+                    - generic [ref=f4e132]:
+                      - generic [ref=f4e133]:
+                        - generic [ref=f4e134]: ✓
+                        - paragraph [ref=f4e135]: 핵심 판단 근거
+                      - list [ref=f4e136]:
+                        - listitem [ref=f4e137]:
+                          - generic [ref=f4e139]:
+                            - text: 한미 FTA 특혜관세 및 거대한 시장 수요미국은 세계 최대 규모의 자동차 시장으로 교체용 타이어 수요가 매우 높습니다. 승용차용 타이어(HS 4011.10.10)는 기본 관세율이 4%이나, 한미 FTA 요건 충족 시 무관세(0%) 혜택을 적용받아 가격 경쟁력을 일부 확보할 수 있습니다.
+                            - generic [ref=f4e140]: "[프로그램 국가추천, usitc.gov]"
+                    - generic [ref=f4e141]:
+                      - generic [ref=f4e142]:
+                        - generic [ref=f4e143]: ⚠
+                        - paragraph [ref=f4e144]: 주요 위험 요소
+                      - list [ref=f4e145]:
+                        - listitem [ref=f4e146]:
+                          - generic [ref=f4e148]:
+                            - text: 한국산 타이어 반덤핑 관세 부과미국 상무부는 한국산 승용차 및 경트럭용 타이어에 대해 반덤핑 규제를 시행 중이며, 넥센타이어(주)는 14.72%의 반덤핑 관세율을 적용받고 있습니다.
+                            - paragraph [ref=f4e149]: → 기본 관세가 0%이더라도 14.72%의 추가 관세가 원가에 가중되므로, 최종 판매 단가 인상 또는 제조사의 마진 축소가 불가피하여 수익성에 직접적인 타격을 줍니다.
+                            - generic [ref=f4e150]: "[KOTRA, federalregister.gov]"
+                        - listitem [ref=f4e151]:
+                          - generic [ref=f4e153]:
+                            - text: 엄격한 DOT 인증 및 사후 관리 규제미국 내 판매를 위해서는 DOT 자체 인증이 필수이며, FMVSS 기준 충족 및 타이어 측면(Sidewall)에 TIN, UTQGS 등의 라벨링을 정확히 양각해야 합니다. 사후 무작위 테스트에서 불합격 시 강제 리콜 대상이 됩니다.
+                            - paragraph [ref=f4e154]: → 초기 인증 비용 외에도 지속적인 품질 관리 비용이 발생하며, 규제 위반 시 대규모 리콜로 인한 막대한 재무적 손실 및 브랜드 이미지 훼손 위험이 있습니다.
+                            - generic [ref=f4e155]: "[KOTRA, regulations.gov, nhtsa.gov]"
+                        - listitem [ref=f4e156]:
+                          - generic [ref=f4e158]:
+                            - text: 높은 O/A 결제 비중에 따른 대금 회수 위험미국 고무 및 플라스틱 제품 제조업의 평균 결제 지연율은 18.9%이며, O/A(T/T 포함) 결제 방식이 85.7%로 압도적입니다.
+                            - paragraph [ref=f4e159]: → 외상 거래(O/A) 요구가 거셀 것으로 예상되며, 바이어 파산이나 결제 지연 시 현금 흐름에 심각한 악영향을 미칠 수 있습니다.
+                            - generic [ref=f4e160]: "[K-SURE, 프로그램 의사결정]"
+                  - generic [ref=f4e161]:
+                    - generic [ref=f4e162]:
+                      - generic [ref=f4e163]: →
+                      - paragraph [ref=f4e164]: 권장 실행 방향
+                    - list [ref=f4e165]:
+                      - listitem [ref=f4e166]:
+                        - generic [ref=f4e167]: "1."
+                        - generic [ref=f4e168]:
+                          - text: 반덤핑 관세(14.72%) 및 물류비를 반영한 최종 도착지 기준 수익성(Landed-cost) 시뮬레이션 수행
+                          - generic [ref=f4e169]: 해외영업팀 및 재무팀
+                          - generic [ref=f4e170]: 우선
+                      - listitem [ref=f4e171]:
+                        - generic [ref=f4e172]: "2."
+                        - generic [ref=f4e173]:
+                          - text: 수출 예정 타이어 모델의 DOT 인증 마크, TIN(타이어 식별 번호), UTQGS 등급 라벨링 규정 준수 여부 점검
+                          - generic [ref=f4e174]: 품질관리팀
+                      - listitem [ref=f4e175]:
+                        - generic [ref=f4e176]: "3."
+                        - generic [ref=f4e177]:
+                          - text: 미국 바이어와의 O/A 결제 조건 협상 대비 K-SURE 단기수출보험 한도 및 가입 요건 확인
+                          - generic [ref=f4e178]: 재무팀
+                  - generic [ref=f4e179]:
+                    - paragraph [ref=f4e180]: 국가 상세 데이터 요약
+                    - generic [ref=f4e181]:
+                      - paragraph [ref=f4e182]: 미합중국(The United States of America) (US)
+                      - generic [ref=f4e183]:
+                        - generic [ref=f4e184]:
+                          - paragraph [ref=f4e185]: 시장 기회
+                          - paragraph [ref=f4e186]: 수입 $10.51B
+                          - paragraph [ref=f4e187]: 한국산 5.6% · $585.4M
+                          - paragraph [ref=f4e188]: UN Comtrade · 2025
+                        - generic [ref=f4e189]:
+                          - paragraph [ref=f4e190]: 물류 환경
+                          - paragraph [ref=f4e191]: LPI 3.8/5
+                          - paragraph [ref=f4e192]: 통관 3.7· 인프라 3.9· 운송 3.4
+                          - paragraph [ref=f4e193]: World Bank Logistics Performance Index · 2022
+                      - generic [ref=f4e194]:
+                        - paragraph [ref=f4e195]: 결제 위험
+                        - paragraph [ref=f4e196]: 국가신용등급 1· 지연율 18.9% · 평균 결제기간 70.4일
+                      - generic [ref=f4e197]:
+                        - paragraph [ref=f4e198]: 국가별 AI 판단 (Step 4)
+                        - paragraph [ref=f4e199]: 조건부 진출 가능 · 신뢰도 높음
+                        - paragraph [ref=f4e200]: 미국 타이어 시장은 높은 수요와 한국산 제품에 대한 긍정적 인식을 바탕으로 큰 기회를 제공합니다. 그러나 한국산 승용차 및 경트럭 타이어에 대한 반덤핑 관세가 부과 중이며, DOT 인증 및 연방 안전 표준 준수 등 엄격한 규제 요건이 존재하여 철저한 사전 준비와 리스크 관리가 필수적입니다. 이러한 조건들을 충족한다면 성공적인 시장 진출이 가능할 것으로 판단됩니다.
+                        - paragraph [ref=f4e201]: 생성 2026. 7. 23. · Gemini
+                  - generic [ref=f4e202]:
+                    - paragraph [ref=f4e203]: 의사결정 게이트
+                    - generic [ref=f4e204]:
+                      - group [ref=f4e205]:
+                        - generic "🛡️ 인증 통과" [ref=f4e206] [cursor=pointer]:
+                          - generic [ref=f4e207]: 🛡️ 인증
+                          - generic [ref=f4e208]: 통과
+                      - group [ref=f4e209]:
+                        - generic "📋 규제 통과" [ref=f4e210] [cursor=pointer]:
+                          - generic [ref=f4e211]: 📋 규제
+                          - generic [ref=f4e212]: 통과
+                      - group [ref=f4e213]:
+                        - generic "💰 관세 통과" [ref=f4e214] [cursor=pointer]:
+                          - generic [ref=f4e215]: 💰 관세
+                          - generic [ref=f4e216]: 통과
+                      - group [ref=f4e217]:
+                        - generic "📊 수익성 확인 필요" [ref=f4e218] [cursor=pointer]:
+                          - generic [ref=f4e219]: 📊 수익성
+                          - generic [ref=f4e220]: 확인 필요
+                      - group [ref=f4e221]:
+                        - generic "🏦 결제 확인 필요" [ref=f4e222] [cursor=pointer]:
+                          - generic [ref=f4e223]: 🏦 결제
+                          - generic [ref=f4e224]: 확인 필요
+                      - group [ref=f4e225]:
+                        - generic "⚠️ 안전 통과" [ref=f4e226] [cursor=pointer]:
+                          - generic [ref=f4e227]: ⚠️ 안전
+                          - generic [ref=f4e228]: 통과
+                  - generic [ref=f4e229]:
+                    - paragraph [ref=f4e230]: 참고 공식자료
+                    - generic [ref=f4e231]:
+                      - link "↗ regulations.gov" [ref=f4e232] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHuU9fKjWolsvmN1gMLftWmk8fkDjA3BVZrPbm9vybWQ-x6yqZv1iMuTZM-fumdowLDnL7-qV-duA1ZII4qsn_pr6zboUPx_DvaVI-1LmO0yzbE0kMstMc0lhcLpkMh_2ByI9dhBzVzcFBiCNwZIWtAN83f1ZzaB-HGGK7k
+                      - link "↗ federalregister.gov" [ref=f4e233] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEOnVrEFimL2ZQ3nG227QOizovNkzqSlce-d72TzYmKzvz741ASbi6tNrC2fLHt0lxX4EL8KWzZja4ZyHzORVl28rRQCrN10wWADEjpU0rTVNBspkJZBGeQXd6yfbpQe0-LbDKruHoRhRtemDYkfUkEp3FwwGuOFlMrBsT9kfwziFDQL5MUqUiHvJHpgv038cKd5U1tzuv8P8eV2Ow6QPGTNUiFP_AOsKNIk9JlXPWY3ibfbROlM1uMqyFSUqSKoMvjwSK2BVLyhItpqDQSyc6FwpvLkWdMYA==
+                      - link "↗ nhtsa.gov" [ref=f4e234] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGhs3b_Csp-1zJDciraC9fbR6jjuxnucMBd3BIXMIjT73UQhxaFI_JrJCbQqrWCj6eOeKcfgE8DIvhgOfQ0BVyVeCFCwf-eNXy-kPeNEUBbb-8Wj8N0ZSgfdS3xG7s2PBoCrcvpFpCfMYdmP0Nz
+                      - link "↗ dot.gov" [ref=f4e235] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKwJDsm8snba0lJCEiPbfJobMJKCwitP4RZEDC685lPftn-PPGP0U0NlKvreMdHCOpj0m9Tb-YEzIqClX2TBfQjdD91ORUrfBNYPJ7tyxUnU6KpSUT0EzVE1fO6Yt2jaGiBFS8x5wAlKjp4fpxOvUJrIxD
+                      - link "↗ nhtsa.gov" [ref=f4e236] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF9Ne09JYzGsSpiftU44YE8HVuxfI6-snFiAdB1Wdpz48n3L2kBtDArefecOMojMd_jc2vOy7jmBQuqU4JmZDF0GdxWKM5aMT-tM1Ez67K2kwK0oZFW_D1gPgWgytYXrVW0XQYkRzTZhF11Oz4zHYqBCUnu3M0=
+                      - link "↗ nhtsa.gov" [ref=f4e237] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGB0Ik-72ajTHEM9xMjQrq0IHFbxtWxn37utmUcIcmh25h5Uzu5Bq71V7gQ1eF29MyCMrl_KiJlg71YYKOlD4XqrGRt2Lbi9su80OINWQdVrB7FJIJkv0WtEIsbeOjhyw==
+                      - link "↗ federalregister.gov" [ref=f4e238] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHS9VBRcMA_p03bSRC1vfWFfeqAOytT-ajRKkhI22wbRiggrdoTFQtPu_1WMEjNXfGMUprR2mwg5UDuSIZqD3du_LhPawUL4_HnLwAZWn6t_w2n5No27uaRrG7apvTbrJVBLGmsDgXD-SzFfR86cAA6fEGJbcQ87OxWADAYG38uT_90lffN62WmpEWkC-VEcLOTQN-NXqsYOVyOQFR-zAF0wTYlKJOn4GWjavT1r2vL1YQOPn0dnjgxynIsDdr2m67vwDwCaGUb2CnZ7-HLo9gNqSxShuCKURTd
+                      - link "↗ federalregister.gov" [ref=f4e239] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFNC8vKtbY8hG3IGRYjVxwmn32E0pFyLhtgjYPwUVoPHKhbr_t7oVJvYSHWkqj_rZJ0kMiIxPCjCl3iM40EhoSJB_i1gFcSmTVuqKiWUygPhA7U3DDNI-W-ZQSD_o-_hW2QIw2gY77HZ3z1VvInMJ6ooCPzbRDwrWu0LnU9wvtXHmVAxrIjQeOk4St5AlgIs58Q6eOmEYCUCGuGix3MFZBkh5OKPDZLXwujFZCHF4TYF0OIRiXSgy0h99IoELYqf8CmNLmbSJzthmKVuylFIhHObg8djVMis8UnLA==
+                      - link "↗ usitc.gov" [ref=f4e240] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEBn5qH2qmA14OBmKpjXcSBUEIW1vUGqpu7leecegysSa79oythuvu5Y3VGq8SSCVaPocw8CatVAlQrmr4COFf4Cm98SN7bkS-v13CCUQdOPXxkM1A_vDG9Ff3iMneR-polzS_iZxY=
+                      - link "↗ usitc.gov" [ref=f4e241] [cursor=pointer]:
+                        - /url: https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEDY7ZYTKmLG2V9WlTzXzIasX24FuQfDDLSpvqq9CF6chHuj0DRnP7ZKbQna8-nlzMSFpayJPH4yszZjhrqKlmY-BYfqFlbH-fLsZ_n0vP-tL_XkazIe-YPgDJKhg3rL7xWz7if-0I=
+                  - paragraph [ref=f4e243]: 저장 리포트 근거 변경 · 재생성 필요
+              - generic [ref=f4e244]:
+                - generic [ref=f4e246]:
+                  - heading "3. AI 추천 진입전략" [level=3] [ref=f4e247]
+                  - paragraph [ref=f4e248]: 여러 대안을 나열하지 않고 우선 실행할 진입 방식 하나를 제안합니다.
+                - generic [ref=f4e249]:
+                  - generic [ref=f4e250]:
+                    - generic [ref=f4e251]:
+                      - paragraph [ref=f4e252]: 우선 고객
+                      - paragraph [ref=f4e253]: 미국 전역의 대형 자동차 부품 유통사 및 타이어 전문 도매 체인
+                    - generic [ref=f4e254]:
+                      - paragraph [ref=f4e255]: 우선 채널
+                      - paragraph [ref=f4e256]: 현지 대형 타이어 유통사와의 B2B 직거래 채널
+                    - generic [ref=f4e257]:
+                      - paragraph [ref=f4e258]: 초기 제품
+                      - paragraph [ref=f4e259]: DOT 인증 및 FMVSS 기준을 충족하는 승용차용 및 경트럭용 타이어 (HS 401110)
+                    - generic [ref=f4e260]:
+                      - paragraph [ref=f4e261]: 포지셔닝
+                      - paragraph [ref=f4e262]: 한미 FTA 무관세 이점을 활용하되, 반덤핑 관세를 상쇄할 수 있는 고품질·고성능(친환경, 내마모성 우수) 프리미엄 타이어로 포지셔닝
+                    - generic [ref=f4e263]:
+                      - paragraph [ref=f4e264]: 거래조건
+                      - paragraph [ref=f4e265]: 초기 거래 시 일부 선금(T/T) 요구, 이후 K-SURE 단기수출보험 가입을 전제로 한 O/A 60일 조건 수용
+                    - generic [ref=f4e266]:
+                      - paragraph [ref=f4e267]: 파일럿 범위
+                      - paragraph [ref=f4e268]: 미국 서부(캘리포니아 등) 지역의 주요 유통망을 타겟으로 초도 물량 40ft FCL 2~3대 분량 테스트 수출
+                    - generic [ref=f4e270]:
+                      - paragraph [ref=f4e271]: 확대 조건
+                      - paragraph [ref=f4e272]: "초도 물량에 대한 현지 소비자 품질 클레임(리콜) 제로 달성 및 반덤핑 관세 납부 후 목표 영업이익률(예: 5% 이상) 달성 시 동부 및 중부로 유통망 확대"
+                  - generic [ref=f4e273]:
+                    - generic [ref=f4e274]: P-COUNTRY-001
+                    - generic [ref=f4e275]: P-FACT-005
+                    - generic [ref=f4e276]: P-RISK-003
+                    - generic [ref=f4e277]: W-003
+                    - generic [ref=f4e278]: W-007
+              - generic [ref=f4e279]:
+                - generic [ref=f4e281]:
+                  - heading "4. 근거 보기" [level=3] [ref=f4e282]
+                  - paragraph [ref=f4e283]: 판단에 사용한 API 값, 공식 출처, 미확인 항목을 확인할 수 있습니다.
+                - heading [level=3] [ref=f4e287]:
+                  - button "근거 상세 펼치기" [ref=f4e288] [cursor=pointer]
+              - paragraph [ref=f4e291]: 본 보고서는 제공된 프로그램 증거 및 공식 웹 출처를 바탕으로 작성된 의사결정 참고용 자료입니다. 반덤핑 관세율은 미국 상무부의 재심 결과에 따라 변동될 수 있으며, 최종적인 법적, 재무적, 규제적 판단은 기업 내부의 전문가 및 현지 법률 고문을 통해 확정해야 합니다.
+    - generic [ref=f4e293]:
+      - button "이전" [ref=f4e294] [cursor=pointer]
+      - button "AI 리포트 재생성" [ref=f4e295] [cursor=pointer]
+      - button "PDF 내려받기" [ref=f4e296] [cursor=pointer]

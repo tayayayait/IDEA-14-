@@ -6,6 +6,7 @@ import {
   buildSafetyKoreaRecallDetailUrl,
   buildKotraCertDetailUrl,
   buildKotraRegDetailUrl,
+  buildKotraRegPdfUrl,
   resolveSafetyKoreaRecallDetailUrl,
   toPublicSourceUrl,
 } from "@/lib/source-url";
@@ -91,6 +92,12 @@ describe("deep link builders", () => {
     expect(buildKotraRegDetailUrl({ country_code: "vn" })).toBe(`${base}&pRegnCd=01&pNatCd=704`);
     expect(buildKotraRegDetailUrl({ iso_wd2_nat_cd: "US" })).toBe(`${base}&pRegnCd=04&pNatCd=842`);
     expect(buildKotraRegDetailUrl({ ISO_WD2_NAT_CD: "JP" })).toBe(`${base}&pRegnCd=01&pNatCd=392`);
+  });
+
+  it("builds an official KOTRA import-regulation PDF link with the selected country", () => {
+    expect(buildKotraRegPdfUrl({ iso_wd2_nat_cd: "US" })).toBe(
+      "https://dream.kotra.or.kr/ajaxa/frNation/nationIemPdfDown.do?pageNo=&pagePerCnt=10&SITE_NO=2&MENU_ID=3700&CONTENTS_NO=1&pTmplateCont=P0407&pNttSn=&pGbn=&pUntyId=&pUnNatCd=&chkNatSn=842&pRegnCd=04&pNatCd=842&iemChk=411",
+    );
   });
 
   it("prefers selected country over raw ISO2 when building regulation source link", () => {

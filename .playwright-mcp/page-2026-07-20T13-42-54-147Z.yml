@@ -1,0 +1,201 @@
+- generic [ref=f3e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=f3e448]:
+    - banner [ref=f3e449]:
+      - link "홈" [ref=f3e451] [cursor=pointer]:
+        - /url: /projects
+        - generic [ref=f3e456]: 산단수출 코파일럿
+      - generic [ref=f3e457]:
+        - link "프로젝트" [ref=f3e458] [cursor=pointer]:
+          - /url: /projects
+        - link "데이터 출처" [ref=f3e459] [cursor=pointer]:
+          - /url: /data-sources
+        - link "KC·리콜 조회" [ref=f3e460] [cursor=pointer]:
+          - /url: /kc-recall
+        - button "로그아웃" [ref=f3e462] [cursor=pointer]
+    - generic [ref=f3e464]:
+      - complementary [ref=f3e465]:
+        - paragraph [ref=f3e466]: 분석 단계
+        - navigation "\\uBD84\\uC11D \\uB2E8\\uACC4" [ref=f3e467]:
+          - link "1단계 기업·공장 검색" [ref=f3e468] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/company
+            - generic [ref=f3e472]:
+              - generic [ref=f3e473]: 기업·공장 검색
+              - generic [ref=f3e474]: 요구사항 1
+          - link "2단계 제품·HS 코드" [ref=f3e475] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/product
+            - generic [ref=f3e479]:
+              - generic [ref=f3e480]: 제품·HS 코드
+              - generic [ref=f3e481]: 요구사항 2
+          - link "3단계 후보국 추천 Top 3" [ref=f3e482] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries
+            - generic [ref=f3e486]:
+              - generic [ref=f3e487]: 후보국 추천 Top 3
+              - generic [ref=f3e488]: 요구사항 3
+          - link "4단계 국가 상세" [ref=f3e489] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/countries/US
+            - generic [ref=f3e490]: "4"
+            - generic [ref=f3e491]:
+              - generic [ref=f3e492]: 국가 상세
+              - generic [ref=f3e493]: 요구사항 4~7
+          - link "5단계 리포트" [ref=f3e494] [cursor=pointer]:
+            - /url: /projects/b9a78717-c15f-409c-80f9-fd510c41d38a/report
+            - generic [ref=f3e495]: "5"
+            - generic [ref=f3e496]:
+              - generic [ref=f3e497]: 리포트
+              - generic [ref=f3e498]: 요구사항 8
+      - main [ref=f3e499]:
+        - generic [ref=f3e500]:
+          - generic [ref=f3e501]:
+            - paragraph [ref=f3e502]: 기획 요구사항 매핑
+            - paragraph [ref=f3e503]: 요구사항 4~7
+            - paragraph [ref=f3e504]: 인증·규제·국가/업종·결제 리스크 상세 검증
+          - generic [ref=f3e505]:
+            - generic [ref=f3e506]:
+              - generic [ref=f3e507]:
+                - generic [ref=f3e508]:
+                  - generic [ref=f3e509]:
+                    - generic [ref=f3e510]:
+                      - paragraph [ref=f3e511]: US
+                      - heading "미합중국(The United States of America)" [level=1] [ref=f3e512]
+                    - generic [ref=f3e513]:
+                      - generic [ref=f3e514]:
+                        - text: 제품
+                        - strong [ref=f3e515]: 타이어
+                      - generic [ref=f3e516]:
+                        - text: HS6
+                        - strong [ref=f3e517]: "401110"
+                      - generic [ref=f3e518]:
+                        - text: HSK10
+                        - strong [ref=f3e519]: "4011100000"
+                    - paragraph [ref=f3e520]: 분석은 HSK10 정확 일치 → HS6 → 제품명 순으로 적용됩니다. 제품 설명과 품목코드가 다르면 결과도 달라질 수 있습니다.
+                    - paragraph [ref=f3e521]: 최종 갱신 미실행
+                  - generic [ref=f3e522]:
+                    - button "갱신 중..." [disabled]
+                    - button "상세 분석" [ref=f3e524] [cursor=pointer]
+                - generic [ref=f3e525]:
+                  - generic [ref=f3e526]:
+                    - paragraph [ref=f3e527]: 수출 적합도
+                    - paragraph [ref=f3e528]: 분석 필요
+                    - paragraph [ref=f3e529]: 데이터 갱신으로 근거를 수집하세요.
+                  - generic [ref=f3e530]:
+                    - paragraph [ref=f3e531]: 시장 기회 점수
+                    - paragraph [ref=f3e532]: 100/100
+                    - paragraph [ref=f3e533]: 시장 규모·성장성 기준이며 규제 위험은 포함하지 않습니다.
+                  - generic [ref=f3e534]:
+                    - paragraph [ref=f3e535]: 근거 충족도
+                    - paragraph [ref=f3e536]: 0%
+                    - paragraph [ref=f3e537]: 확인 0건 · 참고 0건 · 추가 확인 0건
+              - generic [ref=f3e539]:
+                - generic [ref=f3e540]:
+                  - heading "수출 진입장벽 요약" [level=3] [ref=f3e542]
+                  - generic [ref=f3e543]:
+                    - generic [ref=f3e544]:
+                      - paragraph [ref=f3e545]: 포함 이유
+                      - paragraph [ref=f3e546]: 발표용 우선 후보; 인증 데이터 존재; HS 6자리 일치; 제품 키워드 일치; HS 4자리 접두 일치; 수입 규제 데이터 존재; 시장 뉴스 일치
+                    - generic [ref=f3e547]:
+                      - paragraph [ref=f3e548]: 긍정 요인
+                      - paragraph [ref=f3e549]: 미국은 세계 최대의 자동차 시장 중 하나로 교체용 타이어 수요가 꾸준하며, 특히 전기차 보급 확대로 인해 고성능 타이어에 대한 요구가 높습니다. 넥센타이어의 기술력을 바탕으로 현지 완성차 업체에 대한 신차용 타이어 공급 확대 가능성도 매우 긍정적입니다.
+                    - generic [ref=f3e550]:
+                      - paragraph [ref=f3e551]: 주의 요인
+                      - paragraph [ref=f3e552]: 현지 타이어 시장은 글로벌 브랜드 간의 경쟁이 매우 치열하며, 미국 교통부의 DOT 인증 규정 준수 및 환경 관련 규제가 점차 강화되고 있습니다. 또한 최근 무역 정책의 불확실성이 수입 단가와 물류 비용에 영향을 줄 수 있어 면밀한 대비가 필요합니다.
+                    - generic [ref=f3e553]:
+                      - paragraph [ref=f3e554]: 대안시장
+                      - paragraph [ref=f3e555]: 베트남 사회주의 공화국(Socialist Republic of Vietnam)(VN), 중화인민공화국(The People&rsquo;s Republic of China)(CN), 브라질 연방 공화국(The Federal Republic of Brazil)(BR)
+                    - paragraph [ref=f3e556]: "후보 편입 근거: 발표용 우선 후보, 인증 데이터 존재, HS 6자리 일치, 제품 키워드 일치, HS 4자리 접두 일치, 수입 규제 데이터 존재, 시장 뉴스 일치"
+                - generic [ref=f3e557]:
+                  - generic [ref=f3e558]:
+                    - generic [ref=f3e559]:
+                      - generic [ref=f3e560]:
+                        - generic [ref=f3e561]:
+                          - heading "KOTRA 해외인증·규격" [level=3] [ref=f3e562]
+                          - paragraph [ref=f3e563]: 국가·HS/HSK·제품 기준 KOTRA 해외인증 API 결과
+                        - generic [ref=f3e564]: 미실행
+                      - paragraph [ref=f3e565]: 확정 인증정보 0건 / 검토 필요 인증정보 0건
+                    - paragraph [ref=f3e567]: 상세 분석 미실행 상태입니다. 대상국 분석 실행을 눌러주세요.
+                  - generic [ref=f3e568]:
+                    - generic [ref=f3e569]:
+                      - generic [ref=f3e570]:
+                        - generic [ref=f3e571]:
+                          - heading "KOTRA 수입규제·무역구제" [level=3] [ref=f3e572]
+                          - paragraph [ref=f3e573]: DS00000128 API + 국별 대세계 수입규제 CSV 기준 결과
+                        - generic [ref=f3e574]: 미실행
+                      - paragraph [ref=f3e575]: 확정 0건 / 검토 후보 0건
+                    - paragraph [ref=f3e577]: 상세 분석 미실행 상태입니다. 대상국 분석 실행을 눌러주세요.
+            - generic [ref=f3e578]:
+              - generic [ref=f3e579]:
+                - generic [ref=f3e586]:
+                  - heading "관세·FTA" [level=3] [ref=f3e587]
+                  - paragraph [ref=f3e588]: 관세, 협정 후보, 목적국 세부코드 확인 상태
+                - generic [ref=f3e589]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f3e591]:
+                - generic [ref=f3e598]:
+                  - heading "인증·규제·전략물자" [level=3] [ref=f3e599]
+                  - paragraph [ref=f3e600]: 인증 후보와 반드시 확인할 규제 요건
+                - generic [ref=f3e601]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f3e603]:
+                - generic [ref=f3e612]:
+                  - heading "통관 준비" [level=3] [ref=f3e613]
+                  - paragraph [ref=f3e614]: 공통 기본서류와 거래별 추가서류
+                - generic [ref=f3e615]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f3e617]:
+                - generic [ref=f3e625]:
+                  - heading "결제·예상 비용" [level=3] [ref=f3e626]
+                  - paragraph [ref=f3e627]: 대금회수 조건과 현재 산정 가능한 비용
+                - generic [ref=f3e628]: 가격·수량·중량·Incoterms가 없어 총 도착원가는 산출할 수 없습니다.
+              - generic [ref=f3e630]:
+                - generic [ref=f3e637]:
+                  - heading "시장 규모" [level=3] [ref=f3e638]
+                  - paragraph [ref=f3e639]: 목적국 수입시장과 한국산 점유율
+                - generic [ref=f3e640]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+              - generic [ref=f3e642]:
+                - generic [ref=f3e651]:
+                  - heading "제재 확인" [level=3] [ref=f3e652]
+                  - paragraph [ref=f3e653]: 국가 참고정보와 구매자 검색 준비 상태
+                - generic [ref=f3e654]: 직접 일치 결과가 없습니다. 결과 없음은 요건 없음을 의미하지 않습니다.
+            - generic [ref=f3e656]:
+              - generic [ref=f3e658]:
+                - generic [ref=f3e659]:
+                  - heading "다음 실행 단계" [level=3] [ref=f3e660]
+                  - paragraph [ref=f3e661]: 분석 근거에서 자동 생성되며 진행 상태는 프로젝트에 저장됩니다.
+                - generic [ref=f3e662]: 0/0 완료
+              - generic [ref=f3e663]: 분석 실행 후 관세·원산지·승인·통관·결제·비용·제재 체크리스트가 생성됩니다.
+      - complementary [ref=f3e665]:
+        - generic [ref=f3e666]:
+          - generic [ref=f3e667]: 근거 패널
+          - button "근거 패널 접기" [ref=f3e668] [cursor=pointer]
+        - generic [ref=f3e670]:
+          - heading "출처" [level=3] [ref=f3e671]
+          - generic [ref=f3e672]:
+            - paragraph [ref=f3e673]: 분석 기준 코드
+            - paragraph [ref=f3e674]: "제품명: 타이어"
+            - paragraph [ref=f3e675]: HS 401110 / HSK 4011100000
+            - paragraph [ref=f3e676]: "적용 방식: 검색 결과 1순위 자동 반영 (95)"
+            - paragraph [ref=f3e677]: "상태: 신뢰도 높음 / 공식 데이터 매칭 기준으로 상위 후보가 도출되었습니다."
+          - list [ref=f3e678]:
+            - listitem [ref=f3e679]:
+              - generic [ref=f3e680]:
+                - generic "출처 KOTRA" [ref=f3e681]: KOTRA
+                - link "Certification candidate signals 2" [ref=f3e682] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=4030
+            - listitem [ref=f3e688]:
+              - generic [ref=f3e689]:
+                - generic "출처 KOTRA" [ref=f3e690]: KOTRA
+                - link "Import regulation candidate signals 32" [ref=f3e691] [cursor=pointer]:
+                  - /url: https://dream.kotra.or.kr/dream/cms/com/index.do?MENU_ID=3700
+            - listitem [ref=f3e697]:
+              - generic [ref=f3e698]:
+                - generic "출처 기타" [ref=f3e699]: 기타
+                - generic [ref=f3e700]: 최근 12개월 HS/HSK 기준 수출액 / 원문 링크 없음
+                - paragraph [ref=f3e701]: 최근 12개월 HS/HSK 기준 수출액 $406.7M
+          - generic [ref=f3e702]:
+            - paragraph [ref=f3e703]: AI 상태
+            - generic [ref=f3e704]: 실행 중
+            - paragraph [ref=f3e710]: 상세 분석 요청을 처리 중입니다. (6초 경과)
+    - generic [ref=f3e706]:
+      - button "후보군으로" [ref=f3e707] [cursor=pointer]
+      - button "리포트로 안전성 검토로" [ref=f3e708] [cursor=pointer]:
+        - generic [ref=f3e709]: 리포트로
+        - text: 안전성 검토로

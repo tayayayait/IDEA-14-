@@ -1,32 +1,41 @@
-import { normalizeReportText, REPORT_UNKNOWN_TEXT, toSafePublicHref } from "@/lib/report-text";
 import { formatCustomsExportUsd, type CustomsExportStatus } from "@/lib/customs-export-evidence";
-import type { FeasibilityGrade, CountryEvidenceSnapshot } from "@/lib/report-feasibility";
-import {
-  buildCountryEvidenceSnapshot,
-  buildExportFeasibilitySummary,
-  buildPreExportChecklist,
-  buildCertRegChecklist,
-  buildPaymentRiskAssessment,
-  evaluateFeasibilityGrade,
-  getFeasibilityLabel,
-} from "@/lib/report-feasibility";
+import { normalizeReportText, REPORT_UNKNOWN_TEXT, toSafePublicHref } from "@/lib/report-text";
+import { buildProgramEvidenceValue } from "../../supabase/functions/_shared/report-evidence-detail";
+
+export interface ReportGateProfitabilityInputs {
+  salePrice: string;
+  currency: string;
+  unitCost: string;
+  quantity: string;
+  tradeTerm: string;
+  freightInsurance: string;
+  targetMargin: string;
+}
+
+export interface ReportGatePaymentInputs {
+  buyerName: string;
+  paymentMethod: string;
+  advanceRate: string;
+  paymentDays: string;
+  creditVerified: string;
+  insuranceStatus: string;
+}
+
+export interface ReportGateInputs {
+  profitability: ReportGateProfitabilityInputs;
+  payment: ReportGatePaymentInputs;
+}
 
 export interface ReportEvidenceBundle {
-  company: {
-    companyName: string | null;
-    industrialComplex: string | null;
-    address: string | null;
-  } | null;
-  product: {
-    name: string | null;
-    hsCode: string | null;
-    hskCode: string | null;
-    hsReviewRequired: boolean;
-  } | null;
+  company: { companyName: string | null; industrialComplex: string | null; address: string | null } | null;
+  product: { name: string | null; hsCode: string | null; hskCode: string | null; hsReviewRequired: boolean } | null;
   topCountries: ReportEvidenceCountry[];
   certs: ReportEvidenceRow[];
   regs: ReportEvidenceRow[];
   risks: ReportEvidenceRow[];
+  decisionFacts?: ReportEvidenceDecisionFact[];
+  decisionActions?: ReportEvidenceDecisionAction[];
+  gateInputs?: ReportGateInputs;
   safetyFlags: ReportEvidenceFlag[];
   apiLogs: ReportEvidenceApiLog[];
   missingEvidence: string[];
@@ -66,135 +75,332 @@ export interface ReportEvidenceSource {
   impactSummary?: string | null;
 }
 
-export interface ReportEvidenceFlag {
-  flagType: string | null;
-  summary: string | null;
+export interface ReportEvidenceFlag { flagType: string | null; summary: string | null }
+export interface ReportEvidenceDecisionFact {
+  countryCode: string; factKey: string | null; category: string; status: string; severity: string;
+  summary: string; value: unknown; sourceName: string; referenceDate: string | null;
+  caveat: string | null; nextAction: string | null;
 }
+export interface ReportEvidenceDecisionAction {
+  countryCode: string; actionKey: string; title: string; reason: string; status: string; priority: number;
+}
+export interface ReportEvidenceApiLog { apiKeyName: string; status: string; responseCount: number | null }
 
-export interface ReportEvidenceApiLog {
-  apiKeyName: string;
-  status: string;
-  responseCount: number | null;
+export type ReportDecisionVerdict = "proceed" | "conditional" | "hold";
+export type ReportDecisionConfidence = "high" | "medium" | "low";
+export type ReportDecisionReasonType = "opportunity" | "risk";
+export type ReportGateStatus = "clear" | "check_required" | "blocked";
+export type ReportGateTopic = "certification" | "regulation" | "tariff" | "profitability" | "payment" | "safety";
+export type ReportActionHorizon = "D+7" | "D+30" | "D+90";
+
+export interface ReportImmediateAction { action: string; owner: string; evidenceRefs: string[] }
+export interface ReportDecision {
+  verdict: ReportDecisionVerdict;
+  confidence: ReportDecisionConfidence;
+  headline: string;
+  reason: string;
+  immediateActions: ReportImmediateAction[];
+  evidenceRefs: string[];
 }
+export interface ReportDecisionReason {
+  type: ReportDecisionReasonType;
+  title: string;
+  interpretation: string;
+  businessImpact: string;
+  evidenceRefs: string[];
+}
+export interface ReportEntryStrategy {
+  countryCode: string;
+  countryName: string;
+  targetBuyer: string;
+  primaryChannel: string;
+  initialProducts: string;
+  positioning: string;
+  paymentTerms: string;
+  pilotScope: string;
+  expansionCondition: string;
+  evidenceRefs: string[];
+}
+export interface ReportDecisionGate {
+  topic: ReportGateTopic;
+  status: ReportGateStatus;
+  decision: string;
+  requiredAction: string;
+  owner: string;
+  due: string;
+  stopCondition: string;
+  evidenceRefs: string[];
+}
+export interface ReportActionPlanItem {
+  horizon: ReportActionHorizon;
+  owner: string;
+  action: string;
+  deliverable: string;
+  passCriteria: string;
+  evidenceRefs: string[];
+}
+export interface ReportOfficialResearchSource {
+  evidenceId: string; title: string; url: string; organization: string; publishedAt: string; accessedAt: string;
+}
+export interface ReportOfficialFinding { finding: string; evidenceRefs: string[] }
+export interface ReportOfficialResearch {
+  summary: string;
+  keyFindings: ReportOfficialFinding[];
+  queries: string[];
+  sources: ReportOfficialResearchSource[];
+  conflicts: string[];
+}
+export interface ReportStopCondition { condition: string; response: string; evidenceRefs: string[] }
 
 export interface ReportDraft {
-  executiveSummary: string;
-  exportFeasibility: string;
-  topCountryReason: string;
-  countryStrategies: ReportCountryStrategy[];
-  countryCautionAnalysisStatus: CountryCautionAnalysisStatus;
-  countryCautionAnalyses: CountryCautionAnalysis[];
-  preExportChecklist: string[];
-  actionPlan7Days: string[];
-  actionPlan30Days: string[];
-  actionPlan90Days: string[];
+  schemaVersion: 2;
+  decision: ReportDecision;
+  decisionReasons: ReportDecisionReason[];
+  entryStrategy: ReportEntryStrategy;
+  decisionGates: ReportDecisionGate[];
+  actionPlan: ReportActionPlanItem[];
+  officialResearch: ReportOfficialResearch;
+  assumptions: string[];
   unresolvedItems: string[];
-  finalCautions: string[];
+  stopConditions: ReportStopCondition[];
+  disclaimer: string;
 }
 
-export type CountryCautionAnalysisStatus = "generated" | "not_generated";
-
-export type CountryCautionSectionKind =
-  | "certification"
-  | "regulation"
-  | "ksure_country_risk"
-  | "ksure_industry_risk"
-  | "ksure_payment";
-
-export interface CountryCautionFact {
+export interface ReportProgramEvidenceItem {
+  evidenceId: string;
+  category: "country" | "customs" | "certification" | "regulation" | "risk" | "safety" | "decision" | "action" | "api" | "status";
   label: string;
   value: string;
-  meaning: string;
+  sourceName: string;
+  status: string;
+  referenceDate: string;
 }
 
-export interface CountryCautionSection {
-  kind: CountryCautionSectionKind;
-  title: string;
-  facts: CountryCautionFact[];
-  interpretation: string;
-}
-
-export interface CountryCautionAnalysis {
-  countryCode: string;
-  countryName: string;
-  coreSummary: string;
-  sections: CountryCautionSection[];
-}
-
-export interface ReportCountryStrategy {
-  countryCode: string;
-  countryName: string;
-  feasibilityGrade: FeasibilityGrade;
-  oneLineDecision: string;
-  position: string;
-  entryMode: string;
-  entryStrategy: string;
-  requiredChecks: string[];
-  certRegChecklist: string[];
-  paymentRiskAssessment: string;
-  riskResponse: string;
-  evidenceLimits: string[];
-  evidenceRefs: string[];
-  opportunity?: string;
-  newsImpactAnalysis: string;
-  marketOpportunity: string;
-  kotraEntryStrategy?: ReportKotraEntryStrategy;
-}
-
-export interface ReportKotraEntryStrategy {
-  status: "available" | "empty" | "failed" | "pdf_failed";
-  title: string;
-  publishedDate: string;
-  tradeOffice: string;
-  sourceUrl: string;
-  attachmentName: string;
-  attachmentUrl: string;
-  usedPdf: boolean;
-  basisSummary: string;
-  limitations: string[];
-}
-
-const FINAL_CAUTION =
-  "본 리포트는 공공데이터 조회 결과와 AI 요약을 결합한 참고자료이며, 전략물자·인증·규제 적합성의 최종 판정이 아닙니다.";
-const GEMINI_NEWS_BODY_ANALYSIS_PENDING_TEXT =
-  "Gemini 뉴스 본문 분석 미생성 — Step3 뉴스 본문은 리포트 근거에 포함되었지만 Gemini 분석 결과가 아직 생성되지 않았습니다. Step6에서 AI 요약 생성을 실행하세요.";
-const COUNTRY_CAUTION_SECTION_ORDER: CountryCautionSectionKind[] = [
-  "certification",
-  "regulation",
-  "ksure_country_risk",
-  "ksure_industry_risk",
-  "ksure_payment",
+const DISCLAIMER = "본 리포트는 프로그램 조회 데이터와 공식 웹 근거를 바탕으로 실행 우선순위와 확인 조건을 제안하는 참고자료이며, 법적·인증·규제 적합성의 최종 판정이 아닙니다.";
+const GATE_TOPICS: ReportGateTopic[] = ["certification", "regulation", "tariff", "profitability", "payment", "safety"];
+const OFFICIAL_SOURCE_TOKENS = [
+  ".gov", ".go.kr", ".gob.", ".gc.ca", ".europa.eu", "kotra", "k-sure", "ksure", "wto.org",
+  "intracen.org", "trade.gov", "cbp.gov", "usitc.gov", "federalregister.gov", "commerce.gov", "ustr.gov",
+  "europa.eu", "customs", "관세청", "산업통상자원부", "대한무역투자진흥공사", "한국무역보험공사",
+  "world trade organization", "international trade centre", "international trade commission",
+  "national highway traffic safety administration", "federal register",
 ];
-const COUNTRY_CAUTION_SECTION_TITLES: Record<CountryCautionSectionKind, string> = {
-  certification: "인증",
-  regulation: "규제",
-  ksure_country_risk: "K-SURE 국가위험",
-  ksure_industry_risk: "K-SURE 업종위험",
-  ksure_payment: "K-SURE 수출결제",
+const EXCLUDED_SOURCE_TOKENS = ["news", "신문", "일보", "블로그", "blog", "press", "media", "광고"];
+
+export const buildReportProgramEvidenceCatalog = (evidence: ReportEvidenceBundle): ReportProgramEvidenceItem[] => {
+  const selected = evidence.topCountries[0];
+  const selectedCode = normalizeCountryCode(selected?.countryCode);
+  const catalog: ReportProgramEvidenceItem[] = [];
+  const add = (item: ReportProgramEvidenceItem) => catalog.push(item);
+
+  if (selected) {
+    add({
+      evidenceId: "P-COUNTRY-001", category: "country", label: "선택 국가 추천 근거",
+      value: `${safeText(selected.countryName, REPORT_UNKNOWN_TEXT)} · ${safeText(selected.label, REPORT_UNKNOWN_TEXT)} · ${safeText(selected.totalScore, "-")}점 · ${safeText(selected.summary, REPORT_UNKNOWN_TEXT)}`,
+      sourceName: "프로그램 국가추천", status: "available", referenceDate: "",
+    });
+    add({
+      evidenceId: "P-CUSTOMS-001", category: "customs", label: "최근 12개월 수출 흐름",
+      value: selected.customsExport12mUsd
+        ? formatCustomsExportUsd(selected.customsExport12mUsd)
+        : selected.customsExportStatus === "empty" ? "조회 결과 0건" : REPORT_UNKNOWN_TEXT,
+      sourceName: "관세 수출입 데이터", status: selected.customsExport12mUsd ? "available" : "unknown", referenceDate: "",
+    });
+  }
+
+  const addRows = (rows: ReportEvidenceRow[], prefix: string, category: ReportProgramEvidenceItem["category"], label: string) => {
+    rows.filter((row) => !selectedCode || !row.countryCode || normalizeCountryCode(row.countryCode) === selectedCode)
+      .forEach((row, index) => add({
+        evidenceId: `${prefix}-${String(index + 1).padStart(3, "0")}`, category, label,
+        value: safeText(buildProgramEvidenceValue(row), REPORT_UNKNOWN_TEXT), sourceName: safeText(row.sourceOrg, "프로그램 API"),
+        status: "available", referenceDate: "",
+      }));
+  };
+  addRows(evidence.certs, "P-CERT", "certification", "인증 조회 결과");
+  addRows(evidence.regs, "P-REG", "regulation", "수입규제 조회 결과");
+  addRows(evidence.risks, "P-RISK", "risk", "K-SURE 위험 조회 결과");
+
+  (evidence.decisionFacts ?? []).filter((row) => !selectedCode || normalizeCountryCode(row.countryCode) === selectedCode)
+    .forEach((row, index) => add({
+      evidenceId: `P-FACT-${String(index + 1).padStart(3, "0")}`, category: "decision",
+      label: safeText(row.category, "의사결정 사실"), value: safeText(buildProgramEvidenceValue(row), REPORT_UNKNOWN_TEXT),
+      sourceName: safeText(row.sourceName, "프로그램 API"), status: safeText(row.status, "unknown"),
+      referenceDate: safeText(row.referenceDate, ""),
+    }));
+  const profitabilityInput = serializeGateInput(evidence.gateInputs?.profitability);
+  if (profitabilityInput) add({
+    evidenceId: "P-INPUT-PROFIT-001", category: "decision", label: "사용자 수익성 입력",
+    value: profitabilityInput, sourceName: "사용자 입력", status: "user_input", referenceDate: "",
+  });
+  const paymentInput = serializeGateInput(evidence.gateInputs?.payment);
+  if (paymentInput) add({
+    evidenceId: "P-INPUT-PAY-001", category: "decision", label: "사용자 결제조건 입력",
+    value: paymentInput, sourceName: "사용자 입력", status: "user_input", referenceDate: "",
+  });
+  evidence.safetyFlags.forEach((row, index) => add({
+    evidenceId: `P-SAFETY-${String(index + 1).padStart(3, "0")}`, category: "safety",
+    label: safeText(row.flagType, "안전 확인"), value: safeText(row.summary, REPORT_UNKNOWN_TEXT),
+    sourceName: "프로그램 안전 조회", status: "check_required", referenceDate: "",
+  }));
+  (evidence.decisionActions ?? []).filter((row) => !selectedCode || normalizeCountryCode(row.countryCode) === selectedCode)
+    .forEach((row, index) => add({
+      evidenceId: `P-ACTION-${String(index + 1).padStart(3, "0")}`, category: "action",
+      label: safeText(row.title, "프로그램 권장 작업"), value: safeText(row.reason, REPORT_UNKNOWN_TEXT),
+      sourceName: "프로그램 의사결정", status: safeText(row.status, "pending"), referenceDate: "",
+    }));
+  evidence.apiLogs.forEach((row, index) => add({
+    evidenceId: `P-API-${String(index + 1).padStart(3, "0")}`, category: "api",
+    label: safeText(row.apiKeyName, "API 조회 상태"),
+    value: `상태 ${safeText(row.status, "unknown")} · ${safeText(row.responseCount, "-")}건`,
+    sourceName: "프로그램 API 로그", status: safeText(row.status, "unknown"), referenceDate: "",
+  }));
+  if (catalog.length === 0) add({
+    evidenceId: "P-STATUS-001", category: "status", label: "프로그램 근거 상태",
+    value: "선택 국가 또는 API 근거가 충분하지 않음", sourceName: "프로그램", status: "unknown", referenceDate: "",
+  });
+  return catalog;
+};
+
+const buildFallbackGates = (evidence: ReportEvidenceBundle, catalog: ReportProgramEvidenceItem[]): ReportDecisionGate[] => {
+  const certRef = evidenceRef(catalog, "certification");
+  const regRef = evidenceRef(catalog, "regulation");
+  const customsRef = evidenceRef(catalog, "customs");
+  const riskRef = evidenceRef(catalog, "risk");
+  const safetyRef = evidenceRef(catalog, "safety");
+  const baseRef = catalog[0]?.evidenceId ?? "P-STATUS-001";
+  const blockedSafety = evidence.safetyFlags.some((flag) => /금지|차단|수출\s*불가|prohibit|blocked/i.test(`${flag.flagType ?? ""} ${flag.summary ?? ""}`));
+  return [
+    makeGate("certification", "check_required", certRef ? "후보 인증 근거는 있으나 제품 적용성 확인 필요" : "적용 인증 미확인", "공식 인증기관에 제품·규격별 적용 여부와 비용 확인", "인증 담당", "D+7", "필수 인증 취득이 불가능하거나 비용이 목표 원가를 초과함", certRef || baseRef),
+    makeGate("regulation", "check_required", regRef ? "수입규제 후보의 적용 범위 확인 필요" : "수입규제 미확인", "대상국 관세·통관기관 원문에서 시행일과 적용 범위 확인", "통관 담당", "D+7", "수입 금지 또는 사업상 수용 불가능한 제한이 확인됨", regRef || baseRef),
+    makeGate("tariff", "check_required", "실제 적용 관세와 추가관세 미확정", "HS/원산지 기준 기본·추가관세와 무역구제조치 확인", "관세 담당", "D+7", "총 관세 반영 후 목표 마진을 달성할 수 없음", customsRef || baseRef),
+    makeGate("profitability", "check_required", "도착원가와 목표 마진 미확정", "물류·보험·인증·관세를 포함한 도착원가표 작성", "재무 담당", "D+30", "보수 시나리오에서 목표 공헌이익 미달", customsRef || baseRef),
+    makeGate("payment", "check_required", riskRef ? "K-SURE 위험을 거래조건에 반영해야 함" : "결제위험 근거 미확인", "바이어 신용과 선금·LC·분할지급 조건 확정", "영업 담당", "D+30", "회수 안전장치 없이 외상거래만 요구함", riskRef || baseRef),
+    makeGate("safety", blockedSafety ? "blocked" : "check_required", blockedSafety ? "안전·전략물자 차단 가능성 확인" : "제품안전·전략물자 최종 판정 미확정", "공식 판정·시험·라벨 요구사항 확인", "안전 담당", "D+7", "수출통제 또는 안전요건을 충족할 수 없음", safetyRef || baseRef),
+  ];
+};
+
+const makeGate = (
+  topic: ReportGateTopic, status: ReportGateStatus, decision: string, requiredAction: string,
+  owner: string, due: string, stopCondition: string, ref: string,
+): ReportDecisionGate => ({ topic, status, decision, requiredAction, owner, due, stopCondition, evidenceRefs: [ref] });
+
+const buildFallbackActionPlan = (evidence: ReportEvidenceBundle, catalog: ReportProgramEvidenceItem[]): ReportActionPlanItem[] => {
+  const countryName = safeText(evidence.topCountries[0]?.countryName, "선택 국가");
+  const refs = compactRefs([
+    evidenceRef(catalog, "country"), evidenceRef(catalog, "customs"), evidenceRef(catalog, "certification"),
+    evidenceRef(catalog, "regulation"), evidenceRef(catalog, "risk"), catalog[0]?.evidenceId,
+  ]);
+  return [
+    { horizon: "D+7", owner: "HS·인증 담당", action: "HS/HSK와 인증·규제·관세 적용성을 공식기관에 확인", deliverable: "근거 URL·조회일이 포함된 확인표", passCriteria: "필수 요건과 추가 비용이 항목별로 확정됨", evidenceRefs: refs },
+    { horizon: "D+30", owner: "영업·재무 담당", action: `${countryName} 바이어 3~5곳에 대표 규격 견적과 거래조건을 검증`, deliverable: "바이어 피드백·도착원가·결제조건 비교표", passCriteria: "목표 마진과 회수 안전조건을 충족하는 바이어 1곳 이상", evidenceRefs: refs },
+    { horizon: "D+90", owner: "수출 책임자", action: "샘플 결과와 모든 게이트를 재검토해 확대·중단 결정", deliverable: "파일럿 결과 및 최종 Go/No-Go 회의록", passCriteria: "차단 게이트 0건, 핵심 확인 게이트 해소, 파일럿 품질 승인", evidenceRefs: refs },
+  ];
 };
 
 export const buildReportDraftFallback = (evidence: ReportEvidenceBundle): ReportDraft => {
+  const catalog = buildReportProgramEvidenceCatalog(evidence);
+  const selected = evidence.topCountries[0];
+  const countryName = safeText(selected?.countryName, REPORT_UNKNOWN_TEXT);
   const productName = safeText(evidence.product?.name, "해당 품목");
-  const topCountry = evidence.topCountries[0];
-  const topCountryName = safeText(topCountry?.countryName, REPORT_UNKNOWN_TEXT);
-  const hsText = buildHsText(evidence);
-  const missingEvidence = normalizeTextArray(evidence.missingEvidence);
+  const countryRef = evidenceRef(catalog, "country");
+  const customsRef = evidenceRef(catalog, "customs");
+  const certRef = evidenceRef(catalog, "certification");
+  const regRef = evidenceRef(catalog, "regulation");
+  const riskRef = evidenceRef(catalog, "risk");
+  const primaryRef = countryRef || catalog[0].evidenceId;
+  const missing = uniqueTexts(evidence.missingEvidence);
+  const decisionGates = buildFallbackGates(evidence, catalog);
+  const hasBlocked = decisionGates.some((gate) => gate.status === "blocked");
+  const allRefs = compactRefs([primaryRef, customsRef, certRef, regRef, riskRef, evidenceRef(catalog, "safety")]);
 
   return {
-    executiveSummary: `${productName} 기준 우선 검토 국가는 ${topCountryName}입니다. ${hsText} 기준으로 Top 3 국가의 인증·규제·결제위험·제품안전 근거를 확인해야 합니다.`,
-    exportFeasibility: buildExportFeasibilitySummary(evidence.topCountries, evidence),
-    topCountryReason: topCountry
-      ? `${topCountryName}은 추천 점수 ${topCountry.totalScore ?? "-"}점(${safeText(topCountry.label, REPORT_UNKNOWN_TEXT)})으로 1순위입니다. ${safeText(topCountry.summary, "세부 추천 근거는 출처 표와 국가별 유의사항에서 확인해야 합니다.")}`
-      : `추천 국가 근거는 ${REPORT_UNKNOWN_TEXT}입니다.`,
-    countryStrategies: buildFallbackCountryStrategies(evidence),
-    countryCautionAnalysisStatus: "not_generated",
-    countryCautionAnalyses: [],
-    preExportChecklist: buildPreExportChecklist(evidence),
-    actionPlan7Days: build7DayActions(evidence),
-    actionPlan30Days: build30DayActions(evidence),
-    actionPlan90Days: build90DayActions(evidence),
-    unresolvedItems: missingEvidence.length > 0 ? missingEvidence : [REPORT_UNKNOWN_TEXT],
-    finalCautions: [FINAL_CAUTION, "미조회·실패 API 항목은 원문 기관에서 재확인한 뒤 제출용 리포트를 확정해야 합니다."],
+    schemaVersion: 2,
+    decision: {
+      verdict: selected ? (hasBlocked ? "hold" : "conditional") : "hold",
+      confidence: "low",
+      headline: selected ? `${countryName} 수출은 핵심 조건 확인 후 제한적으로 검증하세요.` : "선택 국가 근거가 없어 수출 판단을 보류합니다.",
+      reason: "Gemini 판단이 완료되지 않아 프로그램 API 근거만으로 보수적인 임시 결론을 생성했습니다.",
+      immediateActions: [{
+        action: "인증·규제·관세·목표 마진을 확인한 뒤 샘플 견적 진행 여부를 결정하세요.",
+        owner: "수출 책임자",
+        evidenceRefs: compactRefs([certRef, regRef, customsRef, primaryRef]),
+      }],
+      evidenceRefs: allRefs,
+    },
+    decisionReasons: [
+      {
+        type: "opportunity", title: "선택 시장의 검증 가치",
+        interpretation: selected?.customsExport12mUsd
+          ? `최근 12개월 ${formatCustomsExportUsd(selected.customsExport12mUsd)}의 수출 흐름은 기존 거래 가능성을 확인하는 신호입니다.`
+          : "추천 점수는 검토 우선순위 신호이지만 실제 수요를 확정하지는 않습니다.",
+        businessImpact: "대규모 투자보다 대표 규격의 소규모 견적·샘플 검증이 적합합니다.",
+        evidenceRefs: compactRefs([customsRef, primaryRef]),
+      },
+      {
+        type: "risk", title: "계약 전 확인이 필요한 조건",
+        interpretation: missing.length > 0 ? `${missing.join(" · ")} 항목이 미확인 상태입니다.` : "현재 API 결과만으로 인증 적용성, 실제 관세, 도착원가를 확정할 수 없습니다.",
+        businessImpact: "조건 확인 전 양산 계약이나 회수 위험이 큰 결제조건을 확정하면 안 됩니다.",
+        evidenceRefs: compactRefs([certRef, regRef, riskRef, primaryRef]),
+      },
+    ],
+    entryStrategy: {
+      countryCode: safeText(selected?.countryCode, "-"), countryName,
+      targetBuyer: "제품 규격과 인증 요구사항을 문서로 회신할 수 있는 전문 수입·유통 바이어",
+      primaryChannel: "KOTRA·공식 무역지원기관을 통한 바이어 검증 후 샘플 견적",
+      initialProducts: `${productName} 대표 규격 1~2종`,
+      positioning: "가격만이 아니라 규격 일치, 문서 대응, 공급 안정성을 중심으로 제안",
+      paymentTerms: riskRef ? "초기 거래는 선금·분할지급·신용장 등 회수 안전 조건 우선" : "K-SURE 위험 확인 전 외상거래 보류",
+      pilotScope: "바이어 3~5곳 인터뷰, 대표 규격 샘플 1회, 도착원가와 인증비용 산정",
+      expansionCondition: "필수 인증·규제 통과, 목표 마진 충족, 바이어 결제조건 승인 후 확대",
+      evidenceRefs: allRefs,
+    },
+    decisionGates,
+    actionPlan: buildFallbackActionPlan(evidence, catalog),
+    officialResearch: { summary: "Gemini 공식자료 검색이 완료되지 않았습니다.", keyFindings: [], queries: [], sources: [], conflicts: [] },
+    assumptions: ["선택 국가 한 곳과 현재 HS/HSK를 기준으로 판단함", "추천 점수는 실제 수요나 계약 가능성을 보장하지 않음"],
+    unresolvedItems: missing.length > 0 ? missing : ["공식 관세율·필수 인증 적용성·도착원가·목표 마진 확인 필요"],
+    stopConditions: decisionGates.map((gate) => ({
+      condition: gate.stopCondition,
+      response: gate.status === "blocked" ? "즉시 보류하고 공식기관 확인" : "조건 확인 전 계약·양산 보류",
+      evidenceRefs: gate.evidenceRefs,
+    })),
+    disclaimer: DISCLAIMER,
+  };
+};
+
+export const normalizeReportDraft = (input: unknown, evidence: ReportEvidenceBundle): ReportDraft => {
+  const wrapped = asRecord(input);
+  const source = asRecord(wrapped.draft ?? input);
+  const fallback = buildReportDraftFallback(evidence);
+  const isV2 = Number(source.schemaVersion) === 2;
+  const data = isV2 ? source : convertLegacyDraft(source, fallback, evidence);
+  const catalog = buildReportProgramEvidenceCatalog(evidence);
+  const officialResearch = normalizeOfficialResearch(data.officialResearch, fallback.officialResearch);
+  const allowedRefs = new Set([...catalog.map((item) => item.evidenceId), ...officialResearch.sources.map((item) => item.evidenceId)]);
+  const defaultRefs = [catalog[0]?.evidenceId].filter(Boolean);
+  const linkIssues = countMissingEvidenceLinks(data);
+  const decision = normalizeDecision(data.decision, fallback.decision, allowedRefs, defaultRefs);
+  const decisionGates = normalizeDecisionGates(data.decisionGates, fallback.decisionGates, allowedRefs, defaultRefs);
+  const hasBlocked = decisionGates.some((gate) => gate.status === "blocked");
+  const hasCriticalCheck = decisionGates.some((gate) => gate.status === "check_required");
+  const verdict: ReportDecisionVerdict = hasBlocked ? "hold" : hasCriticalCheck && decision.verdict === "proceed" ? "conditional" : decision.verdict;
+  const issueCount = [linkIssues > 0, officialResearch.conflicts.length > 0, officialResearch.sources.length === 0, evidence.missingEvidence.length > 0].filter(Boolean).length;
+
+  return {
+    schemaVersion: 2,
+    decision: { ...decision, verdict, confidence: downgradeConfidence(decision.confidence, issueCount) },
+    decisionReasons: normalizeDecisionReasons(data.decisionReasons, fallback.decisionReasons, allowedRefs, defaultRefs),
+    entryStrategy: normalizeEntryStrategy(data.entryStrategy, fallback.entryStrategy, evidence, allowedRefs, defaultRefs),
+    decisionGates,
+    actionPlan: normalizeActionPlan(data.actionPlan, fallback.actionPlan, allowedRefs, defaultRefs),
+    officialResearch,
+    assumptions: normalizeTextArray(data.assumptions, fallback.assumptions),
+    unresolvedItems: uniqueTexts(
+      [...normalizeTextArray(data.unresolvedItems), ...normalizeTextArray(evidence.missingEvidence)],
+      isV2 ? [] : fallback.unresolvedItems,
+    ),
+    stopConditions: normalizeStopConditions(data.stopConditions, fallback.stopConditions, allowedRefs, defaultRefs),
+    disclaimer: safeText(data.disclaimer, fallback.disclaimer),
   };
 };
 
@@ -205,667 +411,292 @@ export const buildReportEvidenceHash = (evidence: ReportEvidenceBundle): string 
     hash ^= serialized.charCodeAt(index);
     hash = Math.imul(hash, 0x01000193);
   }
-  return `ev_${(hash >>> 0).toString(16).padStart(8, "0")}`;
+  return `ev_cd1_${(hash >>> 0).toString(16).padStart(8, "0")}`;
 };
 
-export const normalizeReportDraft = (input: unknown, evidence: ReportEvidenceBundle): ReportDraft => {
-  const source = asRecord(asRecord(input).draft ?? input);
-  const fallback = buildReportDraftFallback(evidence);
-  const countryStrategies = sanitizeCountryStrategiesAgainstEvidence(
-    normalizeCountryStrategies(source.countryStrategies, fallback.countryStrategies),
-    evidence,
-  );
-  const countryCautionAnalyses = sanitizeCountryCautionAnalysesAgainstEvidence(
-    normalizeCountryCautionAnalyses(source.countryCautionAnalyses),
-    evidence,
-  );
-  const countryCautionAnalysisStatus: CountryCautionAnalysisStatus =
-    countryCautionAnalyses.length > 0 ? "generated" : "not_generated";
-
+const convertLegacyDraft = (source: Record<string, unknown>, fallback: ReportDraft, evidence: ReportEvidenceBundle): Record<string, unknown> => {
+  const oldDecision = asRecord(source.aiDecision);
+  const oldStrategy = asArray(source.countryStrategies).map(asRecord)[0] ?? {};
+  const oldResearch = asRecord(source.webResearch);
+  const primaryRef = fallback.decision.evidenceRefs[0];
+  const oldActions = (value: unknown, horizon: ReportActionHorizon) => normalizeTextArray(value).map((action) => ({
+    horizon, owner: horizon === "D+7" ? "실무 담당" : "수출 책임자", action,
+    deliverable: `${horizon} 실행 결과`, passCriteria: "담당자 검토 완료", evidenceRefs: [primaryRef],
+  }));
   return {
-    executiveSummary: safeText(source.executiveSummary ?? source.summary, fallback.executiveSummary),
-    exportFeasibility: safeText(source.exportFeasibility, fallback.exportFeasibility),
-    topCountryReason: safeText(source.topCountryReason, fallback.topCountryReason),
-    countryStrategies,
-    countryCautionAnalysisStatus,
-    countryCautionAnalyses: countryCautionAnalysisStatus === "generated" ? countryCautionAnalyses : [],
-    preExportChecklist: normalizeTextArray(source.preExportChecklist, fallback.preExportChecklist),
-    actionPlan7Days: normalizeTextArray(source.actionPlan7Days ?? source.actions, fallback.actionPlan7Days),
-    actionPlan30Days: normalizeTextArray(source.actionPlan30Days, fallback.actionPlan30Days),
-    actionPlan90Days: normalizeTextArray(source.actionPlan90Days, fallback.actionPlan90Days),
-    unresolvedItems: uniqueTexts([
-      ...normalizeTextArray(source.unresolvedItems),
-      ...normalizeTextArray(evidence.missingEvidence),
-    ], fallback.unresolvedItems),
-    finalCautions: uniqueTexts(normalizeTextArray(source.finalCautions), fallback.finalCautions),
-  };
-};
-
-const buildFallbackCountryStrategies = (evidence: ReportEvidenceBundle): ReportCountryStrategy[] => {
-  if (evidence.topCountries.length === 0) {
-    return [{
-      countryCode: "-",
-      countryName: REPORT_UNKNOWN_TEXT,
-      feasibilityGrade: "hold" as FeasibilityGrade,
-      oneLineDecision: "추천 국가 데이터가 없어 수출 우선순위를 판단할 수 없습니다.",
-      position: REPORT_UNKNOWN_TEXT,
-      entryMode: "추천 국가 데이터가 없어 국가별 전략을 확정할 수 없습니다.",
-      entryStrategy: "후보국 추천 데이터 확보 후 진입 전략을 수립하세요.",
-      requiredChecks: ["후보국 추천 단계를 재실행하세요.", "API 출처 표에서 실패 항목을 확인하세요."],
-      certRegChecklist: ["인증·규제 데이터 없음"],
-      paymentRiskAssessment: "결제 리스크 데이터 없음",
-      riskResponse: "근거 데이터 확보 전에는 진출 우선순위를 확정하지 마세요.",
-      evidenceLimits: ["후보국 추천 근거 없음"],
-      evidenceRefs: [],
-      newsImpactAnalysis: "대상국 일치 직접 뉴스 근거 없음 — 관련 뉴스 모니터링 필요",
-      marketOpportunity: "후보국 추천 데이터가 없어 시장 기회를 평가할 수 없습니다.",
-    }];
-  }
-
-  return evidence.topCountries.slice(0, 3).map((country, index) => {
-    const countryName = safeText(country.countryName, REPORT_UNKNOWN_TEXT);
-    const countryCode = safeText(country.countryCode, "-");
-    const snapshot = buildCountryEvidenceSnapshot(country, evidence);
-    const feasibilityGrade = evaluateFeasibilityGrade(snapshot);
-    const requiredChecks = buildCountryRequiredChecks(evidence, country.countryCode);
-    const evidenceRefs = buildCountryEvidenceRefs(country);
-    const evidenceLimits = buildCountryEvidenceLimits(evidence, country, evidenceRefs);
-    return {
-      countryCode,
-      countryName,
-      feasibilityGrade,
-      oneLineDecision: buildCountryOneLineDecision(country, index, feasibilityGrade, snapshot, evidenceRefs),
-      position: buildCountryPosition(country, index),
-      entryMode: buildCountryEntryMode(evidence, country, evidenceRefs),
-      entryStrategy: buildCountryEntryMode(evidence, country, evidenceRefs),
-      requiredChecks,
-      certRegChecklist: buildCertRegChecklist(countryCode, evidence),
-      paymentRiskAssessment: buildPaymentRiskAssessment(countryCode, evidence),
-      riskResponse: buildCountryRiskResponse(evidence, countryCode),
-      evidenceLimits,
-      evidenceRefs,
-      newsImpactAnalysis: buildCountryNewsImpact(country),
-      marketOpportunity: buildCountryMarketOpportunity(country, snapshot, index),
-    };
-  });
-};
-
-const buildCountryOneLineDecision = (
-  country: ReportEvidenceCountry,
-  index: number,
-  feasibilityGrade: FeasibilityGrade,
-  snapshot: CountryEvidenceSnapshot,
-  evidenceRefs: string[],
-): string => {
-  const countryName = safeText(country.countryName, REPORT_UNKNOWN_TEXT);
-  const rank = index === 0 ? "1순위" : `${index + 1}순위`;
-  const certRegText = snapshot.hasCerts && snapshot.hasRegs
-    ? "인증·규제 근거 확인"
-    : snapshot.hasCerts || snapshot.hasRegs
-      ? "인증·규제 일부 확인"
-      : "인증·규제 근거 부족";
-  const newsText = evidenceRefs.length > 0 ? "직접 뉴스 근거 있음" : "직접 뉴스 근거 부족";
-  const paymentText = snapshot.hasPaymentRisk ? "결제위험 반영 필요" : "결제위험 확인 필요";
-  return `${countryName}: ${rank} ${getFeasibilityLabel(feasibilityGrade)} - ${certRegText}, ${newsText}, ${paymentText}.`;
-};
-
-const buildCountryPosition = (country: ReportEvidenceCountry, index: number): string => {
-  const countryName = safeText(country.countryName, REPORT_UNKNOWN_TEXT);
-  const label = safeText(country.label, REPORT_UNKNOWN_TEXT);
-  const score = country.totalScore ?? "-";
-  const rankText = index === 0 ? "Top 1 우선 검증국" : `Top ${index + 1} 검토 후보국`;
-  const customsText = buildCustomsExportSentence(country);
-  return `${countryName}은 ${rankText}입니다. 추천 점수 ${score}점, 판정 라벨은 ${label}입니다.${customsText ? ` ${customsText}` : ""}`;
-};
-
-const buildCountryEntryMode = (
-  evidence: ReportEvidenceBundle,
-  country: ReportEvidenceCountry,
-  evidenceRefs: string[],
-): string => {
-  const countryName = safeText(country.countryName, REPORT_UNKNOWN_TEXT);
-  const hs = safeText(evidence.product?.hsCode, "-");
-  const hsk = safeText(evidence.product?.hskCode, "-");
-  const evidenceText = evidenceRefs.length > 0
-    ? "대상국 일치 근거를 우선 검토하고"
-    : "대상국 일치 직접 뉴스 근거가 부족하므로";
-  const customsText = country.customsExport12mUsd
-    ? `최근 수출 실적(${formatCustomsExportUsd(country.customsExport12mUsd)})을 초기 수요 검증 신호로 참고하되`
-    : "최근 수출 실적이 충분히 확인되지 않았으므로";
-  return `${countryName}은 ${customsText} ${evidenceText} HS/HSK ${hs}/${hsk}, 인증, 수입규제, 결제위험을 원문 기준으로 확인한 뒤 무역관 상담 또는 샘플 수출을 검토하세요.`;
-};
-
-const buildCountryRiskResponse = (evidence: ReportEvidenceBundle, countryCode: string): string => {
-  const paymentRows = evidence.risks.filter(
-    (row) => row.countryCode === countryCode && safeText(row.category, "").toLowerCase().includes("payment"),
-  );
-  if (paymentRows.length > 0) {
-    return "K-SURE 결제위험 근거를 거래조건에 반영하고 초기 거래는 선금·분할지급·LC 등 보수 조건을 검토하세요.";
-  }
-  return "결제위험 근거가 부족하므로 원문 확인 전까지 거래조건을 보수적으로 설정하세요.";
-};
-
-const buildCountryNewsImpact = (country: ReportEvidenceCountry): string => {
-  const sources = buildCountryNewsImpactSources(country);
-  if (sources.length === 0) {
-    return "대상국 일치 직접 뉴스 근거 없음 — 관련 뉴스 모니터링 필요";
-  }
-  return GEMINI_NEWS_BODY_ANALYSIS_PENDING_TEXT;
-};
-
-const buildCountryMarketOpportunity = (
-  country: ReportEvidenceCountry,
-  snapshot: CountryEvidenceSnapshot,
-  index: number,
-): string => {
-  const countryName = safeText(country.countryName, REPORT_UNKNOWN_TEXT);
-  const score = country.totalScore ?? "-";
-  const rank = index === 0 ? "1순위 우선 검증국" : `${index + 1}순위 검토 후보국`;
-  const dataStatus = snapshot.hasCerts && snapshot.hasRegs
-    ? "인증·규제 데이터가 확보되어 구체적 진입 준비가 가능합니다."
-    : "추가 데이터 확보 후 시장 기회를 재평가하세요.";
-  const customsText = country.customsExport12mUsd
-    ? `최근 12개월 HS/HSK 수출액 ${formatCustomsExportUsd(country.customsExport12mUsd)}가 확인되어 기존 거래 흐름이 있는 시장으로 해석할 수 있습니다.`
-    : "최근 12개월 HS/HSK 수출액 근거는 확실한 정보 없음입니다.";
-  return `${countryName}은 추천 점수 ${score}점으로 ${rank}입니다. ${customsText} ${dataStatus}`;
-};
-
-const buildCountryRequiredChecks = (evidence: ReportEvidenceBundle, countryCode: string): string[] => {
-  const certCount = evidence.certs.filter((row) => row.countryCode === countryCode).length;
-  const regCount = evidence.regs.filter((row) => row.countryCode === countryCode).length;
-  const riskCount = evidence.risks.filter((row) => row.countryCode === countryCode).length;
-  return [
-    `HS/HSK ${safeText(evidence.product?.hsCode, "-")}/${safeText(evidence.product?.hskCode, "-")} 품목 분류 재확인`,
-    buildCustomsRequiredCheck(evidence.topCountries.find((country) => country.countryCode === countryCode)),
-    certCount > 0 ? `인증 근거 ${certCount}건 원문 적합성 확인` : "인증 요구사항 확실한 정보 없음",
-    regCount > 0 ? `수입규제 근거 ${regCount}건 적용 범위 확인` : "수입규제 확실한 정보 없음",
-    riskCount > 0 ? `K-SURE 위험 근거 ${riskCount}건 거래조건 반영` : "K-SURE 위험 확실한 정보 없음",
-  ];
-};
-
-const buildCustomsExportSentence = (country: ReportEvidenceCountry): string | null => {
-  if (country.customsExport12mUsd) {
-    return `최근 12개월 HS/HSK 수출액은 ${formatCustomsExportUsd(country.customsExport12mUsd)}입니다.`;
-  }
-  if (country.customsExportStatus === "empty") {
-    return "최근 12개월 HS/HSK 수출액 조회 결과가 없습니다.";
-  }
-  return null;
-};
-
-const buildCustomsRequiredCheck = (country: ReportEvidenceCountry | undefined): string => {
-  if (country?.customsExport12mUsd) {
-    return `최근 12개월 수출액 ${formatCustomsExportUsd(country.customsExport12mUsd)} 기준 기존 거래 흐름 확인`;
-  }
-  return "최근 12개월 HS/HSK 수출액 확실한 정보 없음";
-};
-
-const buildCountryEvidenceRefs = (country: ReportEvidenceCountry): string[] => {
-  const refs = (country.evidenceSources ?? [])
-    .filter((source) => isDirectCountryEvidence(source, country))
-    .map((source) => safeText(source.title, ""))
-    .filter((title) => !isNoEvidencePlaceholder(title))
-    .filter(Boolean)
-    .slice(0, 3);
-  return uniqueTexts(refs);
-};
-
-const buildCountryNewsImpactSources = (country: ReportEvidenceCountry): ReportEvidenceSource[] => {
-  const seen = new Set<string>();
-  const sources: ReportEvidenceSource[] = [];
-
-  for (const source of country.evidenceSources ?? []) {
-    if (!isReportableNewsImpactSource(source, country)) continue;
-    const key = [
-      safeText(source.evidenceType, "").toLowerCase(),
-      safeText(source.title, "").toLowerCase(),
-      safeText(source.summary, "").toLowerCase(),
-      safeText(source.articleBody, "").toLowerCase(),
-      safeText(source.impactSummary, "").toLowerCase(),
-    ].join("|");
-    if (seen.has(key)) continue;
-    seen.add(key);
-    sources.push(source);
-  }
-
-  return sources;
-};
-
-const NEWS_IMPACT_SOURCE_TYPES = new Set(["product_evidence", "country_background", "news"]);
-
-const isReportableNewsImpactSource = (
-  source: ReportEvidenceSource,
-  country: ReportEvidenceCountry,
-): boolean => {
-  if (!hasNewsImpactSourceIdentity(source)) return false;
-  const evidenceType = safeText(source.evidenceType, "").toLowerCase();
-  if (evidenceType !== "direct" && evidenceType !== "background") return false;
-  if (isNoEvidencePlaceholder(safeText(source.title, ""))) return false;
-  const sourceCountry = safeText(source.country, "");
-  if (sourceCountry && !countryNameMatches(sourceCountry, country)) return false;
-  if (mentionsDifferentKnownCountry(`${safeText(source.title, "")} ${safeText(source.summary, "")}`, country)) {
-    return false;
-  }
-  return Boolean(
-    safeText(source.title, "") ||
-    safeText(source.summary, "") ||
-    safeText(source.articleBody, "") ||
-    safeText(source.impactSummary, "")
-  );
-};
-
-const hasNewsImpactSourceIdentity = (source: ReportEvidenceSource): boolean => {
-  const sourceType = safeText(source.sourceType, "").toLowerCase();
-  if (sourceType) return NEWS_IMPACT_SOURCE_TYPES.has(sourceType);
-  return Boolean(
-    safeText(source.newsCategory, "") ||
-    safeText(source.newsScope, "") ||
-    safeText(source.impactSummary, "")
-  );
-};
-
-const buildCountryEvidenceLimits = (
-  evidence: ReportEvidenceBundle,
-  country: ReportEvidenceCountry,
-  evidenceRefs: string[],
-): string[] => {
-  const countryCode = safeText(country.countryCode, "-");
-  const limits: string[] = [];
-  const hasOffTargetNews = (country.evidenceSources ?? []).some((source) => {
-    const evidenceType = safeText(source.evidenceType, "").toLowerCase();
-    return evidenceType === "indirect" || evidenceType === "excluded";
-  });
-
-  if (evidenceRefs.length === 0) limits.push("대상국 일치 직접 뉴스 근거 없음");
-  if (hasOffTargetNews) limits.push("대상국 불일치 뉴스는 전략 본문에서 제외");
-  if (!evidence.certs.some((row) => row.countryCode === countryCode)) limits.push("인증 요구사항 확실한 정보 없음");
-  if (!evidence.regs.some((row) => row.countryCode === countryCode)) limits.push("수입규제 확실한 정보 없음");
-  if (!evidence.risks.some((row) => row.countryCode === countryCode)) limits.push("K-SURE 위험 확실한 정보 없음");
-  limits.push("인증·규제·전략물자·제품안전 최종 판정 아님");
-
-  return uniqueTexts(limits);
-};
-
-const isDirectCountryEvidence = (
-  source: ReportEvidenceSource,
-  country: ReportEvidenceCountry,
-): boolean => {
-  const evidenceType = safeText(source.evidenceType, "").toLowerCase();
-  if (evidenceType === "excluded" || evidenceType === "indirect") return false;
-  if (evidenceType === "background") return false;
-  if (isNoEvidencePlaceholder(safeText(source.title, ""))) return false;
-  const sourceCountry = safeText(source.country, "");
-  if (sourceCountry && !countryNameMatches(sourceCountry, country)) return false;
-  if (mentionsDifferentKnownCountry(`${safeText(source.title, "")} ${safeText(source.summary, "")}`, country)) {
-    return false;
-  }
-  return evidenceType === "direct";
-};
-
-const countryNameMatches = (sourceCountry: string, country: ReportEvidenceCountry): boolean => {
-  const sourceTokens = buildCountryTokens(sourceCountry, country.countryCode);
-  const targetTokens = buildCountryTokens(country.countryName, country.countryCode);
-  return sourceTokens.some((source) => targetTokens.some((target) => source.includes(target) || target.includes(source)));
-};
-
-const buildCountryTokens = (value: string | null | undefined, countryCode: string | null | undefined): string[] => {
-  const tokens = new Set<string>();
-  const normalizedValue = normalizeCountryToken(value);
-  if (normalizedValue) tokens.add(normalizedValue);
-
-  const code = safeText(countryCode, "").toUpperCase();
-  for (const alias of COUNTRY_ALIASES[code] ?? []) tokens.add(normalizeCountryToken(alias));
-  return [...tokens].filter(Boolean);
-};
-
-const mentionsDifferentKnownCountry = (value: string, country: ReportEvidenceCountry): boolean => {
-  const normalized = normalizeCountryToken(value);
-  if (!normalized) return false;
-  const targetCode = safeText(country.countryCode, "").toUpperCase();
-  for (const [code, aliases] of Object.entries(COUNTRY_ALIASES)) {
-    if (code === targetCode) continue;
-    if (aliases.some((alias) => normalized.includes(normalizeCountryToken(alias)))) return true;
-  }
-  return false;
-};
-
-const isNoEvidencePlaceholder = (value: string): boolean => {
-  const normalized = normalizeCountryToken(value);
-  return (
-    normalized.includes("직접근거없음") ||
-    normalized.includes("확실한정보없음") ||
-    normalized.includes("nomatched") ||
-    normalized.includes("noevidence")
-  );
-};
-
-const COUNTRY_ALIASES: Record<string, string[]> = {
-  US: ["미국", "미합중국", "unitedstates", "usa", "america"],
-  CN: ["중국", "중화인민공화국", "china", "peoplesrepublicofchina"],
-  PL: ["폴란드", "폴란드공화국", "poland", "republicofpoland"],
-  DE: ["독일", "독일연방공화국", "germany", "federalrepublicofgermany"],
-  VE: ["베네수엘라", "venezuela"],
-  DK: ["덴마크", "denmark"],
-};
-
-const normalizeCountryToken = (value: string | null | undefined): string => (
-  safeText(value, "")
-    .toLowerCase()
-    .replace(/the\s+/g, "")
-    .replace(/[^a-z0-9가-힣]/g, "")
-);
-
-const build7DayActions = (evidence: ReportEvidenceBundle): string[] => [
-  `HS/HSK ${safeText(evidence.product?.hsCode, "-")}/${safeText(evidence.product?.hskCode, "-")}와 제품 영문명을 재확인하세요.`,
-  "Top 3 국가의 인증·수입규제·결제위험 원문 링크와 조회일을 정리하세요.",
-  "전략물자·제품안전 플래그의 원문 결과를 확인하고 미확인 항목을 분리하세요.",
-];
-
-const build30DayActions = (evidence: ReportEvidenceBundle): string[] => [
-  `${safeText(evidence.topCountries[0]?.countryName, "Top 1 후보국")} 기준 인증 서류, 시험 필요 여부, 예상 리드타임을 체크리스트로 확정하세요.`,
-  "수입규제·통관 요구사항을 적용 범위와 시행일 기준으로 검토하세요.",
-  "K-SURE 결제위험을 기준으로 OA/TT/LC 등 거래조건과 회수 리스크 대응안을 정리하세요.",
-];
-
-const build90DayActions = (evidence: ReportEvidenceBundle): string[] => [
-  "Top 1 후보국 대상 샘플·견적·라벨·통관서류 준비 여부를 점검하세요.",
-  "무역관 또는 유관기관 상담 결과를 리포트 근거에 추가하세요.",
-  `${safeText(evidence.product?.name, "해당 품목")}의 인증·규제·안전 확인 결과를 반영해 수출 착수 여부를 재검토하세요.`,
-];
-
-const normalizeCountryStrategies = (value: unknown, fallback: ReportCountryStrategy[]): ReportCountryStrategy[] => {
-  const rows = asArray(value)
-    .map((row, index) => {
-      const data = asRecord(row);
-      const countryCode = safeText(data.countryCode, "-");
-      const countryName = safeText(data.countryName, REPORT_UNKNOWN_TEXT);
-      const fallbackRow = fallback.find((item) => (
-        item.countryCode === countryCode ||
-        (countryName !== REPORT_UNKNOWN_TEXT && item.countryName === countryName)
-      )) ?? fallback[index];
-      const position = safeText(data.position ?? data.opportunity, REPORT_UNKNOWN_TEXT);
-      const entryMode = safeText(data.entryMode ?? data.entryStrategy, REPORT_UNKNOWN_TEXT);
-      const rawGrade = safeText(data.feasibilityGrade, "conditional").toLowerCase();
-      const feasibilityGrade: FeasibilityGrade =
-        rawGrade === "go" ? "go" : rawGrade === "hold" ? "hold" : "conditional";
-      return {
-        countryCode,
-        countryName,
-        feasibilityGrade,
-        oneLineDecision: safeText(
-          data.oneLineDecision ?? data.oneLineJudgment ?? data.decisionSummary ?? fallbackRow?.oneLineDecision,
-          fallbackRow?.oneLineDecision ?? position,
-        ),
-        position,
-        entryMode,
-        entryStrategy: safeText(data.entryStrategy ?? data.entryMode, REPORT_UNKNOWN_TEXT),
-        requiredChecks: normalizeTextArray(data.requiredChecks),
-        certRegChecklist: normalizeTextArray(data.certRegChecklist),
-        paymentRiskAssessment: safeText(data.paymentRiskAssessment, REPORT_UNKNOWN_TEXT),
-        riskResponse: safeText(data.riskResponse, REPORT_UNKNOWN_TEXT),
-        evidenceLimits: normalizeTextArray(data.evidenceLimits),
-        evidenceRefs: normalizeTextArray(data.evidenceRefs),
-        opportunity: position,
-        newsImpactAnalysis: safeText(data.newsImpactAnalysis, "대상국 일치 직접 뉴스 근거 없음 — 관련 뉴스 모니터링 필요"),
-        marketOpportunity: safeText(data.marketOpportunity, REPORT_UNKNOWN_TEXT),
-        kotraEntryStrategy: normalizeKotraEntryStrategy(data.kotraEntryStrategy) ?? fallbackRow?.kotraEntryStrategy,
-      };
-    })
-    .filter((row) => row.countryName !== REPORT_UNKNOWN_TEXT || row.countryCode !== "-");
-
-  return rows.length > 0 ? rows : fallback;
-};
-
-const normalizeKotraEntryStrategy = (value: unknown): ReportKotraEntryStrategy | undefined => {
-  const data = asRecord(value);
-  const status = safeText(data.status, "").toLowerCase();
-  if (!status) return undefined;
-  const normalizedStatus: ReportKotraEntryStrategy["status"] =
-    status === "available" || status === "empty" || status === "failed" || status === "pdf_failed"
-      ? status
-      : "failed";
-
-  return {
-    status: normalizedStatus,
-    title: safeText(data.title, ""),
-    publishedDate: safeText(data.publishedDate ?? data.published_date, ""),
-    tradeOffice: safeText(data.tradeOffice ?? data.trade_office, ""),
-    sourceUrl: safeHrefText(data.sourceUrl ?? data.source_url),
-    attachmentName: safeText(data.attachmentName ?? data.attachment_name, ""),
-    attachmentUrl: safeHrefText(data.attachmentUrl ?? data.attachment_url),
-    usedPdf: false,
-    basisSummary: "",
-    limitations: normalizeTextArray(data.limitations),
-  };
-};
-
-const normalizeCountryCautionAnalyses = (value: unknown): CountryCautionAnalysis[] => {
-  return asArray(value)
-    .map((entry) => {
-      const row = asRecord(entry);
-      const countryCode = safeText(row.countryCode, "-");
-      const countryName = safeText(row.countryName, REPORT_UNKNOWN_TEXT);
-      const coreSummary = safeText(row.coreSummary ?? row.summary, "");
-      const sections = normalizeCountryCautionSections(row.sections ?? row.items);
-
-      if (countryCode === "-" && countryName === REPORT_UNKNOWN_TEXT) return null;
-      if (!coreSummary || sections.length !== COUNTRY_CAUTION_SECTION_ORDER.length) return null;
-
-      return {
-        countryCode,
-        countryName,
-        coreSummary,
-        sections,
-      };
-    })
-    .filter((entry): entry is CountryCautionAnalysis => Boolean(entry));
-};
-
-const normalizeCountryCautionSections = (value: unknown): CountryCautionSection[] => {
-  const byKind = new Map<CountryCautionSectionKind, CountryCautionSection>();
-
-  for (const item of asArray(value)) {
-    const row = asRecord(item);
-    const kind = normalizeCountryCautionSectionKind(row.kind ?? row.title);
-    if (!kind || byKind.has(kind)) continue;
-
-    const interpretation = safeText(row.interpretation, "");
-    const facts = normalizeCountryCautionFacts(row.facts);
-    if (!interpretation && facts.length === 0) continue;
-
-    byKind.set(kind, {
-      kind,
-      title: safeText(row.title, COUNTRY_CAUTION_SECTION_TITLES[kind]),
-      facts,
-      interpretation,
-    });
-  }
-
-  return COUNTRY_CAUTION_SECTION_ORDER
-    .map((kind) => byKind.get(kind))
-    .filter((entry): entry is CountryCautionSection => Boolean(entry));
-};
-
-const normalizeCountryCautionFacts = (value: unknown): CountryCautionFact[] => {
-  return asArray(value)
-    .map((item) => {
-      const row = asRecord(item);
-      const label = safeText(row.label, "");
-      const valueText = safeText(row.value, "");
-      const meaning = safeText(row.meaning, "");
-      if (!label || !valueText || !meaning) return null;
-      return { label, value: valueText, meaning };
-    })
-    .filter((entry): entry is CountryCautionFact => Boolean(entry));
-};
-
-const sanitizeCountryStrategiesAgainstEvidence = (
-  strategies: ReportCountryStrategy[],
-  evidence: ReportEvidenceBundle,
-): ReportCountryStrategy[] => {
-  return strategies.map((strategy) => {
-    const availability = getCountryCertRegAvailability(evidence, strategy.countryCode);
-    if (availability.hasCerts || availability.hasRegs) {
-      const missingItems = [
-        availability.hasCerts ? "" : "확정 필요 인증 0건: 현재 제품·HS 기준으로 확인된 인증명 없음",
-        availability.hasRegs ? "" : "확정 수입규제 0건: 현재 제품·HS 기준으로 확인된 규제 없음",
-      ].filter(Boolean);
-      return {
-        ...strategy,
-        certRegChecklist: uniqueTexts([...missingItems, ...strategy.certRegChecklist]),
-      };
-    }
-
-    return {
-      ...strategy,
-      certRegChecklist: [
-        "확정 필요 인증 0건: 현재 제품·HS 기준으로 확인된 인증명 없음",
-        "확정 수입규제 0건: 현재 제품·HS 기준으로 확인된 규제 없음",
-      ],
-    };
-  });
-};
-
-const sanitizeCountryCautionAnalysesAgainstEvidence = (
-  analyses: CountryCautionAnalysis[],
-  evidence: ReportEvidenceBundle,
-): CountryCautionAnalysis[] => {
-  return analyses.map((analysis) => {
-    const availability = getCountryCertRegAvailability(evidence, analysis.countryCode);
-    const sections = analysis.sections.map((section) => {
-      if (section.kind === "certification" && !availability.hasCerts) {
-        return buildNoConfirmedCertRegSection("certification");
-      }
-      if (section.kind === "regulation" && !availability.hasRegs) {
-        return buildNoConfirmedCertRegSection("regulation");
-      }
-      return section;
-    });
-    return { ...analysis, sections };
-  });
-};
-
-const getCountryCertRegAvailability = (
-  evidence: ReportEvidenceBundle,
-  countryCode: string,
-): { hasCerts: boolean; hasRegs: boolean } => {
-  const code = normalizeCountryCode(countryCode);
-  if (!code) return { hasCerts: false, hasRegs: false };
-  return {
-    hasCerts: evidence.certs.some((row) => normalizeCountryCode(row.countryCode) === code),
-    hasRegs: evidence.regs.some((row) => normalizeCountryCode(row.countryCode) === code),
-  };
-};
-
-const buildNoConfirmedCertRegSection = (
-  kind: "certification" | "regulation",
-): CountryCautionSection => {
-  if (kind === "certification") {
-    return {
-      kind,
-      title: COUNTRY_CAUTION_SECTION_TITLES.certification,
-      facts: [{
-        label: "확정 필요 인증",
-        value: "0건",
-        meaning: "현재 제품·HS 기준으로 확정된 인증 근거가 없어 특정 인증명을 확정할 수 없음",
+    schemaVersion: 2,
+    decision: {
+      verdict: oldDecision.verdict, confidence: oldDecision.confidence,
+      headline: source.executiveSummary ?? source.summary ?? fallback.decision.headline,
+      reason: oldDecision.rationale ?? source.exportFeasibility ?? fallback.decision.reason,
+      immediateActions: [{
+        action: oldDecision.recommendedDirection ?? normalizeTextArray(source.actionPlan7Days ?? source.actions)[0] ?? fallback.decision.immediateActions[0].action,
+        owner: "수출 책임자", evidenceRefs: [primaryRef],
       }],
-      interpretation: "상세 단계에서 현재 제품·HS 기준 확정 인증이 조회되지 않았으므로 특정 인증명을 리포트 확정값으로 표시하지 않습니다. KOTRA 또는 인증기관 확인이 필요합니다.",
-    };
-  }
-
-  return {
-    kind,
-    title: COUNTRY_CAUTION_SECTION_TITLES.regulation,
-    facts: [{
-      label: "확정 수입규제",
-      value: "0건",
-      meaning: "현재 제품·HS 기준으로 확정된 수입규제 근거가 없어 특정 규제를 확정할 수 없음",
-    }],
-    interpretation: "상세 단계에서 현재 제품·HS 기준 확정 수입규제가 조회되지 않았으므로 리포트에서 규제명을 임의 확정하지 않습니다. 대상국 통관 요건은 별도 확인이 필요합니다.",
+      evidenceRefs: fallback.decision.evidenceRefs,
+    },
+    decisionReasons: [
+      ...normalizeTextArray(oldDecision.opportunities).map((text) => ({
+        type: "opportunity", title: "추진 근거", interpretation: text, businessImpact: "시장 검증 우선순위에 반영", evidenceRefs: [primaryRef],
+      })),
+      ...normalizeTextArray(oldDecision.blockers).map((text) => ({
+        type: "risk", title: "반대 근거", interpretation: text, businessImpact: "계약 전 해소 필요", evidenceRefs: [primaryRef],
+      })),
+    ],
+    entryStrategy: {
+      countryCode: oldStrategy.countryCode ?? fallback.entryStrategy.countryCode,
+      countryName: oldStrategy.countryName ?? fallback.entryStrategy.countryName,
+      targetBuyer: fallback.entryStrategy.targetBuyer,
+      primaryChannel: oldDecision.recommendedDirection ?? oldStrategy.entryMode ?? oldStrategy.entryStrategy ?? fallback.entryStrategy.primaryChannel,
+      initialProducts: safeText(evidence.product?.name, fallback.entryStrategy.initialProducts),
+      positioning: oldStrategy.position ?? oldStrategy.marketOpportunity ?? fallback.entryStrategy.positioning,
+      paymentTerms: oldStrategy.paymentRiskAssessment ?? fallback.entryStrategy.paymentTerms,
+      pilotScope: oldStrategy.entryStrategy ?? fallback.entryStrategy.pilotScope,
+      expansionCondition: oldStrategy.riskResponse ?? fallback.entryStrategy.expansionCondition,
+      evidenceRefs: fallback.entryStrategy.evidenceRefs,
+    },
+    decisionGates: fallback.decisionGates,
+    actionPlan: [
+      ...oldActions(source.actionPlan7Days ?? source.actions, "D+7"),
+      ...oldActions(source.actionPlan30Days, "D+30"),
+      ...oldActions(source.actionPlan90Days, "D+90"),
+    ],
+    officialResearch: {
+      summary: oldResearch.summary,
+      keyFindings: normalizeTextArray(oldResearch.keyFindings).map((finding) => ({ finding, evidenceRefs: [] })),
+      queries: oldResearch.queries, sources: oldResearch.sources, conflicts: [],
+    },
+    assumptions: fallback.assumptions,
+    unresolvedItems: source.unresolvedItems,
+    stopConditions: normalizeTextArray(oldDecision.stopConditions).map((condition) => ({
+      condition, response: "조건 해소 전 진행 보류", evidenceRefs: [primaryRef],
+    })),
+    disclaimer: normalizeTextArray(source.finalCautions).join(" ") || fallback.disclaimer,
   };
 };
 
-const normalizeCountryCode = (value: string | null | undefined): string =>
-  safeText(value, "").trim().toUpperCase();
+const normalizeDecision = (value: unknown, fallback: ReportDecision, allowed: Set<string>, defaultRefs: string[]): ReportDecision => {
+  const row = asRecord(value);
+  const verdict = safeText(row.verdict, fallback.verdict).toLowerCase();
+  const confidence = safeText(row.confidence, fallback.confidence).toLowerCase();
+  return {
+    verdict: verdict === "proceed" || verdict === "hold" ? verdict : "conditional",
+    confidence: confidence === "high" || confidence === "low" ? confidence : "medium",
+    headline: safeText(row.headline, fallback.headline),
+    reason: safeText(row.reason, fallback.reason),
+    immediateActions: normalizeImmediateActions(row.immediateActions, fallback.immediateActions, allowed, defaultRefs),
+    evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, fallback.evidenceRefs.length ? fallback.evidenceRefs : defaultRefs),
+  };
+};
 
-const normalizeCountryCautionSectionKind = (value: unknown): CountryCautionSectionKind | null => {
-  const normalized = safeText(value, "").toLowerCase().replace(/[\s_·/-]+/g, "");
-  if (COUNTRY_CAUTION_SECTION_ORDER.includes(normalized as CountryCautionSectionKind)) {
-    return normalized as CountryCautionSectionKind;
-  }
-  if (normalized === "cert" || normalized.includes("certification") || normalized.includes("인증")) {
-    return "certification";
-  }
-  if (normalized === "reg" || normalized.includes("regulation") || normalized.includes("규제")) {
-    return "regulation";
-  }
-  if (
-    normalized.includes("countryrisk") ||
-    normalized.includes("ksurecountry") ||
-    normalized.includes("국가위험")
-  ) {
-    return "ksure_country_risk";
-  }
-  if (
-    normalized.includes("industryrisk") ||
-    normalized.includes("ksureindustry") ||
-    normalized.includes("업종위험")
-  ) {
-    return "ksure_industry_risk";
-  }
-  if (
-    normalized.includes("payment") ||
-    normalized.includes("exportpayment") ||
-    normalized.includes("수출결제") ||
-    normalized.includes("결제위험")
-  ) {
-    return "ksure_payment";
-  }
+const normalizeImmediateActions = (
+  value: unknown, fallback: ReportImmediateAction[], allowed: Set<string>, defaultRefs: string[],
+): ReportImmediateAction[] => {
+  const rows = asArray(value).map((item) => {
+    const row = asRecord(item);
+    const action = safeText(row.action, "");
+    return action ? { action, owner: safeText(row.owner, "수출 책임자"), evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs) } : null;
+  }).filter((item): item is ReportImmediateAction => Boolean(item));
+  return rows.length ? rows.slice(0, 3) : fallback;
+};
+
+const normalizeDecisionReasons = (
+  value: unknown, fallback: ReportDecisionReason[], allowed: Set<string>, defaultRefs: string[],
+): ReportDecisionReason[] => {
+  const rows = asArray(value).map((item) => {
+    const row = asRecord(item);
+    const interpretation = safeText(row.interpretation, "");
+    if (!interpretation) return null;
+    return {
+      type: safeText(row.type, "risk").toLowerCase() === "opportunity" ? "opportunity" as const : "risk" as const,
+      title: safeText(row.title, "AI 판단 근거"), interpretation,
+      businessImpact: safeText(row.businessImpact, "실행 우선순위에 반영"),
+      evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs),
+    };
+  }).filter((item): item is ReportDecisionReason => Boolean(item));
+  return rows.length ? rows.slice(0, 8) : fallback;
+};
+
+const normalizeEntryStrategy = (
+  value: unknown, fallback: ReportEntryStrategy, evidence: ReportEvidenceBundle, allowed: Set<string>, defaultRefs: string[],
+): ReportEntryStrategy => {
+  const row = asRecord(value);
+  const selected = evidence.topCountries[0];
+  return {
+    countryCode: safeText(selected?.countryCode, fallback.countryCode), countryName: safeText(selected?.countryName, fallback.countryName),
+    targetBuyer: safeText(row.targetBuyer, fallback.targetBuyer), primaryChannel: safeText(row.primaryChannel, fallback.primaryChannel),
+    initialProducts: safeText(row.initialProducts, fallback.initialProducts), positioning: safeText(row.positioning, fallback.positioning),
+    paymentTerms: safeText(row.paymentTerms, fallback.paymentTerms), pilotScope: safeText(row.pilotScope, fallback.pilotScope),
+    expansionCondition: safeText(row.expansionCondition, fallback.expansionCondition),
+    evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, fallback.evidenceRefs.length ? fallback.evidenceRefs : defaultRefs),
+  };
+};
+
+const normalizeDecisionGates = (
+  value: unknown, fallback: ReportDecisionGate[], allowed: Set<string>, defaultRefs: string[],
+): ReportDecisionGate[] => {
+  const byTopic = new Map<ReportGateTopic, ReportDecisionGate>();
+  asArray(value).forEach((item) => {
+    const row = asRecord(item);
+    const topic = normalizeGateTopic(row.topic);
+    if (!topic || byTopic.has(topic)) return;
+    const base = fallback.find((gateItem) => gateItem.topic === topic) ?? fallback[0];
+    const rawStatus = safeText(row.status, base.status).toLowerCase();
+    const status: ReportGateStatus = rawStatus === "clear" || rawStatus === "blocked" ? rawStatus : "check_required";
+    byTopic.set(topic, {
+      topic, status, decision: safeText(row.decision, base.decision), requiredAction: safeText(row.requiredAction, base.requiredAction),
+      owner: safeText(row.owner, base.owner), due: safeText(row.due, base.due), stopCondition: safeText(row.stopCondition, base.stopCondition),
+      evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, base.evidenceRefs.length ? base.evidenceRefs : defaultRefs),
+    });
+  });
+  return GATE_TOPICS.map((topic) => byTopic.get(topic) ?? fallback.find((item) => item.topic === topic)!).filter(Boolean);
+};
+
+const normalizeActionPlan = (
+  value: unknown, fallback: ReportActionPlanItem[], allowed: Set<string>, defaultRefs: string[],
+): ReportActionPlanItem[] => {
+  const rows = asArray(value).map((item) => {
+    const row = asRecord(item);
+    const horizon = normalizeHorizon(row.horizon);
+    const action = safeText(row.action, "");
+    if (!horizon || !action) return null;
+    return {
+      horizon, owner: safeText(row.owner, "수출 책임자"), action,
+      deliverable: safeText(row.deliverable, `${horizon} 산출물`), passCriteria: safeText(row.passCriteria, "담당자 검토 완료"),
+      evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs),
+    };
+  }).filter((item): item is ReportActionPlanItem => Boolean(item));
+  return (["D+7", "D+30", "D+90"] as ReportActionHorizon[]).flatMap((horizon) => {
+    const matches = rows.filter((item) => item.horizon === horizon);
+    return matches.length ? matches : fallback.filter((item) => item.horizon === horizon);
+  }).slice(0, 9);
+};
+
+const normalizeOfficialResearch = (value: unknown, fallback: ReportOfficialResearch): ReportOfficialResearch => {
+  const row = asRecord(value);
+  const sources = asArray(row.sources).map((item, index) => {
+    const source = asRecord(item);
+    const url = safeHrefText(source.url ?? source.uri);
+    const title = safeText(source.title, "");
+    const organization = safeText(source.organization ?? source.org, "");
+    if (!url || !isOfficialSource(`${title} ${organization} ${url}`)) return null;
+    return {
+      evidenceId: /^W-\d{3}$/i.test(safeText(source.evidenceId, ""))
+        ? safeText(source.evidenceId, "").toUpperCase() : `W-${String(index + 1).padStart(3, "0")}`,
+      title: title || url, url, organization: organization || inferOrganization(title, url),
+      publishedAt: safeText(source.publishedAt, ""), accessedAt: safeText(source.accessedAt, ""),
+    };
+  }).filter((item): item is ReportOfficialResearchSource => Boolean(item));
+  const sourceIds = new Set(sources.map((item) => item.evidenceId));
+  const defaultRefs = sources[0] ? [sources[0].evidenceId] : [];
+  const keyFindings = asArray(row.keyFindings).map((item) => {
+    if (typeof item === "string") return { finding: safeText(item, ""), evidenceRefs: defaultRefs };
+    const findingRow = asRecord(item);
+    const finding = safeText(findingRow.finding ?? findingRow.summary, "");
+    return finding ? { finding, evidenceRefs: normalizeEvidenceRefs(findingRow.evidenceRefs, sourceIds, defaultRefs) } : null;
+  }).filter((item): item is ReportOfficialFinding => Boolean(item));
+  return {
+    summary: safeText(row.summary, sources.length ? "공식 웹 근거를 확인했습니다." : fallback.summary),
+    keyFindings, queries: normalizeTextArray(row.queries), sources, conflicts: normalizeTextArray(row.conflicts),
+  };
+};
+
+const normalizeStopConditions = (
+  value: unknown, fallback: ReportStopCondition[], allowed: Set<string>, defaultRefs: string[],
+): ReportStopCondition[] => {
+  const rows = asArray(value).map((item) => {
+    const row = asRecord(item);
+    const condition = safeText(row.condition, typeof item === "string" ? item : "");
+    return condition ? {
+      condition, response: safeText(row.response, "조건 해소 전 진행 보류"),
+      evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs),
+    } : null;
+  }).filter((item): item is ReportStopCondition => Boolean(item));
+  return rows.length ? rows.slice(0, 8) : fallback;
+};
+
+const countMissingEvidenceLinks = (source: Record<string, unknown>): number => {
+  let count = 0;
+  const inspect = (value: unknown) => {
+    const row = asRecord(value);
+    if (Object.keys(row).length && asArray(row.evidenceRefs).length === 0) count += 1;
+  };
+  inspect(source.decision);
+  asArray(asRecord(source.decision).immediateActions).forEach(inspect);
+  asArray(source.decisionReasons).forEach(inspect);
+  inspect(source.entryStrategy);
+  asArray(source.decisionGates).forEach(inspect);
+  asArray(source.actionPlan).forEach(inspect);
+  asArray(source.stopConditions).forEach(inspect);
+  return count;
+};
+
+const normalizeEvidenceRefs = (value: unknown, allowed: Set<string>, fallback: string[]): string[] => {
+  const refs = uniqueTexts(asArray(value).map((item) => safeText(item, ""))).filter((ref) => allowed.has(ref));
+  return refs.length ? refs : fallback.filter((ref) => allowed.has(ref));
+};
+const evidenceRef = (catalog: ReportProgramEvidenceItem[], category: ReportProgramEvidenceItem["category"]): string =>
+  catalog.find((item) => item.category === category)?.evidenceId ?? "";
+const compactRefs = (refs: Array<string | undefined>): string[] => uniqueTexts(refs.filter((ref): ref is string => Boolean(ref)));
+const downgradeConfidence = (confidence: ReportDecisionConfidence, issueCount: number): ReportDecisionConfidence => {
+  if (!issueCount) return confidence;
+  const levels: ReportDecisionConfidence[] = ["low", "medium", "high"];
+  return levels[Math.max(0, levels.indexOf(confidence) - Math.min(2, issueCount))];
+};
+const normalizeGateTopic = (value: unknown): ReportGateTopic | null => {
+  const text = safeText(value, "").toLowerCase();
+  return GATE_TOPICS.includes(text as ReportGateTopic) ? text as ReportGateTopic : null;
+};
+const normalizeHorizon = (value: unknown): ReportActionHorizon | null => {
+  const text = safeText(value, "").toUpperCase().replace(/\s/g, "");
+  if (["D+7", "7", "7D"].includes(text)) return "D+7";
+  if (["D+30", "30", "30D"].includes(text)) return "D+30";
+  if (["D+90", "90", "90D"].includes(text)) return "D+90";
   return null;
 };
-
-const buildHsText = (evidence: ReportEvidenceBundle): string => {
-  const hs = safeText(evidence.product?.hsCode, "-");
-  const hsk = safeText(evidence.product?.hskCode, "-");
-  const review = evidence.product?.hsReviewRequired ? "분류 검토가 필요하며" : "분류 기준을 사용해";
-  return `HS ${hs} · HSK ${hsk} ${review}`;
+const isOfficialSource = (value: string): boolean => {
+  const normalized = value.toLowerCase();
+  return !EXCLUDED_SOURCE_TOKENS.some((token) => normalized.includes(token))
+    && OFFICIAL_SOURCE_TOKENS.some((token) => normalized.includes(token));
 };
-
+const inferOrganization = (title: string, url: string): string => {
+  try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return title || "공식기관"; }
+};
+const normalizeCountryCode = (value: string | null | undefined): string => safeText(value, "").trim().toUpperCase();
 const normalizeTextArray = (value: unknown, fallback: string[] = []): string[] => {
   const texts = asArray(value).map((item) => safeText(item, "")).filter(Boolean);
   return uniqueTexts(texts, fallback);
 };
-
 const uniqueTexts = (values: string[], fallback: string[] = []): string[] => {
   const seen = new Set<string>();
   const out: string[] = [];
   for (const value of values) {
     const text = safeText(value, "");
-    if (!text) continue;
-    const key = text.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
+    if (!text || seen.has(text.toLowerCase())) continue;
+    seen.add(text.toLowerCase());
     out.push(text);
   }
-  return out.length > 0 ? out : fallback;
+  return out.length ? out : fallback;
+};
+const serializeGateInput = (value: Record<string, string> | undefined): string => {
+  if (!value) return "";
+  return Object.entries(value)
+    .filter(([, item]) => Boolean(item.trim()))
+    .map(([key, item]) => `${key}=${item}`)
+    .join(" · ");
 };
 
 const safeText = (value: unknown, fallback: string): string => {
   const normalized = normalizeReportText(typeof value === "number" ? String(value) : value as string | null | undefined);
-  return normalized && normalized.length > 0 ? normalized : fallback;
+  return normalized && normalized.length ? normalized : fallback;
 };
-
 const safeHrefText = (value: unknown): string => {
   if (typeof value !== "string" && typeof value !== "number") return "";
   return toSafePublicHref(String(value)) ?? "";
 };
-
-const asRecord = (value: unknown): Record<string, unknown> => (
-  value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}
-);
-
-const asArray = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
-
+const asRecord = (value: unknown): Record<string, unknown> =>
+  value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+const asArray = (value: unknown): unknown[] => Array.isArray(value) ? value : [];
 const stableStringify = (value: unknown): string => {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;

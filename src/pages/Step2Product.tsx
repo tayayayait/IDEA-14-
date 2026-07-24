@@ -17,6 +17,7 @@ import { toast } from "@/components/ui/sonner";
 import { sanitize, sanitizeNullable } from "@/lib/scoring";
 import { PROCEED_REVIEW_REQUIRED_LABEL, REQUIRE_PRODUCT_CONFIRMATION_FOR_STEP3 } from "@/lib/step3-entry-policy";
 import { filterRelevantHsCandidates } from "@/lib/hs-candidate-relevance";
+import { shouldEnableTireUsPresentationDemo } from "../../supabase/functions/_shared/recommendation";
 import {
   decideAutoSelection,
   resolveCandidateScore,
@@ -564,7 +565,11 @@ export default function Step2Product() {
       fallback_used?: boolean;
     }>(
       "recommend-countries",
-      { project_id: id, require_ai: true },
+      {
+        project_id: id,
+        require_ai: true,
+        presentation_demo_tire_us: shouldEnableTireUsPresentationDemo(hsCode, hskCode),
+      },
       { timeoutMs: RECOMMEND_COUNTRIES_TIMEOUT_MS, retryOn500: false },
     );
     setPreparingRecommendation(false);
@@ -657,19 +662,6 @@ export default function Step2Product() {
             ) : (
               <p className="text-xs text-muted-foreground">제품명을 1개 품목으로 입력하면 HS·HSK 후보 정확도가 높아집니다.</p>
             )}
-          </div>
-          <div className="space-y-1.5">
-            <Label>모델명</Label>
-            <Input value={modelName} onChange={(e) => setModelName(e.target.value)} placeholder="예) BLDC-MTR-3000" />
-          </div>
-          <div className="space-y-1.5">
-            <Label>목표 시장 메모</Label>
-            <Textarea
-              rows={2}
-              value={targetMarketNote}
-              onChange={(e) => setTargetMarketNote(e.target.value)}
-              placeholder="예) 동남아 OEM 공급, 1차 베트남·인도네시아 우선"
-            />
           </div>
           <div className="space-y-1.5">
             <div className="flex items-center justify-between gap-3">

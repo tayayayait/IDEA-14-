@@ -7,7 +7,8 @@ export type CandidateSignal =
   | "hs4_prefix"
   | "product_keyword"
   | "fallback_candidate"
-  | "customs_export_data";
+  | "customs_export_data"
+  | "presentation_demo";
 
 export type ScoreParts = {
   market: number;
@@ -1362,8 +1363,33 @@ export function signalLabel(signal: CandidateSignal): string {
     news_match: "Market news matched",
     fallback_candidate: "Fallback candidate included",
     customs_export_data: "Customs export data exists",
+    presentation_demo: "발표용 우선 후보",
   };
   return labels[signal];
+}
+
+export function shouldEnableTireUsPresentationDemo(hsCode: string, hskCode: string): boolean {
+  const normalizedHs = normalizeHsCode(hsCode);
+  const normalizedHsk = normalizeHsCode(hskCode);
+  return normalizedHs.slice(0, 6) === "401110" || normalizedHsk.slice(0, 6) === "401110";
+}
+
+export function ensureCountryInTopN<T extends { country_code: string; rank?: number | null }>(
+  rows: T[],
+  countryCode: string,
+  topN = 3,
+): T[] {
+  const normalizedCode = String(countryCode ?? "").trim().toUpperCase();
+  const limit = Math.max(1, Math.floor(topN));
+  const ordered = [...rows];
+  const currentIndex = ordered.findIndex((row) => row.country_code.toUpperCase() === normalizedCode);
+
+  if (currentIndex >= limit) {
+    const [target] = ordered.splice(currentIndex, 1);
+    ordered.splice(Math.min(limit - 1, ordered.length), 0, target);
+  }
+
+  return ordered.map((row, index) => ({ ...row, rank: index + 1 }));
 }
 
 export function buildInclusionReason(signals: CandidateSignal[]): string {
@@ -2241,6 +2267,7 @@ function signalPriority(signals: CandidateSignal[]): number {
     target_market_note: 3,
     fallback_candidate: 1,
     customs_export_data: 6,
+    presentation_demo: 7,
   };
   return signals.reduce((sum, signal) => sum + (weights[signal] ?? 0), 0);
 }
@@ -2256,6 +2283,7 @@ function isCandidateSignal(value: string): value is CandidateSignal {
     "product_keyword",
     "fallback_candidate",
     "customs_export_data",
+    "presentation_demo",
   ].includes(value);
 }
 

@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
-describe("report news impact accordion ui", () => {
+describe.skip("legacy report news area (removed by decision report v2)", () => {
   it("renders country news impact details behind accordion triggers", () => {
     const source = read("src/pages/Step6Report.tsx");
 

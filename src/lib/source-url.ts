@@ -25,6 +25,8 @@ type KotraRegDetailUrlOptions = {
   countryCodeIso2?: string | null;
 };
 
+const KOTRA_IMPORT_REG_PDF_URL = "https://dream.kotra.or.kr/ajaxa/frNation/nationIemPdfDown.do";
+
 const KOTRA_IMPORT_REG_COUNTRY_PARAM_MAP: Record<string, KotraImportRegCountryParams> = {
   AE: { pRegnCd: "02", pNatCd: "784" },
   BR: { pRegnCd: "05", pNatCd: "76" },
@@ -206,6 +208,36 @@ export function buildKotraRegDetailUrl(
   if (!countryParams) return base;
 
   return `${base}&pRegnCd=${countryParams.pRegnCd}&pNatCd=${countryParams.pNatCd}`;
+}
+
+export function buildKotraRegPdfUrl(
+  raw: Record<string, unknown> | null | undefined,
+  options?: KotraRegDetailUrlOptions,
+): string | null {
+  const iso2 = resolveIso2CountryCode(raw, options?.countryCodeIso2);
+  if (!iso2) return null;
+
+  const countryParams = KOTRA_IMPORT_REG_COUNTRY_PARAM_MAP[iso2];
+  if (!countryParams) return null;
+
+  const params = new URLSearchParams([
+    ["pageNo", ""],
+    ["pagePerCnt", "10"],
+    ["SITE_NO", "2"],
+    ["MENU_ID", "3700"],
+    ["CONTENTS_NO", "1"],
+    ["pTmplateCont", "P0407"],
+    ["pNttSn", ""],
+    ["pGbn", ""],
+    ["pUntyId", ""],
+    ["pUnNatCd", ""],
+    ["chkNatSn", countryParams.pNatCd],
+    ["pRegnCd", countryParams.pRegnCd],
+    ["pNatCd", countryParams.pNatCd],
+    ["iemChk", "411"],
+  ]);
+
+  return `${KOTRA_IMPORT_REG_PDF_URL}?${params.toString()}`;
 }
 
 function resolveIso2CountryCode(
