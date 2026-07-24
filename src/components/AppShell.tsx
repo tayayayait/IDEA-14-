@@ -162,7 +162,7 @@ export function AppShell({ children, currentStep, evidence, actionBar }: Props) 
       >
         <div className="flex items-center gap-3">
           <Link
-            to="/projects"
+            to="/"
             className="flex items-center gap-2"
             aria-label="홈"
             onFocus={preloadProjectsPage}

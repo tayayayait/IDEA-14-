@@ -42,3 +42,5 @@ network-phase2.txt
 # Supabase temp
 supabase/.temp/
 
+
+.vercel

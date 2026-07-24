@@ -1,0 +1,199 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "산단수출 코파일럿 홈" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e13]: 산단수출 코파일럿
+        - navigation [ref=e14]:
+          - link "이용 흐름" [ref=e15] [cursor=pointer]:
+            - /url: "#workflow"
+          - link "데이터 출처" [ref=e16] [cursor=pointer]:
+            - /url: "#sources"
+          - link "리포트 구성" [ref=e17] [cursor=pointer]:
+            - /url: "#report"
+        - generic [ref=e18]:
+          - link "로그인" [ref=e19] [cursor=pointer]:
+            - /url: /auth
+          - link "서비스 이용하기" [ref=e20] [cursor=pointer]:
+            - /url: /projects
+            - text: 서비스 이용하기
+            - img
+    - main [ref=e21]:
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - img [ref=e31]
+            - text: 공공데이터 기반 수출 준비 의사결정 도구
+          - heading "산단수출 코파일럿" [level=1] [ref=e33]
+          - paragraph [ref=e34]: 제조기업을 위한 데이터 기반 수출 의사결정 워크벤치입니다. 기업·제품 정보를 입력하면 수출 후보국, 인증·수입규제, 결제위험, 전략물자, 제품안전 이슈를 공공데이터 근거와 함께 정리합니다.
+          - generic [ref=e35]:
+            - link "서비스 이용하기" [ref=e36] [cursor=pointer]:
+              - /url: /projects
+              - text: 서비스 이용하기
+              - img
+            - link "리포트 구성 보기" [ref=e37] [cursor=pointer]:
+              - /url: "#report"
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e41]
+              - paragraph [ref=e44]: 분석 단계
+              - paragraph [ref=e45]: 5단계
+            - generic [ref=e46]:
+              - img [ref=e48]
+              - paragraph [ref=e52]: 기획 요구사항
+              - paragraph [ref=e53]: 8개
+            - generic [ref=e54]:
+              - img [ref=e56]
+              - paragraph [ref=e60]: 근거 출처
+              - paragraph [ref=e61]: 5종
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - paragraph [ref=e66]: 분석 프로젝트
+              - paragraph [ref=e67]: 새 분석 2026. 5. 6.
+              - paragraph [ref=e68]: 준비 · 단계 4/5 · 요구사항 5/8
+            - generic [ref=e69]: 83% 완료
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - generic [ref=e74]: 국가
+              - generic [ref=e75]: 점수
+              - generic [ref=e76]: 수요
+              - generic [ref=e77]: 리스크
+              - generic [ref=e78]: 근거
+            - generic [ref=e79]:
+              - generic [ref=e80]: 인도
+              - generic [ref=e81]: "82"
+              - generic [ref=e82]: 높음
+              - generic [ref=e83]: 검토 필요
+              - generic [ref=e84]: KOTRA·K-SURE
+            - generic [ref=e85]:
+              - generic [ref=e86]: 베트남
+              - generic [ref=e87]: "71"
+              - generic [ref=e88]: 중간
+              - generic [ref=e89]: 보통
+              - generic [ref=e90]: KICOX·KOTRA
+            - generic [ref=e91]:
+              - generic [ref=e92]: 미국
+              - generic [ref=e93]: "63"
+              - generic [ref=e94]: 높음
+              - generic [ref=e95]: 주의
+              - generic [ref=e96]: SafetyKorea
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - paragraph [ref=e99]: 다음 확인
+              - paragraph [ref=e100]: 전략물자 판정
+            - generic [ref=e101]:
+              - paragraph [ref=e102]: 리포트 상태
+              - paragraph [ref=e103]: 초안 준비
+            - generic [ref=e104]:
+              - paragraph [ref=e105]: 리스크
+              - paragraph [ref=e106]: 검토 필요
+          - generic [ref=e107]:
+            - generic [ref=e108]: KICOX 정상
+            - generic [ref=e110]: KOTRA 정상
+            - generic [ref=e112]: K-SURE 정상
+      - generic [ref=e115]:
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - paragraph [ref=e118]: Workflow
+            - heading "서비스 이용 흐름" [level=2] [ref=e119]
+          - paragraph [ref=e120]: 기존 분석 화면은 그대로 유지하고, 소개 화면에서 진입한 뒤 프로젝트 워크스페이스에서 실제 분석을 진행합니다.
+        - generic [ref=e121]:
+          - article [ref=e122]:
+            - generic [ref=e123]:
+              - img [ref=e125]
+              - generic [ref=e129]: "01"
+            - heading "기업·제품 입력" [level=3] [ref=e130]
+            - paragraph [ref=e131]: 산단 입주기업과 제품 정보를 기준으로 분석 대상을 정의합니다.
+          - article [ref=e132]:
+            - generic [ref=e133]:
+              - img [ref=e135]
+              - generic [ref=e140]: "02"
+            - heading "수출 후보국 추천" [level=3] [ref=e141]
+            - paragraph [ref=e142]: 국가 정보, 시장 뉴스, 품목 신호를 조합해 우선 검토국을 좁힙니다.
+          - article [ref=e143]:
+            - generic [ref=e144]:
+              - img [ref=e146]
+              - generic [ref=e149]: "03"
+            - heading "리스크 체크" [level=3] [ref=e150]
+            - paragraph [ref=e151]: 인증, 수입규제, 결제위험, 전략물자, 제품안전 이슈를 함께 점검합니다.
+          - article [ref=e152]:
+            - generic [ref=e153]:
+              - img [ref=e155]
+              - generic [ref=e158]: "04"
+            - heading "실행 리포트" [level=3] [ref=e159]
+            - paragraph [ref=e160]: 근거 데이터와 다음 실행 과제를 1페이지 리포트로 정리합니다.
+      - generic [ref=e162]:
+        - generic [ref=e163]:
+          - paragraph [ref=e164]: Evidence
+          - heading "데이터 출처를 먼저 보여줍니다." [level=2] [ref=e165]
+          - paragraph [ref=e166]: 서비스 신뢰는 화면 효과가 아니라 근거 출처에서 나옵니다. 소개 화면에서도 어떤 공공데이터가 분석에 쓰이는지 바로 확인할 수 있어야 합니다.
+        - generic [ref=e167]:
+          - generic [ref=e168]:
+            - img [ref=e170]
+            - generic [ref=e174]:
+              - paragraph [ref=e175]: KICOX
+              - paragraph [ref=e176]: 분석 근거 데이터
+          - generic [ref=e177]:
+            - img [ref=e179]
+            - generic [ref=e183]:
+              - paragraph [ref=e184]: KOTRA
+              - paragraph [ref=e185]: 분석 근거 데이터
+          - generic [ref=e186]:
+            - img [ref=e188]
+            - generic [ref=e192]:
+              - paragraph [ref=e193]: K-SURE
+              - paragraph [ref=e194]: 분석 근거 데이터
+          - generic [ref=e195]:
+            - img [ref=e197]
+            - generic [ref=e201]:
+              - paragraph [ref=e202]: 전략물자관리원
+              - paragraph [ref=e203]: 분석 근거 데이터
+          - generic [ref=e204]:
+            - img [ref=e206]
+            - generic [ref=e210]:
+              - paragraph [ref=e211]: SafetyKorea
+              - paragraph [ref=e212]: 분석 근거 데이터
+      - generic [ref=e214]:
+        - generic [ref=e215]:
+          - paragraph [ref=e216]: Report Preview
+          - heading "최종 결과는 실행 리포트로 정리됩니다." [level=2] [ref=e217]
+          - paragraph [ref=e218]: 추천 결과만 보여주지 않고, 기업 담당자가 다음에 확인해야 할 인증·규제·위험 항목을 함께 묶어 보고서 형태로 제공합니다.
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - img [ref=e221]
+              - generic [ref=e224]: 추천 수출국 Top 3
+            - generic [ref=e225]:
+              - img [ref=e226]
+              - generic [ref=e229]: 국가별 인증·규제 체크리스트
+            - generic [ref=e230]:
+              - img [ref=e231]
+              - generic [ref=e234]: K-SURE 기반 결제·국가·업종 위험
+            - generic [ref=e235]:
+              - img [ref=e236]
+              - generic [ref=e239]: 전략물자 및 제품안전 확인 필요 플래그
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - generic [ref=e242]:
+              - paragraph [ref=e243]: 1페이지 수출 실행 리포트
+              - heading "추천국 종합 판단" [level=3] [ref=e244]
+            - img [ref=e245]
+          - generic [ref=e248]:
+            - generic [ref=e249]:
+              - generic [ref=e250]: 시장성
+              - generic [ref=e251]: 높음
+            - generic [ref=e252]:
+              - generic [ref=e253]: 인증·규제
+              - generic [ref=e254]: 검토 필요
+            - generic [ref=e255]:
+              - generic [ref=e256]: 결제위험
+              - generic [ref=e257]: 보통
+          - link "서비스 이용하기" [ref=e258] [cursor=pointer]:
+            - /url: /projects
+            - text: 서비스 이용하기
+            - img
