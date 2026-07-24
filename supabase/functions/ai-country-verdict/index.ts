@@ -9,7 +9,7 @@ import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const AI_TIMEOUT_MS = 110_000;
-const VERDICT_MODEL = "gemini-2.5-flash";
+const VERDICT_MODEL = "gemini-3.5-flash";
 
 /* ──────────── HTTP ──────────── */
 
@@ -31,9 +31,11 @@ Deno.serve(async (req) => {
       return json({ error: "project_id and country_code required" }, 400);
     }
 
-    // 캐시 확인
+    const forceRefresh = Boolean(body.force_refresh);
+
+    // 캐시 확인 (forceRefresh가 true가 아닐 때만 적용)
     const supabase = createServiceClient();
-    if (evidenceHash) {
+    if (evidenceHash && !forceRefresh) {
       const { data: cached } = await supabase
         .from("country_verdicts")
         .select("verdict, evidence_hash, created_at")
@@ -179,35 +181,62 @@ async function callStructuredVerdict(
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(VERDICT_MODEL)}:generateContent?key=${apiKey}`;
 
   const systemPrompt = [
-    "You are a senior Korean export decision consultant.",
-    "You must produce an AI JUDGMENT, not a data summary.",
-    "CRITICAL RULES:",
-    "- Do NOT write sentences like '~를 확인했습니다', '~건을 확인했습니다', 'N건이 감지되었습니다'.",
-    "- Do NOT list raw data or search result counts.",
-    "- Instead, INTERPRET the data and provide your professional ANALYSIS and JUDGMENT.",
-    "- Each point must include: what the finding means for the exporter, what specific risk or opportunity it creates, and what action to take.",
-    "- Write every text in Korean using formal style (~입니다, ~합니다).",
+    "You are a senior Korean export decision consultant and trade risk management expert.",
+    "Produce an EXHAUSTIVE, highly detailed, professional AI EXPORT JUDGMENT report for the target product and country.",
+    "CRITICAL RULES FOR EXHAUSTIVE RISK PREDICTION & ACCESSIBILITY:",
+    "1. INTEGRATE STEP 4 EVIDENCE: Deeply analyze all provided facts (Opportunity score, inclusion/recommendation rationale, customs tariffs, KOTRA market reports, K-SURE credit/delay data, KICOX data).",
+    "2. PREDICT 5 CORE TRADE RISKS EXHAUSTIVELY: (1) Customs & Tariff verification, (2) Mandatory safety/environmental certifications, (3) Payment & deferred credit risk, (4) Documentation & clearance, (5) Legal/contractual risks.",
+    "3. MANDATORY GLOSSARY IN PARENTHESES RULE: Whenever trade terms, abbreviations, or legal concepts are mentioned (e.g. O/A, L/C, CBP, FMVSS, UTQG, DOT, BOM, Anti-dumping, MFN, FTA, HTSUS, etc.), ALWAYS explain them in Korean inside parentheses right after the term. Format: '약어/전문용어 (쉬운 설명)'. Example: 'O/A (무서류 외상 거래 방식: 수출 대금 미회수 리스크가 큼)', 'CBP (미국 세관국경보호국: 관세 및 원산지 검증 기관)', 'UTQG (통일타이어품질등급: 미국 타이어 필수 겉면 표시 기준)'.",
+    "4. ACCESSIBLE & DETAILED ACTIONABLE ADVICE: Write in formal Korean (~입니다, ~합니다). Provide 1:1 concrete AI mitigation steps for every identified risk so that even first-time exporters can fully understand and prepare.",
     "",
     "Return strict JSON matching this schema:",
     JSON.stringify({
       opinion: "적극 검토 권장 | 조건부 진출 가능 | 진출 보류 권장 | 추가 데이터 필요",
-      opinionDetail: "2~3문장의 종합 판단. 데이터 나열이 아닌 AI의 분석적 결론",
+      executiveSummary: "한줄 핵심 요약 (예: KORUS FTA 관세 혜택은 크지만 DOT 인증 장벽과 반덤핑 관세 리스크가 공존하는 조건부 시장)",
+      opinionDetail: "3~4문장의 상세한 종합 진출 전략 결론. 제품 및 국가 특성을 반영한 통찰",
+      riskScoreboard: {
+        tariffRisk: "높음 | 보통 | 낮음",
+        certificationRisk: "높음 | 보통 | 낮음",
+        paymentRisk: "높음 | 보통 | 낮음",
+        logisticsRisk: "높음 | 보통 | 낮음",
+        legalRisk: "높음 | 보통 | 낮음",
+      },
       keyBasis: [
-        { point: "판단 근거 (분석적 문장)", source: "출처명", sourceUrl: "URL" },
+        { point: "판단 근거 (관세 혜택, 시장 기회 등 구체적 문장)", source: "출처명 (예: 관세청 API / KOTRA)" },
       ],
       majorRisks: [
-        { risk: "위험 요소 (분석적 문장)", mitigation: "구체적 대응 방안", source: "출처명", sourceUrl: "URL" },
+        {
+          risk: "주요 위험 요소 및 전문용어 (쉬운 괄호 설명 포함)",
+          mitigation: "AI의 실질적 1:1 대응 방안 (구체적 해결책 및 전문용어 괄호 설명)",
+          source: "출처명 (예: K-SURE / NHTSA)",
+          severity: "치명적 | 높음 | 보통",
+          likelihood: "높음 | 보통 | 낮음",
+          financialImpact: "예상 손실/비용 영향 (예: 통관 거부 시 컨테이너당 약 $5,000~$15,000 손실)"
+        },
       ],
       recommendedActions: [
-        { action: "권장 행동", reason: "이유", priority: "high | medium" },
+        {
+          action: "권장 행동 제목",
+          reason: "실행 이유 및 목적",
+          priority: "high | medium",
+          timeline: "즉시 | 수출 전 6개월 | 수출 전 3개월 | 수출 전 1개월 | 수출 후",
+          difficulty: "쉬움 | 보통 | 어려움",
+          estimatedCost: "예상 비용 (예: 약 200~500만원 또는 수수료 0.5%)",
+          govSupport: "활용 가능한 한국 정부 지원 사업 (예: KOTRA 해외인증지원사업, K-SURE 수출보험 지원)",
+          subSteps: ["구체적 실행 단계 1", "구체적 실행 단계 2", "구체적 실행 단계 3"]
+        },
       ],
       confidence: "높음 | 보통 | 낮음",
       confidenceReason: "신뢰도 판단 이유",
       officialSources: [
-        { name: "출처명", url: "URL", relevance: "관련성 설명" },
+        { name: "관련 공공기관/규제기관명", url: "", relevance: "관련성 요약" },
       ],
     }),
   ].join("\n");
+
+  const sourcesList = grounded.sources.length > 0
+    ? grounded.sources.map((s) => `- ${s.name}: ${s.url}`).join("\n")
+    : "발견된 출처 URL 없음";
 
   const userPrompt = [
     `## 대상 국가: ${countryName}`,
@@ -219,8 +248,11 @@ async function callStructuredVerdict(
     "## 인터넷 공식자료 검색 결과 (Official Web Research)",
     grounded.text,
     "",
-    "위 두 가지 데이터를 종합하여 AI 최종 판단 JSON을 생성하십시오.",
-    "프로그램 수집 데이터는 사실 근거로 사용하고, 인터넷 검색 결과는 보완·검증 근거로 활용하십시오.",
+    "## 발견된 실제 인터넷 공식자료 URL 목록",
+    sourcesList,
+    "",
+    "위 두 가지 데이터와 발견된 URL 목록을 종합하여 AI 최종 판단 JSON을 생성하십시오.",
+    "officialSources 배열에는 '발견된 실제 인터넷 공식자료 URL 목록'에 존재하는 구체적인 name과 url을 반드시 포함시키십시오.",
     "단순한 데이터 나열이 아닌, 수출자 관점에서의 실질적 판단과 구체적 행동 지침을 제공하십시오.",
   ].join("\n");
 
@@ -236,36 +268,93 @@ async function callStructuredVerdict(
 
   if (!response.ok) throw new Error(`Gemini verdict ${response.status}`);
   const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "{}";
+  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "{}";
+  const parsed = safeParseJson(rawText);
+
+  // officialSources 후처리 보완
+  const officialSources = asArray(parsed.officialSources);
+  if (officialSources.length === 0 && grounded.sources.length > 0) {
+    parsed.officialSources = grounded.sources.slice(0, 6).map((s) => ({
+      name: s.name,
+      url: s.url,
+      relevance: `${countryName} ${productName} 공식자료`,
+    }));
+  }
+
+  // keyBasis 및 majorRisks 출처 URL 스마트 후처리 매핑 (Official Web Research 문맥 및 grounded.sources 탐색)
+  if (grounded.sources.length > 0) {
+    const findSmartUrl = (text: string, currentUrl?: string): string => {
+      // 이미 올바른 external HTTP/HTTPS URL이 들어가 있다면 그대로 사용
+      if (currentUrl && currentUrl.startsWith("http") && !currentUrl.includes("n/a")) {
+        return currentUrl;
+      }
+      
+      const lowerText = text.toLowerCase();
+      
+      // 1. grounded.sources 중 텍스트에 언급된 키워드가 포함된 도메인/이름 탐색
+      for (const s of grounded.sources) {
+        const sNameLower = s.name.toLowerCase();
+        const sUrlLower = s.url.toLowerCase();
+        
+        // 주요 도메인/기관 키워드 매칭
+        const keywords = ["ustr", "nhtsa", "dot", "fmvss", "usitc", "epa", "fda", "customs", "kotra", "ksure", "kicox", "반덤핑", "관세", "안전표준"];
+        for (const kw of keywords) {
+          if (lowerText.includes(kw) && (sNameLower.includes(kw) || sUrlLower.includes(kw))) {
+            return s.url;
+          }
+        }
+      }
+      
+      // 2. 키워드 매칭 실패 시 첫번째 수집된 원문 URL 반환
+      return grounded.sources[0].url;
+    };
+
+    const supplementUrl = (item: any) => {
+      if (item && typeof item === "object") {
+        const textToSearch = `${item.point || item.risk || ""} ${item.source || ""}`;
+        item.sourceUrl = findSmartUrl(textToSearch, item.sourceUrl);
+      }
+    };
+
+    asArray(parsed.keyBasis).forEach(supplementUrl);
+    asArray(parsed.majorRisks).forEach(supplementUrl);
+  }
+
+  return JSON.stringify(parsed);
 }
 
 /* ──────────── 프로그램 증거 요약 ──────────── */
 
 function buildProgramEvidence(body: Record<string, unknown>): string {
   const parts: string[] = [];
+
+  const score = body.opportunity_score;
+  if (score != null) parts.push(`### [Step 4] 종합 기회 점수: ${score}/100점`);
+
+  const rationale = asRecord(body.rationale);
+  if (asText(rationale.inclusion_reason)) {
+    parts.push(`### [Step 4] 국가 포함 사유:\n${asText(rationale.inclusion_reason)}`);
+  }
+  if (asText(rationale.recommendation_reason)) {
+    parts.push(`### [Step 4] 핵심 추천 이유:\n${asText(rationale.recommendation_reason)}`);
+  }
+  if (asText(rationale.low_recommendation_reason)) {
+    parts.push(`### [Step 4] 주의 및 위험 지표:\n${asText(rationale.low_recommendation_reason)}`);
+  }
+
   const facts = asArray(body.decision_facts);
   if (facts.length > 0) {
-    parts.push("### Decision Facts");
-    for (const fact of facts.slice(0, 30)) {
+    parts.push("\n### [Step 4] 수집된 세부 공공데이터 팩트 목록");
+    for (const fact of facts.slice(0, 35)) {
       const f = asRecord(fact);
-      parts.push(`- [${asText(f.category)}] ${asText(f.summary)} (status: ${asText(f.status)}, severity: ${asText(f.severity)})`);
-      if (asText(f.caveat)) parts.push(`  caveat: ${asText(f.caveat)}`);
-      if (asText(f.nextAction)) parts.push(`  next: ${asText(f.nextAction)}`);
+      parts.push(`- [${asText(f.category)}] ${asText(f.summary)} (상태: ${asText(f.status)}, 심각도: ${asText(f.severity)})`);
+      if (asText(f.caveat)) parts.push(`  * 주의사항: ${asText(f.caveat)}`);
+      if (asText(f.nextAction)) parts.push(`  * 조치사항: ${asText(f.nextAction)}`);
+      if (asText(f.sourceName)) parts.push(`  * 출처: ${asText(f.sourceName)}`);
     }
   }
 
-  const rationale = asRecord(body.rationale);
-  if (asText(rationale.recommendation_reason)) {
-    parts.push(`\n### 추천 이유\n${asText(rationale.recommendation_reason)}`);
-  }
-  if (asText(rationale.low_recommendation_reason)) {
-    parts.push(`\n### 주의 요인\n${asText(rationale.low_recommendation_reason)}`);
-  }
-
-  const score = body.opportunity_score;
-  if (score != null) parts.push(`\n### 기회 점수: ${score}/100`);
-
-  return parts.join("\n") || "수집된 데이터 없음";
+  return parts.join("\n") || "Step 4 수집 데이터 없음";
 }
 
 /* ──────────── 유틸 ──────────── */

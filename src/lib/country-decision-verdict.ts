@@ -6,6 +6,7 @@
  */
 
 import type { DecisionFact } from "./country-decision";
+import { normalizeExternalUrl, resolveFallbackSourceUrl } from "./url-validator";
 
 /* ──────────── 공개 인터페이스 ──────────── */
 
@@ -20,12 +21,20 @@ export interface AiVerdictRiskItem {
   mitigation: string;
   source?: string;
   sourceUrl?: string;
+  severity?: "치명적" | "높음" | "보통";
+  likelihood?: "높음" | "보통" | "낮음";
+  financialImpact?: string;
 }
 
 export interface AiVerdictActionItem {
   action: string;
   reason: string;
   priority: "high" | "medium";
+  timeline?: string;
+  difficulty?: "쉬움" | "보통" | "어려움";
+  estimatedCost?: string;
+  govSupport?: string;
+  subSteps?: string[];
 }
 
 export interface AiVerdictSource {
@@ -34,12 +43,22 @@ export interface AiVerdictSource {
   relevance: string;
 }
 
+export interface RiskScoreboard {
+  tariffRisk: "높음" | "보통" | "낮음";
+  certificationRisk: "높음" | "보통" | "낮음";
+  paymentRisk: "높음" | "보통" | "낮음";
+  logisticsRisk: "높음" | "보통" | "낮음";
+  legalRisk: "높음" | "보통" | "낮음";
+}
+
 export type VerdictOpinion = "적극 검토 권장" | "조건부 진출 가능" | "진출 보류 권장" | "추가 데이터 필요";
 export type VerdictConfidence = "높음" | "보통" | "낮음";
 
 export interface AiFinalVerdict {
   opinion: VerdictOpinion;
   opinionDetail: string;
+  executiveSummary: string;
+  riskScoreboard: RiskScoreboard;
   keyBasis: AiVerdictBasisItem[];
   majorRisks: AiVerdictRiskItem[];
   recommendedActions: AiVerdictActionItem[];
@@ -79,20 +98,44 @@ export function parseVerdictResponse(raw: unknown): AiFinalVerdict | null {
   const opinion = asVerdictOpinion(data.opinion);
   if (!opinion) return null;
 
+  const scoreboardRaw = asRecord(data.riskScoreboard);
+  const riskScoreboard: RiskScoreboard = {
+    tariffRisk: asRiskLevel(scoreboardRaw.tariffRisk),
+    certificationRisk: asRiskLevel(scoreboardRaw.certificationRisk),
+    paymentRisk: asRiskLevel(scoreboardRaw.paymentRisk),
+    logisticsRisk: asRiskLevel(scoreboardRaw.logisticsRisk),
+    legalRisk: asRiskLevel(scoreboardRaw.legalRisk),
+  };
+
   return {
     opinion,
     opinionDetail: asText(data.opinionDetail),
+    executiveSummary: asText(data.executiveSummary),
+    riskScoreboard,
     keyBasis: asArray(data.keyBasis).map((item) => {
       const r = asRecord(item);
-      return { point: asText(r.point), source: asText(r.source) || undefined, sourceUrl: asText(r.sourceUrl) || undefined };
+      const source = asText(r.source) || undefined;
+      const rawUrl = asText(r.sourceUrl);
+      const resolvedUrl = resolveFallbackSourceUrl(source, rawUrl);
+      return {
+        point: asText(r.point),
+        source,
+        sourceUrl: resolvedUrl || undefined,
+      };
     }),
     majorRisks: asArray(data.majorRisks).map((item) => {
       const r = asRecord(item);
+      const source = asText(r.source) || undefined;
+      const rawUrl = asText(r.sourceUrl);
+      const resolvedUrl = resolveFallbackSourceUrl(source, rawUrl);
       return {
         risk: asText(r.risk),
         mitigation: asText(r.mitigation),
-        source: asText(r.source) || undefined,
-        sourceUrl: asText(r.sourceUrl) || undefined,
+        source,
+        sourceUrl: resolvedUrl || undefined,
+        severity: asSeverity(r.severity),
+        likelihood: asRiskLevel(r.likelihood) || undefined,
+        financialImpact: asText(r.financialImpact) || undefined,
       };
     }),
     recommendedActions: asArray(data.recommendedActions).map((item) => {
@@ -100,14 +143,26 @@ export function parseVerdictResponse(raw: unknown): AiFinalVerdict | null {
       return {
         action: asText(r.action),
         reason: asText(r.reason),
-        priority: asText(r.priority) === "high" ? "high" : "medium",
+        priority: asText(r.priority) === "high" ? "high" as const : "medium" as const,
+        timeline: asText(r.timeline) || undefined,
+        difficulty: asDifficulty(r.difficulty),
+        estimatedCost: asText(r.estimatedCost) || undefined,
+        govSupport: asText(r.govSupport) || undefined,
+        subSteps: asArray(r.subSteps).map((s) => asText(s)).filter(Boolean) || undefined,
       };
     }),
     confidence: asVerdictConfidence(data.confidence) ?? "보통",
     confidenceReason: asText(data.confidenceReason),
     officialSources: asArray(data.officialSources).map((item) => {
       const r = asRecord(item);
-      return { name: asText(r.name), url: asText(r.url), relevance: asText(r.relevance) };
+      const name = asText(r.name);
+      const rawUrl = asText(r.url);
+      const resolvedUrl = resolveFallbackSourceUrl(name, rawUrl);
+      return {
+        name,
+        url: resolvedUrl || "",
+        relevance: asText(r.relevance),
+      };
     }),
   };
 }
@@ -141,4 +196,22 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value != null && typeof value === "object" && !Array.isArray(value)
     ? (value as Record<string, unknown>)
     : {};
+}
+
+function asRiskLevel(value: unknown): "높음" | "보통" | "낮음" {
+  const text = asText(value);
+  if (text === "높음" || text === "보통" || text === "낮음") return text;
+  return "보통";
+}
+
+function asSeverity(value: unknown): "치명적" | "높음" | "보통" | undefined {
+  const text = asText(value);
+  if (text === "치명적" || text === "높음" || text === "보통") return text;
+  return undefined;
+}
+
+function asDifficulty(value: unknown): "쉬움" | "보통" | "어려움" | undefined {
+  const text = asText(value);
+  if (text === "쉬움" || text === "보통" || text === "어려움") return text;
+  return undefined;
 }
