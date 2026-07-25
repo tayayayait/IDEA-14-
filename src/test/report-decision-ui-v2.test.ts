@@ -13,9 +13,8 @@ describe("decision report v2 UI", () => {
     [
       "1. 기본 정보",
       "2. AI 최종판단",
-      "3. AI 판단 이유",
-      "4. AI 추천 진입전략",
-      "5. 근거 보기",
+      "3. AI 추천 진입전략",
+      "4. 근거 보기",
     ].forEach((title) => expect(decisionContent).toContain(title));
   });
 

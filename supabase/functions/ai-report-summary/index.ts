@@ -12,7 +12,7 @@ import { buildProgramEvidenceValue } from "../_shared/report-evidence-detail.ts"
 
 const UNKNOWN_TEXT = "확실한 정보 없음";
 const AI_TIMEOUT_MS = 110000;
-const GEMINI_REPORT_MODEL = "gemini-3.1-pro-preview";
+const GEMINI_REPORT_MODEL = "gemini-3.5-flash";
 const KOTRA_ENTRY_STRATEGY_ENDPOINT = "https://apis.data.go.kr/B410001/entryStrategy/entryStrategy";
 const GATE_TOPICS = ["certification", "regulation", "tariff", "profitability", "payment", "safety"] as const;
 const GATE_RESEARCH_TASKS = [
@@ -172,26 +172,33 @@ function buildDecisionSystemPrompt(): string {
     "Return strict JSON only. Write every user-facing text in Korean.",
     "Analyze only the selected target country supplied as the first and only topCountries item.",
     "PROGRAM EVIDENCE is authoritative for values retrieved by this program. Never invent a certification, regulation, tariff, sanction, buyer, or statistic.",
+    "If countryVerdicts or Step 4 Gemini verdict data is present in PROGRAM EVIDENCE, you MUST explicitly incorporate its findings (such as anti-dumping tariff rates, safety standards, FMVSS, DOT requirements, etc.) into headline, reason, riskScoreboard, decisionReasons, and immediateActions.",
     "Use the structured country-detail values, official lookup details, caveats, and next actions inside PROGRAM EVIDENCE as additional inputs to the existing report judgment.",
     "Do not treat a candidate tariff code, estimated cost, or needs_verification item as a confirmed final determination.",
     "OFFICIAL WEB EVIDENCE may be used only when it is traceable to one of officialSources and its W-* evidenceId.",
     "Do not use news, media, blogs, social posts, shopping pages, or advertising content even if supplied elsewhere.",
     "Choose exactly one primary entry route. Do not list several alternatives without selecting a priority.",
-    "Make decision.verdict one of proceed, conditional, hold and give a practical reason and up to three immediate actions.",
+    "Make decision.verdict one of proceed, conditional, hold and give a practical reason and up to five immediate actions.",
+    "decision.headline must be a concise, complete directive headline (under 40 chars) without trailing truncation.",
+    "decision.reason must be 2-3 complete, well-formed sentences explaining the core rationale.",
+    "decisionLogicSummary must summarize the evidence-to-decision reasoning flow in 2-3 complete, unbroken sentences without trailing ellipsis or incomplete parentheses.",
     "Every AI judgment and action must include at least one valid evidenceRefs ID from programEvidenceCatalog or officialSources.",
     "decisionReasons must distinguish opportunity and risk, interpret the evidence, and state the business impact.",
+    "For each risk decisionReason, you MUST evaluate severity ('치명적'|'높음'|'보통'), likelihood ('높음'|'보통'|'낮음'), financialImpact, and a concrete 1:1 mitigation strategy.",
+    "Provide a riskScoreboard evaluating 5 key domains: tariffRisk, certificationRisk, paymentRisk, logisticsRisk, legalRisk (each '높음'|'보통'|'낮음').",
+    "For each immediateAction, specify priority ('high'|'medium'), timeline (e.g. 'D+7'), difficulty ('쉬움'|'보통'|'어려움'), estimatedCost, govSupport, and subSteps array.",
     "entryStrategy must specify target buyer, one primary channel, initial products, positioning, payment terms, pilot scope, and expansion condition.",
-    "decisionGates must contain exactly certification, regulation, tariff, profitability, payment, safety.",
+    "decisionGates must contain exactly certification, regulation, tariff, profitability, payment, safety. For each gate, specify requiredDocument (e.g. '📄 NHTSA FMVSS 139 성적서 및 DOT 공장등록증') and resolutionAction, and set isAiInferred true when relying on general AI inference rather than confirmed official DB evidence.",
     "Certification, regulation, tariff, and safety may be clear only when evidenceRefs contains a relevant official W-* source whose gateTopics includes that gate.",
     "Profitability and payment must remain check_required unless explicit business-input evidence for that gate is present in PROGRAM EVIDENCE.",
     "User-entered gate inputs are business inputs, not official facts. Use them only to estimate profitability and payment conditions; missing or unknown fields remain unresolved.",
-    "차단 게이트가 하나라도 있으면 decision.verdict는 반드시 hold로 작성한다.",
-    "핵심 게이트가 check_required이면 decision.verdict는 최대 conditional까지만 허용한다.",
+    "CRITICAL RULE: 차단 게이트(status='blocked')가 하나라도 있으면 decision.verdict는 반드시 hold로 작성한다.",
+    "CRITICAL RULE: 핵심 게이트(certification, regulation, tariff, safety)가 check_required이면 decision.verdict는 최대 conditional까지만 허용한다.",
     "If evidence is missing or conflicting, list it in unresolvedItems or officialResearch.conflicts and lower confidence.",
     "Do not make a final legal, certification, regulatory, strategic-material, or product-safety determination.",
     `For unknown values write '${UNKNOWN_TEXT}' instead of guessing.`,
     "Action plan must cover D+7, D+30, and D+90 and include owner, action, deliverable, passCriteria, and evidenceRefs.",
-    "Schema: {\"schemaVersion\":2,\"decision\":{\"verdict\":\"proceed|conditional|hold\",\"confidence\":\"high|medium|low\",\"headline\":\"...\",\"reason\":\"...\",\"immediateActions\":[{\"action\":\"...\",\"owner\":\"...\",\"evidenceRefs\":[\"P-*|W-*\"]}],\"evidenceRefs\":[\"P-*|W-*\"]},\"decisionReasons\":[{\"type\":\"opportunity|risk\",\"title\":\"...\",\"interpretation\":\"...\",\"businessImpact\":\"...\",\"evidenceRefs\":[\"...\"]}],\"entryStrategy\":{\"countryCode\":\"...\",\"countryName\":\"...\",\"targetBuyer\":\"...\",\"primaryChannel\":\"...\",\"initialProducts\":\"...\",\"positioning\":\"...\",\"paymentTerms\":\"...\",\"pilotScope\":\"...\",\"expansionCondition\":\"...\",\"evidenceRefs\":[\"...\"]},\"decisionGates\":[{\"topic\":\"certification|regulation|tariff|profitability|payment|safety\",\"status\":\"clear|check_required|blocked\",\"decision\":\"...\",\"requiredAction\":\"...\",\"owner\":\"...\",\"due\":\"...\",\"stopCondition\":\"...\",\"evidenceRefs\":[\"...\"]}],\"actionPlan\":[{\"horizon\":\"D+7|D+30|D+90\",\"owner\":\"...\",\"action\":\"...\",\"deliverable\":\"...\",\"passCriteria\":\"...\",\"evidenceRefs\":[\"...\"]}],\"officialResearch\":{\"summary\":\"...\",\"keyFindings\":[{\"finding\":\"...\",\"evidenceRefs\":[\"W-*\"]}],\"conflicts\":[\"...\"]},\"assumptions\":[\"...\"],\"unresolvedItems\":[\"...\"],\"stopConditions\":[{\"condition\":\"...\",\"response\":\"...\",\"evidenceRefs\":[\"...\"]}],\"disclaimer\":\"...\"}",
+    "Schema: {\"schemaVersion\":3,\"decision\":{\"verdict\":\"proceed|conditional|hold\",\"confidence\":\"high|medium|low\",\"confidenceReason\":\"...\",\"headline\":\"...\",\"reason\":\"...\",\"immediateActions\":[{\"action\":\"...\",\"owner\":\"...\",\"priority\":\"high|medium\",\"timeline\":\"D+7\",\"difficulty\":\"쉬움|보통|어려움\",\"estimatedCost\":\"...\",\"govSupport\":\"...\",\"subSteps\":[\"...\"],\"evidenceRefs\":[\"P-*|W-*\"]}],\"evidenceRefs\":[\"P-*|W-*\"]},\"decisionLogicSummary\":\"...\",\"riskScoreboard\":{\"tariffRisk\":\"높음|보통|낮음\",\"certificationRisk\":\"높음|보통|낮음\",\"paymentRisk\":\"높음|보통|낮음\",\"logisticsRisk\":\"높음|보통|낮음\",\"legalRisk\":\"높음|보통|낮음\"},\"decisionReasons\":[{\"type\":\"opportunity|risk\",\"title\":\"...\",\"interpretation\":\"...\",\"businessImpact\":\"...\",\"severity\":\"치명적|높음|보통\",\"likelihood\":\"높음|보통|낮음\",\"financialImpact\":\"...\",\"mitigation\":\"...\",\"evidenceRefs\":[\"...\"]}],\"entryStrategy\":{\"countryCode\":\"...\",\"countryName\":\"...\",\"targetBuyer\":\"...\",\"primaryChannel\":\"...\",\"initialProducts\":\"...\",\"positioning\":\"...\",\"paymentTerms\":\"...\",\"pilotScope\":\"...\",\"expansionCondition\":\"...\",\"evidenceRefs\":[\"...\"]},\"decisionGates\":[{\"topic\":\"certification|regulation|tariff|profitability|payment|safety\",\"status\":\"clear|check_required|blocked\",\"decision\":\"...\",\"requiredAction\":\"...\",\"owner\":\"...\",\"due\":\"...\",\"stopCondition\":\"...\",\"evidenceRefs\":[\"...\"],\"requiredDocument\":\"...\",\"resolutionAction\":\"...\",\"isAiInferred\":true}],\"actionPlan\":[{\"horizon\":\"D+7|D+30|D+90\",\"owner\":\"...\",\"action\":\"...\",\"deliverable\":\"...\",\"passCriteria\":\"...\",\"evidenceRefs\":[\"...\"]}],\"officialResearch\":{\"summary\":\"...\",\"keyFindings\":[{\"finding\":\"...\",\"evidenceRefs\":[\"W-*\"]}],\"conflicts\":[\"...\"]},\"assumptions\":[\"...\"],\"unresolvedItems\":[\"...\"],\"stopConditions\":[{\"condition\":\"...\",\"response\":\"...\",\"evidenceRefs\":[\"...\"]}],\"disclaimer\":\"...\"}",
   ].join(" ");
 }
 

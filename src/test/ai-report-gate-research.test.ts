@@ -14,7 +14,7 @@ describe("gate-targeted official research", () => {
   });
 
   it("uses the country-detail grounded-search pattern and only accepts official sources", () => {
-    expect(source).toContain('const GEMINI_REPORT_MODEL = "gemini-3.1-pro-preview"');
+    expect(source).toContain('const GEMINI_REPORT_MODEL = "gemini-3.5-flash"');
     expect(source).toContain("tools: [{ google_search: {} }]");
     expect(source).toContain("government, customs, certification authorities, KOTRA, K-SURE, WTO, and ITC sources");
     expect(source).toContain("Do not search for or use news, media, blogs, social posts, or advertising content.");

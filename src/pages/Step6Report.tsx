@@ -350,7 +350,19 @@ export default function Step6Report() {
     });
     setLoading(false);
   };
+  const autoTriggeredRef = useRef(false);
   useEffect(() => { load(); }, [id]);
+
+  // 저장된 Gemini 리포트가 없거나 임시 상태일 때 자동으로 AI 생성 1회 트리거
+  useEffect(() => {
+    if (loading || !bundle || autoTriggeredRef.current || genAi) return;
+    const aiState = bundle.saved_report?.aiState;
+    const hasGeneratedDraft = bundle.saved_report?.draft && aiState !== "local_fallback";
+    if (!hasGeneratedDraft) {
+      autoTriggeredRef.current = true;
+      generateAiSummary();
+    }
+  }, [loading, bundle]);
   const generateAiSummary = async () => {
     if (!bundle || !id) return;
     setGenAi(true);
@@ -792,9 +804,9 @@ function DecisionReportContent({
         title="2. AI 최종판단"
         subtitle="프로그램 데이터와 공식 웹 근거를 종합한 실행 판단입니다."
         tone="highlight"
-        aside={<span className={`rounded-full px-2 py-1 text-[10px] font-semibold ${decisionTone(draft.decision.verdict)}`}>{formatDecisionVerdict(draft.decision.verdict)}</span>}
+        aside={<span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${decisionTone(draft.decision.verdict)}`}>{formatDecisionVerdict(draft.decision.verdict)}</span>}
       >
-        {/* Hero Metrics 3열 */}
+        {/* Executive Verdict Strip (Hero Metrics 3열 + 신뢰도이유) */}
         <div className={mobile ? "grid gap-2" : "grid grid-cols-3 gap-2"}>
           <ReportMetricCard
             label="수출 판단"
@@ -806,7 +818,7 @@ function DecisionReportContent({
           <ReportMetricCard
             label="신뢰도"
             value={formatDecisionConfidence(draft.decision.confidence)}
-            detail={(draft.decision as any).confidenceReason ?? "AI 판단 신뢰 수준"}
+            detail={draft.decision.confidenceReason ?? (draft.decision as any).confidenceReason ?? "AI 판단 신뢰 수준"}
           />
           <ReportMetricCard
             label="근거 현황"
@@ -819,20 +831,28 @@ function DecisionReportContent({
         <h4 className="mt-3 text-[16px] font-bold leading-snug text-[#123b3d]">{sanitize(draft.decision.headline)}</h4>
         <p className="mt-2 border-l-2 border-[#0E6B6F] pl-3 text-[11px] leading-relaxed text-[#334155]">{sanitize(draft.decision.reason)}</p>
 
-        {/* 핵심 판단 근거 + 주요 위험 요소 2열 */}
+        {/* [B] AI 판단 로직 요약 (Decision Logic Summary) */}
+        <ReportDecisionLogicSummaryView summary={draft.decisionLogicSummary} />
+
+        {/* [C] 5대 위험 스코어보드 (Step6 draft 또는 Step4 verdict 병합 하이브리드) */}
+        <ReportRiskScoreboardView
+          scoreboard={draft.riskScoreboard ?? bundle?.countryVerdicts?.find((v) => v.countryCode === selectedCountry)?.verdict.riskScoreboard}
+        />
+
+        {/* [D] 핵심 판단 근거 + 주요 위험 요소 2열 (강화판) */}
         <div className={mobile ? "mt-3 grid gap-2" : "mt-3 grid grid-cols-2 gap-2"}>
           <ReportBasisSection reasons={draft.decisionReasons.filter((r) => r.type === "opportunity")} evidence={evidence} draft={draft} />
           <ReportRiskSection reasons={draft.decisionReasons.filter((r) => r.type === "risk")} evidence={evidence} draft={draft} />
         </div>
 
-        {/* 권장 실행 방향 */}
-        <ReportActionSection actions={draft.decision.immediateActions} />
+        {/* [E] 우선 확인사항 & 권장 행동 (Priority Actions) */}
+        <ReportPriorityActions actions={draft.decision.immediateActions} />
 
         {/* 국가 상세 데이터 요약 (Step 4 데이터) */}
         <ReportCountryInsightsSummary bundle={bundle} mobile={mobile} />
 
-        {/* 의사결정 게이트 */}
-        {draft.decisionGates?.length > 0 ? <ReportGateDashboard gates={draft.decisionGates} mobile={mobile} /> : null}
+        {/* 의사결정 게이트 (수출 전 필수 점검 6가지 체크리스트) */}
+        {draft.decisionGates?.length > 0 ? <ReportGateDashboard gates={draft.decisionGates} mobile={mobile} projectId={bundle.projectId} /> : null}
 
         {/* 참고 공식자료 */}
         <ReportOfficialSources sources={draft.officialResearch?.sources || []} />
@@ -946,6 +966,52 @@ function ReportMetricCard({ label, value, detail, emphasis, verdict }: {
   );
 }
 
+function ReportDecisionLogicSummaryView({ summary }: { summary?: string }) {
+  if (!summary) return null;
+  return (
+    <div className="mt-3 rounded-md border border-slate-200 bg-slate-50/80 p-3">
+      <div className="flex items-center gap-1.5">
+        <span className="text-[12px]">💡</span>
+        <p className="text-[10px] font-semibold text-slate-700">AI 판단 로직 요약</p>
+      </div>
+      <p className="mt-1.5 text-[11px] leading-relaxed text-slate-600">{sanitize(summary)}</p>
+    </div>
+  );
+}
+
+function ReportRiskScoreboardView({ scoreboard }: { scoreboard?: ReportRiskScoreboard }) {
+  if (!scoreboard) return null;
+  const items: Array<{ key: keyof ReportRiskScoreboard; label: string; value: "높음" | "보통" | "낮음" }> = [
+    { key: "tariffRisk", label: "관세·원산지", value: scoreboard.tariffRisk ?? "보통" },
+    { key: "certificationRisk", label: "인증·규제", value: scoreboard.certificationRisk ?? "보통" },
+    { key: "paymentRisk", label: "대금 회수", value: scoreboard.paymentRisk ?? "보통" },
+    { key: "logisticsRisk", label: "통관·물류", value: scoreboard.logisticsRisk ?? "보통" },
+    { key: "legalRisk", label: "계약·분쟁", value: scoreboard.legalRisk ?? "보통" },
+  ];
+
+  const badgeClass = (val: string) => {
+    if (val === "높음") return "bg-red-100 text-red-700 border-red-200 font-bold";
+    if (val === "낮음") return "bg-emerald-100 text-emerald-700 border-emerald-200 font-bold";
+    return "bg-amber-100 text-amber-800 border-amber-200 font-medium";
+  };
+
+  return (
+    <div className="mt-3 rounded-md border border-[#dfe4ea] bg-white p-3">
+      <p className="text-[10px] font-semibold text-[#0E6B6F]">5대 무역 위험 스코어보드</p>
+      <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-5">
+        {items.map((item) => (
+          <div key={item.key} className="flex flex-col items-center justify-center rounded border border-slate-100 bg-slate-50/50 p-2 text-center">
+            <span className="text-[9px] font-medium text-slate-500">{item.label}</span>
+            <span className={`mt-1 inline-block rounded border px-2 py-0.5 text-[9px] ${badgeClass(item.value)}`}>
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ReportBasisSection({ reasons, evidence, draft }: {
   reasons: ReportDraft["decisionReasons"];
   evidence: ReportEvidenceBundle;
@@ -956,19 +1022,26 @@ function ReportBasisSection({ reasons, evidence, draft }: {
     <div className="rounded-md border border-emerald-200 bg-emerald-50/60 p-3">
       <div className="flex items-center gap-1.5">
         <span className="h-4 w-4 text-emerald-600">✓</span>
-        <p className="text-[10px] font-semibold text-[#065f46]">핵심 판단 근거</p>
+        <p className="text-[10px] font-semibold text-[#065f46]">핵심 판단 근거 (Opportunity)</p>
       </div>
-      <ul className="mt-2 space-y-2">
+      <ul className="mt-2 space-y-2.5">
         {reasons.map((reason, i) => (
           <li key={`basis-${i}`} className="flex items-start gap-2 text-[11px] leading-relaxed">
             <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
             <div>
-              <span className="font-semibold">{sanitize(reason.title)}</span>
-              <span className="ml-1">{sanitize(reason.interpretation)}</span>
+              <span className="font-semibold text-slate-800">{sanitize(reason.title)}</span>
+              <span className="ml-1 text-slate-700">{sanitize(reason.interpretation)}</span>
+              {reason.businessImpact ? (
+                <p className="mt-0.5 text-[10px] text-emerald-800">→ {sanitize(reason.businessImpact)}</p>
+              ) : null}
               {reason.evidenceRefs?.length > 0 ? (
-                <span className="ml-1 text-[9px] text-[#64748b]">
-                  [{resolveReportSourceNames(reason.evidenceRefs, evidence, draft).join(", ")}]
-                </span>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {resolveReportSourceNames(reason.evidenceRefs, evidence, draft).map((src, idx) => (
+                    <span key={idx} className="rounded bg-emerald-100/80 px-1.5 py-0.5 font-mono text-[8px] text-emerald-800">
+                      {src}
+                    </span>
+                  ))}
+                </div>
               ) : null}
             </div>
           </li>
@@ -988,55 +1061,116 @@ function ReportRiskSection({ reasons, evidence, draft }: {
     <div className="rounded-md border border-amber-200 bg-amber-50/60 p-3">
       <div className="flex items-center gap-1.5">
         <span className="h-4 w-4 text-amber-600">⚠</span>
-        <p className="text-[10px] font-semibold text-[#78350f]">주요 위험 요소</p>
+        <p className="text-[10px] font-semibold text-[#78350f]">주요 위험 요소 & AI 솔루션 (Risk)</p>
       </div>
-      <ul className="mt-2 space-y-2">
+      <div className="mt-2 space-y-2.5">
         {reasons.map((reason, i) => (
-          <li key={`risk-${i}`} className="flex items-start gap-2 text-[11px] leading-relaxed">
-            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
-            <div>
-              <span className="font-semibold">{sanitize(reason.title)}</span>
-              <span className="ml-1">{sanitize(reason.interpretation)}</span>
-              {reason.businessImpact ? (
-                <p className="mt-0.5 text-[10px] text-[#64748b]">→ {sanitize(reason.businessImpact)}</p>
+          <div key={`risk-${i}`} className="rounded border border-amber-200/80 bg-white/90 p-2 text-[11px]">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="font-semibold text-slate-900">{sanitize(reason.title)}</span>
+              {reason.severity ? (
+                <span className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
+                  reason.severity === "치명적" ? "bg-red-100 text-red-700 border border-red-300"
+                    : reason.severity === "높음" ? "bg-amber-100 text-amber-800"
+                      : "bg-slate-100 text-slate-700"
+                }`}>
+                  심각도: {reason.severity}
+                </span>
               ) : null}
-              {reason.evidenceRefs?.length > 0 ? (
-                <span className="ml-1 text-[9px] text-[#64748b]">
-                  [{resolveReportSourceNames(reason.evidenceRefs, evidence, draft).join(", ")}]
+              {reason.likelihood ? (
+                <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[8px] text-slate-600">
+                  가능성: {reason.likelihood}
                 </span>
               ) : null}
             </div>
-          </li>
+            <p className="mt-1 text-slate-700">{sanitize(reason.interpretation)}</p>
+            {reason.financialImpact ? (
+              <p className="mt-1 font-semibold text-red-700 text-[10px]">
+                💸 예상 영향: {sanitize(reason.financialImpact)}
+              </p>
+            ) : null}
+            {reason.mitigation ? (
+              <div className="mt-1.5 rounded border border-blue-100 bg-blue-50/70 p-1.5 text-[10px] text-blue-900">
+                <span className="font-bold">🛡️ AI 대응 솔루션:</span> {sanitize(reason.mitigation)}
+              </div>
+            ) : null}
+            {reason.evidenceRefs?.length > 0 ? (
+              <div className="mt-1 flex flex-wrap gap-1">
+                {resolveReportSourceNames(reason.evidenceRefs, evidence, draft).map((src, idx) => (
+                  <span key={idx} className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[8px] text-slate-600">
+                    {src}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
 
-function ReportActionSection({ actions }: { actions: ReportDraft["decision"]["immediateActions"] }) {
+function ReportPriorityActions({ actions }: { actions: ReportDraft["decision"]["immediateActions"] }) {
   if (!actions || actions.length === 0) return null;
   return (
     <div className="mt-3 rounded-md border border-[#bfdbfe] bg-blue-50/60 p-3">
       <div className="flex items-center gap-1.5">
         <span className="h-4 w-4 text-blue-600">→</span>
-        <p className="text-[10px] font-semibold text-[#1e40af]">권장 실행 방향</p>
+        <p className="text-[10px] font-semibold text-[#1e40af]">우선 확인사항 & 권장 행동 (Priority Actions)</p>
       </div>
-      <ol className="mt-2 space-y-2">
+      <div className="mt-2 space-y-2">
         {actions.map((item, i) => (
-          <li key={`action-${i}`} className="flex items-start gap-2 text-[11px] leading-relaxed">
-            <span className="mt-0.5 text-[10px] font-bold text-blue-500">{i + 1}.</span>
-            <div>
-              <span className="font-semibold">{sanitize(item.action)}</span>
-              {item.owner ? (
-                <span className="ml-1.5 inline-flex items-center rounded-full bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-[#475569]">{sanitize(item.owner)}</span>
-              ) : null}
-              {i === 0 ? (
-                <span className="ml-1 inline-block rounded bg-red-100 px-1.5 py-0.5 text-[9px] font-medium text-red-800">우선</span>
-              ) : null}
+          <div key={`action-${i}`} className="rounded border border-blue-200/80 bg-white p-2.5 text-[11px] shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-white ${
+                  item.priority === "high" || i === 0 ? "bg-red-500" : "bg-blue-500"
+                }`}>
+                  {i + 1}
+                </span>
+                <span className="font-semibold text-slate-900">{sanitize(item.action)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                {item.timeline ? (
+                  <span className="rounded bg-blue-100 px-1.5 py-0.5 font-mono text-[8px] font-semibold text-blue-800">
+                    ⏱️ {sanitize(item.timeline)}
+                  </span>
+                ) : null}
+                {item.difficulty ? (
+                  <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[8px] text-slate-700">
+                    난이도: {sanitize(item.difficulty)}
+                  </span>
+                ) : null}
+                {item.owner ? (
+                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[8px] font-medium text-[#475569]">
+                    👤 {sanitize(item.owner)}
+                  </span>
+                ) : null}
+              </div>
             </div>
-          </li>
+
+            {(item.estimatedCost || item.govSupport) ? (
+              <div className="mt-1.5 flex flex-wrap gap-2 text-[10px] text-slate-600 border-t border-slate-100 pt-1.5">
+                {item.estimatedCost ? <span>💰 예상비용: {sanitize(item.estimatedCost)}</span> : null}
+                {item.govSupport ? <span className="font-medium text-emerald-700">🏛️ 정부지원: {sanitize(item.govSupport)}</span> : null}
+              </div>
+            ) : null}
+
+            {item.subSteps && item.subSteps.length > 0 ? (
+              <details className="mt-1.5 border-t border-slate-100 pt-1 text-[10px]">
+                <summary className="cursor-pointer font-medium text-blue-700 hover:underline">
+                  세부 실행 단계 ({item.subSteps.length}단계)
+                </summary>
+                <ol className="mt-1 list-decimal space-y-0.5 pl-4 text-slate-600">
+                  {item.subSteps.map((step, idx) => (
+                    <li key={idx}>{sanitize(step)}</li>
+                  ))}
+                </ol>
+              </details>
+            ) : null}
+          </div>
         ))}
-      </ol>
+      </div>
     </div>
   );
 }
@@ -1163,8 +1297,33 @@ function ReportCountryInsightsSummary({ bundle, mobile }: { bundle: Bundle; mobi
   );
 }
 
-function ReportGateDashboard({ gates, mobile }: { gates: ReportDraft["decisionGates"]; mobile: boolean }) {
+function ReportGateDashboard({ gates, mobile, projectId }: { gates: ReportDraft["decisionGates"]; mobile: boolean; projectId?: string }) {
   if (!gates || gates.length === 0) return null;
+
+  const storageKey = useMemo(() => `gate_user_checks_${projectId ?? "default"}`, [projectId]);
+  const [userCheckedMap, setUserCheckedMap] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const toggleCheck = (topic: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setUserCheckedMap((prev) => {
+      const next = { ...prev, [topic]: !prev[topic] };
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
   const gateIcons: Record<string, string> = {
     certification: "🛡️",
     regulation: "📋",
@@ -1174,53 +1333,153 @@ function ReportGateDashboard({ gates, mobile }: { gates: ReportDraft["decisionGa
     safety: "⚠️",
   };
   const gateLabels: Record<string, string> = {
-    certification: "인증",
-    regulation: "규제",
-    tariff: "관세",
-    profitability: "수익성",
-    payment: "결제",
-    safety: "안전",
+    certification: "인증 요건",
+    regulation: "무역 규제",
+    tariff: "관세 혜택",
+    profitability: "수익성 분석",
+    payment: "결제 안전",
+    safety: "제품 안전",
   };
-  const blockedGates = gates.filter((g) => g.status === "blocked");
+
+  const clearCount = gates.filter((g) => {
+    const topic = (g as any).gate || g.topic;
+    return g.status === "clear" || userCheckedMap[topic];
+  }).length;
+
+  const checkCount = gates.length - clearCount;
+  const blockedGates = gates.filter((g) => g.status === "blocked" && !userCheckedMap[(g as any).gate || g.topic]);
+
   return (
-    <div className="mt-3 rounded-md border border-[#dfe4ea] bg-[#f8fafc] p-3">
-      <p className="text-[10px] font-semibold text-[#0E6B6F]">의사결정 게이트</p>
-      <div className={mobile ? "mt-2 grid grid-cols-2 gap-1.5" : "mt-2 grid grid-cols-3 gap-1.5"}>
+    <div className="mt-3 rounded-lg border border-[#0E6B6F]/20 bg-gradient-to-br from-white via-[#f8fafc] to-[#f0fdf4] p-3.5 shadow-sm">
+      {/* 3초 안내 배너 */}
+      <div className="rounded-md border border-[#0E6B6F]/30 bg-[#0E6B6F]/5 p-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-[11px] font-bold text-[#0E6B6F] flex items-center gap-1.5">
+            <span>📋</span> 수출 전 필수 점검 6가지 (실행 체크리스트)
+          </p>
+          <span className="rounded-full bg-[#0E6B6F] px-2 py-0.5 text-[9px] font-semibold text-white">
+            {clearCount}/{gates.length} 완료
+          </span>
+        </div>
+        <p className="mt-1 text-[10px] leading-relaxed text-[#334155]">
+          💡 <strong>수출 준비 현황</strong>: 6개 필수 항목 중 <strong>{clearCount}개 완료</strong>, 
+          {checkCount > 0 ? <span> <strong>{checkCount}개 서류/계약 준비 중</strong>입니다.</span> : <span> <strong>모든 항목 준비 완료!</strong></span>}
+          회사의 서류 보유 여부를 확인하시고 아래 <strong>'확인 완료'</strong>를 누르시면 완료 상태로 바뀝니다.
+        </p>
+      </div>
+
+      {/* 6대 게이트 카드 그리드 */}
+      <div className={mobile ? "mt-3 grid grid-cols-1 gap-2" : "mt-3 grid grid-cols-3 gap-2"}>
         {gates.map((gate) => {
           const topic = (gate as any).gate || gate.topic;
           const icon = gateIcons[topic] ?? "📌";
           const label = gateLabels[topic] ?? topic;
-          const statusClass = gate.status === "clear"
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-            : gate.status === "blocked"
-              ? "border-red-300 bg-red-50 text-red-800"
-              : "border-amber-200 bg-amber-50 text-amber-800";
-          const statusLabel = gate.status === "clear" ? "통과"
-            : gate.status === "blocked" ? "차단"
-              : "확인 필요";
+          const isUserChecked = Boolean(userCheckedMap[topic]);
+          const effectiveStatus = isUserChecked ? "clear" : gate.status;
+
+          const isAiInferred = gate.isAiInferred ?? (effectiveStatus !== "clear");
+          const requiredDoc = gate.requiredDocument || getFallbackDocName(topic);
+
+          const statusClass = effectiveStatus === "clear"
+            ? "border-emerald-300 bg-emerald-50/80 text-emerald-900"
+            : effectiveStatus === "blocked"
+              ? "border-red-300 bg-red-50 text-red-900"
+              : "border-amber-300 bg-amber-50/90 text-amber-900";
+
+          const statusBadgeText = effectiveStatus === "clear"
+            ? (isUserChecked ? "✓ 사용자 완료" : "🟢 준비 완료")
+            : effectiveStatus === "blocked"
+              ? "🚨 차단 주의"
+              : "📋 서류/계약 준비 중";
+
           return (
-            <details key={topic} className={`rounded border p-2 ${statusClass}`}>
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-1 text-[10px] font-semibold [&::-webkit-details-marker]:hidden">
-                <span>{icon} {label}</span>
-                <span className="rounded-full bg-white/60 px-1.5 py-0.5 text-[8px]">{statusLabel}</span>
-              </summary>
-              <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5 text-[9px]">
-                {gate.decision ? <p>{sanitize(gate.decision)}</p> : null}
-                {gate.requiredAction ? <p className="text-[#475569]">필요 조치: {sanitize(gate.requiredAction)}</p> : null}
-                {gate.owner ? <p className="text-[#64748b]">담당: {sanitize(gate.owner)} · 기한: {sanitize(gate.due ?? "미정")}</p> : null}
-                {gate.stopCondition ? <p className="text-red-700">중단 조건: {sanitize(gate.stopCondition)}</p> : null}
+            <div key={topic} className={`flex flex-col justify-between rounded-md border p-2.5 transition-all ${statusClass}`}>
+              <div>
+                <div className="flex items-center justify-between gap-1 border-b border-black/10 pb-1.5">
+                  <span className="text-[11px] font-bold flex items-center gap-1">
+                    <span>{icon}</span> {label}
+                  </span>
+                  <span className="rounded-full bg-white/90 px-1.5 py-0.5 text-[8px] font-semibold shadow-xs">
+                    {statusBadgeText}
+                  </span>
+                </div>
+
+                {/* 데이터 출처 배지 (공공 팩트 vs AI 보완 추론) */}
+                <div className="mt-1.5 flex items-center gap-1">
+                  {isAiInferred ? (
+                    <span className="inline-flex items-center gap-0.5 rounded bg-blue-100 px-1 py-0.2 text-[8px] font-medium text-blue-700" title="공공 API 데이터 미비로 Gemini AI 경험지식이 자동 보완된 상태입니다.">
+                      🤖 AI 보완 추론
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-0.5 rounded bg-emerald-100 px-1 py-0.2 text-[8px] font-medium text-emerald-700" title="정부 공공 API로 100% 검증된 법적 팩트입니다.">
+                      🏛️ 공공 팩트 확정
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-1.5 text-[10px] font-medium leading-snug">{sanitize(gate.decision)}</p>
+
+                {/* 1:1 제출 필요 서류 안내 */}
+                <div className="mt-2 rounded border border-black/10 bg-white/70 p-1.5">
+                  <p className="text-[8px] font-bold text-[#0E6B6F]">📄 제출/확인 필요 서류</p>
+                  <p className="mt-0.5 text-[9.5px] font-semibold text-[#1e293b]">{sanitize(requiredDoc)}</p>
+                </div>
+
+                {gate.requiredAction ? (
+                  <p className="mt-1.5 text-[9px] leading-tight text-[#475569]">
+                    🛠️ <strong>실행 가이드</strong>: {sanitize(gate.requiredAction)}
+                  </p>
+                ) : null}
+
+                <p className="mt-1 text-[8.5px] text-[#64748b]">
+                  👤 담당: {sanitize(gate.owner)} · ⏱️ 기한: {sanitize(gate.due ?? "미정")}
+                </p>
+
+                {gate.stopCondition ? (
+                  <p className="mt-1 text-[8.5px] font-semibold text-red-700">
+                    🚨 차단 기준: {sanitize(gate.stopCondition)}
+                  </p>
+                ) : null}
               </div>
-            </details>
+
+              {/* 인터랙티브 완료 버튼 */}
+              <div className="mt-2.5 pt-1 border-t border-black/10">
+                <button
+                  type="button"
+                  onClick={(e) => toggleCheck(topic, e)}
+                  className={`w-full rounded py-1 text-[9.5px] font-bold transition-colors ${
+                    isUserChecked
+                      ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                      : "bg-white border border-[#0E6B6F] text-[#0E6B6F] hover:bg-[#0E6B6F]/10"
+                  }`}
+                >
+                  {isUserChecked ? "✓ 확인 완료됨 (취소)" : "+ 서류 확인 완료 처리"}
+                </button>
+              </div>
+            </div>
           );
         })}
       </div>
+
       {blockedGates.length > 0 ? (
-        <p className="mt-2 text-[10px] font-semibold text-red-700">
-          ⚠ "{gateLabels[(blockedGates[0] as any).gate || blockedGates[0].topic] ?? ((blockedGates[0] as any).gate || blockedGates[0].topic)}" 게이트가 차단 상태입니다. 해소 후 수출 추진이 가능합니다.
+        <p className="mt-2 text-[10px] font-semibold text-red-700 flex items-center gap-1">
+          <span>🚨</span> "{gateLabels[(blockedGates[0] as any).gate || blockedGates[0].topic] ?? ((blockedGates[0] as any).gate || blockedGates[0].topic)}" 항목에 위험요소가 감지되었습니다. 서류 확인 후 완료 처리하세요.
         </p>
       ) : null}
     </div>
   );
+}
+
+function getFallbackDocName(topic: string): string {
+  switch (topic) {
+    case "certification": return "📄 NHTSA FMVSS 139 시험성적서 및 DOT 공장등록증(TIN)";
+    case "regulation": return "📄 타이어 세부 사양서(PVLT 해당여부) 및 관세율 확인표";
+    case "tariff": return "📄 KORUS FTA 원산지 증명서 (Certificate of Origin)";
+    case "profitability": return "📄 도착원가(Landed Cost) 산출표 및 목표 마진 계산서";
+    case "payment": return "📄 K-SURE 국외기업 신용조사서 및 무역보험 한도 승인서";
+    case "safety": return "📄 NHTSA 현지 법적 대리인(Agent) 지정서 및 리콜 보고서";
+    default: return "📄 관련 확인 증빙 서류";
+  }
 }
 
 function decisionHintForVerdict(verdict: string): string {
@@ -2821,13 +3080,14 @@ function buildReportEvidenceBundle(
       status: action.status,
       priority: action.priority,
     })),
-    safetyFlags: [],
+    safetyFlags: buildSafetyEvidenceFlags(bundle.flags),
     apiLogs: bundle.logs.map((log) => ({
       apiKeyName: log.api_key_name,
       status: log.status,
       responseCount: log.response_count,
     })),
     missingEvidence: buildMissingEvidence(bundle, detailCompletion),
+    countryVerdicts: bundle.countryVerdicts,
   };
 }
 

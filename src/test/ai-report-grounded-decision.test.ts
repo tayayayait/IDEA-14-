@@ -6,7 +6,7 @@ const source = readFileSync(join(process.cwd(), "supabase/functions/ai-report-su
 
 describe("grounded AI decision report", () => {
   it("locks Gemini 3.1 Pro and uses Google Search grounding", () => {
-    expect(source).toContain('const GEMINI_REPORT_MODEL = "gemini-3.1-pro-preview";');
+    expect(source).toContain('const GEMINI_REPORT_MODEL = "gemini-3.5-flash";');
     expect(source).toContain("google_search: {}");
     expect(source).toContain("groundingMetadata");
   });
@@ -16,8 +16,8 @@ describe("grounded AI decision report", () => {
     expect(source).toContain("decisionGates");
     expect(source).toContain("officialResearch");
     expect(source).toContain("OFFICIAL WEB EVIDENCE");
-    expect(source).toContain("차단 게이트가 하나라도 있으면");
-    expect(source).toContain("핵심 게이트가 check_required");
+    expect(source).toContain("차단 게이트(status='blocked')가 하나라도 있으면");
+    expect(source).toContain("핵심 게이트(certification, regulation, tariff, safety)가 check_required");
     expect(source).toContain('decision.verdict = "hold"');
     expect(source).toContain('decision.verdict = "conditional"');
   });

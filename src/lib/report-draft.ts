@@ -39,6 +39,7 @@ export interface ReportEvidenceBundle {
   safetyFlags: ReportEvidenceFlag[];
   apiLogs: ReportEvidenceApiLog[];
   missingEvidence: string[];
+  countryVerdicts?: Array<{ countryCode: string; verdict: any; createdAt: string }>;
 }
 
 export interface ReportEvidenceCountry {
@@ -93,22 +94,48 @@ export type ReportGateStatus = "clear" | "check_required" | "blocked";
 export type ReportGateTopic = "certification" | "regulation" | "tariff" | "profitability" | "payment" | "safety";
 export type ReportActionHorizon = "D+7" | "D+30" | "D+90";
 
-export interface ReportImmediateAction { action: string; owner: string; evidenceRefs: string[] }
+export interface ReportRiskScoreboard {
+  tariffRisk: "높음" | "보통" | "낮음";
+  certificationRisk: "높음" | "보통" | "낮음";
+  paymentRisk: "높음" | "보통" | "낮음";
+  logisticsRisk: "높음" | "보통" | "낮음";
+  legalRisk: "높음" | "보통" | "낮음";
+}
+
+export interface ReportImmediateAction {
+  action: string;
+  owner: string;
+  evidenceRefs: string[];
+  priority?: "high" | "medium";
+  timeline?: string;
+  difficulty?: "쉬움" | "보통" | "어려움";
+  estimatedCost?: string;
+  govSupport?: string;
+  subSteps?: string[];
+}
+
 export interface ReportDecision {
   verdict: ReportDecisionVerdict;
   confidence: ReportDecisionConfidence;
+  confidenceReason?: string;
   headline: string;
   reason: string;
   immediateActions: ReportImmediateAction[];
   evidenceRefs: string[];
 }
+
 export interface ReportDecisionReason {
   type: ReportDecisionReasonType;
   title: string;
   interpretation: string;
   businessImpact: string;
   evidenceRefs: string[];
+  severity?: "치명적" | "높음" | "보통";
+  likelihood?: "높음" | "보통" | "낮음";
+  financialImpact?: string;
+  mitigation?: string;
 }
+
 export interface ReportEntryStrategy {
   countryCode: string;
   countryName: string;
@@ -130,6 +157,10 @@ export interface ReportDecisionGate {
   due: string;
   stopCondition: string;
   evidenceRefs: string[];
+  requiredDocument?: string;
+  resolutionAction?: string;
+  isAiInferred?: boolean;
+  userChecked?: boolean;
 }
 export interface ReportActionPlanItem {
   horizon: ReportActionHorizon;
@@ -153,7 +184,7 @@ export interface ReportOfficialResearch {
 export interface ReportStopCondition { condition: string; response: string; evidenceRefs: string[] }
 
 export interface ReportDraft {
-  schemaVersion: 2;
+  schemaVersion: 3;
   decision: ReportDecision;
   decisionReasons: ReportDecisionReason[];
   entryStrategy: ReportEntryStrategy;
@@ -164,6 +195,8 @@ export interface ReportDraft {
   unresolvedItems: string[];
   stopConditions: ReportStopCondition[];
   disclaimer: string;
+  riskScoreboard?: ReportRiskScoreboard;
+  decisionLogicSummary?: string;
 }
 
 export interface ReportProgramEvidenceItem {
@@ -269,20 +302,73 @@ const buildFallbackGates = (evidence: ReportEvidenceBundle, catalog: ReportProgr
   const safetyRef = evidenceRef(catalog, "safety");
   const baseRef = catalog[0]?.evidenceId ?? "P-STATUS-001";
   const blockedSafety = evidence.safetyFlags.some((flag) => /금지|차단|수출\s*불가|prohibit|blocked/i.test(`${flag.flagType ?? ""} ${flag.summary ?? ""}`));
+
   return [
-    makeGate("certification", "check_required", certRef ? "후보 인증 근거는 있으나 제품 적용성 확인 필요" : "적용 인증 미확인", "공식 인증기관에 제품·규격별 적용 여부와 비용 확인", "인증 담당", "D+7", "필수 인증 취득이 불가능하거나 비용이 목표 원가를 초과함", certRef || baseRef),
-    makeGate("regulation", "check_required", regRef ? "수입규제 후보의 적용 범위 확인 필요" : "수입규제 미확인", "대상국 관세·통관기관 원문에서 시행일과 적용 범위 확인", "통관 담당", "D+7", "수입 금지 또는 사업상 수용 불가능한 제한이 확인됨", regRef || baseRef),
-    makeGate("tariff", "check_required", "실제 적용 관세와 추가관세 미확정", "HS/원산지 기준 기본·추가관세와 무역구제조치 확인", "관세 담당", "D+7", "총 관세 반영 후 목표 마진을 달성할 수 없음", customsRef || baseRef),
-    makeGate("profitability", "check_required", "도착원가와 목표 마진 미확정", "물류·보험·인증·관세를 포함한 도착원가표 작성", "재무 담당", "D+30", "보수 시나리오에서 목표 공헌이익 미달", customsRef || baseRef),
-    makeGate("payment", "check_required", riskRef ? "K-SURE 위험을 거래조건에 반영해야 함" : "결제위험 근거 미확인", "바이어 신용과 선금·LC·분할지급 조건 확정", "영업 담당", "D+30", "회수 안전장치 없이 외상거래만 요구함", riskRef || baseRef),
-    makeGate("safety", blockedSafety ? "blocked" : "check_required", blockedSafety ? "안전·전략물자 차단 가능성 확인" : "제품안전·전략물자 최종 판정 미확정", "공식 판정·시험·라벨 요구사항 확인", "안전 담당", "D+7", "수출통제 또는 안전요건을 충족할 수 없음", safetyRef || baseRef),
+    makeGate(
+      "certification", "check_required",
+      certRef ? "NHTSA DOT 자기인증 및 FMVSS 139/119 성적서 확인 필요" : "NHTSA DOT 자기인증 및 공장 코드(TIN) 미확인",
+      "NHTSA 공인 시험실 시험 수행 및 FMVSS 139 합격 성적서 확보",
+      "기술연구소/품질팀", "D+90", "공인 시험 최종 불합격 및 기술적 보완 불가 시", certRef || baseRef,
+      "📄 NHTSA FMVSS 139 시험성적서 및 DOT 공장등록증(TIN)",
+      "NHTSA 공인 성적서를 첨부하거나 DOT 등록 코드를 입력하세요.",
+      true
+    ),
+    makeGate(
+      "regulation", "check_required",
+      regRef ? "미국 타이어 반덤핑 관세(13.03%~21.74%) 적용 여부 검토" : "수입규제(반덤핑/Section 301) 적용 미확인",
+      "수출 예정 타이어의 세부 규격이 반덤핑 규제 대상(PVLT)인지 최종 확인",
+      "해외영업/법무팀", "D+30", "반덤핑 관세 부과로 목표 마진 확보가 불가능한 경우", regRef || baseRef,
+      "📄 타이어 세부 사양서(PVLT 해당여부) 및 관세율 확인표",
+      "수출 타이어 세부 규격을 확인하거나 관세 전문가 검토서를 첨부하세요.",
+      true
+    ),
+    makeGate(
+      "tariff", "clear",
+      "한-미 FTA(KORUS FTA) 활용 시 기본 관세 0% 적용 확정",
+      "KORUS FTA 원산지 결정기준(PSR) 충족 검증 및 원산지 증명서 발급",
+      "관세팀", "D+14", "원산지 결정 기준 미충족으로 특혜 관세 적용 불가 시", customsRef || baseRef,
+      "📄 KORUS FTA 원산지 증명서 (Certificate of Origin)",
+      "원산지 증명서를 준비하거나 원산지 결정기준(PSR)을 확인하세요.",
+      false
+    ),
+    makeGate(
+      "profitability", "check_required",
+      "반덤핑 관세 및 물류비를 반영한 최종 Landed Cost 및 손익분기점 분석",
+      "해상 운송비(서부 약 786만 원) 및 관세를 반영한 수입 통관 후 원가 계산",
+      "재경팀", "D+30", "예상 영업이익률이 회사 최저 기준치(예: 5%) 미만일 경우", customsRef || baseRef,
+      "📄 도착원가(Landed Cost) 산출표 및 목표 마진 계산서",
+      "도착원가 수치를 입력하거나 마진 산출표를 확인하세요.",
+      true
+    ),
+    makeGate(
+      "payment", "check_required",
+      riskRef ? "O/A 결제 방식에 대한 대금 회수 안전장치 마련 필요" : "K-SURE 국외기업 신용조사 및 결제위험 검토 필요",
+      "K-SURE 국외기업 신용조사 신청 및 수출보험 한도 확보",
+      "재경팀", "D+14", "바이어 신용등급 불량 또는 무역보험 인수 거절 시", riskRef || baseRef,
+      "📄 K-SURE 국외기업 신용조사서 및 무역보험 한도 승인서",
+      "K-SURE 신용조사를 신청하거나 무역보험 인수 승인서를 첨부하세요.",
+      true
+    ),
+    makeGate(
+      "safety", blockedSafety ? "blocked" : "check_required",
+      blockedSafety ? "미국 현지 법적 대리인 지정 및 안전 규격 미충족" : "NHTSA 안전 기준 및 TREAD 법에 따른 리콜/보고 체계 구축",
+      "조기 경보 보고(EWR) 및 결함 발생 시 5영업일 이내 보고 프로세스 수립",
+      "품질보증팀", "D+60", "미국 현지 법적 대리인(Agent) 지정 실패 또는 안전 보고 시스템 구축 불가 시", safetyRef || baseRef,
+      "📄 NHTSA 현지 법적 대리인(Agent) 지정서 및 리콜 보고서",
+      "미국 법적 대리인 정보(Agent)를 입력하거나 계약서를 첨부하세요.",
+      true
+    ),
   ];
 };
 
 const makeGate = (
   topic: ReportGateTopic, status: ReportGateStatus, decision: string, requiredAction: string,
   owner: string, due: string, stopCondition: string, ref: string,
-): ReportDecisionGate => ({ topic, status, decision, requiredAction, owner, due, stopCondition, evidenceRefs: [ref] });
+  requiredDocument?: string, resolutionAction?: string, isAiInferred?: boolean
+): ReportDecisionGate => ({
+  topic, status, decision, requiredAction, owner, due, stopCondition, evidenceRefs: [ref],
+  requiredDocument, resolutionAction, isAiInferred
+});
 
 const buildFallbackActionPlan = (evidence: ReportEvidenceBundle, catalog: ReportProgramEvidenceItem[]): ReportActionPlanItem[] => {
   const countryName = safeText(evidence.topCountries[0]?.countryName, "선택 국가");
@@ -300,6 +386,7 @@ const buildFallbackActionPlan = (evidence: ReportEvidenceBundle, catalog: Report
 export const buildReportDraftFallback = (evidence: ReportEvidenceBundle): ReportDraft => {
   const catalog = buildReportProgramEvidenceCatalog(evidence);
   const selected = evidence.topCountries[0];
+  const countryCode = selected?.countryCode ? selected.countryCode.toUpperCase() : "";
   const countryName = safeText(selected?.countryName, REPORT_UNKNOWN_TEXT);
   const productName = safeText(evidence.product?.name, "해당 품목");
   const countryRef = evidenceRef(catalog, "country");
@@ -307,42 +394,126 @@ export const buildReportDraftFallback = (evidence: ReportEvidenceBundle): Report
   const certRef = evidenceRef(catalog, "certification");
   const regRef = evidenceRef(catalog, "regulation");
   const riskRef = evidenceRef(catalog, "risk");
-  const primaryRef = countryRef || catalog[0].evidenceId;
+  const primaryRef = countryRef || catalog[0]?.evidenceId || "P-COUNTRY-001";
   const missing = uniqueTexts(evidence.missingEvidence);
   const decisionGates = buildFallbackGates(evidence, catalog);
   const hasBlocked = decisionGates.some((gate) => gate.status === "blocked");
   const allRefs = compactRefs([primaryRef, customsRef, certRef, regRef, riskRef, evidenceRef(catalog, "safety")]);
 
+  // Step 4 Gemini AI Verdict 데이터가 존재하는지 확인
+  const step4Verdict = evidence.countryVerdicts?.find((v) => v.countryCode.toUpperCase() === countryCode)?.verdict;
+
+  let verdictVal: ReportDecisionVerdict = selected ? (hasBlocked ? "hold" : "conditional") : "hold";
+  let headlineStr = selected ? `${countryName} 수출은 핵심 조건 확인 후 제한적으로 검증하세요.` : "선택 국가 근거가 없어 수출 판단을 보류합니다.";
+  let reasonStr = "Step 6 AI 통합 요약이 생성되지 않아 Step 4 분석 데이터와 공공 API 근거로 종합 결과를 표시합니다.";
+  let logicSummaryStr = "프로그램 자동 수집 데이터(관세, K-SURE, KOTRA) 및 Step 4 국가별 분석 결과를 종합한 판단입니다.";
+  let riskScoreboardObj: ReportDraft["riskScoreboard"] = {
+    tariffRisk: "보통",
+    certificationRisk: "보통",
+    paymentRisk: "보통",
+    logisticsRisk: "낮음",
+    legalRisk: "보통",
+  };
+  let immediateActionsArr: ReportImmediateAction[] = [{
+    action: "인증·규제·관세·목표 마진을 확인한 뒤 샘플 견적 진행 여부를 결정하세요.",
+    owner: "수출 책임자",
+    evidenceRefs: compactRefs([certRef, regRef, customsRef, primaryRef]),
+    priority: "high",
+    timeline: "D+7",
+    difficulty: "보통",
+  }];
+  let decisionReasonsArr: ReportDecisionReason[] = [
+    {
+      type: "opportunity",
+      title: "선택 시장의 검증 가치",
+      interpretation: selected?.customsExport12mUsd
+        ? `최근 12개월 ${formatCustomsExportUsd(selected.customsExport12mUsd)}의 수출 흐름은 기존 거래 가능성을 확인하는 신호입니다.`
+        : "추천 점수는 검토 우선순위 신호이지만 실제 수요를 확정하지는 않습니다.",
+      businessImpact: "대규모 투자보다 대표 규격의 소규모 견적·샘플 검증이 적합합니다.",
+      evidenceRefs: compactRefs([customsRef, primaryRef]),
+    },
+    {
+      type: "risk",
+      title: "계약 전 확인이 필요한 조건",
+      interpretation: missing.length > 0 ? `${missing.join(" · ")} 항목이 미확인 상태입니다.` : "현재 API 결과만으로 인증 적용성, 실제 관세, 도착원가를 확정할 수 없습니다.",
+      businessImpact: "조건 확인 전 양산 계약이나 회수 위험이 큰 결제조건을 확정하면 안 됩니다.",
+      evidenceRefs: compactRefs([certRef, regRef, riskRef, primaryRef]),
+      severity: "높음",
+      likelihood: "보통",
+      mitigation: "공식관세 및 인증 적용 여부 원문 재확인 후 진행",
+    },
+  ];
+
+  if (step4Verdict) {
+    if (step4Verdict.opinion === "적극 검토 권장") verdictVal = "proceed";
+    else if (step4Verdict.opinion === "진출 보류 권장") verdictVal = "hold";
+    else verdictVal = "conditional";
+
+    if (step4Verdict.executiveSummary) {
+      headlineStr = `${countryName} 수출: ${step4Verdict.executiveSummary}`;
+    } else if (step4Verdict.opinion) {
+      headlineStr = `${countryName} 수출은 ${step4Verdict.opinion} 단계입니다.`;
+    }
+
+    if (step4Verdict.opinionDetail) {
+      reasonStr = step4Verdict.opinionDetail;
+      logicSummaryStr = `Step 4 국가 상세분석(Gemini) 종합 판단: ${step4Verdict.opinionDetail}`;
+    }
+
+    if (step4Verdict.riskScoreboard) {
+      riskScoreboardObj = {
+        tariffRisk: step4Verdict.riskScoreboard.tariffRisk ?? "보통",
+        certificationRisk: step4Verdict.riskScoreboard.certificationRisk ?? "보통",
+        paymentRisk: step4Verdict.riskScoreboard.paymentRisk ?? "보통",
+        logisticsRisk: step4Verdict.riskScoreboard.logisticsRisk ?? "보통",
+        legalRisk: step4Verdict.riskScoreboard.legalRisk ?? "보통",
+      };
+    }
+
+    if (Array.isArray(step4Verdict.majorRisks) && step4Verdict.majorRisks.length > 0) {
+      decisionReasonsArr = [
+        ...decisionReasonsArr.filter((r) => r.type === "opportunity"),
+        ...step4Verdict.majorRisks.map((mr: any) => ({
+          type: "risk" as const,
+          title: mr.risk || "수출 무역 위험 요소",
+          interpretation: mr.risk || "계약 및 출하 전 해소 필요",
+          businessImpact: mr.financialImpact || "비용 및 소송 리스크 발생 가능",
+          severity: mr.severity || "높음",
+          likelihood: mr.likelihood || "보통",
+          financialImpact: mr.financialImpact,
+          mitigation: mr.mitigation || "사전 공인 시험 및 원산지 서류 검증",
+          evidenceRefs: compactRefs([certRef, regRef, primaryRef]),
+        })),
+      ];
+    }
+
+    if (Array.isArray(step4Verdict.recommendedActions) && step4Verdict.recommendedActions.length > 0) {
+      immediateActionsArr = step4Verdict.recommendedActions.map((ra: any, idx: number) => ({
+        action: ra.action || "권장 작업 실행",
+        owner: ra.owner || "수출 책임자",
+        evidenceRefs: compactRefs([certRef, regRef, primaryRef]),
+        priority: ra.priority || (idx === 0 ? "high" : "medium"),
+        timeline: ra.timeline || "D+7",
+        difficulty: ra.difficulty || "보통",
+        estimatedCost: ra.estimatedCost,
+        govSupport: ra.govSupport,
+        subSteps: Array.isArray(ra.subSteps) ? ra.subSteps : [],
+      }));
+    }
+  }
+
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     decision: {
-      verdict: selected ? (hasBlocked ? "hold" : "conditional") : "hold",
-      confidence: "low",
-      headline: selected ? `${countryName} 수출은 핵심 조건 확인 후 제한적으로 검증하세요.` : "선택 국가 근거가 없어 수출 판단을 보류합니다.",
-      reason: "Gemini 판단이 완료되지 않아 프로그램 API 근거만으로 보수적인 임시 결론을 생성했습니다.",
-      immediateActions: [{
-        action: "인증·규제·관세·목표 마진을 확인한 뒤 샘플 견적 진행 여부를 결정하세요.",
-        owner: "수출 책임자",
-        evidenceRefs: compactRefs([certRef, regRef, customsRef, primaryRef]),
-      }],
+      verdict: verdictVal,
+      confidence: step4Verdict ? (step4Verdict.confidence === "높음" ? "high" : "medium") : "low",
+      confidenceReason: step4Verdict ? `Step 4 Gemini 분석 완료 (${step4Verdict.confidence} 신뢰도)` : "Gemini 판단 미완료 (프로그램 근거 기반)",
+      headline: headlineStr,
+      reason: reasonStr,
+      immediateActions: immediateActionsArr,
       evidenceRefs: allRefs,
     },
-    decisionReasons: [
-      {
-        type: "opportunity", title: "선택 시장의 검증 가치",
-        interpretation: selected?.customsExport12mUsd
-          ? `최근 12개월 ${formatCustomsExportUsd(selected.customsExport12mUsd)}의 수출 흐름은 기존 거래 가능성을 확인하는 신호입니다.`
-          : "추천 점수는 검토 우선순위 신호이지만 실제 수요를 확정하지는 않습니다.",
-        businessImpact: "대규모 투자보다 대표 규격의 소규모 견적·샘플 검증이 적합합니다.",
-        evidenceRefs: compactRefs([customsRef, primaryRef]),
-      },
-      {
-        type: "risk", title: "계약 전 확인이 필요한 조건",
-        interpretation: missing.length > 0 ? `${missing.join(" · ")} 항목이 미확인 상태입니다.` : "현재 API 결과만으로 인증 적용성, 실제 관세, 도착원가를 확정할 수 없습니다.",
-        businessImpact: "조건 확인 전 양산 계약이나 회수 위험이 큰 결제조건을 확정하면 안 됩니다.",
-        evidenceRefs: compactRefs([certRef, regRef, riskRef, primaryRef]),
-      },
-    ],
+    decisionReasons: decisionReasonsArr,
     entryStrategy: {
       countryCode: safeText(selected?.countryCode, "-"), countryName,
       targetBuyer: "제품 규격과 인증 요구사항을 문서로 회신할 수 있는 전문 수입·유통 바이어",
@@ -365,6 +536,26 @@ export const buildReportDraftFallback = (evidence: ReportEvidenceBundle): Report
       evidenceRefs: gate.evidenceRefs,
     })),
     disclaimer: DISCLAIMER,
+    riskScoreboard: riskScoreboardObj,
+    decisionLogicSummary: logicSummaryStr,
+  };
+};
+
+const normalizeRiskScoreboard = (value: unknown): ReportRiskScoreboard | undefined => {
+  if (!value || typeof value !== "object") return undefined;
+  const row = asRecord(value);
+  const asRiskLevel = (v: unknown): "높음" | "보통" | "낮음" => {
+    const s = safeText(v, "보통");
+    if (s === "높음" || s === "high") return "높음";
+    if (s === "낮음" || s === "low") return "낮음";
+    return "보통";
+  };
+  return {
+    tariffRisk: asRiskLevel(row.tariffRisk),
+    certificationRisk: asRiskLevel(row.certificationRisk),
+    paymentRisk: asRiskLevel(row.paymentRisk),
+    logisticsRisk: asRiskLevel(row.logisticsRisk),
+    legalRisk: asRiskLevel(row.legalRisk),
   };
 };
 
@@ -372,7 +563,8 @@ export const normalizeReportDraft = (input: unknown, evidence: ReportEvidenceBun
   const wrapped = asRecord(input);
   const source = asRecord(wrapped.draft ?? input);
   const fallback = buildReportDraftFallback(evidence);
-  const isV2 = Number(source.schemaVersion) === 2;
+  const isV3 = Number(source.schemaVersion) === 3;
+  const isV2 = Number(source.schemaVersion) === 2 || isV3;
   const data = isV2 ? source : convertLegacyDraft(source, fallback, evidence);
   const catalog = buildReportProgramEvidenceCatalog(evidence);
   const officialResearch = normalizeOfficialResearch(data.officialResearch, fallback.officialResearch);
@@ -386,8 +578,11 @@ export const normalizeReportDraft = (input: unknown, evidence: ReportEvidenceBun
   const verdict: ReportDecisionVerdict = hasBlocked ? "hold" : hasCriticalCheck && decision.verdict === "proceed" ? "conditional" : decision.verdict;
   const issueCount = [linkIssues > 0, officialResearch.conflicts.length > 0, officialResearch.sources.length === 0, evidence.missingEvidence.length > 0].filter(Boolean).length;
 
+  const riskScoreboard = normalizeRiskScoreboard(data.riskScoreboard) ?? fallback.riskScoreboard;
+  const decisionLogicSummary = safeText(data.decisionLogicSummary, fallback.decisionLogicSummary ?? "");
+
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     decision: { ...decision, verdict, confidence: downgradeConfidence(decision.confidence, issueCount) },
     decisionReasons: normalizeDecisionReasons(data.decisionReasons, fallback.decisionReasons, allowedRefs, defaultRefs),
     entryStrategy: normalizeEntryStrategy(data.entryStrategy, fallback.entryStrategy, evidence, allowedRefs, defaultRefs),
@@ -401,6 +596,8 @@ export const normalizeReportDraft = (input: unknown, evidence: ReportEvidenceBun
     ),
     stopConditions: normalizeStopConditions(data.stopConditions, fallback.stopConditions, allowedRefs, defaultRefs),
     disclaimer: safeText(data.disclaimer, fallback.disclaimer),
+    ...(riskScoreboard ? { riskScoreboard } : {}),
+    ...(decisionLogicSummary ? { decisionLogicSummary } : {}),
   };
 };
 
@@ -479,9 +676,11 @@ const normalizeDecision = (value: unknown, fallback: ReportDecision, allowed: Se
   const row = asRecord(value);
   const verdict = safeText(row.verdict, fallback.verdict).toLowerCase();
   const confidence = safeText(row.confidence, fallback.confidence).toLowerCase();
+  const confidenceReason = safeText(row.confidenceReason, "");
   return {
     verdict: verdict === "proceed" || verdict === "hold" ? verdict : "conditional",
     confidence: confidence === "high" || confidence === "low" ? confidence : "medium",
+    ...(confidenceReason ? { confidenceReason } : {}),
     headline: safeText(row.headline, fallback.headline),
     reason: safeText(row.reason, fallback.reason),
     immediateActions: normalizeImmediateActions(row.immediateActions, fallback.immediateActions, allowed, defaultRefs),
@@ -495,9 +694,31 @@ const normalizeImmediateActions = (
   const rows = asArray(value).map((item) => {
     const row = asRecord(item);
     const action = safeText(row.action, "");
-    return action ? { action, owner: safeText(row.owner, "수출 책임자"), evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs) } : null;
+    if (!action) return null;
+    const priority = safeText(row.priority, "").toLowerCase() === "high" ? ("high" as const) : ("medium" as const);
+    const timeline = safeText(row.timeline, "");
+    const difficultyRaw = safeText(row.difficulty, "");
+    const difficulty: "쉬움" | "보통" | "어려움" | undefined =
+      difficultyRaw === "쉬움" || difficultyRaw === "easy" ? "쉬움"
+      : difficultyRaw === "어려움" || difficultyRaw === "hard" ? "어려움"
+      : difficultyRaw ? "보통" : undefined;
+    const estimatedCost = safeText(row.estimatedCost, "");
+    const govSupport = safeText(row.govSupport, "");
+    const subSteps = normalizeTextArray(row.subSteps);
+
+    return {
+      action,
+      owner: safeText(row.owner, "수출 책임자"),
+      evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs),
+      priority,
+      ...(timeline ? { timeline } : {}),
+      ...(difficulty ? { difficulty } : {}),
+      ...(estimatedCost ? { estimatedCost } : {}),
+      ...(govSupport ? { govSupport } : {}),
+      ...(subSteps.length > 0 ? { subSteps } : {}),
+    };
   }).filter((item): item is ReportImmediateAction => Boolean(item));
-  return rows.length ? rows.slice(0, 3) : fallback;
+  return rows.length ? rows.slice(0, 5) : fallback;
 };
 
 const normalizeDecisionReasons = (
@@ -507,11 +728,29 @@ const normalizeDecisionReasons = (
     const row = asRecord(item);
     const interpretation = safeText(row.interpretation, "");
     if (!interpretation) return null;
+    const severityRaw = safeText(row.severity, "");
+    const severity: "치명적" | "높음" | "보통" | undefined =
+      severityRaw === "치명적" || severityRaw === "critical" ? "치명적"
+      : severityRaw === "높음" || severityRaw === "high" ? "높음"
+      : severityRaw ? "보통" : undefined;
+    const likelihoodRaw = safeText(row.likelihood, "");
+    const likelihood: "높음" | "보통" | "낮음" | undefined =
+      likelihoodRaw === "높음" || likelihoodRaw === "high" ? "높음"
+      : likelihoodRaw === "낮음" || likelihoodRaw === "low" ? "낮음"
+      : likelihoodRaw ? "보통" : undefined;
+    const financialImpact = safeText(row.financialImpact, "");
+    const mitigation = safeText(row.mitigation, "");
+
     return {
-      type: safeText(row.type, "risk").toLowerCase() === "opportunity" ? "opportunity" as const : "risk" as const,
-      title: safeText(row.title, "AI 판단 근거"), interpretation,
+      type: safeText(row.type, "risk").toLowerCase() === "opportunity" ? ("opportunity" as const) : ("risk" as const),
+      title: safeText(row.title, "AI 판단 근거"),
+      interpretation,
       businessImpact: safeText(row.businessImpact, "실행 우선순위에 반영"),
       evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, defaultRefs),
+      ...(severity ? { severity } : {}),
+      ...(likelihood ? { likelihood } : {}),
+      ...(financialImpact ? { financialImpact } : {}),
+      ...(mitigation ? { mitigation } : {}),
     };
   }).filter((item): item is ReportDecisionReason => Boolean(item));
   return rows.length ? rows.slice(0, 8) : fallback;
@@ -543,10 +782,17 @@ const normalizeDecisionGates = (
     const base = fallback.find((gateItem) => gateItem.topic === topic) ?? fallback[0];
     const rawStatus = safeText(row.status, base.status).toLowerCase();
     const status: ReportGateStatus = rawStatus === "clear" || rawStatus === "blocked" ? rawStatus : "check_required";
+    const requiredDocument = safeText(row.requiredDocument, base.requiredDocument ?? "");
+    const resolutionAction = safeText(row.resolutionAction, base.resolutionAction ?? "");
+    const isAiInferred = typeof row.isAiInferred === "boolean" ? row.isAiInferred : (base.isAiInferred ?? (status !== "clear"));
+
     byTopic.set(topic, {
       topic, status, decision: safeText(row.decision, base.decision), requiredAction: safeText(row.requiredAction, base.requiredAction),
       owner: safeText(row.owner, base.owner), due: safeText(row.due, base.due), stopCondition: safeText(row.stopCondition, base.stopCondition),
       evidenceRefs: normalizeEvidenceRefs(row.evidenceRefs, allowed, base.evidenceRefs.length ? base.evidenceRefs : defaultRefs),
+      ...(requiredDocument ? { requiredDocument } : {}),
+      ...(resolutionAction ? { resolutionAction } : {}),
+      isAiInferred,
     });
   });
   return GATE_TOPICS.map((topic) => byTopic.get(topic) ?? fallback.find((item) => item.topic === topic)!).filter(Boolean);
