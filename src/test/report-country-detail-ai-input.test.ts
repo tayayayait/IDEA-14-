@@ -131,6 +131,6 @@ describe("report country-detail evidence for AI", () => {
   });
 
   it("versions the evidence hash so saved reports are regenerated with detailed evidence", () => {
-    expect(buildReportEvidenceHash(baseEvidence())).toMatch(/^ev_cd1_[a-f0-9]{8}$/);
+    expect(buildReportEvidenceHash(baseEvidence())).toMatch(/^ev_cd2_[a-f0-9]{8}$/);
   });
 });

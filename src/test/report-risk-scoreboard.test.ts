@@ -17,15 +17,15 @@ const mockEvidenceBundle: ReportEvidenceBundle = {
   missingEvidence: [],
 };
 
-describe("ReportDraft v3 확장 및 riskScoreboard 검증", () => {
-  test("buildReportDraftFallback이 schemaVersion 3 및 기본 riskScoreboard를 생성해야 함", () => {
+describe("ReportDraft v4 확장 및 riskScoreboard 검증", () => {
+  test("buildReportDraftFallback이 schemaVersion 4 및 기본 riskScoreboard를 생성해야 함", () => {
     const fallback = buildReportDraftFallback(mockEvidenceBundle);
-    expect(fallback.schemaVersion).toBe(3);
+    expect(fallback.schemaVersion).toBe(4);
     expect(fallback.riskScoreboard).toBeDefined();
     expect(fallback.riskScoreboard?.tariffRisk).toBe("보통");
     expect(fallback.riskScoreboard?.certificationRisk).toBe("보통");
     expect(fallback.riskScoreboard?.paymentRisk).toBe("보통");
-    expect(fallback.decisionLogicSummary).toContain("프로그램 자동 수집 데이터");
+    expect(fallback.decisionLogicSummary).toContain("1~4단계 프로그램 데이터");
   });
 
   test("normalizeReportDraft가 v3 입력 데이터의 riskScoreboard 및 risk deep-dive 필드를 정상 파싱해야 함", () => {
@@ -96,7 +96,7 @@ describe("ReportDraft v3 확장 및 riskScoreboard 검증", () => {
 
     const normalized = normalizeReportDraft(rawV3Input, mockEvidenceBundle);
 
-    expect(normalized.schemaVersion).toBe(3);
+    expect(normalized.schemaVersion).toBe(4);
     expect(normalized.riskScoreboard?.certificationRisk).toBe("높음");
     expect(normalized.riskScoreboard?.tariffRisk).toBe("낮음");
     expect(normalized.decisionLogicSummary).toBe("UN Comtrade 수입규모 1위 국가이나 DOT 규제 미충족 시 반송 리스크가 큼");
@@ -117,7 +117,7 @@ describe("ReportDraft v3 확장 및 riskScoreboard 검증", () => {
     expect(riskReason?.mitigation).toBe("계약 전 미국 인정 시험소(NHTSA 등록) 성적서 사전 확보");
   });
 
-  test("v2 레거시 데이터 로드 시 안전하게 v3으로 업그레이드되며 fallback 값이 적용되어야 함", () => {
+  test("v2 레거시 데이터 로드 시 안전하게 v4로 업그레이드되며 fallback 값이 적용되어야 함", () => {
     const rawV2Input = {
       schemaVersion: 2,
       decision: {
@@ -140,9 +140,9 @@ describe("ReportDraft v3 확장 및 riskScoreboard 검증", () => {
     };
 
     const normalized = normalizeReportDraft(rawV2Input, mockEvidenceBundle);
-    expect(normalized.schemaVersion).toBe(3);
+    expect(normalized.schemaVersion).toBe(4);
     expect(normalized.riskScoreboard).toBeDefined();
     expect(normalized.riskScoreboard?.tariffRisk).toBe("보통");
-    expect(normalized.decisionLogicSummary).toContain("프로그램 자동 수집 데이터");
+    expect(normalized.decisionLogicSummary).toContain("1~4단계 프로그램 데이터");
   });
 });

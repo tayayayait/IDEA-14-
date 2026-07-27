@@ -31,7 +31,7 @@ describe("decision-first report draft v2", () => {
   it("builds a selected-country v2 fallback without legacy or news fields", () => {
     const draft = buildReportDraftFallback(evidence);
 
-    expect(draft.schemaVersion).toBe(2);
+    expect(draft.schemaVersion).toBe(4);
     expect(draft.decision.verdict).toBe("conditional");
     expect(draft.entryStrategy.countryCode).toBe("US");
     expect(draft.actionPlan.map((item) => item.horizon)).toEqual(expect.arrayContaining(["D+7", "D+30", "D+90"]));
@@ -120,7 +120,7 @@ describe("decision-first report draft v2", () => {
       actionPlan90Days: ["파일럿 성과 재평가"],
     }, evidence);
 
-    expect(draft.schemaVersion).toBe(2);
+    expect(draft.schemaVersion).toBe(4);
     expect(draft.decision.headline).toBe("기존 AI 요약");
     expect(draft.decision.reason).toContain("인증과 결제조건");
     expect(draft.entryStrategy.primaryChannel).toContain("샘플");

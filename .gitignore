@@ -42,5 +42,17 @@ network-phase2.txt
 # Supabase temp
 supabase/.temp/
 
+# Generated presentation inspection and temporary work files
+output/_slide4_work/
+output/*.inspect.ndjson
+output/~$*.pptx
+output/제품서비스개발_유창재/
+output/*_montage.png
+tmp/*
+
+# Large media assets are stored through Git LFS
+*.pptx filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+
 
 .vercel

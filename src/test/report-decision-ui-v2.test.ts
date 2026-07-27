@@ -7,15 +7,26 @@ const activeRender = source.slice(source.indexOf("export default function Step6R
 const decisionContent = source.slice(source.indexOf("function DecisionReportContent"), source.indexOf("async function saveReportDraft"));
 
 describe("decision report v2 UI", () => {
-  it("uses the same five-section content for mobile and PDF", () => {
+  it("uses the same consolidated decision content for mobile and PDF", () => {
     expect(activeRender.match(/<DecisionReportContent/g)?.length).toBe(2);
-    expect(decisionContent).toContain('data-report-schema="decision-v2"');
+    expect(decisionContent).toContain('data-report-schema="decision-v4"');
     [
-      "1. 기본 정보",
-      "2. AI 최종판단",
+      "1. 1~4단계 통합 요약",
+      "2. AI 종합 판단",
       "3. AI 추천 진입전략",
-      "4. 근거 보기",
+      "4. 실질 행동 가이드",
+      "5. 근거 보기",
     ].forEach((title) => expect(decisionContent).toContain(title));
+  });
+
+  it("shows each analysis stage and turns the AI plan into accountable actions", () => {
+    ["기업·공장", "제품·HS 코드", "후보국 추천", "국가 상세"].forEach((label) => {
+      expect(decisionContent).toContain(label);
+    });
+    ["D+7", "D+30", "D+90", "담당", "산출물", "완료 기준"].forEach((label) => {
+      expect(decisionContent).toContain(label);
+    });
+    expect(decisionContent).toContain("draft.actionPlan");
   });
 
   it("shows distinct success, partial, fallback, and stale states", () => {
@@ -25,13 +36,13 @@ describe("decision report v2 UI", () => {
     expect(decisionContent).toContain("저장 리포트 근거 변경 · 재생성 필요");
   });
 
-  it("does not render legacy duplicate, news, Top 3, or separate trade-office sections", () => {
+  it("does not render legacy duplicate, news, or separate trade-office sections", () => {
     expect(activeRender).not.toContain("<ReportNewsImpactPrint");
     expect(activeRender).not.toContain("<ExecutiveSummaryPanel");
     expect(activeRender).not.toContain("<ReportFeasibilityPrint");
     expect(activeRender).not.toContain("<TradeOfficeActionsAccordion");
     expect(activeRender).not.toContain("<CountryCautionCards");
-    expect(decisionContent).not.toContain("Top 3");
+    expect(decisionContent).toContain("bundle.countries.slice(0, 3)");
   });
 
   it("keeps API values and official sources in the evidence appendix", () => {

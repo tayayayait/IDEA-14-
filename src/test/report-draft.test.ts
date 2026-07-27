@@ -654,6 +654,6 @@ describe.skip("legacy report draft v1 (removed by decision report v2)", () => {
 
     expect(first).toBe(same);
     expect(first).not.toBe(changed);
-    expect(first).toMatch(/^ev_cd1_[a-f0-9]{8}$/);
+    expect(first).toMatch(/^ev_cd2_[a-f0-9]{8}$/);
   });
 });
