@@ -105,6 +105,17 @@ describe("CountryDecisionDashboard 사용자용 근거 표시", () => {
     expect(decisionValueLabel("countryGrade")).toBe("국가신용등급");
     expect(decisionValueLabel("isReported")).toBe("한국산 실적 신고값");
   });
+
+  it("renders destination tariff detail without US or tire-specific UI hardcoding", () => {
+    expect(dashboardSource).toContain("buildDestinationTariffEvidence");
+    expect(dashboardSource).toContain("DestinationTariffCard");
+    expect(dashboardSource).toContain("목적국 세번 후보");
+    expect(dashboardSource).toContain("dataModeLabel");
+    expect(dashboardSource).toContain("candidate.hierarchyDescription");
+    expect(dashboardSource).not.toContain('countryCode === "US"');
+    expect(dashboardSource).not.toContain("래디얼 타이어");
+    expect(dashboardSource).not.toContain("림 직경");
+  });
 });
 
 describe("CountryDecisionDashboard 좁은 본문 가독성", () => {

@@ -229,6 +229,7 @@ const COUNTRY_ROWS: SeedCountry[] = [
   { code: "BR", name: "Brazil" },
   { code: "CN", name: "China" },
   { code: "DE", name: "Germany" },
+  { code: "GB", name: "United Kingdom" },
   { code: "ID", name: "Indonesia" },
   { code: "IN", name: "India" },
   { code: "JP", name: "Japan" },
@@ -250,6 +251,7 @@ export const COUNTRY_ALIAS_MAP: Record<string, string[]> = {
   BR: ["Brazil", "\uBE0C\uB77C\uC9C8"],
   CN: ["China", "PRC", "People's Republic of China", "Zhongguo", "\uC911\uAD6D", "\uC911\uD654\uC778\uBBFC\uACF5\uD654\uAD6D"],
   DE: ["Germany", "Deutschland", "\uB3C5\uC77C"],
+  GB: ["United Kingdom", "Great Britain", "Britain", "UK", "\uC601\uAD6D"],
   ID: ["Indonesia", "\uC778\uB3C4\uB124\uC2DC\uC544"],
   IN: ["India", "\uC778\uB3C4"],
   JP: ["Japan", "Nippon", "\uC77C\uBCF8"],
@@ -2298,7 +2300,8 @@ function cleanText(value: string): string {
 function extractExplicitCountryCodes(text: string): string[] {
   const source = String(text ?? "");
   const matches = source.match(/\b[A-Z]{2}\b/g) ?? [];
-  return dedupeStrings(matches.filter((code) => code in COUNTRY_NAME_BY_CODE));
+  const normalized = matches.map((code) => code === "UK" ? "GB" : code);
+  return dedupeStrings(normalized.filter((code) => code in COUNTRY_NAME_BY_CODE));
 }
 
 let ALIAS_REGEX: RegExp | null = null;

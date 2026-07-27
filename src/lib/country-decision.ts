@@ -230,7 +230,8 @@ export function buildDecisionSummary({
 }
 
 export function buildDefaultActionItems(facts: DecisionFact[]): DecisionActionItem[] {
-  const tariffFact = facts.find((fact) => fact.factKey?.startsWith("tariff_fta:wits_"));
+  const tariffFact = facts.find((fact) => fact.factKey === "tariff_fta:national_tariff_candidates")
+    ?? facts.find((fact) => fact.factKey?.startsWith("tariff_fta:wits_"));
   const customsFact = facts.find(
     (fact) => fact.category === "customs_requirement" && fact.status === "confirmed",
   );

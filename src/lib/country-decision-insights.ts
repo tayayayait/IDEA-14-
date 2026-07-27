@@ -27,29 +27,49 @@ export interface LogisticsEvidence {
   referenceDate: string | null;
 }
 
-export interface UsitcHtsCandidate {
+export type DestinationTariffDataMode = "live_api" | "official_snapshot" | "aggregate_fallback";
+
+export interface DestinationTariffCandidate {
+  tariffCode: string;
+  /** 이전 USITC 저장 데이터와 보고서 호환용 별칭 */
   htsCode: string;
   statisticalSuffix: string;
   description: string;
+  hierarchyDescription: string;
   indent: number | null;
   units: string[];
   footnotes: string[];
   generalRate: string;
+  mfnRate: string;
+  koreaPreferentialRate: string;
   specialRate: string;
   otherRate: string;
+  otherRateLabel: string;
+  measures: string[];
+  conditions: string[];
   rateInheritedFrom: string | null;
   codeLevel: number;
   isFinalCandidate: boolean;
 }
-export interface UsitcHtsEvidence {
-  candidates: UsitcHtsCandidate[];
-  primaryCandidates: UsitcHtsCandidate[];
-  remainingCandidates: UsitcHtsCandidate[];
-  additionalMeasures: UsitcHtsCandidate[];
+
+export interface DestinationTariffEvidence {
+  countryCode: string;
+  countryName: string;
+  nomenclature: string;
+  dataMode: DestinationTariffDataMode;
+  finalCodeDigits: number;
+  candidates: DestinationTariffCandidate[];
+  primaryCandidates: DestinationTariffCandidate[];
+  remainingCandidates: DestinationTariffCandidate[];
+  additionalMeasures: DestinationTariffCandidate[];
   specificationHint: string | null;
   sourceName: string;
+  sourceUrl: string | null;
   referenceDate: string | null;
 }
+
+export type UsitcHtsCandidate = DestinationTariffCandidate;
+export type UsitcHtsEvidence = DestinationTariffEvidence;
 
 export interface DecisionServiceGroups {
   marketOpportunity: DecisionFact[];
@@ -131,29 +151,44 @@ export function buildLogisticsEvidence(facts: DecisionFact[]): LogisticsEvidence
   };
 }
 
-export function buildUsitcHtsEvidence(facts: DecisionFact[]): UsitcHtsEvidence | null {
+export function buildDestinationTariffEvidence(facts: DecisionFact[]): DestinationTariffEvidence | null {
   const fact = facts.find((item) => (
     !item.isStale &&
-    item.factKey === "tariff_fta:usitc_hts_candidates" &&
+    (
+      item.factKey === "tariff_fta:national_tariff_candidates" ||
+      item.factKey === "tariff_fta:usitc_hts_candidates"
+    ) &&
     item.category === "tariff_fta"
   ));
   if (!fact) return null;
 
   const value = asRecord(fact.value);
-  const candidates = prioritizeUsitcHtsCandidates(usitcCandidates(value.candidates));
+  const finalCodeDigits = positiveInteger(value.finalCodeDigits) ?? 10;
+  const candidates = prioritizeDestinationTariffCandidates(destinationTariffCandidates(value.candidates, finalCodeDigits));
   const finalCandidates = candidates.filter((candidate) => candidate.isFinalCandidate);
   const primaryCandidates = (finalCandidates.length ? finalCandidates : candidates).slice(0, 4);
-  const primaryKeys = new Set(primaryCandidates.map((candidate) => candidate.htsCode));
+  const primaryKeys = new Set(primaryCandidates.map((candidate) => candidate.tariffCode));
+  const legacyUsitc = fact.factKey === "tariff_fta:usitc_hts_candidates";
 
   return {
+    countryCode: text(value.countryCode) || (legacyUsitc ? "US" : ""),
+    countryName: text(value.countryName) || (legacyUsitc ? "미국" : "목적국"),
+    nomenclature: text(value.nomenclature) || (legacyUsitc ? "US HTS" : "목적국 관세표"),
+    dataMode: destinationTariffDataMode(value.dataMode) || (legacyUsitc ? "live_api" : "official_snapshot"),
+    finalCodeDigits,
     candidates,
     primaryCandidates,
-    remainingCandidates: candidates.filter((candidate) => !primaryKeys.has(candidate.htsCode)),
-    additionalMeasures: usitcCandidates(value.additionalMeasures),
+    remainingCandidates: candidates.filter((candidate) => !primaryKeys.has(candidate.tariffCode)),
+    additionalMeasures: destinationTariffCandidates(value.additionalMeasures, finalCodeDigits),
     specificationHint: text(value.specificationHint) || null,
     sourceName: fact.sourceName,
+    sourceUrl: fact.sourceUrl,
     referenceDate: fact.referenceDate,
   };
+}
+
+export function buildUsitcHtsEvidence(facts: DecisionFact[]): UsitcHtsEvidence | null {
+  return buildDestinationTariffEvidence(facts);
 }
 
 export function groupDecisionFactsForService(facts: DecisionFact[]): DecisionServiceGroups {
@@ -207,35 +242,55 @@ function boundedLpi(value: unknown): number | null {
   return parsed != null && parsed >= 0 && parsed <= 5 ? round2(parsed) : null;
 }
 
-function usitcCandidates(value: unknown): UsitcHtsCandidate[] {
+function destinationTariffCandidates(value: unknown, finalCodeDigits: number): DestinationTariffCandidate[] {
   if (!Array.isArray(value)) return [];
   return value.flatMap((entry) => {
     const row = asRecord(entry);
-    const htsCode = text(row.htsCode);
-    if (!htsCode) return [];
-    const codeLevel = htsCode.replace(/\D/g, "").length;
+    const tariffCode = text(row.tariffCode) || text(row.htsCode);
+    if (!tariffCode) return [];
+    const codeLevel = tariffCode.replace(/\D/g, "").length;
+    const koreaPreferentialRate = text(row.koreaPreferentialRate) || text(row.specialRate) || "-";
+    const declarable = typeof row.declarable === "boolean" ? row.declarable : codeLevel === finalCodeDigits;
     return [{
-      htsCode,
+      tariffCode,
+      htsCode: tariffCode,
       statisticalSuffix: text(row.statisticalSuffix),
       description: text(row.description),
+      hierarchyDescription: text(row.hierarchyDescription),
       indent: finiteNumber(row.indent),
       units: stringArray(row.units),
       footnotes: stringArray(row.footnotes),
       generalRate: text(row.generalRate) || "-",
-      specialRate: text(row.specialRate) || "-",
+      mfnRate: text(row.mfnRate) || text(row.generalRate) || "-",
+      koreaPreferentialRate,
+      specialRate: koreaPreferentialRate,
       otherRate: text(row.otherRate) || "-",
+      otherRateLabel: text(row.otherRateLabel) || "기타",
+      measures: stringArray(row.measures),
+      conditions: stringArray(row.conditions),
       rateInheritedFrom: text(row.rateInheritedFrom) || null,
       codeLevel,
-      isFinalCandidate: codeLevel === 10,
+      isFinalCandidate: declarable && codeLevel === finalCodeDigits,
     }];
   });
 }
 
-function prioritizeUsitcHtsCandidates(candidates: UsitcHtsCandidate[]): UsitcHtsCandidate[] {
+function prioritizeDestinationTariffCandidates(candidates: DestinationTariffCandidate[]): DestinationTariffCandidate[] {
   return [...candidates].sort((left, right) => {
     if (left.codeLevel !== right.codeLevel) return left.codeLevel - right.codeLevel;
     return left.htsCode.localeCompare(right.htsCode, undefined, { numeric: true });
   });
+}
+
+function destinationTariffDataMode(value: unknown): DestinationTariffDataMode | null {
+  return value === "live_api" || value === "official_snapshot" || value === "aggregate_fallback"
+    ? value
+    : null;
+}
+
+function positiveInteger(value: unknown): number | null {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
 }
 
 function round2(value: number): number {

@@ -46,7 +46,7 @@ import {
   fetchKostiStrategicHsk,
   fetchKoreaEximExchange,
   fetchSeaExportFreight,
-  fetchUsitcHts,
+  fetchDestinationTariff,
   fetchWorldBankLpi,
   fetchUnComtradeMarket,
   fetchWitsTariff,
@@ -469,6 +469,10 @@ Deno.serve(async (req) => {
     const publicDataKey = resolvePublicDataKey();
     const comtradeKey = normalizeAuthKeyValue(Deno.env.get("UN_COMTRADE_API_KEY") || "");
     const koreaEximKey = normalizeAuthKeyValue(Deno.env.get("KOREAEXIM_AUTH_KEY") || "");
+    const ukTradeTariffCredentials = {
+      ukClientId: normalizeAuthKeyValue(Deno.env.get("UK_TRADE_TARIFF_CLIENT_ID") || ""),
+      ukClientSecret: normalizeAuthKeyValue(Deno.env.get("UK_TRADE_TARIFF_CLIENT_SECRET") || ""),
+    };
 
     if (!productId || !productName || !hsCode || !hskCode) {
       return json({
@@ -536,7 +540,7 @@ Deno.serve(async (req) => {
       kostiHskResult,
       seaFreightResult,
       worldBankLpiResult,
-      usitcHtsResult,
+      destinationTariffResult,
     ] =
       await Promise.all([
         fetchKotraOverseasCertInfo(detailContext, kotraKey),
@@ -553,7 +557,7 @@ Deno.serve(async (req) => {
         fetchKostiStrategicHsk(countryDecisionContext, publicDataKey),
         fetchSeaExportFreight(countryDecisionContext, publicDataKey),
         fetchWorldBankLpi(countryDecisionContext),
-        fetchUsitcHts(countryDecisionContext),
+        fetchDestinationTariff(countryDecisionContext, ukTradeTariffCredentials),
       ]);
 
     if (serviceSupa) {
@@ -1049,7 +1053,7 @@ Deno.serve(async (req) => {
       kostiHskResult.status,
       seaFreightResult.status,
       worldBankLpiResult.status,
-      usitcHtsResult.status,
+      ...(["US", "GB", "JP"].includes(countryCode) ? [destinationTariffResult.status] : []),
     ];
 
     const decisionFacts: DecisionFactInput[] = [
@@ -1061,7 +1065,7 @@ Deno.serve(async (req) => {
       ...kostiHskResult.facts,
       ...seaFreightResult.facts,
       ...worldBankLpiResult.facts,
-      ...usitcHtsResult.facts,
+      ...destinationTariffResult.facts,
     ];
 
     if (certResult.ok) {
@@ -1416,7 +1420,7 @@ Deno.serve(async (req) => {
       witsTariffResult.status,
       exchangeResult.status,
       worldBankLpiResult.status,
-      ...(countryCode === "US" ? [usitcHtsResult.status] : []),
+      ...(["US", "GB", "JP"].includes(countryCode) ? [destinationTariffResult.status] : []),
     ]) {
       if (provider.state === "error") errorIssueLabels.push(provider.label);
       else if (provider.state === "empty" || provider.state === "not_run") {
@@ -1953,6 +1957,8 @@ function buildDecisionActionRows(facts: DecisionFactInput[]): Array<{
   factKey: string | null;
 }> {
   const tariffFact = facts.find((fact) =>
+    fact.factKey === "tariff_fta:national_tariff_candidates"
+  ) ?? facts.find((fact) =>
     fact.factKey.startsWith("tariff_fta:wits_")
   );
   const customsFact = facts.find((fact) =>

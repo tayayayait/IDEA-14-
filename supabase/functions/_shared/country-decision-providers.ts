@@ -1,5 +1,10 @@
 import { z } from "npm:zod@3.25.76";
 import { buildUsitcClassificationGuidance } from "./usitc-classification-guidance.ts";
+import {
+  fetchJapanCustomsTariff,
+  fetchUkTradeTariff,
+  type DestinationTariffCredentials,
+} from "./destination-tariff.ts";
 
 export type EvidenceStatus =
   | "confirmed"
@@ -90,6 +95,7 @@ const iso2ToM49: Record<string, string> = {
   BR: "076",
   CN: "156",
   DE: "276",
+  GB: "826",
   ID: "360",
   IN: "356",
   JP: "392",
@@ -113,6 +119,7 @@ const countryCurrency: Record<string, string> = {
   BR: "BRL",
   CN: "CNH",
   DE: "EUR",
+  GB: "GBP",
   ID: "IDR(100)",
   IN: "INR",
   JP: "JPY(100)",
@@ -128,6 +135,7 @@ const countryCurrency: Record<string, string> = {
 const seaExportRoutesByCountry: Record<string, string[]> = {
   CN: ["중국"],
   DE: ["유럽연합"],
+  GB: ["유럽연합"],
   JP: ["일본"],
   PL: ["유럽연합"],
   US: ["미국서부", "미국동부"],
@@ -605,13 +613,20 @@ export async function fetchUsitcHts(
   try {
     const url = new URL(USITC_HTS_ENDPOINT);
     url.searchParams.set("keyword", context.hs6);
-    const response = await fetchWithRetry(url.toString());
+    const headingUrl = new URL(USITC_HTS_ENDPOINT);
+    headingUrl.searchParams.set("keyword", context.hs6.slice(0, 4));
+    const [response, headingResponse] = await Promise.all([
+      fetchWithRetry(url.toString()),
+      fetchWithRetry(headingUrl.toString()).catch(() => null),
+    ]);
     if (!response.ok) {
       return providerResult("usitc_hts", "미국 USITC HTS", "error", 0,
         `USITC HTS HTTP ${response.status}`, fetchedAt, []);
     }
 
-    const rows = collectUsitcRows(await response.json());
+    const primaryRows = collectUsitcRows(await response.json());
+    const headingRows = headingResponse?.ok ? collectUsitcRows(await headingResponse.json()) : [];
+    const rows = dedupeUsitcRows([...primaryRows, ...headingRows]);
     const targetHsDigits = context.hs6;
     const additionalMeasures = rows
       .filter((row) => row.htsCode.startsWith("9903"))
@@ -619,7 +634,10 @@ export async function fetchUsitcHts(
     const matchingRows = rows
       .filter((row) => !row.htsCode.startsWith("99"))
       .filter((row) => digitsOnly(row.htsCode).startsWith(targetHsDigits));
-    const selectedCandidates = hydrateUsitcCandidateRates(matchingRows, rows)
+    const selectedCandidates = hydrateUsitcCandidateHierarchy(
+      hydrateUsitcCandidateRates(matchingRows, rows),
+      rows,
+    )
       .sort(compareUsitcRows);
 
     if (!selectedCandidates.length) {
@@ -634,12 +652,17 @@ export async function fetchUsitcHts(
     });
 
     const fact = factInput({
-      factKey: "tariff_fta:usitc_hts_candidates",
+      factKey: "tariff_fta:national_tariff_candidates",
       category: "tariff_fta",
       status: "needs_verification",
       severity: "caution",
       summary: `미국 USITC HTS에서 ${selectedCandidates.length}개의 세번 후보와 추가 관세 조치를 확인했습니다.`,
       value: {
+        countryCode: context.countryCode,
+        countryName: context.countryName,
+        nomenclature: "US Harmonized Tariff Schedule",
+        dataMode: "live_api",
+        finalCodeDigits: 10,
         hs6: context.hs6,
         candidates: selectedCandidates,
         additionalMeasures,
@@ -660,6 +683,25 @@ export async function fetchUsitcHts(
     return providerResult("usitc_hts", "미국 USITC HTS", "error", 0,
       safeErrorMessage(error), fetchedAt, []);
   }
+}
+
+export async function fetchDestinationTariff(
+  context: CountryDecisionContext,
+  credentials: DestinationTariffCredentials = {},
+): Promise<DecisionProviderResult> {
+  if (context.countryCode === "US") return await fetchUsitcHts(context);
+  if (context.countryCode === "GB") return await fetchUkTradeTariff(context, credentials);
+  if (context.countryCode === "JP") return await fetchJapanCustomsTariff(context);
+  const fetchedAt = new Date().toISOString();
+  return providerResult(
+    "destination_tariff",
+    "목적국 공식 관세표",
+    "not_run",
+    0,
+    "현재 공식 세번 상세 연결 대상이 아니므로 WITS HS6 관세 범위를 사용합니다.",
+    fetchedAt,
+    [],
+  );
 }
 
 export async function fetchKoreaEximExchange(
@@ -955,6 +997,7 @@ type UsitcHtsRow = {
   htsCode: string;
   statisticalSuffix: string;
   description: string;
+  hierarchyDescription: string;
   indent: number | null;
   units: string[];
   footnotes: string[];
@@ -963,6 +1006,30 @@ type UsitcHtsRow = {
   otherRate: string;
   rateInheritedFrom: string | null;
 };
+
+function hydrateUsitcCandidateHierarchy(candidateRows: UsitcHtsRow[], allRows: UsitcHtsRow[]): UsitcHtsRow[] {
+  return candidateRows.map((row) => {
+    const rowDigits = digitsOnly(row.htsCode);
+    const descriptions = allRows
+      .filter((parent) => {
+        const parentDigits = digitsOnly(parent.htsCode);
+        return parentDigits.length < rowDigits.length && rowDigits.startsWith(parentDigits) && parent.description;
+      })
+      .sort(compareUsitcRows)
+      .map((parent) => parent.description);
+    descriptions.push(row.description);
+    return { ...row, hierarchyDescription: [...new Set(descriptions.filter(Boolean))].join(" > ") };
+  });
+}
+
+function dedupeUsitcRows(rows: UsitcHtsRow[]): UsitcHtsRow[] {
+  const byCode = new Map<string, UsitcHtsRow>();
+  for (const row of rows) {
+    const existing = byCode.get(row.htsCode);
+    if (!existing || (!hasUsitcRate(existing) && hasUsitcRate(row))) byCode.set(row.htsCode, row);
+  }
+  return [...byCode.values()];
+}
 
 function hydrateUsitcCandidateRates(candidateRows: UsitcHtsRow[], allRows: UsitcHtsRow[]): UsitcHtsRow[] {
   return candidateRows.map((row) => {
@@ -1037,6 +1104,7 @@ function normalizeUsitcRow(record: Record<string, unknown>): UsitcHtsRow | null 
     htsCode,
     statisticalSuffix: findUsitcField(record, /statistical.?suffix|stat.?suffix/i),
     description: findUsitcField(record, /description|commodity|article/i),
+    hierarchyDescription: "",
     indent: parseUsitcIndent(findUsitcField(record, /^indent$/i)),
     units: findUsitcArray(record, /^units?$/i),
     footnotes: findUsitcFootnotes(record),

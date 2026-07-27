@@ -9,5 +9,6 @@ export const SEED_COUNTRIES = [
   { code: "TH", name: "태국" },
   { code: "AE", name: "아랍에미리트" },
   { code: "BR", name: "브라질" },
+  { code: "GB", name: "영국" },
   { code: "TR", name: "튀르키예" },
 ] as const;

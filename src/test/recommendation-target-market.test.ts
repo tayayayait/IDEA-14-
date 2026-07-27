@@ -110,6 +110,7 @@ describe("recommendation candidate logic", () => {
     expect(isCountryTextMatched("US", "미합중국(The United States of America)", "nat=미국 regn=북미")).toBe(true);
     expect(isCountryTextMatched("JP", "일본(Japan)", "nat=일본")).toBe(true);
     expect(isCountryTextMatched("CN", "중화인민공화국(The People's Republic of China)", "nat=중국")).toBe(true);
+    expect(isCountryTextMatched("GB", "영국(United Kingdom)", "nat=UK regn=Europe")).toBe(true);
   });
 
   it("builds shared country aliases without matching India inside Indonesia", () => {

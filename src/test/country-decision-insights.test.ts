@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DecisionCategory, DecisionFact } from "@/lib/country-decision";
 import {
+  buildDestinationTariffEvidence,
   buildLogisticsEvidence,
   buildMarketEvidence,
   buildTariffRangeEvidence,
@@ -111,6 +112,42 @@ describe("country decision service insights", () => {
 
     expect(evidence?.candidates[0].htsCode).toBe("4011.10.10");
     expect(evidence?.additionalMeasures[0].htsCode).toBe("9903.40.05");
+  });
+
+  it("builds destination-neutral evidence for a national tariff fact", () => {
+    const evidence = buildDestinationTariffEvidence([
+      fact("uk-tariff", "tariff_fta", {
+        countryCode: "GB",
+        countryName: "United Kingdom",
+        nomenclature: "UK Trade Tariff",
+        dataMode: "live_api",
+        finalCodeDigits: 10,
+        candidates: [{
+          tariffCode: "8486900000",
+          description: "Parts and accessories",
+          hierarchyDescription: "Machines used for the manufacture of semiconductor devices > Parts and accessories",
+          generalRate: "2.00%",
+          mfnRate: "2.00%",
+          koreaPreferentialRate: "0.00%",
+          otherRate: "20.00%",
+          otherRateLabel: "VAT",
+          declarable: true,
+        }],
+      }, "tariff_fta:national_tariff_candidates"),
+    ]);
+
+    expect(evidence).toMatchObject({
+      countryCode: "GB",
+      countryName: "United Kingdom",
+      nomenclature: "UK Trade Tariff",
+      dataMode: "live_api",
+    });
+    expect(evidence?.primaryCandidates[0]).toMatchObject({
+      tariffCode: "8486900000",
+      koreaPreferentialRate: "0.00%",
+      otherRateLabel: "VAT",
+      isFinalCandidate: true,
+    });
   });
 
   it("prioritizes 10-digit USITC candidates and keeps 8-digit branches in the full list", () => {

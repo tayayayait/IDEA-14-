@@ -19,6 +19,10 @@ const dashboardSource = readFileSync(
   join(process.cwd(), "src/components/CountryDecisionDashboard.tsx"),
   "utf8",
 );
+const destinationTariffSource = readFileSync(
+  join(process.cwd(), "supabase/functions/_shared/destination-tariff.ts"),
+  "utf8",
+);
 
 describe("USITC classification guidance", () => {
   it("builds semiconductor guidance from the current product and HTS candidate", () => {
@@ -105,6 +109,21 @@ describe("country decision provider contracts", () => {
     expect(providerSource).toContain("buildUsitcClassificationGuidance");
     expect(providerSource).not.toContain("타이어 구조(방사형/기타)와 림 직경");
     expect(providerSource).not.toContain("타이어 구조와 림 직경을 입력한 뒤");
+  });
+
+  it("routes national tariff detail through US, UK, and Japan official providers", () => {
+    expect(providerSource).toContain("export async function fetchDestinationTariff");
+    expect(providerSource).toContain('context.countryCode === "US"');
+    expect(providerSource).toContain('context.countryCode === "GB"');
+    expect(providerSource).toContain('context.countryCode === "JP"');
+    expect(providerSource).toContain("fetchUkTradeTariff");
+    expect(providerSource).toContain("fetchJapanCustomsTariff");
+    expect(edgeSource).toContain("fetchDestinationTariff(countryDecisionContext");
+    expect(edgeSource).toContain('Deno.env.get("UK_TRADE_TARIFF_CLIENT_ID")');
+    expect(edgeSource).toContain('Deno.env.get("UK_TRADE_TARIFF_CLIENT_SECRET")');
+    expect(destinationTariffSource).toContain('factKey: "tariff_fta:national_tariff_candidates"');
+    expect(destinationTariffSource).toContain('dataMode: "live_api"');
+    expect(destinationTariffSource).toContain('dataMode: "official_snapshot"');
   });
 
   it("falls back through the latest seven days for EXIM exchange rates", () => {

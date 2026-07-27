@@ -81,6 +81,30 @@ describe("country decision model", () => {
     expect(actions).toEqual([]);
   });
 
+  it("prefers national tariff detail over the WITS aggregate for the tariff action", () => {
+    const national = getMockFact({
+      id: "national-tariff",
+      factKey: "tariff_fta:national_tariff_candidates",
+      category: "tariff_fta",
+      status: "needs_verification",
+      sourceName: "UK Trade Tariff",
+      sourceUrl: "https://www.trade-tariff.service.gov.uk/",
+    });
+    const aggregate = getMockFact({
+      id: "wits-tariff",
+      factKey: "tariff_fta:wits_hs6_range",
+      category: "tariff_fta",
+      status: "estimated",
+      sourceName: "World Bank WITS / UNCTAD TRAINS",
+      sourceUrl: "https://wits.worldbank.org/",
+    });
+
+    const actions = buildDefaultActionItems([aggregate, national]);
+
+    expect(actions[0]?.actionKey).toBe("confirm_destination_tariff_code");
+    expect(actions[0]?.sourceUrl).toBe(national.sourceUrl);
+  });
+
   it("실제 API 근거가 있는 항목만 다음 행동으로 생성한다", () => {
     const actions = buildDefaultActionItems([
       getMockFact({

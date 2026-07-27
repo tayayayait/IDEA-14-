@@ -41,13 +41,13 @@ import {
   buildMarketEvidence,
   buildLogisticsEvidence,
   buildTariffRangeEvidence,
-  buildUsitcHtsEvidence,
+  buildDestinationTariffEvidence,
   groupDecisionFactsForService,
   type DecisionServiceGroups,
   type LogisticsEvidence,
   type MarketEvidence,
   type TariffRangeEvidence,
-  type UsitcHtsEvidence,
+  type DestinationTariffEvidence,
 } from "@/lib/country-decision-insights";
 
 export interface CountryDecisionProviderStatus {
@@ -113,8 +113,11 @@ export function CountryDecisionDashboard(props: Props) {
     () => buildDecisionSummary({ opportunityScore: props.opportunityScore, facts }),
     [facts, props.opportunityScore],
   );
-  const hasUsitcHtsFact = useMemo(
-    () => facts.some((fact) => fact.category === "tariff_fta" && fact.factKey === "tariff_fta:usitc_hts_candidates"),
+  const hasDestinationTariffFact = useMemo(
+    () => facts.some((fact) => (
+      fact.category === "tariff_fta" &&
+      (fact.factKey === "tariff_fta:national_tariff_candidates" || fact.factKey === "tariff_fta:usitc_hts_candidates")
+    )),
     [facts],
   );
   // KOTRA 인증·수입규제 원문은 Step 4 하단의 전용 근거 패널에서 보여준다.
@@ -123,15 +126,15 @@ export function CountryDecisionDashboard(props: Props) {
     () => facts.filter((fact) => (
       fact.category !== "certification" &&
       fact.category !== "import_regulation" &&
-      !(hasUsitcHtsFact && fact.factKey === "tariff_fta:wits_hs6_range")
+      !(hasDestinationTariffFact && fact.factKey === "tariff_fta:wits_hs6_range")
     )),
-    [facts, hasUsitcHtsFact],
+    [facts, hasDestinationTariffFact],
   );
   const groupedFacts = useMemo(() => groupDecisionFactsForService(dashboardFacts), [dashboardFacts]);
   const marketEvidence = useMemo(() => buildMarketEvidence(facts), [facts]);
   const tariffEvidence = useMemo(() => buildTariffRangeEvidence(facts), [facts]);
   const logisticsEvidence = useMemo(() => buildLogisticsEvidence(facts), [facts]);
-  const usitcHtsEvidence = useMemo(() => buildUsitcHtsEvidence(facts), [facts]);
+  const destinationTariffEvidence = useMemo(() => buildDestinationTariffEvidence(facts), [facts]);
   const verificationCount = facts.filter((fact) => fact.status === "needs_verification").length;
   const failedCount = props.providers.filter((provider) => provider.state === "error").length;
 
@@ -193,13 +196,13 @@ export function CountryDecisionDashboard(props: Props) {
         ) : null}
       </section>
 
-      <div className="columns-1 gap-3 2xl:columns-2">
+      <div className="grid items-start gap-4 2xl:grid-cols-2">
         {primarySections.map((section) => {
           const sectionFacts = groupedFacts[section.key];
           const sectionVisual = section.key === "marketOpportunity" && marketEvidence
             ? <MarketEvidenceChart evidence={marketEvidence} />
-            : section.key === "marketEntry" && (tariffEvidence || usitcHtsEvidence)
-              ? <MarketEntryVisual countryCode={props.countryCode} tariffEvidence={tariffEvidence} usitcEvidence={usitcHtsEvidence} />
+            : section.key === "marketEntry" && (tariffEvidence || destinationTariffEvidence)
+              ? <MarketEntryVisual tariffEvidence={tariffEvidence} destinationTariffEvidence={destinationTariffEvidence} />
               : section.key === "transactionRisk" && logisticsEvidence
                 ? <LogisticsEvidenceChart evidence={logisticsEvidence} />
                 : null;
@@ -343,72 +346,66 @@ function DecisionSection({
 }
 
 function MarketEntryVisual({
-  countryCode,
   tariffEvidence,
-  usitcEvidence,
+  destinationTariffEvidence,
 }: {
-  countryCode: string;
   tariffEvidence: TariffRangeEvidence | null;
-  usitcEvidence: UsitcHtsEvidence | null;
+  destinationTariffEvidence: DestinationTariffEvidence | null;
 }) {
   return (
     <div className="space-y-3">
-      {tariffEvidence && !usitcEvidence ? <TariffRangeChart evidence={tariffEvidence} /> : !usitcEvidence ? (
-        <div className={usitcEvidence
-          ? "rounded-lg border border-sky-200 bg-sky-50/60 p-3 text-xs leading-5 text-sky-900"
-          : "rounded-lg border border-dashed border-amber-300 bg-amber-50/60 p-3 text-xs leading-5 text-amber-900"}>
-          {usitcEvidence
-            ? "WITS HS6 범위는 제공되지 않아, 아래 목적국 공식 HTS 후보와 세율을 우선 표시합니다."
-            : "HS6 관세 범위를 확인하지 못했습니다. 목적국 8~10자리 세번 확정 후 다시 확인하세요."}
-        </div>
-        ) : null}
-      {countryCode === "US" && usitcEvidence ? <UsitcHtsCard evidence={usitcEvidence} /> : null}
-      {countryCode === "US" && !usitcEvidence ? (
-        <div className="rounded-lg border border-dashed border-amber-300 bg-amber-50/60 p-3 text-xs leading-5 text-amber-900">
-          미국 HTS 후보를 아직 확인하지 못했습니다. 데이터 갱신 후 제품 사양과 함께 다시 조회하세요.
-        </div>
-      ) : null}
+      {tariffEvidence && !destinationTariffEvidence ? <TariffRangeChart evidence={tariffEvidence} /> : null}
+      {destinationTariffEvidence ? <DestinationTariffCard evidence={destinationTariffEvidence} /> : null}
     </div>
   );
 }
 
-function UsitcHtsCard({ evidence }: { evidence: UsitcHtsEvidence }) {
-  const [showAllCandidates, setShowAllCandidates] = useState(false);
+function DestinationTariffCard({ evidence }: { evidence: DestinationTariffEvidence }) {
+  const [showAllCandidates, setShowAllCandidates] = useState(true);
   const candidates = showAllCandidates ? evidence.candidates : evidence.primaryCandidates;
   const remainingCount = evidence.remainingCandidates.length;
   return (
     <div className="rounded-lg border border-sky-200 bg-sky-50/60 p-3">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold text-sky-950">미국 HTS 후보</p>
-          <p className="mt-0.5 text-[11px] text-sky-800">미국 공식 관세표 기준 · 최종 세번은 제품 사양 확인 필요</p>
+          <p className="text-xs font-semibold text-sky-950">{evidence.countryName} 목적국 세번 후보</p>
+          <p className="mt-0.5 text-[11px] text-sky-800">{evidence.nomenclature} 기준 · 최종 세번은 제품 사양 확인 필요</p>
         </div>
-        <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-900">최종 확인</span>
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-900">최종 확인</span>
+          <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-medium text-sky-800">{dataModeLabel(evidence.dataMode)}</span>
+        </div>
       </div>
-      <p className="mt-3 text-xs text-sky-900">HS6 하위 분류 {evidence.candidates.length}건</p>
+      <p className="mt-3 text-xs text-sky-900">HS6 하위 분류 {evidence.candidates.length}건 · 최종 코드 {evidence.finalCodeDigits}자리</p>
       <div className="mt-2 space-y-2">
         {candidates.map((candidate) => (
-          <div key={candidate.htsCode} className="rounded-md border border-sky-200/80 bg-white/80 p-2.5" style={{ marginLeft: formatUsitcIndent(candidate.indent) }}>
+          <div key={candidate.tariffCode} className="rounded-md border border-sky-200/80 bg-white/80 p-2.5" style={{ marginLeft: formatTariffIndent(candidate.indent) }}>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-sm font-semibold text-sky-950">{candidate.htsCode}</span>
+                <span className="font-mono text-sm font-semibold text-sky-950">{candidate.tariffCode}</span>
                 <span className="rounded-full bg-sky-100 px-1.5 py-0.5 text-[10px] font-medium text-sky-800">
                   {candidate.isFinalCandidate
-                    ? "10자리 최종 후보"
+                    ? `${evidence.finalCodeDigits}자리 최종 후보`
                     : candidate.codeLevel === 6
                       ? "HS6 기준"
                       : candidate.codeLevel + "자리 분류"}
                 </span>
               </div>
-              <span className="text-xs font-medium text-slate-700">일반세율 {formatUsitcRate(candidate.generalRate)}</span>
+              <span className="text-xs font-medium text-slate-700">일반세율 {formatTariffRate(candidate.generalRate)}</span>
             </div>
-            {candidate.description ? <p className="mt-1 text-xs leading-5 text-slate-700">{formatUsitcDescription(candidate.description)}</p> : null}
-            {candidate.specialRate !== "-" || candidate.otherRate !== "-" ? (
-              <div className="mt-1 grid gap-1 text-[11px] text-muted-foreground sm:grid-cols-2">
-                <span>한국산 특혜 {formatUsitcRate(candidate.specialRate)}</span>
-                <span>기타 {formatUsitcRate(candidate.otherRate)}</span>
-              </div>
+            {candidate.hierarchyDescription || candidate.description ? (
+              <p className="mt-1 text-xs leading-5 text-slate-700">{formatTariffDescription(candidate.hierarchyDescription || candidate.description)}</p>
             ) : null}
+            <div className="mt-1 grid gap-1 text-[11px] text-muted-foreground sm:grid-cols-2">
+              <span>MFN/WTO {formatTariffRate(candidate.mfnRate)}</span>
+              <span>한국산 특혜 {formatTariffRate(candidate.koreaPreferentialRate)}</span>
+              {candidate.otherRate !== "-" ? <span>{candidate.otherRateLabel} {formatTariffRate(candidate.otherRate)}</span> : null}
+              {candidate.rateInheritedFrom ? <span>세율 상속 {candidate.rateInheritedFrom}</span> : null}
+            </div>
+            {candidate.units.length ? <p className="mt-1 text-[11px] text-muted-foreground">단위 {candidate.units.join(" · ")}</p> : null}
+            {candidate.measures.length ? <p className="mt-1 text-[11px] leading-5 text-slate-600">조치 {candidate.measures.join(" · ")}</p> : null}
+            {candidate.conditions.length ? <p className="mt-1 text-[11px] leading-5 text-amber-800">조건 {candidate.conditions.join(" · ")}</p> : null}
+            {candidate.footnotes.length ? <p className="mt-1 text-[11px] leading-5 text-muted-foreground">주석 {candidate.footnotes.join(" · ")}</p> : null}
           </div>
         ))}
       </div>
@@ -424,43 +421,38 @@ function UsitcHtsCard({ evidence }: { evidence: UsitcHtsEvidence }) {
       {evidence.additionalMeasures.length ? (
         <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
           <p className="font-semibold">추가 관세</p>
-          <p className="mt-0.5">{evidence.additionalMeasures.map((item) => item.htsCode + " " + formatUsitcRate(item.generalRate)).join(" · ")}</p>
+          <p className="mt-0.5">{evidence.additionalMeasures.map((item) => item.tariffCode + " " + formatTariffRate(item.generalRate)).join(" · ")}</p>
         </div>
       ) : null}
       {evidence.specificationHint ? <p className="mt-2 text-[11px] leading-5 text-muted-foreground">확인할 정보: {evidence.specificationHint}</p> : null}
-      <p className="mt-2 text-[11px] text-muted-foreground">자료: 미국 국제무역위원회(USITC) · 기준 {evidence.referenceDate ?? "미제공"}</p>
+      <p className="mt-2 text-[11px] text-muted-foreground">
+        자료: {evidence.sourceName} · 기준 {evidence.referenceDate ?? "미제공"}
+        {evidence.sourceUrl ? <a href={evidence.sourceUrl} target="_blank" rel="noreferrer" className="ml-1 font-medium text-brand hover:underline">공식 원문</a> : null}
+      </p>
     </div>
   );
 }
 
-function formatUsitcIndent(indent: number | null): string {
+function formatTariffIndent(indent: number | null): string {
   return indent == null ? "0rem" : Math.max(0, indent - 1) * 0.75 + "rem";
 }
 
-function formatUsitcRate(rate: string): string {
+function formatTariffRate(rate: string): string {
   return rate.replace(/\s*\([^)]*\)/g, "").trim() || "-";
 }
 
-function formatUsitcDescription(description: string): string {
-  const plain = description
+function formatTariffDescription(description: string): string {
+  return description
     .replace(/<[^>]*>/g, "")
     .replace(/&amp;/gi, "&")
     .replace(/\s+/g, " ")
     .trim();
-  if (/^radial$/i.test(plain)) return "래디얼 타이어";
-  if (/^other$/i.test(plain)) return "기타";
-  if (/^of a kind used on motor cars/i.test(plain)) return "승용자동차용(스테이션 왜건·경주용 자동차 포함)";
+}
 
-  const orLess = plain.match(/Having a rim diameter of ([\d.]+) cm \((\d+) inches\) or less/i);
-  if (orLess) return "림 직경 " + orLess[1] + "cm(" + orLess[2] + "인치) 이하";
-
-  const range = plain.match(/Having a rim diameter greater than\s*(?:\(>\)|>)?\s*([\d.]+) cm \((\d+) inches\) but not more than\s*(?:\(>\)|>)?\s*([\d.]+) cm \((\d+) inches\)/i);
-  if (range) return "림 직경 " + range[1] + "cm(" + range[2] + "인치) 초과 ~ " + range[3] + "cm(" + range[4] + "인치) 이하";
-
-  const greaterThan = plain.match(/Having a rim diameter greater than\s*(?:\(>\)|>)?\s*([\d.]+) cm \((\d+) inches\)/i);
-  if (greaterThan) return "림 직경 " + greaterThan[1] + "cm(" + greaterThan[2] + "인치) 초과";
-
-  return plain;
+function dataModeLabel(mode: DestinationTariffEvidence["dataMode"]): string {
+  if (mode === "live_api") return "공식 API 실시간";
+  if (mode === "official_snapshot") return "공식 관세표 기준";
+  return "HS6 집계 참고";
 }
 function lpiGrade(value: number | null): { label: string; color: string; bgColor: string; barColor: string; description: string } {
   if (value == null) return { label: "미확인", color: "text-slate-500", bgColor: "bg-slate-100", barColor: "bg-slate-300", description: "데이터를 확인하지 못했습니다." };
