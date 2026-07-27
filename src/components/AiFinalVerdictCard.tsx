@@ -162,7 +162,7 @@ export function AiFinalVerdictCard(props: Props) {
               <Bot className="h-5 w-5 text-brand" />
               <CardTitle className="text-base">AI 최종 판단</CardTitle>
             </div>
-            <Button size="sm" onClick={generateVerdict}>
+            <Button size="sm" onClick={() => generateVerdict()}>
               <Bot className="mr-1 h-3.5 w-3.5" />
               AI 판단 생성
             </Button>
@@ -200,7 +200,7 @@ export function AiFinalVerdictCard(props: Props) {
               <AlertTriangle className="h-5 w-5 text-red-500" />
               <CardTitle className="text-base">AI 판단 생성 실패</CardTitle>
             </div>
-            <Button size="sm" variant="outline" onClick={generateVerdict}>
+            <Button size="sm" variant="outline" onClick={() => generateVerdict()}>
               <RefreshCw className="mr-1 h-3.5 w-3.5" />
               재시도
             </Button>
