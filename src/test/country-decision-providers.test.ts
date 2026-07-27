@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { buildUsitcClassificationGuidance } from "../../supabase/functions/_shared/usitc-classification-guidance";
 
 const providerSource = readFileSync(
   join(process.cwd(), "supabase/functions/_shared/country-decision-providers.ts"),
@@ -18,6 +19,40 @@ const dashboardSource = readFileSync(
   join(process.cwd(), "src/components/CountryDecisionDashboard.tsx"),
   "utf8",
 );
+
+describe("USITC classification guidance", () => {
+  it("builds semiconductor guidance from the current product and HTS candidate", () => {
+    const guidance = buildUsitcClassificationGuidance({
+      productName: "반도체장비 부품",
+      hs6: "848690",
+      candidates: [{
+        htsCode: "8486.90.00.00",
+        description: "Parts and accessories",
+      }],
+    });
+
+    expect(guidance.specificationHint).toContain("반도체장비 부품");
+    expect(guidance.specificationHint).toContain("용도·적용 대상");
+    expect(guidance.specificationHint).not.toMatch(/타이어|림 직경/);
+    expect(guidance.nextAction).toContain("8486.90.00.00");
+  });
+
+  it("derives tire-specific criteria only when the returned descriptions require them", () => {
+    const guidance = buildUsitcClassificationGuidance({
+      productName: "승용차용 타이어",
+      hs6: "401110",
+      candidates: [
+        { htsCode: "4011.10.10", description: "Radial" },
+        { htsCode: "4011.10.10.10", description: "Having a rim diameter of 33 cm (13 inches) or less" },
+      ],
+    });
+
+    expect(guidance.specificationHint).toContain("승용차용 타이어");
+    expect(guidance.specificationHint).toContain("구조");
+    expect(guidance.specificationHint).toContain("규격·치수");
+    expect(guidance.specificationHint).not.toContain("반도체");
+  });
+});
 
 describe("country decision provider contracts", () => {
   it("does not manufacture non-API baseline facts", () => {
@@ -64,6 +99,12 @@ describe("country decision provider contracts", () => {
     expect(providerSource).toContain('attributeValue("MIN_RATE")');
     expect(providerSource).toContain('attributeValue("MAX_RATE")');
     expect(providerSource).toContain("fetchWithRetry(url, {}, 35_000)");
+  });
+
+  it("builds USITC confirmation guidance from the current product instead of a fixed tire example", () => {
+    expect(providerSource).toContain("buildUsitcClassificationGuidance");
+    expect(providerSource).not.toContain("타이어 구조(방사형/기타)와 림 직경");
+    expect(providerSource).not.toContain("타이어 구조와 림 직경을 입력한 뒤");
   });
 
   it("falls back through the latest seven days for EXIM exchange rates", () => {

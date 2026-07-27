@@ -1,4 +1,5 @@
 import { z } from "npm:zod@3.25.76";
+import { buildUsitcClassificationGuidance } from "./usitc-classification-guidance.ts";
 
 export type EvidenceStatus =
   | "confirmed"
@@ -626,6 +627,12 @@ export async function fetchUsitcHts(
         "미국 HTS 후보를 확인하지 못했습니다.", fetchedAt, []);
     }
 
+    const guidance = buildUsitcClassificationGuidance({
+      productName: context.productName,
+      hs6: context.hs6,
+      candidates: selectedCandidates,
+    });
+
     const fact = factInput({
       factKey: "tariff_fta:usitc_hts_candidates",
       category: "tariff_fta",
@@ -636,14 +643,14 @@ export async function fetchUsitcHts(
         hs6: context.hs6,
         candidates: selectedCandidates,
         additionalMeasures,
-        specificationHint: "타이어 구조(방사형/기타)와 림 직경을 확정해야 미국 HTS 10자리를 결정할 수 있습니다.",
+        specificationHint: guidance.specificationHint,
       },
       scope: "hs6",
       sourceName: "USITC Harmonized Tariff Schedule",
       sourceUrl: USITC_HTS_PAGE,
       referenceDate: new Date().getUTCFullYear().toString(),
       caveat: "한국 HSK와 미국 HTS는 1:1로 확정되지 않습니다. General/Special 세율은 제품 사양과 원산지 조건을 최종 확인해야 합니다.",
-      nextAction: "타이어 구조와 림 직경을 입력한 뒤 USITC 원문에서 미국 10자리 세번과 추가 관세를 확정하세요.",
+      nextAction: guidance.nextAction,
       fetchedAt,
       expiresAt: plusHours(fetchedAt, 24 * 7),
     });
