@@ -7,12 +7,6 @@
  */
 import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import {
-  buildVerifiedEvidenceCatalog,
-  finalizeAiVerdict,
-  isOfficialAuthorityUrl,
-  type VerifiedEvidenceCatalog,
-} from "../_shared/ai-verdict-evidence.ts";
 
 const AI_TIMEOUT_MS = 110_000;
 const VERDICT_MODEL = "gemini-3.5-flash";
@@ -71,42 +65,20 @@ Deno.serve(async (req) => {
         text: "인터넷 검색에 실패하여 프로그램 수집 데이터만으로 판단합니다.",
         sources: [],
         queries: [],
-        claims: [],
       };
     }
-
-    const evidenceCatalog = buildVerifiedEvidenceCatalog({
-      countryCode,
-      hs6,
-      retrievedAt: new Date().toISOString(),
-      decisionFacts: asArray(body.decision_facts),
-      groundedSources: grounded.sources,
-      groundedClaims: grounded.claims,
-    });
 
     // 2단계: 구조화 판단 생성
     const verdictJson = await callStructuredVerdict(
       programEvidence,
       grounded,
-      evidenceCatalog,
       countryName,
       productName,
       hs6,
     );
 
     // DB 저장 (UPSERT)
-    const verdict = finalizeAiVerdict({
-      rawVerdict: safeParseJson(verdictJson),
-      catalog: evidenceCatalog,
-      requiredCategories: [
-        "tariff_fta",
-        "certification",
-        "import_regulation",
-        "payment_risk",
-        "strategic_goods",
-      ],
-      now: new Date().toISOString(),
-    });
+    const verdict = safeParseJson(verdictJson);
     if (evidenceHash) {
       await supabase
         .from("country_verdicts")
@@ -130,8 +102,6 @@ Deno.serve(async (req) => {
       grounding: {
         queries: grounded.queries,
         sources: grounded.sources,
-        accepted_claims: evidenceCatalog.evidence.filter((item) => item.origin === "official_web").length,
-        rejected_claims: evidenceCatalog.rejectedClaims.length,
       },
     });
   } catch (error) {
@@ -144,9 +114,8 @@ Deno.serve(async (req) => {
 
 interface GroundedResult {
   text: string;
-  sources: Array<{ name: string; url: string; resolvedUrl?: string }>;
+  sources: Array<{ name: string; url: string }>;
   queries: string[];
-  claims: unknown[];
 }
 
 async function callGroundedResearch(
@@ -170,30 +139,9 @@ async function callGroundedResearch(
     "4. Recent trade policy changes affecting this product (tariff changes, FTA updates)",
     "5. Any import restrictions, quotas, or special requirements",
     "Do NOT use news, media, blogs, social posts, or advertising content.",
-    "AI internal knowledge may be used to design searches and explain implications, but never as evidence for a current rate, legal requirement, threshold, fee, fine, or market statistic.",
-    "Every confirmed claim must quote a narrowly relevant official source, match the target country and HS/product scope, and carry its own source URL and effective/published date when available.",
-    "If applicability is unclear, set verificationStatus to needs_verification and scopeMatch to false. Never infer that zero search results means no regulation.",
-    "Return strict JSON only using this schema:",
-    'Root JSON keys must be exactly "researchSummary" and "claims". Claim keys must include "verificationStatus" and "scopeMatch".',
-    JSON.stringify({
-      researchSummary: "공식자료 조사 결과 요약",
-      claims: [{
-        claimId: "web:unique-id",
-        claim: "하나의 검증 가능한 구체적 주장",
-        category: "tariff_fta | certification | import_regulation | payment_risk | strategic_goods | customs_requirement | market | logistics | legal",
-        value: "공식자료에 있는 값과 단위 또는 null",
-        countryCode,
-        hsCode: hs6,
-        scopeMatch: true,
-        verificationStatus: "confirmed | needs_verification | conflict",
-        sourceName: "공식기관명",
-        sourceTitle: "문서 또는 페이지 제목",
-        sourceUrl: "실제 공식 원문 URL",
-        effectiveDate: "YYYY-MM-DD 또는 null",
-        evidenceExcerpt: "주장을 직접 뒷받침하는 짧은 근거",
-      }],
-    }),
-  ].join("\n");
+    "Separate confirmed facts from unresolved items. Include the responsible authority for every finding.",
+    "Write a concise Korean research brief. Do not output JSON.",
+  ].join(" ");
 
   const response = await fetchWithTimeout(url, {
     method: "POST",
@@ -210,16 +158,11 @@ async function callGroundedResearch(
   const data = await response.json();
   const candidate = data.candidates?.[0];
   const metadata = candidate?.groundingMetadata ?? {};
-  const rawText = candidate?.content?.parts?.[0]?.text ?? "";
-  const research = safeParseJson(rawText);
-  const sources = await resolveGroundedSources(extractSources(metadata.groundingChunks));
-  const claims = alignGroundedClaims(asArray(research.claims), sources);
 
   return {
-    text: rawText,
+    text: candidate?.content?.parts?.[0]?.text ?? "",
     queries: uniqueTexts(asArray(metadata.webSearchQueries).map(asText)),
-    sources,
-    claims,
+    sources: extractSources(metadata.groundingChunks),
   };
 }
 
@@ -228,7 +171,6 @@ async function callGroundedResearch(
 async function callStructuredVerdict(
   programEvidence: string,
   grounded: GroundedResult,
-  evidenceCatalog: VerifiedEvidenceCatalog,
   countryName: string,
   productName: string,
   hs6: string,
@@ -246,12 +188,6 @@ async function callStructuredVerdict(
     "2. PREDICT 5 CORE TRADE RISKS EXHAUSTIVELY: (1) Customs & Tariff verification, (2) Mandatory safety/environmental certifications, (3) Payment & deferred credit risk, (4) Documentation & clearance, (5) Legal/contractual risks.",
     "3. MANDATORY GLOSSARY IN PARENTHESES RULE: Whenever trade terms, abbreviations, or legal concepts are mentioned (e.g. O/A, L/C, CBP, FMVSS, UTQG, DOT, BOM, Anti-dumping, MFN, FTA, HTSUS, etc.), ALWAYS explain them in Korean inside parentheses right after the term. Format: '약어/전문용어 (쉬운 설명)'. Example: 'O/A (무서류 외상 거래 방식: 수출 대금 미회수 리스크가 큼)', 'CBP (미국 세관국경보호국: 관세 및 원산지 검증 기관)', 'UTQG (통일타이어품질등급: 미국 타이어 필수 겉면 표시 기준)'.",
     "4. ACCESSIBLE & DETAILED ACTIONABLE ADVICE: Write in formal Korean (~입니다, ~합니다). Provide 1:1 concrete AI mitigation steps for every identified risk so that even first-time exporters can fully understand and prepare.",
-    "5. EVIDENCE-ID RULE: Every factual keyBasis and majorRisks item MUST cite one or more evidenceIds copied exactly from ALLOWED VERIFIED EVIDENCE CATALOG. Never invent an evidence ID.",
-    "6. CURRENT-FACT RULE: Tariff rates, legal thresholds, mandatory certification, fines, fees, costs, dates, statistics, and named government programs may be stated as facts only when the exact value is present in a cited evidence item.",
-    "7. AI-KNOWLEDGE RULE: Use internal knowledge for search ideas, interpretation, explanations, and checklists. If a useful risk has no verified evidence, write it as a question or additional-check item, use evidenceIds=[], and never state an exact number or legal conclusion.",
-    "8. ESTIMATE RULE: Do not invent cost or damage ranges. Set estimatedCost to '견적 필요' and financialImpact to a qualitative description unless a cited evidence item contains the number.",
-    "9. ABSENCE RULE: A zero-result or needs_verification item never proves that a regulation, certification, or strategic-goods control does not exist.",
-    "10. Do not output confidence or officialSources. The server computes them from evidence coverage after generation.",
     "",
     "Return strict JSON matching this schema:",
     JSON.stringify({
@@ -266,19 +202,16 @@ async function callStructuredVerdict(
         legalRisk: "높음 | 보통 | 낮음",
       },
       keyBasis: [
-        {
-          point: "판단 근거 (관세 혜택, 시장 기회 등 구체적 문장)",
-          evidenceIds: ["ALLOWED VERIFIED EVIDENCE CATALOG의 실제 ID"],
-        },
+        { point: "판단 근거 (관세 혜택, 시장 기회 등 구체적 문장)", source: "출처명 (예: 관세청 API / KOTRA)" },
       ],
       majorRisks: [
         {
           risk: "주요 위험 요소 및 전문용어 (쉬운 괄호 설명 포함)",
           mitigation: "AI의 실질적 1:1 대응 방안 (구체적 해결책 및 전문용어 괄호 설명)",
-          evidenceIds: ["ALLOWED VERIFIED EVIDENCE CATALOG의 실제 ID, 없으면 빈 배열"],
+          source: "출처명 (예: K-SURE / NHTSA)",
           severity: "치명적 | 높음 | 보통",
           likelihood: "높음 | 보통 | 낮음",
-          financialImpact: "근거에 금액이 있으면 해당 금액, 없으면 정성적 영향과 견적 필요 안내"
+          financialImpact: "예상 손실/비용 영향 (예: 통관 거부 시 컨테이너당 약 $5,000~$15,000 손실)"
         },
       ],
       recommendedActions: [
@@ -288,29 +221,22 @@ async function callStructuredVerdict(
           priority: "high | medium",
           timeline: "즉시 | 수출 전 6개월 | 수출 전 3개월 | 수출 전 1개월 | 수출 후",
           difficulty: "쉬움 | 보통 | 어려움",
-          estimatedCost: "공식 근거가 있으면 해당 값, 없으면 견적 필요",
-          govSupport: "근거 ID로 확인된 정부 지원 또는 관계기관 문의 안내",
-          evidenceIds: ["비용·지원사업을 뒷받침하는 실제 근거 ID, 없으면 빈 배열"],
+          estimatedCost: "예상 비용 (예: 약 200~500만원 또는 수수료 0.5%)",
+          govSupport: "활용 가능한 한국 정부 지원 사업 (예: KOTRA 해외인증지원사업, K-SURE 수출보험 지원)",
           subSteps: ["구체적 실행 단계 1", "구체적 실행 단계 2", "구체적 실행 단계 3"]
         },
+      ],
+      confidence: "높음 | 보통 | 낮음",
+      confidenceReason: "신뢰도 판단 이유",
+      officialSources: [
+        { name: "관련 공공기관/규제기관명", url: "", relevance: "관련성 요약" },
       ],
     }),
   ].join("\n");
 
-  const verifiedEvidenceJson = JSON.stringify(
-    evidenceCatalog.evidence.map((item) => ({
-      id: item.id,
-      category: item.category,
-      claim: item.claim,
-      value: item.value,
-      evidenceLevel: item.level,
-      sourceName: item.sourceName,
-      sourceUrl: item.sourceUrl,
-      referenceDate: item.referenceDate,
-      retrievedAt: item.retrievedAt,
-      origin: item.origin,
-    })),
-  );
+  const sourcesList = grounded.sources.length > 0
+    ? grounded.sources.map((s) => `- ${s.name}: ${s.url}`).join("\n")
+    : "발견된 출처 URL 없음";
 
   const userPrompt = [
     `## 대상 국가: ${countryName}`,
@@ -319,12 +245,14 @@ async function callStructuredVerdict(
     "## 프로그램 수집 데이터 (Program Evidence)",
     programEvidence,
     "",
-    "## ALLOWED VERIFIED EVIDENCE CATALOG",
-    verifiedEvidenceJson,
+    "## 인터넷 공식자료 검색 결과 (Official Web Research)",
+    grounded.text,
     "",
-    `공식 웹 검색에서 검증 수락 ${evidenceCatalog.evidence.filter((item) => item.origin === "official_web").length}건, 제외 ${evidenceCatalog.rejectedClaims.length}건, 상충 ${evidenceCatalog.conflicts.length}건입니다.`,
-    "위 카탈로그에 존재하는 evidenceIds만 사용하여 AI 최종 판단 JSON을 생성하십시오.",
-    "카탈로그 밖의 내부지식은 설명·질문·실행 체크리스트에만 사용하고, 현재 사실이나 정확한 수치로 단정하지 마십시오.",
+    "## 발견된 실제 인터넷 공식자료 URL 목록",
+    sourcesList,
+    "",
+    "위 두 가지 데이터와 발견된 URL 목록을 종합하여 AI 최종 판단 JSON을 생성하십시오.",
+    "officialSources 배열에는 '발견된 실제 인터넷 공식자료 URL 목록'에 존재하는 구체적인 name과 url을 반드시 포함시키십시오.",
     "단순한 데이터 나열이 아닌, 수출자 관점에서의 실질적 판단과 구체적 행동 지침을 제공하십시오.",
   ].join("\n");
 
@@ -341,7 +269,58 @@ async function callStructuredVerdict(
   if (!response.ok) throw new Error(`Gemini verdict ${response.status}`);
   const data = await response.json();
   const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "{}";
-  return JSON.stringify(safeParseJson(rawText));
+  const parsed = safeParseJson(rawText);
+
+  // officialSources 후처리 보완
+  const officialSources = asArray(parsed.officialSources);
+  if (officialSources.length === 0 && grounded.sources.length > 0) {
+    parsed.officialSources = grounded.sources.slice(0, 6).map((s) => ({
+      name: s.name,
+      url: s.url,
+      relevance: `${countryName} ${productName} 공식자료`,
+    }));
+  }
+
+  // keyBasis 및 majorRisks 출처 URL 스마트 후처리 매핑 (Official Web Research 문맥 및 grounded.sources 탐색)
+  if (grounded.sources.length > 0) {
+    const findSmartUrl = (text: string, currentUrl?: string): string => {
+      // 이미 올바른 external HTTP/HTTPS URL이 들어가 있다면 그대로 사용
+      if (currentUrl && currentUrl.startsWith("http") && !currentUrl.includes("n/a")) {
+        return currentUrl;
+      }
+      
+      const lowerText = text.toLowerCase();
+      
+      // 1. grounded.sources 중 텍스트에 언급된 키워드가 포함된 도메인/이름 탐색
+      for (const s of grounded.sources) {
+        const sNameLower = s.name.toLowerCase();
+        const sUrlLower = s.url.toLowerCase();
+        
+        // 주요 도메인/기관 키워드 매칭
+        const keywords = ["ustr", "nhtsa", "dot", "fmvss", "usitc", "epa", "fda", "customs", "kotra", "ksure", "kicox", "반덤핑", "관세", "안전표준"];
+        for (const kw of keywords) {
+          if (lowerText.includes(kw) && (sNameLower.includes(kw) || sUrlLower.includes(kw))) {
+            return s.url;
+          }
+        }
+      }
+      
+      // 2. 키워드 매칭 실패 시 첫번째 수집된 원문 URL 반환
+      return grounded.sources[0].url;
+    };
+
+    const supplementUrl = (item: any) => {
+      if (item && typeof item === "object") {
+        const textToSearch = `${item.point || item.risk || ""} ${item.source || ""}`;
+        item.sourceUrl = findSmartUrl(textToSearch, item.sourceUrl);
+      }
+    };
+
+    asArray(parsed.keyBasis).forEach(supplementUrl);
+    asArray(parsed.majorRisks).forEach(supplementUrl);
+  }
+
+  return JSON.stringify(parsed);
 }
 
 /* ──────────── 프로그램 증거 요약 ──────────── */
@@ -369,15 +348,9 @@ function buildProgramEvidence(body: Record<string, unknown>): string {
     for (const fact of facts.slice(0, 35)) {
       const f = asRecord(fact);
       parts.push(`- [${asText(f.category)}] ${asText(f.summary)} (상태: ${asText(f.status)}, 심각도: ${asText(f.severity)})`);
-      const factKey = asText(f.factKey) || asText(f.fact_key) || asText(f.id);
-      if (factKey) parts.push(`  * 근거 ID: program:${factKey}`);
-      if (f.value != null) parts.push(`  * 원천 값: ${safeEvidenceJson(f.value, 6_000)}`);
       if (asText(f.caveat)) parts.push(`  * 주의사항: ${asText(f.caveat)}`);
       if (asText(f.nextAction)) parts.push(`  * 조치사항: ${asText(f.nextAction)}`);
       if (asText(f.sourceName)) parts.push(`  * 출처: ${asText(f.sourceName)}`);
-      if (asText(f.sourceUrl)) parts.push(`  * 원문 URL: ${asText(f.sourceUrl)}`);
-      if (asText(f.referenceDate)) parts.push(`  * 기준일: ${asText(f.referenceDate)}`);
-      if (asText(f.fetchedAt)) parts.push(`  * 조회일: ${asText(f.fetchedAt)}`);
     }
   }
 
@@ -449,81 +422,6 @@ function extractSources(chunks: unknown): Array<{ name: string; url: string }> {
     seen.add(s.url);
     return true;
   });
-}
-
-async function resolveGroundedSources(
-  sources: Array<{ name: string; url: string }>,
-): Promise<Array<{ name: string; url: string; resolvedUrl?: string }>> {
-  return await Promise.all(sources.slice(0, 12).map(async (source) => {
-    if (isOfficialAuthorityUrl(source.url)) return { ...source, resolvedUrl: source.url };
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5_000);
-    try {
-      const response = await fetch(source.url, {
-        method: "GET",
-        redirect: "follow",
-        signal: controller.signal,
-        headers: { Range: "bytes=0-0" },
-      });
-      const resolvedUrl = response.url;
-      return isOfficialAuthorityUrl(resolvedUrl)
-        ? { ...source, url: resolvedUrl, resolvedUrl }
-        : source;
-    } catch {
-      return source;
-    } finally {
-      clearTimeout(timeout);
-    }
-  }));
-}
-
-function alignGroundedClaims(
-  claims: unknown[],
-  sources: Array<{ name: string; url: string; resolvedUrl?: string }>,
-): unknown[] {
-  return claims.map((rawClaim) => {
-    const claim = asRecord(rawClaim);
-    const rawUrl = asText(claim.sourceUrl) || asText(claim.source_url);
-    const claimSourceName = `${asText(claim.sourceName)} ${asText(claim.sourceTitle)}`.toLowerCase();
-    const exact = sources.find((source) => rawUrl && (source.url === rawUrl || source.resolvedUrl === rawUrl));
-    const byOfficialHost = sources.find((source) => (
-      rawUrl && isOfficialAuthorityUrl(rawUrl) && sameHostname(source.resolvedUrl || source.url, rawUrl)
-    ));
-    const byName = sources.find((source) => sourceNameMatches(claimSourceName, source.name));
-    const matched = exact ?? byOfficialHost ?? byName;
-    return matched
-      ? { ...claim, resolvedUrl: matched.resolvedUrl || matched.url }
-      : claim;
-  });
-}
-
-function sameHostname(left: string, right: string): boolean {
-  try {
-    return new URL(left).hostname.toLowerCase() === new URL(right).hostname.toLowerCase();
-  } catch {
-    return false;
-  }
-}
-
-function sourceNameMatches(claimSourceName: string, groundedName: string): boolean {
-  const grounded = groundedName.toLowerCase();
-  const tokens = claimSourceName
-    .split(/[^a-z0-9가-힣]+/i)
-    .map((token) => token.trim())
-    .filter((token) => token.length >= 4);
-  return tokens.some((token) => grounded.includes(token));
-}
-
-function safeEvidenceJson(value: unknown, maxLength: number): string {
-  try {
-    const serialized = JSON.stringify(value);
-    if (!serialized) return "null";
-    return serialized.length <= maxLength
-      ? serialized
-      : `${serialized.slice(0, maxLength)}…(원천 값 일부 생략)`;
-  } catch {
-    return "직렬화할 수 없는 원천 값";
-  }
 }
 
 function safeParseJson(text: string): Record<string, unknown> {

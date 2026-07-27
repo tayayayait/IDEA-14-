@@ -9,6 +9,7 @@ import {
   Loader2,
   RefreshCw,
   ExternalLink,
+  LinkIcon,
   Sparkles,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -22,6 +23,7 @@ import {
   type VerdictConfidence,
 } from "@/lib/country-decision-verdict";
 import type { DecisionFact } from "@/lib/country-decision";
+import { normalizeExternalUrl } from "@/lib/url-validator";
 
 /* ──────────── Props ──────────── */
 
@@ -52,14 +54,8 @@ export function AiFinalVerdictCard(props: Props) {
   const [createdAt, setCreatedAt] = useState<string | null>(null);
 
   const evidenceHash = useMemo(
-    () => computeEvidenceHash(props.facts, {
-      countryCode: props.countryCode,
-      productName: props.productName,
-      hs6: props.hs6,
-      opportunityScore: props.opportunityScore,
-      rationale: props.rationale ?? {},
-    }),
-    [props.facts, props.countryCode, props.productName, props.hs6, props.opportunityScore, props.rationale],
+    () => computeEvidenceHash(props.facts),
+    [props.facts],
   );
 
   // 캐시 조회
@@ -111,19 +107,14 @@ export function AiFinalVerdictCard(props: Props) {
             .slice(0, 30)
             .map((f) => ({
               id: f.id,
-              factKey: f.factKey,
               category: f.category,
               status: f.status,
               severity: f.severity,
               summary: f.summary,
-              value: f.value,
               caveat: f.caveat,
               nextAction: f.nextAction,
               scope: f.scope,
               sourceName: f.sourceName,
-              sourceUrl: f.sourceUrl,
-              referenceDate: f.referenceDate,
-              fetchedAt: f.fetchedAt,
             })),
         },
       });
@@ -233,7 +224,7 @@ export function AiFinalVerdictCard(props: Props) {
             <CardTitle className="text-base">AI 최종 판단</CardTitle>
           </div>
           <div className="flex items-center gap-2">
-            <ConfidenceBadge confidence={verdict.confidence} score={verdict.confidenceScore} reason={verdict.confidenceReason} />
+            <ConfidenceBadge confidence={verdict.confidence} reason={verdict.confidenceReason} />
             <Button size="sm" variant="outline" onClick={() => generateVerdict(true)} className="h-7 gap-1 text-xs bg-background/80 hover:bg-background">
               <RefreshCw className="h-3.5 w-3.5" />
               AI 판단 재생성
@@ -262,8 +253,6 @@ export function AiFinalVerdictCard(props: Props) {
           <RiskScoreboardView scoreboard={verdict.riskScoreboard} />
         ) : null}
 
-        {verdict.evidenceSummary ? <EvidenceSummaryView summary={verdict.evidenceSummary} /> : null}
-
         {/* 핵심 판단 근거 + 주요 위험 요소 2열 */}
         <div className="grid gap-3 sm:grid-cols-2">
           <BasisSection items={verdict.keyBasis} />
@@ -282,18 +271,14 @@ export function AiFinalVerdictCard(props: Props) {
             </div>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {verdict.officialSources.map((source, i) => (
-                <a
+                <span
                   key={i}
-                  href={source.url}
-                  target="_blank"
-                  rel="noreferrer"
                   className="inline-flex items-center gap-1 rounded-md border border-blue-100 bg-blue-50/60 px-2 py-1 text-[11px] font-medium text-blue-800"
-                  title={[source.relevance, source.referenceDate ? `기준일 ${source.referenceDate}` : ""].filter(Boolean).join(" · ") || "공공데이터 기관"}
+                  title={source.relevance || "공공데이터 기관"}
                 >
                   <CheckCircle2 className="h-3 w-3 text-blue-500" />
                   {source.name}
-                  <ExternalLink className="h-3 w-3" />
-                </a>
+                </span>
               ))}
             </div>
           </div>
@@ -303,40 +288,13 @@ export function AiFinalVerdictCard(props: Props) {
         <div className="flex items-start gap-1.5 rounded-md bg-muted/50 px-3 py-2">
           <Info className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground" />
           <p className="text-[11px] leading-relaxed text-muted-foreground">
-            본 판단은 화면에 연결된 공공데이터와 공식 원문 근거를 Gemini가 해석한 참고 의견입니다. 근거가 없는 AI 내부지식은 추가 확인 항목으로 구분됩니다.
+            본 판단은 KOTRA·K-SURE·KICOX 등 공공데이터와 전문 규제 팩트를 Gemini가 종합 분석하여 생성한 참고 의견입니다.
             최종 수출 의사결정은 전문가 자문과 관계기관의 공식 확인을 거쳐야 합니다.
             {createdAt ? ` · 생성 ${new Date(createdAt).toLocaleDateString("ko-KR")}` : ""}
           </p>
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-function EvidenceSummaryView({ summary }: { summary: NonNullable<AiFinalVerdict["evidenceSummary"]> }) {
-  return (
-    <div className="rounded-lg border border-blue-200/70 bg-blue-50/40 p-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5">
-          <ShieldCheck className="h-4 w-4 text-blue-700" />
-          <p className="text-xs font-semibold text-blue-950">판단 근거 검증 현황</p>
-        </div>
-        <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-semibold text-blue-800 ring-1 ring-blue-200">
-          근거 연결 {summary.supportedClaimCount}/{summary.totalClaimCount}건 · {summary.supportedClaimRatio}%
-        </span>
-      </div>
-      <div className="mt-2 flex flex-wrap gap-1.5 text-[10px] text-blue-900/80">
-        <span>프로그램 팩트 {summary.programFactCount}건</span>
-        <span>· 공식 웹 근거 {summary.officialWebClaimCount}건</span>
-        {summary.rejectedWebClaimCount > 0 ? <span>· 검증 제외 {summary.rejectedWebClaimCount}건</span> : null}
-        {summary.conflictCount > 0 ? <span className="font-semibold text-red-700">· 상충 {summary.conflictCount}건</span> : null}
-      </div>
-      {summary.missingCriticalChecks.length > 0 ? (
-        <p className="mt-1.5 text-[10px] text-amber-800">
-          추가 확인 분야: {summary.missingCriticalChecks.join(", ")}
-        </p>
-      ) : null}
-    </div>
   );
 }
 
@@ -390,7 +348,6 @@ function BasisSection({ items }: { items: AiFinalVerdict["keyBasis"] }) {
             <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
             <div>
               <span>{item.point}</span>
-              <EvidenceLevelBadge level={item.evidenceLevel} note={item.verificationNote} />
               {item.source ? (
                 <SourceTag name={item.source} url={item.sourceUrl} />
               ) : null}
@@ -428,8 +385,7 @@ function RiskSection({ items }: { items: AiFinalVerdict["majorRisks"] }) {
                   </span>
                 ) : null}
                 <span className="font-medium text-foreground">{item.risk}</span>
-                <EvidenceLevelBadge level={item.evidenceLevel} note={item.verificationNote} />
-                {item.source ? <SourceTag name={item.source} url={item.sourceUrl} /> : null}
+                {item.source ? <SourceTag name={item.source} /> : null}
               </div>
 
               {item.financialImpact ? (
@@ -482,7 +438,6 @@ function ActionSection({ items }: { items: AiFinalVerdict["recommendedActions"] 
                     난이도: {item.difficulty}
                   </span>
                 ) : null}
-                <EvidenceLevelBadge level={item.evidenceLevel} note={item.verificationNote} />
               </div>
 
               {item.reason ? (
@@ -492,9 +447,6 @@ function ActionSection({ items }: { items: AiFinalVerdict["recommendedActions"] 
               {item.estimatedCost ? (
                 <p className="text-xs text-foreground/80 font-medium">
                   💰 <span className="font-semibold">예상 비용:</span> {item.estimatedCost}
-                  {item.estimateType === "ai_planning_estimate" ? (
-                    <span className="ml-1 text-[10px] font-normal text-amber-700">(공식 견적 아님)</span>
-                  ) : null}
                 </p>
               ) : null}
 
@@ -523,22 +475,9 @@ function ActionSection({ items }: { items: AiFinalVerdict["recommendedActions"] 
   );
 }
 
-function SourceTag({ name, url }: { name: string; url?: string }) {
+function SourceTag({ name }: { name: string; url?: string }) {
   if (!name || name.toUpperCase() === "N/A") return null;
   const cleanName = name.replace(/^\[|\]$/g, "").trim();
-  if (url) {
-    return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noreferrer"
-        className="ml-1.5 inline-flex items-center gap-0.5 rounded-full border border-blue-100/60 bg-blue-50/80 px-2 py-0.5 text-[10px] font-medium text-blue-700 hover:underline"
-      >
-        출처: {cleanName}
-        <ExternalLink className="h-2.5 w-2.5" />
-      </a>
-    );
-  }
   return (
     <span className="ml-1.5 inline-flex items-center rounded-full bg-blue-50/80 px-2 py-0.5 text-[10px] font-medium text-blue-700 border border-blue-100/60">
       출처: {cleanName}
@@ -546,25 +485,7 @@ function SourceTag({ name, url }: { name: string; url?: string }) {
   );
 }
 
-function EvidenceLevelBadge({
-  level,
-  note,
-}: {
-  level: AiFinalVerdict["keyBasis"][number]["evidenceLevel"];
-  note?: string;
-}) {
-  const meta = EVIDENCE_LEVEL_STYLES[level] ?? EVIDENCE_LEVEL_STYLES.needs_verification;
-  return (
-    <span
-      className={`ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold ${meta.className}`}
-      title={note || meta.description}
-    >
-      {meta.label}
-    </span>
-  );
-}
-
-function ConfidenceBadge({ confidence, score, reason }: { confidence: VerdictConfidence; score?: number; reason: string }) {
+function ConfidenceBadge({ confidence, reason }: { confidence: VerdictConfidence; reason: string }) {
   const style = CONFIDENCE_STYLES[confidence];
   return (
     <span
@@ -573,7 +494,7 @@ function ConfidenceBadge({ confidence, score, reason }: { confidence: VerdictCon
       title={reason}
     >
       <ShieldCheck className="h-3 w-3" />
-      신뢰도 {confidence}{score != null ? ` · ${score}점` : ""}
+      신뢰도 {confidence}
     </span>
   );
 }
@@ -622,26 +543,3 @@ const CONFIDENCE_STYLES: Record<VerdictConfidence, { bg: string; text: string }>
   "보통": { bg: "rgba(245, 158, 11, 0.1)", text: "#78350f" },
   "낮음": { bg: "rgba(239, 68, 68, 0.1)", text: "#7f1d1d" },
 };
-
-const EVIDENCE_LEVEL_STYLES = {
-  cross_checked: {
-    label: "교차 확인",
-    description: "서로 다른 공식 출처로 교차 확인했습니다.",
-    className: "bg-indigo-100 text-indigo-800",
-  },
-  official_confirmed: {
-    label: "공식 확인",
-    description: "공식 원문 근거가 직접 연결되었습니다.",
-    className: "bg-emerald-100 text-emerald-800",
-  },
-  ai_interpretation: {
-    label: "AI 해석",
-    description: "확인된 근거를 AI가 수출자 관점에서 해석했습니다.",
-    className: "bg-blue-100 text-blue-800",
-  },
-  needs_verification: {
-    label: "추가 확인",
-    description: "직접 연결된 공식 근거가 부족합니다.",
-    className: "bg-amber-100 text-amber-800",
-  },
-} as const;
