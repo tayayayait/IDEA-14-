@@ -120,9 +120,14 @@ describe("CountryDecisionDashboard 사용자용 근거 표시", () => {
 
 describe("CountryDecisionDashboard 좁은 본문 가독성", () => {
   it("keeps decision cards single-column until a wide desktop and prevents compact values from breaking", () => {
-    expect(dashboardSource).toContain('className="grid items-start gap-4 2xl:grid-cols-2"');
+    expect(dashboardSource).toContain('className="columns-1 gap-4 2xl:columns-2"');
     expect(dashboardSource).toContain("isCompactDecisionValue");
     expect(dashboardSource).toContain("whitespace-nowrap");
+  });
+
+  it("uses balanced desktop columns so a tall card cannot create a blank row beside a short card", () => {
+    expect(dashboardSource).toContain('className="columns-1 gap-4 2xl:columns-2"');
+    expect(dashboardSource).toContain("break-inside-avoid-column");
   });
 
   it("기본 대시보드에서는 시장 진입 조건을 요약 카드로 표시하고 원문만 상세로 둔다", () => {

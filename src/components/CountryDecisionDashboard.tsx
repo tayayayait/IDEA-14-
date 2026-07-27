@@ -196,7 +196,7 @@ export function CountryDecisionDashboard(props: Props) {
         ) : null}
       </section>
 
-      <div className="grid items-start gap-4 2xl:grid-cols-2">
+      <div className="columns-1 gap-4 2xl:columns-2">
         {primarySections.map((section) => {
           const sectionFacts = groupedFacts[section.key];
           const sectionVisual = section.key === "marketOpportunity" && marketEvidence
