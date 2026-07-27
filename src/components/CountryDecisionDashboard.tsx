@@ -200,7 +200,7 @@ export function CountryDecisionDashboard(props: Props) {
         {primarySections.map((section) => {
           const sectionFacts = groupedFacts[section.key];
           const sectionVisual = section.key === "marketOpportunity" && marketEvidence
-            ? <MarketEvidenceChart evidence={marketEvidence} />
+            ? <MarketEvidenceChart evidence={marketEvidence} countryName={props.countryName} />
             : section.key === "marketEntry" && (tariffEvidence || destinationTariffEvidence)
               ? <MarketEntryVisual tariffEvidence={tariffEvidence} destinationTariffEvidence={destinationTariffEvidence} />
               : section.key === "transactionRisk" && logisticsEvidence
@@ -523,30 +523,33 @@ function formatLpiValue(value: number | null): string {
 }
 
 
-function MarketEvidenceChart({ evidence }: { evidence: MarketEvidence }) {
+function MarketEvidenceChart({ evidence, countryName }: { evidence: MarketEvidence; countryName: string }) {
+  const destination = countryName || "목적국";
+  const destinationMarket = `${destination} 수입시장`;
+  const otherSuppliers = `${destination} 내 기타 수입국`;
   const data = [{
-    name: "수입시장",
+    name: destinationMarket,
     korea: evidence.koreaSharePct,
     others: Math.max(0, 100 - evidence.koreaSharePct),
   }];
   return (
     <div className="rounded-lg border border-sky-200 bg-sky-50/60 p-3">
       <div className="grid gap-2 sm:grid-cols-2">
-        <ChartMetric label={`${evidence.period ?? "최근"} 전체 수입`} value={formatCompactUsd(evidence.importMarketUsd)} />
-        <ChartMetric label="한국산 수입" value={formatCompactUsd(evidence.importsFromKoreaUsd)} />
+        <ChartMetric label={`${evidence.period ?? "최근"} ${destinationMarket} 전체 수입`} value={formatCompactUsd(evidence.importMarketUsd)} />
+        <ChartMetric label={`${destination}의 한국산 수입`} value={formatCompactUsd(evidence.importsFromKoreaUsd)} />
       </div>
       <div className="mt-3 flex items-center justify-between text-xs">
-        <span className="font-medium text-slate-700">한국산 점유율</span>
+        <span className="font-medium text-slate-700">{destinationMarket} 내 한국산 점유율</span>
         <strong className="text-sky-800">{evidence.koreaSharePct.toLocaleString("ko-KR", { maximumFractionDigits: 2 })}%</strong>
       </div>
-      <div className="mt-1 h-14" role="img" aria-label={`한국산 점유율 ${evidence.koreaSharePct}%`}>
+      <div className="mt-1 h-14" role="img" aria-label={`${destinationMarket} 내 한국산 점유율 ${evidence.koreaSharePct}%`}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ top: 4, right: 0, bottom: 4, left: 0 }}>
             <XAxis type="number" domain={[0, 100]} hide />
             <YAxis type="category" dataKey="name" hide />
-            <Tooltip formatter={(value: number, name: string) => [`${Number(value).toFixed(2)}%`, name === "korea" ? "한국산" : "기타 국가"]} />
+            <Tooltip formatter={(value: number, name: string) => [`${Number(value).toFixed(2)}%`, name === "한국산" ? "한국산" : otherSuppliers]} />
             <Bar dataKey="korea" name="한국산" stackId="share" fill="#0E7490" radius={[5, 0, 0, 5]} />
-            <Bar dataKey="others" name="기타 국가" stackId="share" fill="#CBD5E1" radius={[0, 5, 5, 0]} />
+            <Bar dataKey="others" name={otherSuppliers} stackId="share" fill="#CBD5E1" radius={[0, 5, 5, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -116,6 +116,13 @@ describe("CountryDecisionDashboard 사용자용 근거 표시", () => {
     expect(dashboardSource).not.toContain("래디얼 타이어");
     expect(dashboardSource).not.toContain("림 직경");
   });
+
+  it("labels market share with the selected destination and distinct supplier groups", () => {
+    expect(dashboardSource).toContain("countryName={props.countryName}");
+    expect(dashboardSource).toContain("destinationMarket} 내 한국산 점유율");
+    expect(dashboardSource).toContain("기타 수입국");
+    expect(dashboardSource).toContain('name === "한국산" ? "한국산" :');
+  });
 });
 
 describe("CountryDecisionDashboard 좁은 본문 가독성", () => {
