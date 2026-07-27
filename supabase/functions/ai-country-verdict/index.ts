@@ -188,6 +188,8 @@ async function callStructuredVerdict(
     "2. PREDICT 5 CORE TRADE RISKS EXHAUSTIVELY: (1) Customs & Tariff verification, (2) Mandatory safety/environmental certifications, (3) Payment & deferred credit risk, (4) Documentation & clearance, (5) Legal/contractual risks.",
     "3. MANDATORY GLOSSARY IN PARENTHESES RULE: Whenever trade terms, abbreviations, or legal concepts are mentioned (e.g. O/A, L/C, CBP, FMVSS, UTQG, DOT, BOM, Anti-dumping, MFN, FTA, HTSUS, etc.), ALWAYS explain them in Korean inside parentheses right after the term. Format: '약어/전문용어 (쉬운 설명)'. Example: 'O/A (무서류 외상 거래 방식: 수출 대금 미회수 리스크가 큼)', 'CBP (미국 세관국경보호국: 관세 및 원산지 검증 기관)', 'UTQG (통일타이어품질등급: 미국 타이어 필수 겉면 표시 기준)'.",
     "4. ACCESSIBLE & DETAILED ACTIONABLE ADVICE: Write in formal Korean (~입니다, ~합니다). Provide 1:1 concrete AI mitigation steps for every identified risk so that even first-time exporters can fully understand and prepare.",
+    "5. 정부지원사업명은 생성하지 마십시오. 정부지원사업은 별도의 기업마당 공식 API 결과로만 제공합니다.",
+    "6. recommendedActions에는 우선순위, 예상 일정, 난이도, 예상 비용을 만들지 말고 행동·이유·실행 단계만 작성하십시오.",
     "",
     "Return strict JSON matching this schema:",
     JSON.stringify({
@@ -218,11 +220,6 @@ async function callStructuredVerdict(
         {
           action: "권장 행동 제목",
           reason: "실행 이유 및 목적",
-          priority: "high | medium",
-          timeline: "즉시 | 수출 전 6개월 | 수출 전 3개월 | 수출 전 1개월 | 수출 후",
-          difficulty: "쉬움 | 보통 | 어려움",
-          estimatedCost: "예상 비용 (예: 약 200~500만원 또는 수수료 0.5%)",
-          govSupport: "활용 가능한 한국 정부 지원 사업 (예: KOTRA 해외인증지원사업, K-SURE 수출보험 지원)",
           subSteps: ["구체적 실행 단계 1", "구체적 실행 단계 2", "구체적 실행 단계 3"]
         },
       ],

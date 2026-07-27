@@ -30,3 +30,5 @@ verify_jwt = false
 [functions.ai-country-verdict]
 verify_jwt = false
 
+[functions.api-bizinfo-support]
+verify_jwt = false

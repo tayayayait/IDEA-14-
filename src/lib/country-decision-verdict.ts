@@ -29,11 +29,6 @@ export interface AiVerdictRiskItem {
 export interface AiVerdictActionItem {
   action: string;
   reason: string;
-  priority: "high" | "medium";
-  timeline?: string;
-  difficulty?: "쉬움" | "보통" | "어려움";
-  estimatedCost?: string;
-  govSupport?: string;
   subSteps?: string[];
 }
 
@@ -143,11 +138,6 @@ export function parseVerdictResponse(raw: unknown): AiFinalVerdict | null {
       return {
         action: asText(r.action),
         reason: asText(r.reason),
-        priority: asText(r.priority) === "high" ? "high" as const : "medium" as const,
-        timeline: asText(r.timeline) || undefined,
-        difficulty: asDifficulty(r.difficulty),
-        estimatedCost: asText(r.estimatedCost) || undefined,
-        govSupport: asText(r.govSupport) || undefined,
         subSteps: asArray(r.subSteps).map((s) => asText(s)).filter(Boolean) || undefined,
       };
     }),
@@ -207,11 +197,5 @@ function asRiskLevel(value: unknown): "높음" | "보통" | "낮음" {
 function asSeverity(value: unknown): "치명적" | "높음" | "보통" | undefined {
   const text = asText(value);
   if (text === "치명적" || text === "높음" || text === "보통") return text;
-  return undefined;
-}
-
-function asDifficulty(value: unknown): "쉬움" | "보통" | "어려움" | undefined {
-  const text = asText(value);
-  if (text === "쉬움" || text === "보통" || text === "어려움") return text;
   return undefined;
 }

@@ -8,8 +8,6 @@ import {
   Info,
   Loader2,
   RefreshCw,
-  ExternalLink,
-  LinkIcon,
   Sparkles,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -23,7 +21,7 @@ import {
   type VerdictConfidence,
 } from "@/lib/country-decision-verdict";
 import type { DecisionFact } from "@/lib/country-decision";
-import { normalizeExternalUrl } from "@/lib/url-validator";
+import { OfficialSupportProgramsSection } from "@/components/OfficialSupportProgramsSection";
 
 /* ──────────── Props ──────────── */
 
@@ -57,6 +55,32 @@ export function AiFinalVerdictCard(props: Props) {
     () => computeEvidenceHash(props.facts),
     [props.facts],
   );
+  const supportVerdictSignals = useMemo(() => {
+    if (!verdict) return [];
+    const summaryText = [
+      verdict.executiveSummary,
+      verdict.opinionDetail,
+      ...verdict.keyBasis.map((item) => item.point),
+    ].filter(Boolean).join(" ");
+
+    return [
+      ...(summaryText
+        ? [{ source: "summary" as const, text: summaryText }]
+        : []),
+      ...verdict.majorRisks.map((item) => ({
+        source: "risk" as const,
+        text: [item.risk, item.mitigation].filter(Boolean).join(" "),
+      })),
+      ...verdict.recommendedActions.map((item) => ({
+        source: "action" as const,
+        text: [
+          item.action,
+          item.reason,
+          ...(item.subSteps ?? []),
+        ].filter(Boolean).join(" "),
+      })),
+    ];
+  }, [verdict]);
 
   // 캐시 조회
   useEffect(() => {
@@ -262,6 +286,14 @@ export function AiFinalVerdictCard(props: Props) {
         {/* 권장 실행 방향 */}
         <ActionSection items={verdict.recommendedActions} />
 
+        {/* 기업마당 공식 지원사업 */}
+        <OfficialSupportProgramsSection
+          projectId={props.projectId}
+          productName={props.productName}
+          countryName={props.countryName}
+          verdictSignals={supportVerdictSignals}
+        />
+
         {/* 참고 공공데이터 출처 */}
         {verdict.officialSources.length > 0 ? (
           <div className="rounded-lg border border-border/70 bg-card p-3">
@@ -423,38 +455,10 @@ function ActionSection({ items }: { items: AiFinalVerdict["recommendedActions"] 
               {i + 1}
             </span>
             <div className="space-y-1.5 w-full">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="font-semibold text-foreground text-sm">{item.action}</span>
-                {item.priority === "high" ? (
-                  <span className="rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-800">우선</span>
-                ) : null}
-                {item.timeline ? (
-                  <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 border border-blue-200/60">
-                    ⏱️ {item.timeline}
-                  </span>
-                ) : null}
-                {item.difficulty ? (
-                  <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                    난이도: {item.difficulty}
-                  </span>
-                ) : null}
-              </div>
+              <span className="font-semibold text-foreground text-sm">{item.action}</span>
 
               {item.reason ? (
                 <p className="text-xs text-muted-foreground">{item.reason}</p>
-              ) : null}
-
-              {item.estimatedCost ? (
-                <p className="text-xs text-foreground/80 font-medium">
-                  💰 <span className="font-semibold">예상 비용:</span> {item.estimatedCost}
-                </p>
-              ) : null}
-
-              {item.govSupport ? (
-                <div className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-1 text-xs text-emerald-800 border border-emerald-200/60 font-medium">
-                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-                  <span><span className="font-semibold">정부 지원 활용:</span> {item.govSupport}</span>
-                </div>
               ) : null}
 
               {item.subSteps && item.subSteps.length > 0 ? (
